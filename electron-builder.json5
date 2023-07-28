@@ -2,37 +2,31 @@
  * @see https://www.electron.build/configuration/configuration
  */
 {
-  "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
-  "appId": "YourAppID",
-  "asar": true,
-  "directories": {
-    "output": "release/${version}"
+  $schema: "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
+  appId: "YourAppID",
+  asar: true,
+  directories: {
+    output: "release/${version}",
   },
-  "files": [
-    "dist-electron",
-    "dist"
-  ],
-  "mac": {
-    "artifactName": "${productName}_${version}.${ext}",
-    "target": [
-      "dmg"
-    ]
+  files: ["dist-electron", "dist"],
+  mac: {
+    artifactName: "${productName}_${version}.${ext}",
+    target: ["dmg"],
   },
-  "win": {
-    "target": [
+  win: {
+    requestedExecutionLevel: "requireAdministrator",
+    target: [
       {
-        "target": "nsis",
-        "arch": [
-          "x64"
-        ]
-      }
+        target: "nsis",
+        arch: ["x64"],
+      },
     ],
-    "artifactName": "${productName}_${version}.${ext}"
+    artifactName: "${productName}_${version}.${ext}",
   },
-  "nsis": {
-    "oneClick": false,
-    "perMachine": false,
-    "allowToChangeInstallationDirectory": true,
-    "deleteAppDataOnUninstall": false
-  }
+  nsis: {
+    oneClick: false,
+    perMachine: false,
+    allowToChangeInstallationDirectory: true,
+    deleteAppDataOnUninstall: false,
+  },
 }
