@@ -29,7 +29,6 @@ ipcMain.on('child:exec', (_event, path) => {
 })
 
 const { dialog } = require('electron');
-
 ipcMain.handle('dialog:show', async (_event, options) => {
   const result = await dialog.showOpenDialog(options);
   if (!result.canceled) {

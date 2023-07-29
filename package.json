@@ -37,7 +37,6 @@
     "vue-tsc": "^1.2.0"
   },
   "dependencies": {
-    "electron-store": "^8.1.0",
-    "element-plus": "^2.3.7"
+    "electron-store": "^8.1.0"
   }
 }
