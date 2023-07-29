@@ -1,8 +1,8 @@
 {
-  "name": "MiXED",
+  "name": "miXED Launcher",
   "version": "2.0.0",
   "main": "dist-electron/main/index.js",
-  "description": "Really simple Electron + Vue + Vite boilerplate.",
+  "description": "All-in-one MiHOYO game launcher",
   "author": "HoraceHYY <3214442497@qq.com>",
   "license": "MIT",
   "private": true,
