@@ -2,6 +2,43 @@ import { app, BrowserWindow, shell, ipcMain } from 'electron'
 import { release } from 'node:os'
 import { join } from 'node:path'
 
+const Store = require('electron-store');
+const store = new Store();
+ipcMain.handle('store:get', (_event, key) => {
+  return store.get(key)
+})
+ipcMain.on('store:set', (_event, key, value) => {
+  store.set(key, value)
+})
+ipcMain.on('store:delete', (_event, key) => {
+  store.delete(key)
+})
+ipcMain.on('store:clear', () => {
+  store.clear()
+})
+
+const child = require('child_process')
+ipcMain.on('child:exec', (_event, path) => {
+  child.execFile(path, function (err, data) {
+    if (err) {
+        console.error(err)
+        return
+    }
+    console.log(data.toString())
+  })
+})
+
+const { dialog } = require('electron');
+
+ipcMain.handle('dialog:show', async (_event, options) => {
+  const result = await dialog.showOpenDialog(options);
+  if (!result.canceled) {
+    return result.filePaths; // 返回选择的目录路径
+  } else {
+    return []; // 对话框被取消，返回空数组
+  }
+});
+
 // The built directory structure
 //
 // ├─┬ dist-electron
@@ -51,10 +88,11 @@ async function createWindow() {
       // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
       // Consider using contextBridge.exposeInMainWorld
       // Read more on https://www.electronjs.org/docs/latest/tutorial/context-isolation
-      nodeIntegration: true,
-      contextIsolation: false,
+      nodeIntegration: false,
+      contextIsolation: true,
     },
   })
+  // win.setWindowButtonVisibility(true)
 
   if (process.env.VITE_DEV_SERVER_URL) { // electron-vite-vue#298
     win.loadURL(url)
@@ -66,9 +104,9 @@ async function createWindow() {
   }
 
   // Test actively push message to the Electron-Renderer
-  win.webContents.on('did-finish-load', () => {
-    win?.webContents.send('main-process-message', new Date().toLocaleString())
-  })
+  // win.webContents.on('did-finish-load', () => {
+  //   win?.webContents.send('main-process-message', new Date().toLocaleString())
+  // })
 
   // Make all links open with the browser, not with the application
   win.webContents.setWindowOpenHandler(({ url }) => {
@@ -102,19 +140,3 @@ app.on('activate', () => {
   }
 })
 
-// New window example arg: new windows url
-ipcMain.handle('open-win', (_, arg) => {
-  const childWindow = new BrowserWindow({
-    webPreferences: {
-      preload,
-      nodeIntegration: true,
-      contextIsolation: false,
-    },
-  })
-
-  if (process.env.VITE_DEV_SERVER_URL) {
-    childWindow.loadURL(`${url}#${arg}`)
-  } else {
-    childWindow.loadFile(indexHtml, { hash: arg })
-  }
-})
