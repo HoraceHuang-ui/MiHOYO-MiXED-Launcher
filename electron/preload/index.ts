@@ -16,6 +16,13 @@ contextBridge.exposeInMainWorld("dialog", {
     return result
   }
 })
+contextBridge.exposeInMainWorld("enka", {
+  getPlayer: async (uid, lang) => {
+    console.log('ipcRenderer')
+    const result = await ipcRenderer.invoke("enka:getPlayer", uid)
+    return result
+  }
+})
 
 function domReady(
   condition: DocumentReadyState[] = ["complete", "interactive"]

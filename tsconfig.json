@@ -12,7 +12,8 @@
     "lib": ["ESNext", "DOM"],
     "skipLibCheck": true,
     "noEmit": true,
-    "allowJs": true
+    "allowJs": true,
+    "types": ["element-plus/global"]
   },
   "include": ["src"],
   "references": [

@@ -34,7 +34,7 @@ const srLaunch = () => {
 </script>
 
 <template>
-    <TopHeader :selection="3" />
+    <!-- <TopHeader :selection="3" /> -->
     <div class="bg">
         <el-scrollbar height="90vh">
             <img class="bg-pic" src="../assets/srbanner.webp" />

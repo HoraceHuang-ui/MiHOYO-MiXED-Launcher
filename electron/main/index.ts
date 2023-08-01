@@ -1,4 +1,4 @@
-import { app, BrowserWindow, shell, ipcMain } from 'electron'
+import { app, BrowserWindow, shell, ipcMain, nativeTheme } from 'electron'
 import { release } from 'node:os'
 import { join } from 'node:path'
 
@@ -37,6 +37,25 @@ ipcMain.handle('dialog:show', async (_event, options) => {
     return []; // 对话框被取消，返回空数组
   }
 });
+
+const { Wrapper } = require('enkanetwork.js')
+const enka = new Wrapper({
+  language: 'zh-CN'
+})
+ipcMain.handle("enka:getPlayer", async (_event, uid) => {
+  // enka.getPlayer(uid, 'zh-CN')
+  // .then((value) => {
+  //     playerInfo = value
+  //     playerInfoReady.value = true
+  //     window.store.set('genshinInfo', playerInfo)
+  // })
+  // .catch((err) => {
+  //     console.error(err)
+  // })
+  console.log('ipcMain invoke')
+  const result = await enka.getPlayer(uid)
+  return result
+})
 
 // The built directory structure
 //
@@ -77,11 +96,13 @@ const url = process.env.VITE_DEV_SERVER_URL
 const indexHtml = join(process.env.DIST, 'index.html')
 
 async function createWindow() {
+  nativeTheme.themeSource = "light"
   win = new BrowserWindow({
     title: 'Main window',
     icon: join(process.env.PUBLIC, 'favicon.ico'),
     width: 1200,
     height: 700,
+    resizable: false,
     webPreferences: {
       preload,
       // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production

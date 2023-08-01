@@ -1,31 +1,39 @@
 <script setup>
 import { useRouter } from 'vue-router'
-const props = defineProps({
-    selection: Number
-})
+import { ref } from 'vue'
+// const props = defineProps({
+//     selection: Number
+// })
 
+const selection = ref(1)
 const router = useRouter()
 const home = () => {
+    selection.value = 1
     router.push("/")
 }
 const genshin = () => {
+    selection.value = 2
     router.push("/gspage")
 }
 const starRail = () => {
+    selection.value = 3
     router.push("/srpage")
 }
 </script>
 
 <template>
     <div class="navbar">
-        <div>aa</div>
+        <div>
+            <div>aa</div>
+            <el-button>a</el-button>
+        </div>
         <div class="navbar-mid">
-            <img src="../assets/homeicon.png" class="navbar-homeicon" @click="home"
-                :class="{ selected: props.selection == 1 }" style="opacity: 60%;" />
+            <img src="../assets/homeicon.png" class="navbar-homeicon" @click="home" :class="{ selected: selection == 1 }"
+                style="opacity: 60%;" />
             <img src="../assets/gsicon.webp" class="navbar-gameicon" @click="genshin"
-                :class="{ selected: props.selection == 2 }" />
+                :class="{ selected: selection == 2 }" />
             <img src="../assets/sricon.webp" class="navbar-gameicon" @click="starRail"
-                :class="{ selected: props.selection == 3 }" />
+                :class="{ selected: selection == 3 }" />
         </div>
         <div>bb</div>
     </div>
@@ -43,6 +51,7 @@ const starRail = () => {
     height: 8vh;
     width: 100%;
     left: 0px;
+    background-color: white;
     /* -webkit-app-region: drag; */
 }
 
@@ -69,9 +78,7 @@ const starRail = () => {
 
 .selected {
     background-color: lightblue;
-    border-color: rgb(121, 184, 255);
-    border-width: 5px;
-    border-style: solid;
+    border: 5px solid rgb(121, 184, 255);
 }
 
 .navbar-selection {

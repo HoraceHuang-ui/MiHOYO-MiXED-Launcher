@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import TopHeader from '../components/TopHeader.vue'
+import GenshinInfoCard from '../components/GenshinInfoCard.vue'
 
 const gsPath = ref('')
 const displayConfirm = ref(false)
@@ -32,28 +33,25 @@ const gsLaunch = () => {
 </script>
 
 <template>
-    <TopHeader :selection="2" />
-    <div class="bg">
-        <img class="bg-pic" src="../assets/gsbanner.avif" />
-        <div class="bottom-mask"></div>
-        <div class="bottom-area mask">
-            <div class="path-confirm">
+    <!-- <TopHeader :selection="2" /> -->
+    <img class="bg-pic" src="../assets/gsbanner.avif" @touchmove.prevent @mousewheel.prevent />
+    <el-scrollbar height="90vh" class="scroll-wrapper">
+        <div class="items-scroll">
+            <div>
                 <button v-if="gsPath" @click="gsLaunch" class="mainpage-button">原神启动</button>
                 <button v-else @click="gsImport" class="mainpage-button">原神导入</button>
                 <button v-if="displayConfirm" @click="confirmPath" class="confirm-button">确认</button>
             </div>
             <div v-if="displayConfirm">{{ path }}</div>
+            <!-- <div class="gsInfoCard">
+                <h2 style="margin-top: 5px;">账号信息</h2>
+            </div> -->
+            <GenshinInfoCard class="scroll-card"></GenshinInfoCard>
         </div>
-    </div>
+    </el-scrollbar>
 </template>
 
 <style scoped>
-.path-confirm {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-}
-
 /* ::-webkit-scrollbar {
     width: 0 !important;
 }
@@ -63,44 +61,57 @@ const gsLaunch = () => {
     height: 0;
 } */
 
-.bg {
-    height: 90vh;
-    width: 96vw;
-    justify-content: center;
-    align-items: center;
-    justify-content: center;
-    align-content: center;
-    border-radius: 30px;
-}
-
 .bg-pic {
-    width: 100%;
+    width: 98vw;
+    top: 0;
     border-radius: 20px;
     -webkit-mask: linear-gradient(white, transparent)
 }
 
-.bottom-area {
-    position: sticky;
-    bottom: 0;
-    height: 20vh;
+.scroll-wrapper {
+    position: absolute;
+    top: 10vh;
+    left: 10vw;
 }
 
-.bottom-mask {
-    position: sticky;
-    bottom: 0;
-    height: 60vh;
+.items-scroll {
+    /* position: relative;
+    margin-top: -35vh; */
+    margin-top: 69vh;
+    width: 80vw;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: space-between;
+    align-items: center;
+    justify-items: space-between;
+    /* background-color: linear-gradient(transparent, white 50%); */
+    /* background: linear-gradient(180deg, rgba(2, 0, 36, 0) 0%, rgba(255, 255, 255, 1) 39%); */
 }
 
 .mainpage-button {
     font-weight: bold;
     font-size: 20px;
     background-color: rgb(255, 208, 114);
-    margin: 5px;
+    margin: 10px;
 }
 
 .confirm-button {
     border-color: rgb(255, 208, 114);
     border-width: 3px;
     margin: 5px;
+}
+
+.scroll-card {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.gsInfoCard {
+    padding: 10px;
+    width: 80vw;
+    height: 90vh;
+    background-color: white;
+    border-radius: 10px;
 }
 </style>
