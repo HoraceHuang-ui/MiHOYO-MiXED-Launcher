@@ -1,41 +1,43 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
-// const props = defineProps({
-//     selection: Number
-// })
+const props = defineProps({
+    selection: Number
+})
 
 const selection = ref(1)
 const router = useRouter()
 const home = () => {
-    selection.value = 1
     router.push("/")
 }
 const genshin = () => {
-    selection.value = 2
     router.push("/gspage")
 }
 const starRail = () => {
-    selection.value = 3
     router.push("/srpage")
+}
+const clearAll = async () => {
+    await window.store.clear()
+}
+const clearPlayerInfo = async () => {
+    await window.store.delete("genshinInfo")
 }
 </script>
 
 <template>
     <div class="navbar">
         <div>
-            <div>aa</div>
-            <el-button>a</el-button>
+            <el-button @click="clearAll">清除全部</el-button>
         </div>
         <div class="navbar-mid">
-            <img src="../assets/homeicon.png" class="navbar-homeicon" @click="home" :class="{ selected: selection == 1 }"
-                style="opacity: 60%;" />
+            <img src="../assets/homeicon.png" class="navbar-homeicon" @click="home"
+                :class="{ selected: props.selection == 1 }" style="opacity: 60%;" />
             <img src="../assets/gsicon.webp" class="navbar-gameicon" @click="genshin"
-                :class="{ selected: selection == 2 }" />
+                :class="{ selected: props.selection == 2 }" />
             <img src="../assets/sricon.webp" class="navbar-gameicon" @click="starRail"
-                :class="{ selected: selection == 3 }" />
+                :class="{ selected: props.selection == 3 }" />
         </div>
-        <div>bb</div>
+        <el-button @click="clearPlayerInfo">清除游戏数据</el-button>
     </div>
 </template>
 

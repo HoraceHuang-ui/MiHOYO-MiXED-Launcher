@@ -1,9 +1,9 @@
 <script setup>
-import TopHeader from './components/TopHeader.vue'
+// import TopHeader from './components/TopHeader.vue'
 </script>
 
 <template id="app">
-  <TopHeader />
+  <!-- <TopHeader /> -->
   <router-view></router-view>
 </template>
 

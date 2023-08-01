@@ -28,7 +28,7 @@ const starRail = async () => {
 </script>
 
 <template>
-    <!-- <TopHeader :selection="1" /> -->
+    <TopHeader :selection="1" />
     <!-- @touchmove.prevent @mousewheel.prevent -->
     <div class="bg" @touchmove.prevent @mousewheel.prevent>
         <img class="bg-pic" src="../assets/gsbanner.avif" />
@@ -51,7 +51,7 @@ const starRail = async () => {
     height: 0;
 } */
 
-.bg {
+/* .bg {
     height: 90vh;
     width: 96vw;
     justify-content: center;
@@ -59,10 +59,10 @@ const starRail = async () => {
     justify-content: center;
     align-content: center;
     border-radius: 30px;
-}
+} */
 
 .bg-pic {
-    width: 100%;
+    width: 98vw;
     border-radius: 20px;
     -webkit-mask: linear-gradient(white, transparent)
 }

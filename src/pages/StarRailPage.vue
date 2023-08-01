@@ -34,7 +34,7 @@ const srLaunch = () => {
 </script>
 
 <template>
-    <!-- <TopHeader :selection="3" /> -->
+    <TopHeader :selection="3" />
     <div class="bg">
         <el-scrollbar height="90vh">
             <img class="bg-pic" src="../assets/srbanner.webp" />
@@ -67,7 +67,7 @@ const srLaunch = () => {
     height: 0;
 } */
 
-.bg {
+/* .bg {
     height: 90vh;
     width: 96vw;
     justify-content: center;
@@ -75,10 +75,10 @@ const srLaunch = () => {
     justify-content: center;
     align-content: center;
     border-radius: 30px;
-}
+} */
 
 .bg-pic {
-    width: 100%;
+    width: 98vw;
     border-radius: 20px;
     -webkit-mask: linear-gradient(white, transparent)
 }
