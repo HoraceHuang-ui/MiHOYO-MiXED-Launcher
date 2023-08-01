@@ -12,6 +12,8 @@ onMounted(() => {
         .then((value) => {
             if (value) {
                 playerInfoReady.value = true
+                uid = value.uid
+                uidInput.value = uid
             }
             playerInfo.value = value
             // console.log(playerInfo)
