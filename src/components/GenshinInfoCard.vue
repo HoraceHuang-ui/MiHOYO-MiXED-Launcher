@@ -52,31 +52,42 @@ const requestInfo = () => {
 </script>
 
 <template>
-    <el-card>
-        <template #header>
-            <div class="card-header">
-                <div v-if="playerInfoReady" class="flex-row left" style="width: 30vw;">
-                    <el-avatar
-                        :src="'https://enka.network/ui/' + playerInfo.player.profilePicture.assets.icon + '.png'"></el-avatar>
-                    <el-text size="large" tag="b" style="margin-left: 1vw;">{{ playerInfo.player.username }}</el-text>
-                </div>
-                <div class="flex-row mid">
-                    <el-input v-model="uidInput" placeholder="输入uid以显示账号信息" @keyup.enter.native="requestInfo"
-                        class="title-input"></el-input>
-                    <el-text v-if="playerInfoLoading" style="margin-left: 1vw;">正在加载数据，请稍候……</el-text>
-                </div>
-                <div v-if="playerInfoReady" class="flex-row right" style="width: 30vw;">
-                    <el-tag size="large" style="margin-left: 5px;">世界等级 {{ playerInfo.player.levels.world }}</el-tag>
-                    <el-tag size="large" style="margin-left: 5px;">冒险等阶 {{ playerInfo.player.levels.rank }}</el-tag>
+    <div class="card-bg">
+        <div class="card-header">
+            <!-- TODO: 名片图片位于图层（z轴）最底部且贴右上角 -->
+            <el-image v-if="playerInfoReady" class="bg-image"
+                :src="'https://enka.network/ui/' + playerInfo.player.namecard.assets.picPath[0] + '.png'">
+            </el-image>
+            <div v-if="playerInfoReady" class="flex-row left items-center" style="width: 35vw;">
+                <el-avatar style="margin-left: 1vw;"
+                    :src="'https://enka.network/ui/' + playerInfo.player.profilePicture.assets.icon + '.png'"></el-avatar>
+                <el-text size="large" tag="b" style="margin-left: 1vw;">{{ playerInfo.player.username }}</el-text>
+            </div>
+            <div class="flex-row mid">
+                <el-input v-model="uidInput" placeholder="输入uid以显示账号信息" @keyup.enter.native="requestInfo"
+                    class="title-input"></el-input>
+                <el-text v-if="playerInfoLoading" style="margin-left: 1vw;">正在加载数据，请稍候……</el-text>
+            </div>
+            <div v-if="playerInfoReady" style="width: 35vw;position: relative;">
+                <!-- 这里是卡片组件，页面在GenshinPage.vue -->
+                <div class="tags-wrapper gap-x-1 flex-row right items-center">
+                    <el-tag size="large" class="levels-tag">世界等级 {{ playerInfo.player.levels.world }}</el-tag>
+                    <el-tag size="large" class="levels-tag">冒险等阶 {{ playerInfo.player.levels.rank }}</el-tag>
                 </div>
             </div>
-        </template>
-    </el-card>
+        </div>
+    </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+.card-bg {
+    background-color: white;
+    border-radius: 4.5vh;
+    min-height: 50vh;
+}
+
 .title-input {
-    width: 20vw;
+    width: 15vw;
 }
 
 .flex-row {
@@ -105,5 +116,30 @@ const requestInfo = () => {
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
+    padding: 0;
+    height: 9vh;
+    position: relative;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.gap-x-1 {
+    &>* {
+        margin-right: 1rem;
+    }
+}
+
+.bg-image {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+}
+
+.tags-wrapper {
+    height: 100%;
 }
 </style>

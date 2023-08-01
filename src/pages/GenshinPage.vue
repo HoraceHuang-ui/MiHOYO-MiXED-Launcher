@@ -35,7 +35,7 @@ const gsLaunch = () => {
 <template>
     <TopHeader :selection="2" />
     <img class="bg-pic" src="../assets/gsbanner.avif" @touchmove.prevent @mousewheel.prevent />
-    <el-scrollbar height="91vh" class="scroll-wrapper">
+    <el-scrollbar height="90vh" class="scroll-wrapper">
         <div class="items-scroll">
             <div>
                 <button v-if="gsPath" @click="gsLaunch" class="mainpage-button">原神启动</button>
@@ -70,7 +70,7 @@ const gsLaunch = () => {
 
 .scroll-wrapper {
     position: absolute;
-    top: 9vh;
+    top: 10vh;
     left: 10vw;
 }
 
@@ -104,7 +104,6 @@ const gsLaunch = () => {
 
 .scroll-card {
     width: 100%;
-    border-radius: 10px;
 }
 
 .gsInfoCard {
