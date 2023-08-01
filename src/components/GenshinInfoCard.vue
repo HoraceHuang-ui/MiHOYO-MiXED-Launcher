@@ -54,27 +54,43 @@ const requestInfo = () => {
 <template>
     <div class="card-bg">
         <div class="card-header">
-            <!-- TODO: 名片图片位于图层（z轴）最底部且贴右上角 -->
             <el-image v-if="playerInfoReady" class="bg-image"
                 :src="'https://enka.network/ui/' + playerInfo.player.namecard.assets.picPath[0] + '.png'">
             </el-image>
+            <el-text v-if="playerInfoLoading" class="bg-image"
+                style="margin-left: 1vw; right: 2vw; top: 3vh;">正在加载数据，请稍候……</el-text>
             <div v-if="playerInfoReady" class="flex-row left items-center" style="width: 35vw;">
                 <el-avatar style="margin-left: 1vw;"
                     :src="'https://enka.network/ui/' + playerInfo.player.profilePicture.assets.icon + '.png'"></el-avatar>
-                <el-text size="large" tag="b" style="margin-left: 1vw;">{{ playerInfo.player.username }}</el-text>
+                <el-text size="large" tag="b" style="margin-left: 1vw; font-size: larger;">{{ playerInfo.player.username
+                }}</el-text>
             </div>
+            <div v-else style="width: 35vw" />
             <div class="flex-row mid">
                 <el-input v-model="uidInput" placeholder="输入uid以显示账号信息" @keyup.enter.native="requestInfo"
                     class="title-input"></el-input>
-                <el-text v-if="playerInfoLoading" style="margin-left: 1vw;">正在加载数据，请稍候……</el-text>
             </div>
-            <div v-if="playerInfoReady" style="width: 35vw;position: relative;">
-                <!-- 这里是卡片组件，页面在GenshinPage.vue -->
+            <div v-if="playerInfoReady" style="width: 35vw; position: relative;">
                 <div class="tags-wrapper gap-x-1 flex-row right items-center">
-                    <el-tag size="large" class="levels-tag">世界等级 {{ playerInfo.player.levels.world }}</el-tag>
-                    <el-tag size="large" class="levels-tag">冒险等阶 {{ playerInfo.player.levels.rank }}</el-tag>
+                    <el-tag size="large" round>
+                        <div class="flex-row">
+                            WL
+                            <span style="font-weight: bold; margin-left: 1ch;">
+                                {{ playerInfo.player.levels.world }}
+                            </span>
+                        </div>
+                    </el-tag>
+                    <el-tag size="large" round>
+                        <div class="flex-row">
+                            AR
+                            <span style="font-weight: bold; margin-left: 1ch;">
+                                {{ playerInfo.player.levels.rank }}
+                            </span>
+                        </div>
+                    </el-tag>
                 </div>
             </div>
+            <div v-else style="width: 35vw" />
         </div>
     </div>
 </template>
@@ -103,7 +119,10 @@ const requestInfo = () => {
 .mid {
     justify-self: center;
     justify-content: center;
+    justify-items: center;
     align-self: center;
+    align-content: center;
+    align-items: center;
 }
 
 .right {
