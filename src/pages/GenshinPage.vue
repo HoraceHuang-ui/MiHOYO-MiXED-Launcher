@@ -35,7 +35,7 @@ const gsLaunch = () => {
 <template>
     <TopHeader :selection="2" />
     <img class="bg-pic top-0 rounded-3xl" src="../assets/gsbanner.avif" @touchmove.prevent @mousewheel.prevent />
-    <el-scrollbar height="90vh" class="scroll-wrapper absolute">
+    <el-scrollbar height="91vh" class="scroll-wrapper absolute">
         <div class="items-scroll flex flex-col space-x-1 content-center items-center">
             <div>
                 <button v-if="gsPath" @click="gsLaunch" class="p-3 mx-2 my-2 font-bold text-xl bg-yellow-400">原神启动</button>

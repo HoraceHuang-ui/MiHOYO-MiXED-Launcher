@@ -32,7 +32,7 @@ const starRail = async () => {
     <!-- @touchmove.prevent @mousewheel.prevent -->
     <div class="bg" @touchmove.prevent @mousewheel.prevent>
         <img class="bg-pic rounded-3xl" src="../assets/gsbanner.avif" />
-        <div class="bottom-mask sticky bottom-0"></div>
+        <div class="sticky bottom-0" style="height: 60vh;"></div>
         <div class="bottom-area sticky">
             <h1 class="font-sans font-bold text-5xl" style="margin-bottom: 10px;">MiHOYO MiXED Launcher</h1>
             <button v-if="gsPath" @click="genshin" class="p-3 mx-2 my-2 font-bold text-xl bg-yellow-400">原神启动</button>
@@ -54,9 +54,5 @@ const starRail = async () => {
 .bottom-area {
     bottom: 10px;
     height: 20vh;
-}
-
-.bottom-mask {
-    height: 60vh;
 }
 </style>

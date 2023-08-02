@@ -53,6 +53,7 @@ const requestInfo = () => {
 
 <template>
     <div class="card-bg bg-white">
+        <!-- HEADER -->
         <div class="flex flex-row w-full p-0 relative justify-between" style="height: 9vh;">
             <el-image v-if="playerInfoReady" class="absolute top-0 bottom-0 z-0" style="right: 1px;"
                 :src="'https://enka.network/ui/' + playerInfo.player.namecard.assets.picPath[0] + '.png'">
@@ -92,6 +93,8 @@ const requestInfo = () => {
             </div>
             <div v-else style="width: 35vw" />
         </div>
+        <!-- BODY -->
+
     </div>
 </template>
 
@@ -102,6 +105,5 @@ const requestInfo = () => {
 
 .card-bg {
     border-radius: 5vh;
-    min-height: 50vh;
 }
 </style>
