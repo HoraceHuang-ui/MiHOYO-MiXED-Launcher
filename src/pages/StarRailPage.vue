@@ -36,75 +36,35 @@ const srLaunch = () => {
 <template>
     <TopHeader :selection="3" />
     <div class="bg">
-        <el-scrollbar height="90vh">
-            <img class="bg-pic" src="../assets/srbanner.webp" />
-            <div class="bottom-mask"></div>
-            <div class="bottom-area mask">
-                <div class="path-confirm">
-                    <button v-if="srPath" @click="srLaunch" class="mainpage-button">星铁启动</button>
-                    <button v-else @click="srImport" class="mainpage-button">星铁导入</button>
-                    <button v-if="displayConfirm" @click="confirmPath" class="confirm-button">确认</button>
-                </div>
-                <div v-if="displayConfirm">{{ path }}</div>
+        <img class="bg-pic rounded-3xl" src="../assets/srbanner.webp" />
+        <div class="bottom-mask sticky bottom-0"></div>
+        <div class="bottom-area sticky bottom-0">
+            <div class="flex flex-row justify-center">
+                <button v-if="srPath" @click="srLaunch" class="p-3 mx-2 my-2 font-bold text-xl bg-yellow-400">星铁启动</button>
+                <button v-else @click="srImport" class="p-3 mx-2 my-2 font-bold text-xl bg-yellow-400">星铁导入</button>
+                <button v-if="displayConfirm" @click="confirmPath"
+                    class="p-3 mx-2 my-2 text-xl bg-white border-3 border-yellow-500">确认</button>
             </div>
-        </el-scrollbar>
+            <div v-if="displayConfirm">{{ path }}</div>
+        </div>
     </div>
 </template>
 
 <style scoped>
-.path-confirm {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-}
-
-/* ::-webkit-scrollbar {
-    width: 0 !important;
-}
-
-::-webkit-scrollbar {
-    width: 0 !important;
-    height: 0;
-} */
-
-/* .bg {
-    height: 90vh;
-    width: 96vw;
-    justify-content: center;
-    align-items: center;
-    justify-content: center;
-    align-content: center;
-    border-radius: 30px;
-} */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 .bg-pic {
     width: 98vw;
-    border-radius: 20px;
     -webkit-mask: linear-gradient(white, transparent)
 }
 
 .bottom-area {
-    position: sticky;
-    bottom: 0;
     height: 20vh;
 }
 
 .bottom-mask {
-    position: sticky;
-    bottom: 0;
     height: 60vh;
-}
-
-.mainpage-button {
-    font-weight: bold;
-    font-size: 20px;
-    background-color: rgb(255, 208, 114);
-    margin: 5px;
-}
-
-.confirm-button {
-    border-color: rgb(255, 208, 114);
-    border-width: 3px;
-    margin: 5px;
 }
 </style>

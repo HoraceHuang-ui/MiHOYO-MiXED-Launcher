@@ -52,38 +52,38 @@ const requestInfo = () => {
 </script>
 
 <template>
-    <div class="card-bg">
-        <div class="card-header">
-            <el-image v-if="playerInfoReady" class="bg-image"
+    <div class="card-bg bg-white">
+        <div class="flex flex-row w-full p-0 relative justify-between" style="height: 9vh;">
+            <el-image v-if="playerInfoReady" class="absolute top-0 bottom-0 z-0" style="right: 1px;"
                 :src="'https://enka.network/ui/' + playerInfo.player.namecard.assets.picPath[0] + '.png'">
             </el-image>
-            <el-text v-if="playerInfoLoading" class="bg-image"
+            <el-text v-if="playerInfoLoading" class="absolute top-0 right-0 bottom-0 z-0"
                 style="margin-left: 1vw; right: 2vw; top: 3vh;">正在加载数据，请稍候……</el-text>
-            <div v-if="playerInfoReady" class="flex-row left items-center" style="width: 35vw;">
+            <div v-if="playerInfoReady" class="flex flex-row content-start items-center" style="width: 35vw;">
                 <el-avatar style="margin-left: 1vw;"
                     :src="'https://enka.network/ui/' + playerInfo.player.profilePicture.assets.icon + '.png'"></el-avatar>
                 <el-text size="large" tag="b" style="margin-left: 1vw; font-size: larger;">{{ playerInfo.player.username
                 }}</el-text>
             </div>
             <div v-else style="width: 35vw" />
-            <div class="flex-row mid">
+            <div class="flex flex-row self-center">
                 <el-input v-model="uidInput" placeholder="输入uid以显示账号信息" @keyup.enter.native="requestInfo"
-                    class="title-input"></el-input>
+                    style="width: 15vw;"></el-input>
             </div>
             <div v-if="playerInfoReady" style="width: 35vw; position: relative;">
-                <div class="tags-wrapper gap-x-1 flex-row right items-center">
-                    <el-tag size="large" round>
-                        <div class="flex-row">
+                <div class="h-full flex flex-row justify-end items-center">
+                    <el-tag size="large" round class="mr-2">
+                        <div class="flex flex-row">
                             WL
-                            <span style="font-weight: bold; margin-left: 1ch;">
+                            <span class="font-bold" style="margin-left: 1ch;">
                                 {{ playerInfo.player.levels.world }}
                             </span>
                         </div>
                     </el-tag>
-                    <el-tag size="large" round>
-                        <div class="flex-row">
+                    <el-tag size="large" round class="mr-4">
+                        <div class="flex flex-row">
                             AR
-                            <span style="font-weight: bold; margin-left: 1ch;">
+                            <span class="font-bold" style="margin-left: 1ch;">
                                 {{ playerInfo.player.levels.rank }}
                             </span>
                         </div>
@@ -95,70 +95,13 @@ const requestInfo = () => {
     </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .card-bg {
-    background-color: white;
-    border-radius: 4.5vh;
+    border-radius: 5vh;
     min-height: 50vh;
-}
-
-.title-input {
-    width: 15vw;
-}
-
-.flex-row {
-    display: flex;
-    flex-direction: row;
-}
-
-.left {
-    justify-self: left;
-    justify-content: left;
-}
-
-.mid {
-    justify-self: center;
-    justify-content: center;
-    justify-items: center;
-    align-self: center;
-    align-content: center;
-    align-items: center;
-}
-
-.right {
-    justify-self: right;
-    justify-content: right;
-}
-
-.card-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 100%;
-    padding: 0;
-    height: 9vh;
-    position: relative;
-}
-
-.items-center {
-    align-items: center;
-}
-
-.gap-x-1 {
-    &>* {
-        margin-right: 1rem;
-    }
-}
-
-.bg-image {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 0;
-}
-
-.tags-wrapper {
-    height: 100%;
 }
 </style>

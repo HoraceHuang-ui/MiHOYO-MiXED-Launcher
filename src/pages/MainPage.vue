@@ -31,58 +31,32 @@ const starRail = async () => {
     <TopHeader :selection="1" />
     <!-- @touchmove.prevent @mousewheel.prevent -->
     <div class="bg" @touchmove.prevent @mousewheel.prevent>
-        <img class="bg-pic" src="../assets/gsbanner.avif" />
-        <div class="bottom-mask"></div>
-        <div class="bottom-area mask">
-            <h1 style="margin-bottom: 10px;">MiHOYO MiXED Launcher</h1>
-            <button v-if="gsPath" @click="genshin" class="mainpage-button">原神启动</button>
-            <button v-if="srPath" @click="starRail" class="mainpage-button">星铁启动</button>
+        <img class="bg-pic rounded-3xl" src="../assets/gsbanner.avif" />
+        <div class="bottom-mask sticky bottom-0"></div>
+        <div class="bottom-area sticky">
+            <h1 class="font-sans font-bold text-5xl" style="margin-bottom: 10px;">MiHOYO MiXED Launcher</h1>
+            <button v-if="gsPath" @click="genshin" class="p-3 mx-2 my-2 font-bold text-xl bg-yellow-400">原神启动</button>
+            <button v-if="srPath" @click="starRail" class="p-3 mx-2 my-2 font-bold text-xl bg-yellow-400">星铁启动</button>
         </div>
     </div>
 </template>
 
 <style scoped>
-/* ::-webkit-scrollbar {
-    width: 0 !important;
-}
-
-::-webkit-scrollbar {
-    width: 0 !important;
-    height: 0;
-} */
-
-/* .bg {
-    height: 90vh;
-    width: 96vw;
-    justify-content: center;
-    align-items: center;
-    justify-content: center;
-    align-content: center;
-    border-radius: 30px;
-} */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 .bg-pic {
     width: 98vw;
-    border-radius: 20px;
     -webkit-mask: linear-gradient(white, transparent)
 }
 
 .bottom-area {
-    position: sticky;
     bottom: 10px;
     height: 20vh;
 }
 
 .bottom-mask {
-    position: sticky;
-    bottom: 0;
     height: 60vh;
-}
-
-.mainpage-button {
-    font-weight: bold;
-    font-size: 20px;
-    background-color: rgb(255, 208, 114);
-    margin: 5px;
 }
 </style>
