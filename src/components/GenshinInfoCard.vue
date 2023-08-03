@@ -98,10 +98,10 @@ const requestInfo = () => {
         <!-- BODY -->
         <div v-if="playerInfoReady && playerInfo.characters.length > 0">
             <div class="flex flex-row w-full justify-center z-50 relative">
-                <div v-for="(character, index) in playerInfo.player.showcase" class="relative">
+                <div v-for="(character, index) in playerInfo.player.showcase" class="relative" @click="showcaseIdx = index">
                     <div class="absolute bottom-0 w-9 h-9 border-2 rounded-full bg-white"
                         :class="{ 'border-blue-600 border-3': showcaseIdx == index }" style="left: 10px;"></div>
-                    <img class="charSideIcon rounded-full ml-1 w-12" @click="showcaseIdx = index"
+                    <img class="charSideIcon rounded-full ml-1 w-12"
                         :src="'https://enka.network/ui/' + (character.costumeId != '' ? character.assets.costumes[0].sideIconName : character.assets.sideIcon) + '.png'" />
                 </div>
             </div>
@@ -140,7 +140,7 @@ const requestInfo = () => {
 @tailwind utilities;
 
 .charSideIcon {
-    -webkit-mask: radial-gradient(white 90%, transparent)
+    -webkit-mask: radial-gradient(white 80%, transparent)
 }
 
 .gacha-mask {
