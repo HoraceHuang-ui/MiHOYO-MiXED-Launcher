@@ -97,9 +97,9 @@ const requestInfo = () => {
         </div>
         <!-- BODY -->
         <div v-if="playerInfoReady && playerInfo.characters.length > 0">
-            <div class="flex flex-row w-full justify-center z-50">
+            <div class="flex flex-row w-full justify-center z-50 relative">
                 <div v-for="(character, index) in playerInfo.player.showcase" class="relative">
-                    <div class="absolute bottom-0 w-9 h-9 border-2 rounded-full"
+                    <div class="absolute bottom-0 w-9 h-9 border-2 rounded-full bg-white"
                         :class="{ 'border-blue-600 border-3': showcaseIdx == index }" style="left: 10px;"></div>
                     <img class="charSideIcon rounded-full ml-1 w-12" @click="showcaseIdx = index"
                         :src="'https://enka.network/ui/' + (character.costumeId != '' ? character.assets.costumes[0].sideIconName : character.assets.sideIcon) + '.png'" />
@@ -114,13 +114,17 @@ const requestInfo = () => {
                 Electro: #31005b #6f478c
                 Geo: #773f00 #9f772c
             -->
-            <div class="mt-4 bg-blue-200 w-full" style="border-radius: 4.5vh; height: 40vw;">
-                <div v-for="(, index) in playerInfo.characters">
-                    <div v-if="showcaseIdx == index">
-                        <img class="gacha-mask block" style="height: 100%;" loading="lazy"
-                            :src="'https://enka.network/ui/' + (playerInfo.characters[index].costumeId != '' ? playerInfo.characters[showcaseIdx].assets.costumes[0].art : playerInfo.characters[showcaseIdx].assets.gachaIcon) + '.png'" />
-
-                        <div></div>
+            <div v-for="(, index) in playerInfo.characters" class="z-0">
+                <div v-if="showcaseIdx == index" class="mt-4 bg-blue-200 w-full"
+                    style="border-radius: 4.5vh; height: 40vw;">
+                    <div class="flex flex-row h-full relative">
+                        <div class="left-gacha w-2/3 inline-block object-cover absolute left-0 bottom-0"
+                            style="height: 115%;">
+                            <img class="gacha-mask inline-block object-cover bottom-0 left-0 absolute z-0 h-full"
+                                loading="lazy"
+                                :src="'https://enka.network/ui/' + (playerInfo.characters[index].costumeId != '' ? playerInfo.characters[showcaseIdx].assets.costumes[0].art : playerInfo.characters[showcaseIdx].assets.gachaIcon) + '.png'" />
+                        </div>
+                        <div class="w-1/2 h-full absolute top-0 right-0">qqqqqqqqqqa</div>
                     </div>
                 </div>
             </div>
@@ -140,6 +144,10 @@ const requestInfo = () => {
 }
 
 .gacha-mask {
-    -webkit-mask: radial-gradient(white 80%, transparent);
+    -webkit-mask: linear-gradient(transparent, white 15%)
+}
+
+.left-gacha {
+    -webkit-mask: linear-gradient(270deg, transparent, white 20%)
 }
 </style>

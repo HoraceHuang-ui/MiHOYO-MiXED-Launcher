@@ -62,6 +62,7 @@ const gsLaunch = () => {
 .scroll-wrapper {
     top: 10vh;
     left: 10vw;
+    border-radius: 5vh;
 }
 
 .items-scroll {
