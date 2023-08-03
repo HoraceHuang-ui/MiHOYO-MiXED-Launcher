@@ -99,28 +99,32 @@ const getCharElement = (id) => {
     <div class="bg-white" style="border-radius: 4.5vh;">
         <!-- HEADER -->
         <div class="flex flex-row w-full p-0 relative justify-between" style="height: 9vh;">
+            <!-- 右上角名片 -->
             <el-image v-if="playerInfoReady" class="absolute top-0 right-0 bottom-0 z-0"
                 :src="'https://enka.network/ui/' + playerInfo.player.namecard.assets.picPath[0] + '.png'">
             </el-image>
             <el-text v-if="playerInfoLoading" class="absolute top-0 right-0 bottom-0 z-0"
                 style="margin-left: 1vw; right: 2vw; top: 3vh;">正在加载数据，请稍候……</el-text>
+            <!-- 左上角头像、昵称 -->
             <div v-if="playerInfoReady" class="flex flex-row content-start items-center" style="width: 35vw;">
                 <el-avatar style="margin-left: 1vw;"
                     :src="'https://enka.network/ui/' + playerInfo.player.profilePicture.assets.icon + '.png'"></el-avatar>
-                <el-text size="large" tag="b" style="margin-left: 1vw; font-size: larger;">{{ playerInfo.player.username
-                }}</el-text>
+                <div class="font-genshin" style="margin-left: 1vw; font-size: larger;">{{
+                    playerInfo.player.username
+                }}</div>
             </div>
             <div v-else style="width: 35vw" />
             <div class="flex flex-row self-center">
                 <el-input v-model="uidInput" placeholder="输入uid以显示账号信息" @keyup.enter.native="requestInfo"
                     style="width: 15vw;"></el-input>
             </div>
+            <!-- 右侧 WL AR -->
             <div v-if="playerInfoReady" style="width: 35vw; position: relative;">
                 <div class="h-full flex flex-row justify-end items-center">
                     <el-tag size="large" round class="mr-2">
                         <div class="flex flex-row">
                             WL
-                            <span class="font-bold" style="margin-left: 1ch;">
+                            <span class="font-genshin" style="margin-left: 1ch; margin-top: 1px;">
                                 {{ playerInfo.player.levels.world }}
                             </span>
                         </div>
@@ -128,7 +132,7 @@ const getCharElement = (id) => {
                     <el-tag size="large" round class="mr-4">
                         <div class="flex flex-row">
                             AR
-                            <span class="font-bold" style="margin-left: 1ch;">
+                            <span class="font-genshin" style="margin-left: 1ch; margin-top: 1px;">
                                 {{ playerInfo.player.levels.rank }}
                             </span>
                         </div>
@@ -164,18 +168,33 @@ const getCharElement = (id) => {
                             <img class="gacha-mask inline-block object-cover bottom-0 left-0 absolute z-10 h-full"
                                 loading="lazy" :src="'https://enka.network/ui/' + character.assets.gachaIcon + '.png'" />
                         </div>
-                        <!-- 左下角命之座 -->
+                        <!-- 左下角天赋、命之座 -->
                         <div class="absolute bottom-2 left-2 z-20">
-                            <div class="flex flex-row relative">
-                                <div v-for="idx in 6">
-                                    <div v-if="idx <= character.constellationsList.length" class="relative">
-                                        <div class="absolute bottom-0 left-2 w-8 h-8 rounded-full bg-black z-20 opacity-70">
+                            <div class="flex flex-col">
+                                <div class="flex flex-row relative">
+                                    <div v-for="skill in character.skills" class="rounded-full ml-2 h-8 mb-2 flex flex-row"
+                                        style="background-color: rgb(0 0 0 / 0.6); width: 72px;">
+                                        <img class="h-8 rounded-full"
+                                            :src="'https://enka.network/ui/' + skill.assets.icon + '.png'" />
+                                        <div class="text-center w-full mr-1 h-full align-middle" style="margin-top: 3px;">
+                                            <span class="text-white text-base font-genshin">{{
+                                                skill.level }}</span>
                                         </div>
-                                        <img class="relative h-8 rounded-full ml-2 z-30"
-                                            :src="'https://enka.network/ui/' + character.constellationsList[idx - 1].assets.icon + '.png'" />
                                     </div>
-                                    <div v-else>
-                                        <img src="../assets/locked.png" class="w-8 opacity-70 ml-2 bg-black rounded-full" />
+                                </div>
+                                <div class="flex flex-row relative">
+                                    <div v-for="idx in 6">
+                                        <div v-if="idx <= character.constellationsList.length" class="relative">
+                                            <div
+                                                class="absolute bottom-0 left-2 w-8 h-8 rounded-full bg-black z-20 opacity-70">
+                                            </div>
+                                            <img class="relative h-8 rounded-full ml-2 z-30"
+                                                :src="'https://enka.network/ui/' + character.constellationsList[idx - 1].assets.icon + '.png'" />
+                                        </div>
+                                        <div v-else>
+                                            <img src="../assets/locked.png"
+                                                class="w-8 opacity-70 ml-2 bg-black rounded-full" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -183,13 +202,13 @@ const getCharElement = (id) => {
                         <!-- 右侧详情 -->
                         <div class="w-2/5 h-full absolute top-4 right-6 bottom-4 flex flex-col z-20">
                             <div class="w-full text-right">
-                                <span class=" text-gray-200 font-medium bottom-0 text-xl align-bottom">
+                                <span class=" text-gray-200 font-genshin bottom-0 text-xl align-bottom">
                                     Lv. {{ character.properties.level.val }} /
                                 </span>
-                                <span class=" text-gray-400 bottom-0 text-xl align-bottom mr-2">
+                                <span class=" text-gray-400 bottom-0 text-xl align-bottom mr-2 font-serif">
                                     {{ ascLevelMap[character.properties.ascension.val * 1] }}
                                 </span>
-                                <span class=" text-white text-3xl font-bold">{{ character.name }}</span>
+                                <span class=" text-white font-genshin text-4xl font-bold">{{ character.name }}</span>
                             </div>
                             <div class="mt-2 text-white text-left w-full rounded-xl p-2 pl-4"
                                 style="background-color: rgba(0, 0, 0, 0.5);">
@@ -210,6 +229,10 @@ const getCharElement = (id) => {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.font-genshin {
+    font-family: genshin-font;
+}
 
 .char-side-icon {
     -webkit-mask: radial-gradient(white 80%, transparent)

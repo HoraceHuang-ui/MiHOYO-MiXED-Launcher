@@ -38,8 +38,10 @@ const gsLaunch = () => {
     <el-scrollbar height="91vh" class="scroll-wrapper absolute">
         <div class="items-scroll flex flex-col content-center items-center">
             <div>
-                <button v-if="gsPath" @click="gsLaunch" class="p-3 mx-2 my-2 font-bold text-xl bg-yellow-400">原神启动</button>
-                <button v-else @click="gsImport" class="p-3 mx-2 my-2 font-bold text-xl bg-yellow-400">原神导入</button>
+                <button v-if="gsPath" @click="gsLaunch"
+                    class="font-genshin p-3 mx-2 my-2 font-bold text-xl bg-yellow-400">原神启动</button>
+                <button v-else @click="gsImport"
+                    class="font-genshin p-3 mx-2 my-2 font-bold text-xl bg-yellow-400">原神导入</button>
                 <button v-if="displayConfirm" @click="confirmPath"
                     class="p-3 mx-2 my-2 text-xl bg-white border-3 border-yellow-500">确认</button>
             </div>
@@ -53,6 +55,10 @@ const gsLaunch = () => {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.font-genshin {
+    font-family: genshin-font;
+}
 
 .bg-pic {
     width: 98vw;
