@@ -177,8 +177,9 @@ const getCharElement = (id) => {
                                         <img class="h-8 rounded-full"
                                             :src="'https://enka.network/ui/' + skill.assets.icon + '.png'" />
                                         <div class="text-center w-full mr-1 h-full align-middle" style="margin-top: 3px;">
-                                            <span class="text-white text-base font-genshin">{{
-                                                skill.level }}</span>
+                                            <span
+                                                :class="{ 'text-orange-300': skill.level >= 10 }, { 'text-white': skill.level < 10 }"
+                                                class="text-base font-genshin">{{ skill.level }}</span>
                                         </div>
                                     </div>
                                 </div>
