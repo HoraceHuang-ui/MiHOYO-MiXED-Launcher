@@ -37,6 +37,7 @@ const elementAssets = {
         ico: './src/assets/elementIcons/pyro.png',
     },
 }
+const ascLevelMap = [20, 40, 50, 60, 70, 80, 90]
 
 onMounted(() => {
     window.store.get('genshinInfo')
@@ -138,6 +139,7 @@ const getCharElement = (id) => {
         </div>
         <!-- BODY -->
         <div v-if="playerInfoReady && playerInfo.characters.length > 0">
+            <!-- 角色头像列表 -->
             <div class="flex flex-row w-full justify-center z-50 relative">
                 <div v-for="(character, index) in playerInfo.player.showcase" class="relative" @click="showcaseIdx = index">
                     <div class="absolute bottom-0 w-9 h-9 border-2 rounded-full bg-white"
@@ -146,26 +148,50 @@ const getCharElement = (id) => {
                         :src="'https://enka.network/ui/' + (character.costumeId != '' ? character.assets.costumes[0].sideIconName : character.assets.sideIcon) + '.png'" />
                 </div>
             </div>
+            <!-- 角色详情卡片 -->
             <div v-for="(character, index) in playerInfo.characters" class="z-0">
                 <div v-if="showcaseIdx == index" class="mt-4 w-full relative">
+                    <!-- absolute： 卡片元素背景、元素图标 -->
                     <img class="relative z-0" :src="getCharElement(index).bg" style="border-radius: 4.5vh; height: 40vw;" />
                     <img class="h-1/4 absolute opacity-50" :src="getCharElement(index).ico"
                         style="top: -7px; right: -18px;" />
+                    <!-- 卡片前景 -->
                     <div class="flex flex-row h-full absolute top-0 left-0 right-0 bottom-0 z-10">
+                        <!-- 立绘 -->
                         <div class="left-gacha w-2/3 inline-block object-cover absolute left-0 bottom-0 z-10"
                             style="height: 115%;">
                             <!-- :src="'https://enka.network/ui/' + (character.costumeId != '' ? character.assets.costumes[0].art : character.assets.gachaIcon) + '.png'" -->
                             <img class="gacha-mask inline-block object-cover bottom-0 left-0 absolute z-10 h-full"
                                 loading="lazy" :src="'https://enka.network/ui/' + character.assets.gachaIcon + '.png'" />
                         </div>
+                        <!-- 左下角命之座 -->
+                        <div class="absolute bottom-2 left-2 z-20">
+                            <div class="flex flex-row relative">
+                                <div v-for="idx in 6">
+                                    <div v-if="idx <= character.constellationsList.length" class="relative">
+                                        <div class="absolute bottom-0 left-2 w-8 h-8 rounded-full bg-black z-20 opacity-70">
+                                        </div>
+                                        <img class="relative h-8 rounded-full ml-2 z-30"
+                                            :src="'https://enka.network/ui/' + character.constellationsList[idx - 1].assets.icon + '.png'" />
+                                    </div>
+                                    <div v-else>
+                                        <img src="../assets/locked.png" class="w-8 opacity-70 ml-2 bg-black rounded-full" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 右侧详情 -->
                         <div class="w-2/5 h-full absolute top-4 right-6 bottom-4 flex flex-col z-20">
                             <div class="w-full text-right">
-                                <span class=" text-gray-200 bottom-0 text-xl align-bottom mr-2">Lv. {{
-                                    character.properties.level.val
-                                }}</span>
+                                <span class=" text-gray-200 font-medium bottom-0 text-xl align-bottom">
+                                    Lv. {{ character.properties.level.val }} /
+                                </span>
+                                <span class=" text-gray-400 bottom-0 text-xl align-bottom mr-2">
+                                    {{ ascLevelMap[character.properties.ascension.val * 1] }}
+                                </span>
                                 <span class=" text-white text-3xl font-bold">{{ character.name }}</span>
                             </div>
-                            <div class="mt-2 text-white text-left w-full rounded-xl p-2"
+                            <div class="mt-2 text-white text-left w-full rounded-xl p-2 pl-4"
                                 style="background-color: rgba(0, 0, 0, 0.5);">
                                 <p>aaa</p>
                                 <p>bbb</p>
@@ -190,7 +216,7 @@ const getCharElement = (id) => {
 }
 
 .gacha-mask {
-    -webkit-mask: linear-gradient(transparent, white 15%)
+    -webkit-mask: linear-gradient(transparent, white 15%, white 85%, transparent)
 }
 
 .left-gacha {
