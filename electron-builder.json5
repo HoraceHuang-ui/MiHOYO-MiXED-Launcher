@@ -4,7 +4,7 @@
 {
   $schema: "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
   appId: "YourAppID",
-  asar: true,
+  asar: false,
   directories: {
     output: "release/${version}",
   },
@@ -29,4 +29,16 @@
     allowToChangeInstallationDirectory: true,
     deleteAppDataOnUninstall: false,
   },
+  extraResources: [
+    {
+      from: "./src/assets/elementBgs",
+      to: "./app/dist/src/assets/elementBgs",
+      filter: ["*"],
+    },
+    {
+      from: "./src/assets/elementIcons",
+      to: "./app/dist/src/assets/elementIcons",
+      filter: ["*"],
+    },
+  ],
 }
