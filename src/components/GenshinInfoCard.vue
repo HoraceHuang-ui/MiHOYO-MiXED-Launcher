@@ -142,36 +142,40 @@ const getCharElement = (id) => {
                 <div v-for="(character, index) in playerInfo.player.showcase" class="relative" @click="showcaseIdx = index">
                     <div class="absolute bottom-0 w-9 h-9 border-2 rounded-full bg-white"
                         :class="{ 'border-blue-600 border-3': showcaseIdx == index }" style="left: 10px;"></div>
-                    <img class="charSideIcon rounded-full ml-1 w-12"
+                    <img class="char-side-icon rounded-full ml-1 w-12"
                         :src="'https://enka.network/ui/' + (character.costumeId != '' ? character.assets.costumes[0].sideIconName : character.assets.sideIcon) + '.png'" />
                 </div>
             </div>
-            <!-- COLORS
-                Anemo: #006163 #228283
-                Dendro: #001d00 #1b6220
-                Pyro: #761b09 #9e5d50
-                Hydro: #09438d #517aae
-                Cryo: #005175 #28839c
-                Electro: #31005b #6f478c
-                Geo: #773f00 #9f772c
-            -->
-            <div v-for="(, index) in playerInfo.characters" class="z-0">
+            <div v-for="(character, index) in playerInfo.characters" class="z-0">
                 <div v-if="showcaseIdx == index" class="mt-4 w-full relative">
                     <img class="relative z-0" :src="getCharElement(index).bg" style="border-radius: 4.5vh; height: 40vw;" />
+                    <img class="h-1/4 absolute opacity-50" :src="getCharElement(index).ico"
+                        style="top: -7px; right: -18px;" />
                     <div class="flex flex-row h-full absolute top-0 left-0 right-0 bottom-0 z-10">
                         <div class="left-gacha w-2/3 inline-block object-cover absolute left-0 bottom-0 z-10"
                             style="height: 115%;">
-                            <!-- :src="'https://enka.network/ui/' + (playerInfo.characters[index].costumeId != '' ? playerInfo.characters[showcaseIdx].assets.costumes[0].art : playerInfo.characters[showcaseIdx].assets.gachaIcon) + '.png'" -->
+                            <!-- :src="'https://enka.network/ui/' + (character.costumeId != '' ? character.assets.costumes[0].art : character.assets.gachaIcon) + '.png'" -->
                             <img class="gacha-mask inline-block object-cover bottom-0 left-0 absolute z-10 h-full"
-                                loading="lazy"
-                                :src="'https://enka.network/ui/' + playerInfo.characters[showcaseIdx].assets.gachaIcon + '.png'" />
+                                loading="lazy" :src="'https://enka.network/ui/' + character.assets.gachaIcon + '.png'" />
                         </div>
-                        <div class="w-1/2 h-full absolute top-0 right-0">qqqqqqqqqqa</div>
+                        <div class="w-2/5 h-full absolute top-4 right-6 bottom-4 flex flex-col z-20">
+                            <div class="w-full text-right">
+                                <span class=" text-gray-200 bottom-0 text-xl align-bottom mr-2">Lv. {{
+                                    character.properties.level.val
+                                }}</span>
+                                <span class=" text-white text-3xl font-bold">{{ character.name }}</span>
+                            </div>
+                            <div class="mt-2 text-white text-left w-full rounded-xl p-2"
+                                style="background-color: rgba(0, 0, 0, 0.5);">
+                                <p>aaa</p>
+                                <p>bbb</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div v-else-if="!playerInfoReady">此处将显示角色的详细信息</div>
+        <div v-else-if="!playerInfoReady" class="mt-4 mb-4">此处将显示角色的详细信息</div>
         <div v-else class="mt-4 mb-4">当前暂无详细信息，请在游戏内打开“展示详细信息”后再试</div>
     </div>
 </template>
@@ -181,7 +185,7 @@ const getCharElement = (id) => {
 @tailwind components;
 @tailwind utilities;
 
-.charSideIcon {
+.char-side-icon {
     -webkit-mask: radial-gradient(white 80%, transparent)
 }
 
