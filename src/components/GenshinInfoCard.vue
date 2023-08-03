@@ -7,6 +7,36 @@ const playerInfoReady = ref(false)
 const playerInfoLoading = ref(false)
 const playerInfo = ref({})
 const showcaseIdx = ref(0)
+const elementAssets = {
+    cryo: {
+        bg: './src/assets/elementBgs/cryo.png',
+        ico: './src/assets/elementIcons/cryo.png',
+    },
+    anemo: {
+        bg: './src/assets/elementBgs/anemo.png',
+        ico: './src/assets/elementIcons/anemo.png',
+    },
+    dendro: {
+        bg: './src/assets/elementBgs/dendro.png',
+        ico: './src/assets/elementIcons/dendro.png',
+    },
+    electro: {
+        bg: './src/assets/elementBgs/electro.png',
+        ico: './src/assets/elementIcons/electro.png',
+    },
+    geo: {
+        bg: './src/assets/elementBgs/geo.png',
+        ico: './src/assets/elementIcons/geo.png',
+    },
+    hydro: {
+        bg: './src/assets/elementBgs/hydro.png',
+        ico: './src/assets/elementIcons/hydro.png',
+    },
+    pyro: {
+        bg: './src/assets/elementBgs/pyro.png',
+        ico: './src/assets/elementIcons/pyro.png',
+    },
+}
 
 onMounted(() => {
     window.store.get('genshinInfo')
@@ -50,6 +80,17 @@ const requestInfo = () => {
         })
     playerInfoLoading.value = true
     console.log(uid)
+}
+
+const getCharElement = (id) => {
+    const charStats = playerInfo.value.characters[id].stats
+    if (charStats.pyroEnergyCost.value && charStats.pyroEnergyCost.value > 0) { return elementAssets.pyro }
+    else if (charStats.cryoEnergyCost.value && charStats.cryoEnergyCost.value > 0) { return elementAssets.cryo }
+    else if (charStats.hydroEnergyCost.value && charStats.hydroEnergyCost.value > 0) { return elementAssets.hydro }
+    else if (charStats.electroEnergyCost.value && charStats.electroEnergyCost.value > 0) { return elementAssets.electro }
+    else if (charStats.geoEnergyCost.value && charStats.geoEnergyCost.value > 0) { return elementAssets.geo }
+    else if (charStats.anemoEnergyCost.value && charStats.anemoEnergyCost.value > 0) { return elementAssets.anemo }
+    else if (charStats.dendroEnergyCost.value && charStats.dendroEnergyCost.value > 0) { return elementAssets.dendro }
 }
 </script>
 
@@ -115,14 +156,15 @@ const requestInfo = () => {
                 Geo: #773f00 #9f772c
             -->
             <div v-for="(, index) in playerInfo.characters" class="z-0">
-                <div v-if="showcaseIdx == index" class="mt-4 bg-blue-200 w-full"
-                    style="border-radius: 4.5vh; height: 40vw;">
-                    <div class="flex flex-row h-full relative">
-                        <div class="left-gacha w-2/3 inline-block object-cover absolute left-0 bottom-0"
+                <div v-if="showcaseIdx == index" class="mt-4 w-full relative">
+                    <img class="relative z-0" :src="getCharElement(index).bg" style="border-radius: 4.5vh; height: 40vw;" />
+                    <div class="flex flex-row h-full absolute top-0 left-0 right-0 bottom-0 z-10">
+                        <div class="left-gacha w-2/3 inline-block object-cover absolute left-0 bottom-0 z-10"
                             style="height: 115%;">
-                            <img class="gacha-mask inline-block object-cover bottom-0 left-0 absolute z-0 h-full"
+                            <!-- :src="'https://enka.network/ui/' + (playerInfo.characters[index].costumeId != '' ? playerInfo.characters[showcaseIdx].assets.costumes[0].art : playerInfo.characters[showcaseIdx].assets.gachaIcon) + '.png'" -->
+                            <img class="gacha-mask inline-block object-cover bottom-0 left-0 absolute z-10 h-full"
                                 loading="lazy"
-                                :src="'https://enka.network/ui/' + (playerInfo.characters[index].costumeId != '' ? playerInfo.characters[showcaseIdx].assets.costumes[0].art : playerInfo.characters[showcaseIdx].assets.gachaIcon) + '.png'" />
+                                :src="'https://enka.network/ui/' + playerInfo.characters[showcaseIdx].assets.gachaIcon + '.png'" />
                         </div>
                         <div class="w-1/2 h-full absolute top-0 right-0">qqqqqqqqqqa</div>
                     </div>
