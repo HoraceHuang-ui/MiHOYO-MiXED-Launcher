@@ -36,7 +36,7 @@ const gsLaunch = () => {
     <TopHeader :selection="2" />
     <img class="bg-pic top-0 rounded-3xl" src="../assets/gsbanner.avif" @touchmove.prevent @mousewheel.prevent />
     <el-scrollbar height="91vh" class="scroll-wrapper absolute">
-        <div class="items-scroll flex flex-col space-x-1 content-center items-center">
+        <div class="items-scroll flex flex-col content-center items-center">
             <div>
                 <button v-if="gsPath" @click="gsLaunch" class="p-3 mx-2 my-2 font-bold text-xl bg-yellow-400">原神启动</button>
                 <button v-else @click="gsImport" class="p-3 mx-2 my-2 font-bold text-xl bg-yellow-400">原神导入</button>
@@ -44,7 +44,7 @@ const gsLaunch = () => {
                     class="p-3 mx-2 my-2 text-xl bg-white border-3 border-yellow-500">确认</button>
             </div>
             <div v-if="displayConfirm">{{ path }}</div>
-            <GenshinInfoCard class="my-2 w-full"></GenshinInfoCard>
+            <GenshinInfoCard class="my-2 w-full mb-4 shadow-md"></GenshinInfoCard>
         </div>
     </el-scrollbar>
 </template>

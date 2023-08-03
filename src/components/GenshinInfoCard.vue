@@ -6,6 +6,7 @@ var uid = ''
 const playerInfoReady = ref(false)
 const playerInfoLoading = ref(false)
 const playerInfo = ref({})
+const showcaseIdx = ref(0)
 
 onMounted(() => {
     window.store.get('genshinInfo')
@@ -16,8 +17,9 @@ onMounted(() => {
                 uidInput.value = uid
             }
             playerInfo.value = value
-            // console.log(playerInfo)
+            console.log(playerInfo.value)
         }).catch((err) => {
+            console.log('err')
             console.error(err)
         })
 })
@@ -52,10 +54,10 @@ const requestInfo = () => {
 </script>
 
 <template>
-    <div class="card-bg bg-white">
+    <div class="bg-white" style="border-radius: 4.5vh;">
         <!-- HEADER -->
         <div class="flex flex-row w-full p-0 relative justify-between" style="height: 9vh;">
-            <el-image v-if="playerInfoReady" class="absolute top-0 bottom-0 z-0" style="right: 1px;"
+            <el-image v-if="playerInfoReady" class="absolute top-0 right-0 bottom-0 z-0"
                 :src="'https://enka.network/ui/' + playerInfo.player.namecard.assets.picPath[0] + '.png'">
             </el-image>
             <el-text v-if="playerInfoLoading" class="absolute top-0 right-0 bottom-0 z-0"
@@ -94,7 +96,37 @@ const requestInfo = () => {
             <div v-else style="width: 35vw" />
         </div>
         <!-- BODY -->
+        <div v-if="playerInfoReady && playerInfo.characters.length > 0">
+            <div class="flex flex-row w-full justify-center z-50">
+                <div v-for="(character, index) in playerInfo.player.showcase" class="relative">
+                    <div class="absolute bottom-0 w-9 h-9 border-2 rounded-full"
+                        :class="{ 'border-blue-600 border-3': showcaseIdx == index }" style="left: 10px;"></div>
+                    <img class="charSideIcon rounded-full ml-1 w-12" @click="showcaseIdx = index"
+                        :src="'https://enka.network/ui/' + (character.costumeId != '' ? character.assets.costumes[0].sideIconName : character.assets.sideIcon) + '.png'" />
+                </div>
+            </div>
+            <!-- COLORS
+                Anemo: #006163 #228283
+                Dendro: #001d00 #1b6220
+                Pyro: #761b09 #9e5d50
+                Hydro: #09438d #517aae
+                Cryo: #005175 #28839c
+                Electro: #31005b #6f478c
+                Geo: #773f00 #9f772c
+            -->
+            <div class="mt-4 bg-blue-200 w-full" style="border-radius: 4.5vh; height: 40vw;">
+                <div v-for="(, index) in playerInfo.characters">
+                    <div v-if="showcaseIdx == index">
+                        <img class="gacha-mask block" style="height: 100%;" loading="lazy"
+                            :src="'https://enka.network/ui/' + (playerInfo.characters[index].costumeId != '' ? playerInfo.characters[showcaseIdx].assets.costumes[0].art : playerInfo.characters[showcaseIdx].assets.gachaIcon) + '.png'" />
 
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div v-else-if="!playerInfoReady">此处将显示角色的详细信息</div>
+        <div v-else class="mt-4 mb-4">当前暂无详细信息，请在游戏内打开“展示详细信息”后再试</div>
     </div>
 </template>
 
@@ -103,7 +135,11 @@ const requestInfo = () => {
 @tailwind components;
 @tailwind utilities;
 
-.card-bg {
-    border-radius: 5vh;
+.charSideIcon {
+    -webkit-mask: radial-gradient(white 90%, transparent)
+}
+
+.gacha-mask {
+    -webkit-mask: radial-gradient(white 80%, transparent);
 }
 </style>
