@@ -155,9 +155,9 @@ const calcCritScoreTotal = (index) => {
     var score = 0.0
     const artifacts = playerInfo.value.characters[index].equipment.artifacts
     artifacts.forEach(artifact => {
-        if (artifact.mainstat == "FIGHT_PROP_CRITICAL_HURT") {
+        if (artifact.mainstat.stat == "FIGHT_PROP_CRITICAL_HURT") {
             score += artifact.mainstat.statValue
-        } else if (artifact.mainstat == "FIGHT_PROP_CRITICAL") {
+        } else if (artifact.mainstat.stat == "FIGHT_PROP_CRITICAL") {
             score += artifact.mainstat.statValue * 2
         }
         const substats = artifact.substats
