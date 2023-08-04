@@ -43,15 +43,6 @@ const enka = new Wrapper({
   language: 'zh-CN'
 })
 ipcMain.handle("enka:getPlayer", async (_event, uid) => {
-  // enka.getPlayer(uid, 'zh-CN')
-  // .then((value) => {
-  //     playerInfo = value
-  //     playerInfoReady.value = true
-  //     window.store.set('genshinInfo', playerInfo)
-  // })
-  // .catch((err) => {
-  //     console.error(err)
-  // })
   console.log('ipcMain invoke')
   const result = await enka.getPlayer(uid)
   return result
