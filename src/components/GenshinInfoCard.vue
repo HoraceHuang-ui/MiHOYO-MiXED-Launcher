@@ -39,6 +39,8 @@ const elementAssets = {
 }
 const ascLevelMap = [20, 40, 50, 60, 70, 80, 90]
 const propNameMap = new Map()
+const propShortNameMap = new Map()
+const artifactTypeNameMap = new Map()
 
 onMounted(() => {
     window.store.get('genshinInfo')
@@ -66,14 +68,31 @@ onMounted(() => {
     propNameMap.set("FIGHT_PROP_CHARGE_EFFICIENCY", "元素充能效率")
     propNameMap.set("FIGHT_PROP_HEAL_ADD", "治疗加成")
     propNameMap.set("FIGHT_PROP_ELEMENT_MASTERY", "元素精通")
-    propNameMap.set("FIGHT_PROP_PHYSICAL_ADD_HURT", "物理伤害加成")
-    propNameMap.set("FIGHT_PROP_FIRE_ADD_HURT", "火元素伤害加成")
-    propNameMap.set("FIGHT_PROP_ELEC_ADD_HURT", "雷元素伤害加成")
-    propNameMap.set("FIGHT_PROP_WATER_ADD_HURT", "水元素伤害加成")
-    propNameMap.set("FIGHT_PROP_WIND_ADD_HURT", "风元素伤害加成")
-    propNameMap.set("FIGHT_PROP_ICE_ADD_HURT", "冰元素伤害加成")
-    propNameMap.set("FIGHT_PROP_ROCK_ADD_HURT", "岩元素伤害加成")
-    propNameMap.set("FIGHT_PROP_GRASS_ADD_HURT", "草元素伤害加成")
+    propNameMap.set("FIGHT_PROP_PHYSICAL_ADD_HURT", "物伤加成")
+    propNameMap.set("FIGHT_PROP_FIRE_ADD_HURT", "火伤加成")
+    propNameMap.set("FIGHT_PROP_ELEC_ADD_HURT", "雷伤加成")
+    propNameMap.set("FIGHT_PROP_WATER_ADD_HURT", "水伤加成")
+    propNameMap.set("FIGHT_PROP_WIND_ADD_HURT", "风伤加成")
+    propNameMap.set("FIGHT_PROP_ICE_ADD_HURT", "冰伤加成")
+    propNameMap.set("FIGHT_PROP_ROCK_ADD_HURT", "岩伤加成")
+    propNameMap.set("FIGHT_PROP_GRASS_ADD_HURT", "草伤加成")
+
+    propShortNameMap.set("FIGHT_PROP_HP", "生命")
+    propShortNameMap.set("FIGHT_PROP_ATTACK", "攻击")
+    propShortNameMap.set("FIGHT_PROP_DEFENSE", "防御")
+    propShortNameMap.set("FIGHT_PROP_HP_PERCENT", "生命")
+    propShortNameMap.set("FIGHT_PROP_ATTACK_PERCENT", "攻击")
+    propShortNameMap.set("FIGHT_PROP_DEFENSE_PERCENT", "防御")
+    propShortNameMap.set("FIGHT_PROP_CRITICAL", "暴率")
+    propShortNameMap.set("FIGHT_PROP_CRITICAL_HURT", "暴伤")
+    propShortNameMap.set("FIGHT_PROP_CHARGE_EFFICIENCY", "充能")
+    propShortNameMap.set("FIGHT_PROP_ELEMENT_MASTERY", "精通")
+
+    artifactTypeNameMap.set("EQUIP_BRACER", "生之花")
+    artifactTypeNameMap.set("EQUIP_NACKLACE", "死之羽")
+    artifactTypeNameMap.set("EQUIP_SHOES", "时之沙")
+    artifactTypeNameMap.set("EQUIP_RING", "空之杯")
+    artifactTypeNameMap.set("EQUIP_DRESS", "理之冠")
 })
 
 const router = useRouter()
@@ -120,8 +139,63 @@ const getPropName = (prop) => {
     return propNameMap.get(prop)
 }
 
+const getPropShortName = (prop) => {
+    return propShortNameMap.get(prop)
+}
+
+const getArtifactTypeName = (prop) => {
+    return artifactTypeNameMap.get(prop)
+}
+
 const showPercentage = (prop) => {
-    return prop.endsWith("HURT") || prop.endsWith("CRITICAL") || prop.endsWith("PERCENT") || prop.endsWith("ADD") || prop.endsWith("EFFICIENCY")
+    return (prop.endsWith("HURT") || prop.endsWith("CRITICAL") || prop.endsWith("PERCENT") || prop.endsWith("ADD") || prop.endsWith("EFFICIENCY")) ? '%' : ''
+}
+
+const calcCritScoreTotal = (index) => {
+    var score = 0.0
+    const artifacts = playerInfo.value.characters[index].equipment.artifacts
+    artifacts.forEach(artifact => {
+        if (artifact.mainstat == "FIGHT_PROP_CRITICAL_HURT") {
+            score += artifact.mainstat.statValue
+        } else if (artifact.mainstat == "FIGHT_PROP_CRITICAL") {
+            score += artifact.mainstat.statValue * 2
+        }
+        const substats = artifact.substats
+        substats.forEach(substat => {
+            if (substat.stat == "FIGHT_PROP_CRITICAL_HURT") {
+                score += substat.statValue
+            } else if (substat.stat == "FIGHT_PROP_CRITICAL") {
+                score += substat.statValue * 2
+            }
+        })
+    })
+    return score
+}
+
+const getArtifactSetInfo = (index) => {
+    var s = ""
+    const artifacts = playerInfo.value.characters[index].equipment.artifacts
+    const sets = new Map()
+    artifacts.forEach(artifact => {
+        const setName = artifact.setName
+        if (sets.get(setName)) {
+            sets.set(setName, sets.get(setName) + 1)
+        } else {
+            sets.set(setName, 1)
+        }
+    })
+    sets.forEach((value, key) => {
+        if (value >= 4) {
+            s = key.substring(0, 2) + " 4"
+        } else if (value >= 2) {
+            if (s == "") {
+                s = key.substring(0, 2) + " 2"
+            } else {
+                s = s + " + " + key.substring(0, 2) + " 2"
+            }
+        }
+    })
+    return s
 }
 </script>
 
@@ -235,109 +309,159 @@ const showPercentage = (prop) => {
                         <div class=" w-5/12 h-full absolute top-4 right-6 bottom-4 flex flex-col z-20">
                             <!-- Lv. 90/90 角色名字-->
                             <div class="w-full text-right">
-                                <span class=" text-gray-200 font-genshin bottom-0 text-xl align-bottom">
+                                <span class=" text-gray-200 font-genshin bottom-0 text-2xl align-bottom">
                                     Lv. {{ character.properties.level.val }} /
                                 </span>
-                                <span class=" text-gray-400 bottom-0 text-xl align-bottom mr-2 font-serif">
+                                <span class=" text-gray-400 bottom-0 text-2xl align-bottom mr-6 font-serif">
                                     {{ ascLevelMap[character.properties.ascension.val * 1] }}
                                 </span>
-                                <span class=" text-white font-genshin text-4xl font-bold">{{ character.name }}</span>
+                                <span class=" text-white font-genshin text-5xl font-bold">{{ character.name }}</span>
                             </div>
                             <!-- 详情第一块：属性 -->
-                            <div class="mt-2 text-white text-left w-full rounded-xl p-2 pl-4 grid grid-cols-3 grid-rows-3"
+                            <div class="mt-2 text-gray-200 text-lg text-left w-full rounded-xl p-2 pl-4 grid grid-cols-3 grid-rows-3"
                                 style="background-color: rgba(0, 0, 0, 0.5);">
                                 <div class="w-full justify-between" style="grid-column: 1; grid-row: 1;">
                                     <span class="text-gray-300">生命</span>
-                                    <span class="text-white text-right font-genshin ml-3">{{
+                                    <span class="text-gray-200 text-right font-genshin ml-3">{{
                                         parseInt(character.stats.maxHp.value)
                                     }}</span>
                                 </div>
                                 <div style="grid-column: 2; grid-row: 1;">
                                     <span class="text-gray-300">攻击</span>
-                                    <span class="text-white text-right font-genshin ml-3">{{
+                                    <span class="text-gray-200 text-right font-genshin ml-3">{{
                                         parseInt(character.stats.atk.value)
                                     }}</span>
                                 </div>
                                 <div style="grid-column: 3; grid-row: 1;">
                                     <span class="text-gray-300">防御</span>
-                                    <span class="text-white text-right font-genshin ml-3">{{
+                                    <span class="text-gray-200 text-right font-genshin ml-3">{{
                                         parseInt(character.stats.def.value)
                                     }}</span>
                                 </div>
                                 <div style="grid-column: 1; grid-row: 2;">
                                     <span class="text-gray-300">充能</span>
-                                    <span class="text-white text-right font-genshin ml-3">{{
+                                    <span class="text-gray-200 text-right font-genshin ml-3">{{
                                         (character.stats.energyRecharge.value * 100).toFixed(1)
                                     }}%</span>
                                 </div>
                                 <div style="grid-column: 2; grid-row: 2;">
                                     <span class="text-gray-300">精通</span>
-                                    <span class="text-white text-right font-genshin ml-3">{{
+                                    <span class="text-gray-200 text-right font-genshin ml-3">{{
                                         parseInt(!character.stats.elementalMastery.value ? 0 :
                                             character.stats.elementalMastery.value)
                                     }}</span>
                                 </div>
                                 <div style="grid-column: 3; grid-row: 2;">
                                     <span class="text-gray-300">能量</span>
-                                    <span class="text-white text-right font-genshin ml-3">{{
+                                    <span class="text-gray-200 text-right font-genshin ml-3">{{
                                         getCharElementEnergy(index)
                                     }}</span>
                                 </div>
                                 <div class="grid grid-cols-2 grid-rows-1" style="grid-column: 1 / 4; grid-row: 3;">
                                     <div style="grid-column: 1; grid-row: 1;">
                                         <span class="text-gray-300">暴击率</span>
-                                        <span class="text-white text-right font-genshin ml-3">{{
+                                        <span class="text-gray-200 text-right font-genshin ml-3">{{
                                             (character.stats.critRate.value * 100).toFixed(1)
                                         }}%</span>
                                     </div>
                                     <div style="grid-column: 2; grid-row: 1;">
                                         <span class="text-gray-300">暴击伤害</span>
-                                        <span class="text-white text-right font-genshin ml-3">{{
+                                        <span class="text-gray-200 text-right font-genshin ml-3">{{
                                             (character.stats.critDamage.value * 100).toFixed(1)
                                         }}%</span>
                                     </div>
                                 </div>
                             </div>
                             <!-- 详情第二块：武器 -->
-                            <div class="mt-2 w-full rounded-xl h-16 flex flex-row"
-                                style="background-color: rgb(0 0 0 / 0.6);">
+                            <div class="mt-2 w-full rounded-xl flex flex-row"
+                                style="background-color: rgb(0 0 0 / 0.6); height: 84px;">
                                 <img class="h-full"
                                     :src="'https://enka.network/ui/' + character.equipment.weapon.assets.awakenIcon + '.png'" />
-                                <div class="w-full h-full">
-                                    <div class="flex flex-row justify-between ml-1 mt-1">
+                                <div class="w-full h-full relative">
+                                    <div class="flex flex-row justify-between ml-2 mt-4">
                                         <div>
-                                            <span class="text-white font-genshin text-xl">
+                                            <span class="text-gray-200 font-genshin text-2xl">
                                                 {{ character.equipment.weapon.name }}</span>
-                                            <span class="text-white font-genshin text-lg"> Lv. {{
+                                            <span class="text-gray-200 font-genshin text-xl"> Lv. {{
                                                 character.equipment.weapon.level }} /</span>
                                             <span class="text-gray-300 ml-1 font-serif">{{
                                                 ascLevelMap[character.equipment.weapon.ascensionLevel] }}</span>
                                         </div>
-                                        <div class="text-gray-200 mr-2 text-sm">精炼
-                                            <span class="text-white font-genshin text-base">{{
+                                        <div class="text-gray-200 mr-2 text-sm absolute right-0 top-0">精炼
+                                            <span class="text-gray-200 font-genshin text-base">{{
                                                 character.equipment.weapon.refinement.level + 1 }}</span>
                                             阶
                                         </div>
                                     </div>
-                                    <div class="text-gray-300 ml-1 mb-1 text-left grid grid-cols-3">
+                                    <div class="text-gray-300 ml-2 text-left grid grid-cols-3">
                                         <div style="grid-column: 1;">
                                             攻击力
-                                            <span class="text-white font-genshin text-lg">{{
+                                            <span class="text-gray-200 font-genshin text-lg">{{
                                                 character.equipment.weapon.weaponStats[0].statValue }}</span>
                                         </div>
                                         <div class="ml-2" style="grid-column: 2 / 4;">
                                             {{ getPropName(character.equipment.weapon.weaponStats[1].stat) }}
-                                            <span class="text-white font-genshin text-lg">{{
+                                            <span class="text-gray-200 font-genshin text-lg">{{
                                                 character.equipment.weapon.weaponStats[1].statValue }}{{
-        showPercentage(character.equipment.weapon.weaponStats[1].stat) ? '%' : ''
-    }}</span>
+        showPercentage(character.equipment.weapon.weaponStats[1].stat) }}</span>
                                         </div>
                                     </div>
 
                                 </div>
                             </div>
                             <!-- 详情第三块：圣遗物 -->
-
+                            <el-carousel class="mt-2 w-full h-40 rounded-xl " arrow="never" :autoplay="false"
+                                style="background-color: rgb(0 0 0 / 0.6);">
+                                <el-carousel-item v-for="(artifact, index) in character.equipment.artifacts"
+                                    class="pb-2 pr-2 pl-4 flex flex-row h-40 text-gray-200">
+                                    <img style="height: 140%; margin-left: -15px; margin-top: -45px;"
+                                        class="artifact-mask w-28 object-cover"
+                                        :src="'https://enka.network/ui/' + artifact.icon + '.png'" />
+                                    <div class="w-full h-full relative">
+                                        <div class="text-gray-400 mr-2 text-sm absolute right-0 top-1">
+                                            {{ artifact.name }} ·
+                                            <span class="text-gray-200 font-genshin text-base">{{
+                                                getArtifactTypeName(artifact.equipType) }}</span>
+                                        </div>
+                                        <!-- 主词条、等级 -->
+                                        <div class="text-left mt-7 w-full flex flex-row">
+                                            <span class="text-gray-200 text-xl">{{ getPropName(artifact.mainstat.stat)
+                                            }}</span>
+                                            <span class="text-gray-200 text-3xl ml-2 font-genshin">{{
+                                                artifact.mainstat.statValue }}{{
+        showPercentage(artifact.mainstat.stat) }}</span>
+                                            <div style="margin-top: 4px;"
+                                                :class="{ 'border-orange-400 bg-orange-900 text-orange-300': artifact.stars == 5 },
+                                                    { 'border-purple-400 bg-purple-900 text-purple-300': artifact.stars == 4 },
+                                                    { 'border-blue-400 bg-blue-900 text-blue-300': artifact.stars == 3 },
+                                                    { 'border-green-400 bg-green-900 text-green-300': artifact.stars == 2 }"
+                                                class="h-full justify-end ml-2 font-genshin rounded-full border px-2">
+                                                +{{ artifact.level - 1 }}
+                                            </div>
+                                        </div>
+                                        <!-- 副词条 -->
+                                        <div class="grid grid-cols-2 mt-2 grid-rows-2 gap-1 w-full text-left">
+                                            <div v-for="substat in artifact.substats">
+                                                <span class="text-gray-300 text-lg">{{ getPropShortName(substat.stat)
+                                                }}</span>
+                                                <span class="text-gray-200 font-genshin text-xl ml-2">{{ substat.statValue
+                                                }}{{
+    showPercentage(substat.stat) }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </el-carousel-item>
+                            </el-carousel>
+                            <div class="flex flex-row justify-between">
+                                <div class="text-gray-200 ml-1 mt-1 font-genshin">
+                                    双爆总分：
+                                    <span class="text-gray-100">{{ calcCritScoreTotal(index).toFixed(1)
+                                    }}</span>
+                                </div>
+                                <div class="text-gray-100 mt-1 mr-1 font-genshin">
+                                    {{ getArtifactSetInfo(index) }}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -367,5 +491,9 @@ const showPercentage = (prop) => {
 
 .left-gacha {
     -webkit-mask: linear-gradient(270deg, transparent, white 20%)
+}
+
+.artifact-mask {
+    -webkit-mask: linear-gradient(270deg, transparent 10%, white 60%)
 }
 </style>
