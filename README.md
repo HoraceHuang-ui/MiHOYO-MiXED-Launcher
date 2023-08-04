@@ -9,7 +9,7 @@
 - [ ] **国际化支持。** I18n.
 - [ ] **原神分析玩家游戏数据。** Analyze player info for Genshin Impact.
   - [x] 获取数据 / Retrieve data
-  - [ ] 呈现数据 / Display data
+  - [x] 呈现数据 / Display data
 - [ ] **星铁分析玩家游戏数据。** Analyze player info for Honkai Star Rail.
 # Credits
 - [electron-vite/electron-vite-vue](https://github.com/electron-vite/electron-vite-vue)
