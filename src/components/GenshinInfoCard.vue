@@ -40,23 +40,7 @@ const elementAssets = {
 const ascLevelMap = [20, 40, 50, 60, 70, 80, 90]
 const propNameMap = new Map()
 const propShortNameMap = new Map()
-const artifactTypeNameMap = new Map()
-
-onMounted(() => {
-    window.store.get('genshinInfo')
-        .then((value) => {
-            if (value) {
-                playerInfoReady.value = true
-                uid = value.uid
-                uidInput.value = uid
-            }
-            playerInfo.value = value
-            console.log(playerInfo.value)
-        }).catch((err) => {
-            console.log('err')
-            console.error(err)
-        })
-
+const setPropNameMaps = () => {
     propNameMap.set("FIGHT_PROP_HP", "生命值")
     propNameMap.set("FIGHT_PROP_ATTACK", "攻击力")
     propNameMap.set("FIGHT_PROP_DEFENSE", "防御力")
@@ -87,12 +71,80 @@ onMounted(() => {
     propShortNameMap.set("FIGHT_PROP_CRITICAL_HURT", "暴伤")
     propShortNameMap.set("FIGHT_PROP_CHARGE_EFFICIENCY", "充能")
     propShortNameMap.set("FIGHT_PROP_ELEMENT_MASTERY", "精通")
-
+}
+const artifactTypeNameMap = new Map()
+const artifactShortNameMap = new Map()
+const setArtifactPropsMaps = () => {
     artifactTypeNameMap.set("EQUIP_BRACER", "生之花")
-    artifactTypeNameMap.set("EQUIP_NACKLACE", "死之羽")
+    artifactTypeNameMap.set("EQUIP_NECKLACE", "死之羽")
     artifactTypeNameMap.set("EQUIP_SHOES", "时之沙")
     artifactTypeNameMap.set("EQUIP_RING", "空之杯")
     artifactTypeNameMap.set("EQUIP_DRESS", "理之冠")
+
+    artifactShortNameMap.set("游医", "游医")
+    artifactShortNameMap.set("冒险家", "冒险家")
+    artifactShortNameMap.set("幸运儿", "幸运儿")
+    artifactShortNameMap.set("学士", "学士")
+    artifactShortNameMap.set("战狂", "战狂")
+    artifactShortNameMap.set("祭水之人", "祭水")
+    artifactShortNameMap.set("武人", "武人")
+    artifactShortNameMap.set("守护之心", "守护")
+    artifactShortNameMap.set("祭雷之人", "祭雷")
+    artifactShortNameMap.set("流放者", "流放者")
+    artifactShortNameMap.set("行者之心", "行者")
+    artifactShortNameMap.set("祭冰之人", "祭冰")
+    artifactShortNameMap.set("奇迹", "奇迹")
+    artifactShortNameMap.set("勇士之心", "勇士")
+    artifactShortNameMap.set("教官", "教官")
+    artifactShortNameMap.set("赌徒", "赌徒")
+    artifactShortNameMap.set("祭火之人", "祭火")
+    artifactShortNameMap.set("如雷的盛怒", "如雷")
+    artifactShortNameMap.set("追忆之注连", "追忆")
+    artifactShortNameMap.set("冰风迷途的勇士", "冰套")
+    artifactShortNameMap.set("染血的骑士道", "骑士道")
+    artifactShortNameMap.set("华馆梦醒形骸记", "华馆")
+    artifactShortNameMap.set("昔日宗室之仪", "宗室")
+    artifactShortNameMap.set("沉沦之心", "水套")
+    artifactShortNameMap.set("沙上楼阁史话", "楼阁")
+    artifactShortNameMap.set("悠古的磐岩", "磐岩")
+    artifactShortNameMap.set("海染砗磲", "海染")
+    artifactShortNameMap.set("翠绿之影", "风套")
+    artifactShortNameMap.set("苍白之火", "苍白")
+    artifactShortNameMap.set("乐园遗落之花", "乐园")
+    artifactShortNameMap.set("流浪大地的乐团", "乐团")
+    artifactShortNameMap.set("逆飞的流星", "流星")
+    artifactShortNameMap.set("辰砂往生录", "辰砂")
+    artifactShortNameMap.set("平息鸣雷的尊者", "平雷")
+    artifactShortNameMap.set("渡过烈火的贤人", "渡火")
+    artifactShortNameMap.set("千岩牢固", "千岩")
+    artifactShortNameMap.set("水仙之梦", "水仙")
+    artifactShortNameMap.set("被怜爱的少女", "少女")
+    artifactShortNameMap.set("来歆余响", "余响")
+    artifactShortNameMap.set("炽烈的炎之魔女", "魔女")
+    artifactShortNameMap.set("绝缘之旗印", "绝缘")
+    artifactShortNameMap.set("花海甘露之光", "甘露")
+    artifactShortNameMap.set("角斗士的终幕礼", "角斗")
+    artifactShortNameMap.set("深林的记忆", "草套")
+    artifactShortNameMap.set("饰金之梦", "饰金")
+}
+
+onMounted(() => {
+    window.store.get('genshinInfo')
+        .then((value) => {
+            if (value) {
+                playerInfoReady.value = true
+                uid = value.uid
+                uidInput.value = uid
+            }
+            playerInfo.value = value
+            console.log(playerInfo.value)
+        }).catch((err) => {
+            console.log('err')
+            console.error(err)
+        })
+
+    setPropNameMaps()
+    setArtifactPropsMaps()
 })
 
 const router = useRouter()
@@ -147,6 +199,10 @@ const getArtifactTypeName = (prop) => {
     return artifactTypeNameMap.get(prop)
 }
 
+const getArtifactShortName = (prop) => {
+    return artifactShortNameMap.get(prop)
+}
+
 const showPercentage = (prop) => {
     return (prop.endsWith("HURT") || prop.endsWith("CRITICAL") || prop.endsWith("PERCENT") || prop.endsWith("ADD") || prop.endsWith("EFFICIENCY")) ? '%' : ''
 }
@@ -173,7 +229,7 @@ const calcCritScoreTotal = (index) => {
 }
 
 const getArtifactSetInfo = (index) => {
-    var s = ""
+    var tokens = []
     const artifacts = playerInfo.value.characters[index].equipment.artifacts
     const sets = new Map()
     artifacts.forEach(artifact => {
@@ -186,15 +242,25 @@ const getArtifactSetInfo = (index) => {
     })
     sets.forEach((value, key) => {
         if (value >= 4) {
-            s = key.substring(0, 2) + " 4"
+            tokens.push(key)
+            tokens.push(" 4")
         } else if (value >= 2) {
-            if (s == "") {
-                s = key.substring(0, 2) + " 2"
+            if (tokens.length == 0) {
+                tokens.push(key)
+                tokens.push(" 2")
             } else {
-                s = s + " + " + key.substring(0, 2) + " 2"
+                tokens.push(key)
+                tokens.push(" 2")
             }
         }
     })
+    if (tokens.length == 2) {
+        return tokens[0] + tokens[1]
+    } else if (tokens.length == 4) {
+        return getArtifactShortName(tokens[0]) + tokens[1] + " + " + getArtifactShortName(tokens[2]) + tokens[3]
+    } else {
+        return "暂无圣遗物套装"
+    }
     return s
 }
 </script>
@@ -313,7 +379,8 @@ const getArtifactSetInfo = (index) => {
                                     Lv. {{ character.properties.level.val }} /
                                 </span>
                                 <span class=" text-gray-400 bottom-0 text-2xl align-bottom mr-6 font-serif">
-                                    {{ ascLevelMap[character.properties.ascension.val * 1] }}
+                                    {{ ascLevelMap[character.properties.ascension.val ? character.properties.ascension.val *
+                                        1 : 0] }}
                                 </span>
                                 <span class=" text-white font-genshin text-5xl font-bold">{{ character.name }}</span>
                             </div>
@@ -385,7 +452,8 @@ const getArtifactSetInfo = (index) => {
                                             <span class="text-gray-200 font-genshin text-xl"> Lv. {{
                                                 character.equipment.weapon.level }} /</span>
                                             <span class="text-gray-300 ml-1 font-serif">{{
-                                                ascLevelMap[character.equipment.weapon.ascensionLevel] }}</span>
+                                                ascLevelMap[character.equipment.weapon.ascensionLevel ?
+                                                    character.equipment.weapon.ascensionLevel : 0] }}</span>
                                         </div>
                                         <div class="text-gray-200 mr-2 text-sm absolute right-0 top-0">精炼
                                             <span class="text-gray-200 font-genshin text-base">{{
@@ -399,7 +467,8 @@ const getArtifactSetInfo = (index) => {
                                             <span class="text-gray-200 font-genshin text-lg">{{
                                                 character.equipment.weapon.weaponStats[0].statValue }}</span>
                                         </div>
-                                        <div class="ml-2" style="grid-column: 2 / 4;">
+                                        <div v-if="character.equipment.weapon.weaponStats.length > 1" class="ml-2"
+                                            style="grid-column: 2 / 4;">
                                             {{ getPropName(character.equipment.weapon.weaponStats[1].stat) }}
                                             <span class="text-gray-200 font-genshin text-lg">{{
                                                 character.equipment.weapon.weaponStats[1].statValue }}{{
@@ -410,9 +479,10 @@ const getArtifactSetInfo = (index) => {
                                 </div>
                             </div>
                             <!-- 详情第三块：圣遗物 -->
-                            <el-carousel class="mt-2 w-full h-40 rounded-xl " arrow="never" :autoplay="false"
+                            <el-carousel v-if="character.equipment.artifacts && character.equipment.artifacts.length > 0"
+                                class="mt-2 w-full h-40 rounded-xl " arrow="never" :autoplay="false"
                                 style="background-color: rgb(0 0 0 / 0.6);">
-                                <el-carousel-item v-for="(artifact, index) in character.equipment.artifacts"
+                                <el-carousel-item v-for="artifact in character.equipment.artifacts"
                                     class="pb-2 pr-2 pl-4 flex flex-row h-40 text-gray-200">
                                     <img style="height: 140%; margin-left: -15px; margin-top: -45px;"
                                         class="artifact-mask w-28 object-cover"
@@ -440,7 +510,8 @@ const getArtifactSetInfo = (index) => {
                                             </div>
                                         </div>
                                         <!-- 副词条 -->
-                                        <div class="grid grid-cols-2 mt-2 grid-rows-2 gap-1 w-full text-left">
+                                        <div v-if="artifact.substats && artifact.substats.length > 0"
+                                            class="grid grid-cols-2 mt-2 grid-rows-2 gap-1 w-full text-left">
                                             <div v-for="substat in artifact.substats">
                                                 <span class="text-gray-300 text-lg">{{ getPropShortName(substat.stat)
                                                 }}</span>
@@ -449,10 +520,14 @@ const getArtifactSetInfo = (index) => {
     showPercentage(substat.stat) }}</span>
                                             </div>
                                         </div>
+                                        <div v-else class="mt-2 text-left text-gray-300 text-lg">暂无副词条</div>
                                     </div>
                                 </el-carousel-item>
                             </el-carousel>
-                            <div class="flex flex-row justify-between">
+                            <div v-else class="mt-2 w-full h-40 rounded-xl pt-16 text-gray-200 text-center align-middle"
+                                style="background-color: rgb(0 0 0 / 0.6);">暂未装配圣遗物</div>
+                            <div v-if="character.equipment.artifacts && character.equipment.artifacts.length > 0"
+                                class="flex flex-row justify-between">
                                 <div class="text-gray-200 ml-1 mt-1 font-genshin">
                                     双爆总分：
                                     <span class="text-gray-100">{{ calcCritScoreTotal(index).toFixed(1)
@@ -460,6 +535,15 @@ const getArtifactSetInfo = (index) => {
                                 </div>
                                 <div class="text-gray-100 mt-1 mr-1 font-genshin">
                                     {{ getArtifactSetInfo(index) }}
+                                </div>
+                            </div>
+                            <div v-else class="flex flex-row justify-between">
+                                <div class="text-gray-200 ml-1 mt-1 font-genshin">
+                                    双爆总分：
+                                    <span class="text-gray-100">0</span>
+                                </div>
+                                <div class="text-gray-100 mt-1 mr-1 font-genshin">
+                                    暂无圣遗物套装
                                 </div>
                             </div>
                         </div>
