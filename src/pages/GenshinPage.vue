@@ -28,6 +28,7 @@ const confirmPath = async () => {
     displayConfirm.value = false
 }
 const gsLaunch = () => {
+    window.win.min()
     window.child.exec(gsPath.value.concat('\\Genshin Impact Game\\YuanShen.exe'))
 }
 </script>

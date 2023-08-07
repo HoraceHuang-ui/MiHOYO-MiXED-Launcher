@@ -5,7 +5,8 @@ import App from './App.vue'
 import router from "./router"
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
-import './assets/fonts/fonts.css'
+import './assets/styles/fonts.css'
+import './assets/styles/traffic.scss'
 
 createApp(App)
 .use(router)

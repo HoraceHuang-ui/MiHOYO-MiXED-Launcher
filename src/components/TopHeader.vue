@@ -1,6 +1,5 @@
 <script setup>
 import { useRouter } from 'vue-router'
-import { ref } from 'vue'
 const props = defineProps({
     selection: Number
 })
@@ -21,14 +20,20 @@ const clearAll = async () => {
 const clearPlayerInfo = async () => {
     await window.store.delete("genshinInfo")
 }
+
+const winClose = () => {
+    console.log("click on close")
+    window.win.close()
+}
 </script>
 
 <template>
-    <div class="navbar sticky flex flex-row justify-between p-2 z-50 top-0 w-full left-0 bg-white" style="height: 8vh;">
-        <div>
+    <div class="drag sticky flex flex-row justify-between z-50 top-0 w-full left-0 bg-white" style="height: 8vh;">
+        <div class="no-drag flex flex-row mt-3" style="width: 35vw;">
             <el-button @click="clearAll">清除全部</el-button>
+            <el-button class="no-drag" @click="clearPlayerInfo">清除游戏数据</el-button>
         </div>
-        <div class="navbar-mid flex flex-row h-full items-center justify-items-center">
+        <div class="no-drag flex flex-row h-full items-center justify-items-center">
             <img src="../assets/homeicon.png" class="mx-2 rounded-lg opacity-60" @click="home"
                 :class="{ selected: props.selection == 1 }" style="height: 6vh;" />
             <img src="../assets/gsicon.webp" class="mx-2 rounded-lg" @click="genshin"
@@ -36,7 +41,13 @@ const clearPlayerInfo = async () => {
             <img src="../assets/sricon.webp" class="mx-2 rounded-lg" @click="starRail"
                 :class="{ selected: props.selection == 3 }" style="height: 6vh;" />
         </div>
-        <el-button @click="clearPlayerInfo">清除游戏数据</el-button>
+        <div class="example focus no-drag" style="width: 35vw;">
+            <div class="traffic-lights no-drag">
+                <button class="traffic-light traffic-light-maximize mx-1" id="maximize"></button>
+                <button class="traffic-light traffic-light-minimize mx-1" id="minimize"></button>
+                <button class="traffic-light traffic-light-close mx-1" id="close" @click="winClose"></button>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -45,12 +56,12 @@ const clearPlayerInfo = async () => {
 @tailwind components;
 @tailwind utilities;
 
-.navbar {
-    /* -webkit-app-region: drag; */
+.drag {
+    -webkit-app-region: drag;
 }
 
-.navbar-mid {
-    /* -webkit-app-region: no-drag; */
+.no-drag {
+    -webkit-app-region: no-drag;
 }
 
 .selected {

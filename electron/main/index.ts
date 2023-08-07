@@ -1,6 +1,6 @@
-import { app, BrowserWindow, shell, ipcMain, nativeTheme } from 'electron'
+import { app, BrowserWindow, shell, ipcMain, nativeTheme, Tray, Menu } from 'electron'
 import { release } from 'node:os'
-import { join } from 'node:path'
+var path = require('path')
 
 const Store = require('electron-store');
 const store = new Store();
@@ -58,10 +58,10 @@ ipcMain.handle("enka:getPlayer", async (_event, uid) => {
 // ├─┬ dist
 // │ └── index.html    > Electron-Renderer
 //
-process.env.DIST_ELECTRON = join(__dirname, '..')
-process.env.DIST = join(process.env.DIST_ELECTRON, '../dist')
+process.env.DIST_ELECTRON = path.join(__dirname, '..')
+process.env.DIST = path.join(process.env.DIST_ELECTRON, '../dist')
 process.env.PUBLIC = process.env.VITE_DEV_SERVER_URL
-  ? join(process.env.DIST_ELECTRON, '../public')
+  ? path.join(process.env.DIST_ELECTRON, '../public')
   : process.env.DIST
 
 // Disable GPU Acceleration for Windows 7
@@ -82,18 +82,21 @@ if (!app.requestSingleInstanceLock()) {
 
 let win: BrowserWindow | null = null
 // Here, you can also use other preload
-const preload = join(__dirname, '../preload/index.js')
+const preload = path.join(__dirname, '../preload/index.js')
 const url = process.env.VITE_DEV_SERVER_URL
-const indexHtml = join(process.env.DIST, 'index.html')
+const indexHtml = path.join(process.env.DIST, 'index.html')
+let tray = null
 
 async function createWindow() {
   nativeTheme.themeSource = "light"
   win = new BrowserWindow({
     title: 'Main window',
-    icon: join(process.env.PUBLIC, 'favicon.ico'),
+    icon: path.join(process.env.PUBLIC, 'favicon.ico'),
     width: 1200,
     height: 700,
     resizable: false,
+    // transparent: true,
+    frame: false,
     webPreferences: {
       preload,
       // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
@@ -113,6 +116,34 @@ async function createWindow() {
   } else {
     win.loadFile(indexHtml)
   }
+  ipcMain.on('win:close', () => {
+    win.close()
+  })
+  ipcMain.on('win:min', () => {
+    win.minimize()
+  })
+  win.on("close", (e) => {
+    console.log('main close')
+    win.hide(); 
+    win.setSkipTaskbar(true);
+    e.preventDefault();
+  })
+  tray = new Tray(path.join(__dirname, '../../public/favicon.ico'));
+  const contextMenu = Menu.buildFromTemplate([
+    {label: '退出', click: () => {win.destroy()}},
+  ])
+  tray.setToolTip('miXeD')
+  tray.setContextMenu(contextMenu)
+  tray.on('click', ()=>{ 
+      win.isVisible() ? win.hide() : win.show()
+      win.isVisible() ?win.setSkipTaskbar(false):win.setSkipTaskbar(true);
+  })
+  // win.on('show', () => {
+  //   tray.setHighlightMode('always')
+  // })
+  // win.on('hide', () => {
+  //   tray.setHighlightMode('never')
+  // })
 
   // Test actively push message to the Electron-Renderer
   // win.webContents.on('did-finish-load', () => {

@@ -17,12 +17,14 @@ const genshin = async () => {
     console.log("click on genshin")
     console.log(gsPath.value.concat('\\Genshin Impact Game\\YuanShen.exe'))
     window.child.exec(gsPath.value.concat('\\Genshin Impact Game\\YuanShen.exe'))
+    window.win.min()
 }
 
 const starRail = async () => {
     console.log("click on starrail")
     console.log(srPath.value.concat('\\Game\\StarRail.exe'))
     await window.child.exec(srPath.value.concat('\\Game\\StarRail.exe'))
+    window.win.min()
 }
 
 </script>

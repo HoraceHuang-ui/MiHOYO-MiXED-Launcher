@@ -23,6 +23,16 @@ contextBridge.exposeInMainWorld("enka", {
     return result
   }
 })
+contextBridge.exposeInMainWorld("win", {
+  close: () => {
+    console.log('renderer close')
+    ipcRenderer.send("win:close")
+  },
+  min: () => {
+    console.log('renderer min')
+    ipcRenderer.send("win:min")
+  }
+})
 
 function domReady(
   condition: DocumentReadyState[] = ["complete", "interactive"]

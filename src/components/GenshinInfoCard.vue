@@ -500,12 +500,11 @@ const getArtifactSetInfo = (index) => {
                                             <span class="text-gray-200 text-3xl ml-2 font-genshin">{{
                                                 artifact.mainstat.statValue }}{{
         showPercentage(artifact.mainstat.stat) }}</span>
-                                            <div style="margin-top: 4px;"
-                                                :class="{ 'border-orange-400 bg-orange-900 text-orange-300': artifact.stars == 5 },
-                                                    { 'border-purple-400 bg-purple-900 text-purple-300': artifact.stars == 4 },
-                                                    { 'border-blue-400 bg-blue-900 text-blue-300': artifact.stars == 3 },
-                                                    { 'border-green-400 bg-green-900 text-green-300': artifact.stars == 2 }"
-                                                class="h-full justify-end ml-2 font-genshin rounded-full border px-2">
+                                            <div :class="{ 'border-orange-400 bg-orange-900 text-orange-300': artifact.stars == 5 },
+                                                { 'border-purple-400 bg-purple-900 text-purple-300': artifact.stars == 4 },
+                                                { 'border-blue-400 bg-blue-900 text-blue-300': artifact.stars == 3 },
+                                                { 'border-green-400 bg-green-900 text-green-300': artifact.stars == 2 }"
+                                                class="h-full justify-end mt-1 ml-2 font-genshin rounded-full border px-2">
                                                 +{{ artifact.level - 1 }}
                                             </div>
                                         </div>
