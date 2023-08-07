@@ -25,12 +25,13 @@ contextBridge.exposeInMainWorld("enka", {
 })
 contextBridge.exposeInMainWorld("win", {
   close: () => {
-    console.log('renderer close')
     ipcRenderer.send("win:close")
   },
   min: () => {
-    console.log('renderer min')
     ipcRenderer.send("win:min")
+  },
+  tray: () => {
+    ipcRenderer.send("win:tray")
   }
 })
 

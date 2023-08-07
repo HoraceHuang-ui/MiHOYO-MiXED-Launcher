@@ -122,11 +122,9 @@ async function createWindow() {
   ipcMain.on('win:min', () => {
     win.minimize()
   })
-  win.on("close", (e) => {
-    console.log('main close')
+  ipcMain.on("win:tray", () => {
     win.hide(); 
     win.setSkipTaskbar(true);
-    e.preventDefault();
   })
   tray = new Tray(path.join(__dirname, '../../public/favicon.ico'));
   const contextMenu = Menu.buildFromTemplate([

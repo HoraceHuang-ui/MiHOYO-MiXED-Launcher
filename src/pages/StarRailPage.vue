@@ -30,7 +30,7 @@ const confirmPath = async () => {
 }
 const srLaunch = () => {
     window.child.exec(srPath.value.concat('\\Game\\StarRail.exe'))
-    window.win.min()
+    window.win.tray()
 }
 </script>
 

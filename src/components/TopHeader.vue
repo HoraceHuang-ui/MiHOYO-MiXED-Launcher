@@ -22,8 +22,10 @@ const clearPlayerInfo = async () => {
 }
 
 const winClose = () => {
-    console.log("click on close")
     window.win.close()
+}
+const winMin = () => {
+    window.win.min()
 }
 </script>
 
@@ -44,7 +46,7 @@ const winClose = () => {
         <div class="example focus no-drag" style="width: 35vw;">
             <div class="traffic-lights no-drag">
                 <button class="traffic-light traffic-light-maximize mx-1" id="maximize"></button>
-                <button class="traffic-light traffic-light-minimize mx-1" id="minimize"></button>
+                <button class="traffic-light traffic-light-minimize mx-1" id="minimize" @click="winMin"></button>
                 <button class="traffic-light traffic-light-close mx-1" id="close" @click="winClose"></button>
             </div>
         </div>
