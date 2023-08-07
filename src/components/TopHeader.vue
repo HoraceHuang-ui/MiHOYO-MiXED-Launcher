@@ -50,7 +50,7 @@ const winMin = () => {
                 :class="{ selected: props.selection == 3 }" />
         </div>
         <div class="example focus no-drag" style="width: 35vw;">
-            <div class="traffic-lights no-drag">
+            <div class="traffic-lights no-drag mt-2">
                 <button class="traffic-light traffic-light-maximize mx-1" id="maximize"></button>
                 <button class="traffic-light traffic-light-minimize mx-1" id="minimize" @click="winMin"></button>
                 <button class="traffic-light traffic-light-close mx-1" id="close" @click="winClose"></button>

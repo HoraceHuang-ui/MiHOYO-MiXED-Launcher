@@ -35,7 +35,7 @@ const gsLaunch = () => {
 
 <template>
     <TopHeader :selection="2" />
-    <img class="bg-pic top-0 rounded-3xl" src="../assets/gsbanner.avif" @touchmove.prevent @mousewheel.prevent />
+    <img class="bg-pic top-0 rounded-3xl" src="../assets/gsbanner.jpg" @touchmove.prevent @mousewheel.prevent />
     <el-scrollbar height="91vh" class="scroll-wrapper absolute">
         <div class="items-scroll flex flex-col content-center items-center">
             <div>
