@@ -4,6 +4,8 @@ const props = defineProps({
     selection: Number
 })
 
+const pageNames = ['主页', '原神', '崩坏：星穹铁道']
+
 const router = useRouter()
 const home = () => {
     router.push("/")
@@ -31,17 +33,21 @@ const winMin = () => {
 
 <template>
     <div class="drag sticky flex flex-row justify-between z-50 top-0 w-full left-0 bg-white" style="height: 8vh;">
-        <div class="no-drag flex flex-row mt-3" style="width: 35vw;">
+        <!-- <div class="no-drag flex flex-row mt-3" style="width: 35vw;">
             <el-button @click="clearAll">清除全部</el-button>
             <el-button class="no-drag" @click="clearPlayerInfo">清除游戏数据</el-button>
+        </div> -->
+        <div class="mt-3 ml-2 text-left flex flex-row" style="width: 35vw;">
+            <img src="../../public/favicon.ico" class="h-6 mt-1" />
+            <div class="ml-2" style="margin-top: 2px;">miXeD Launcher · {{ pageNames[selection - 1] }}</div>
         </div>
         <div class="no-drag flex flex-row h-full items-center justify-items-center">
-            <img src="../assets/homeicon.png" class="mx-2 rounded-lg opacity-60" @click="home"
-                :class="{ selected: props.selection == 1 }" style="height: 6vh;" />
-            <img src="../assets/gsicon.webp" class="mx-2 rounded-lg" @click="genshin"
-                :class="{ selected: props.selection == 2 }" style="height: 6vh;" />
-            <img src="../assets/sricon.webp" class="mx-2 rounded-lg" @click="starRail"
-                :class="{ selected: props.selection == 3 }" style="height: 6vh;" />
+            <img src="../assets/homeicon.png" class="mx-2 rounded-lg opacity-60 h-8" @click="home"
+                :class="{ selected: props.selection == 1 }" />
+            <img src="../assets/gsicon.webp" class="mx-2 rounded-lg h-8" @click="genshin"
+                :class="{ selected: props.selection == 2 }" />
+            <img src="../assets/sricon.webp" class="mx-2 rounded-lg h-8" @click="starRail"
+                :class="{ selected: props.selection == 3 }" />
         </div>
         <div class="example focus no-drag" style="width: 35vw;">
             <div class="traffic-lights no-drag">
@@ -67,6 +73,7 @@ const winMin = () => {
 }
 
 .selected {
+    height: 6vh;
     background-color: lightblue;
     border: 5px solid rgb(121, 184, 255);
 }
