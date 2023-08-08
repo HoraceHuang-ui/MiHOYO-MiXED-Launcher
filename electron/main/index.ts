@@ -4,52 +4,11 @@ var path = require('path')
 
 const Store = require('electron-store');
 const store = new Store();
-ipcMain.handle('store:get', (_event, key) => {
-  return store.get(key)
-})
-ipcMain.on('store:set', (_event, key, value) => {
-  store.set(key, value)
-})
-ipcMain.on('store:delete', (_event, key) => {
-  store.delete(key)
-})
-ipcMain.on('store:clear', () => {
-  store.clear()
-})
-
 const child = require('child_process')
-ipcMain.on('child:exec', (_event, path) => {
-  child.execFile(path, function (err, data) {
-    if (err) {
-        console.error(err)
-        return
-    }
-    console.log(data.toString())
-  })
-})
-
 const { dialog } = require('electron');
-ipcMain.handle('dialog:show', async (_event, options) => {
-  const result = await dialog.showOpenDialog(options);
-  if (!result.canceled) {
-    return result.filePaths; // 返回选择的目录路径
-  } else {
-    return []; // 对话框被取消，返回空数组
-  }
-});
-
 const { Wrapper } = require('enkanetwork.js')
 const enka = new Wrapper({
   language: 'zh-CN'
-})
-ipcMain.handle("enka:getPlayer", async (_event, uid) => {
-  console.log('ipcMain invoke')
-  const result = await enka.getPlayer(uid)
-  return result
-})
-
-ipcMain.handle("path:joinDirname", (_event, arg) => {
-  return path.join(process.cwd(), arg)
 })
 
 // The built directory structure
@@ -91,11 +50,14 @@ const url = process.env.VITE_DEV_SERVER_URL
 const indexHtml = path.join(process.env.DIST, 'index.html')
 let tray = null
 
+var iconPath = path.join(process.env.PUBLIC, 'favicon.ico')
+var assetsPath = process.env.VITE_DEV_SERVER_URL ? '../../src/assets' : path.join(__dirname, '../../../src/assets')
+
 async function createWindow() {
   nativeTheme.themeSource = "light"
   win = new BrowserWindow({
     title: 'Main window',
-    icon: path.join(process.env.PUBLIC, 'favicon.ico'),
+    icon: iconPath,
     width: 1200,
     height: 700,
     resizable: false,
@@ -120,6 +82,18 @@ async function createWindow() {
   } else {
     win.loadFile(indexHtml)
   }
+
+  // ---------- Window actions ----------
+  const contextMenu = Menu.buildFromTemplate([
+    { label: '退出', click: () => {win.destroy()} },
+  ])
+  tray = new Tray(path.join(process.env.PUBLIC, 'favicon.ico'))
+  tray.setToolTip('miXeD')
+  tray.setContextMenu(contextMenu)
+  tray.on('click', ()=>{ 
+      win.isVisible() ? win.hide() : win.show()
+      win.isVisible() ? win.setSkipTaskbar(false) : win.setSkipTaskbar(true)
+  })
   ipcMain.on('win:close', () => {
     win.close()
   })
@@ -127,19 +101,54 @@ async function createWindow() {
     win.minimize()
   })
   ipcMain.on("win:tray", () => {
-    win.hide(); 
-    win.setSkipTaskbar(true);
+    win.hide()
+    win.setSkipTaskbar(true)
   })
-  tray = new Tray(path.join(__dirname, '../../public/favicon.ico'));
-  const contextMenu = Menu.buildFromTemplate([
-    {label: '退出', click: () => {win.destroy()}},
-  ])
-  tray.setToolTip('miXeD')
-  tray.setContextMenu(contextMenu)
-  tray.on('click', ()=>{ 
-      win.isVisible() ? win.hide() : win.show()
-      win.isVisible() ?win.setSkipTaskbar(false):win.setSkipTaskbar(true);
+
+  // ---------- custom IPCs ----------
+
+  ipcMain.handle('store:get', (_event, key) => {
+    return store.get(key)
   })
+  ipcMain.on('store:set', (_event, key, value) => {
+    store.set(key, value)
+  })
+  ipcMain.on('store:delete', (_event, key) => {
+    store.delete(key)
+  })
+  ipcMain.on('store:clear', () => {
+    store.clear()
+  })
+
+  ipcMain.on('child:exec', (_event, path) => {
+    child.execFile(path, function (err, data) {
+      if (err) {
+          console.error(err)
+          return
+      }
+      console.log(data.toString())
+    })
+  })
+
+  ipcMain.handle('dialog:show', async (_event, options) => {
+    const result = await dialog.showOpenDialog(options);
+    if (!result.canceled) {
+      return result.filePaths; // 返回选择的目录路径
+    } else {
+      return []; // 对话框被取消，返回空数组
+    }
+  });
+  
+  ipcMain.handle("enka:getPlayer", async (_event, uid) => {
+    console.log('ipcMain invoke')
+    const result = await enka.getPlayer(uid)
+    return result
+  })
+
+  ipcMain.handle("path:joinDirnameAsset", (_event, arg) => {
+    return path.join(assetsPath, arg)
+  })
+
   // win.on('show', () => {
   //   tray.setHighlightMode('always')
   // })

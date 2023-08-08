@@ -36,7 +36,7 @@ contextBridge.exposeInMainWorld("win", {
   }
 })
 contextBridge.exposeInMainWorld("path", {
-  joinDirname: (arg) => ipcRenderer.invoke("path:joinDirname", arg)
+  joinDirnameAsset: (arg) => ipcRenderer.invoke("path:joinDirnameAsset", arg)
 })
 
 function domReady(

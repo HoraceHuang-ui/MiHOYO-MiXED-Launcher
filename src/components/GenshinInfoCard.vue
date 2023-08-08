@@ -146,46 +146,46 @@ onMounted(() => {
 
     setPropNameMaps()
     setArtifactPropsMaps()
-    window.path.joinDirname('resources/src/assets/elementBgs/cryo.png').then((value) => {
+    window.path.joinDirnameAsset('elementBgs/cryo.png').then((value) => {
         elementAssets.value.cryo.bg = value
     })
-    window.path.joinDirname('resources/src/assets/elementIcons/cryo.png').then((value) => {
+    window.path.joinDirnameAsset('elementIcons/cryo.png').then((value) => {
         elementAssets.value.cryo.ico = value
     })
-    window.path.joinDirname('resources/src/assets/elementBgs/pyro.png').then((value) => {
+    window.path.joinDirnameAsset('elementBgs/pyro.png').then((value) => {
         elementAssets.value.pyro.bg = value
     })
-    window.path.joinDirname('resources/src/assets/elementIcons/pyro.png').then((value) => {
+    window.path.joinDirnameAsset('elementIcons/pyro.png').then((value) => {
         elementAssets.value.pyro.ico = value
     })
-    window.path.joinDirname('resources/src/assets/elementBgs/electro.png').then((value) => {
+    window.path.joinDirnameAsset('elementBgs/electro.png').then((value) => {
         elementAssets.value.electro.bg = value
     })
-    window.path.joinDirname('resources/src/assets/elementIcons/electro.png').then((value) => {
+    window.path.joinDirnameAsset('elementIcons/electro.png').then((value) => {
         elementAssets.value.electro.ico = value
     })
-    window.path.joinDirname('resources/src/assets/elementBgs/hydro.png').then((value) => {
+    window.path.joinDirnameAsset('elementBgs/hydro.png').then((value) => {
         elementAssets.value.hydro.bg = value
     })
-    window.path.joinDirname('resources/src/assets/elementIcons/hydro.png').then((value) => {
+    window.path.joinDirnameAsset('elementIcons/hydro.png').then((value) => {
         elementAssets.value.hydro.ico = value
     })
-    window.path.joinDirname('resources/src/assets/elementBgs/geo.png').then((value) => {
+    window.path.joinDirnameAsset('elementBgs/geo.png').then((value) => {
         elementAssets.value.geo.bg = value
     })
-    window.path.joinDirname('resources/src/assets/elementIcons/geo.png').then((value) => {
+    window.path.joinDirnameAsset('elementIcons/geo.png').then((value) => {
         elementAssets.value.geo.ico = value
     })
-    window.path.joinDirname('resources/src/assets/elementBgs/dendro.png').then((value) => {
+    window.path.joinDirnameAsset('elementBgs/dendro.png').then((value) => {
         elementAssets.value.dendro.bg = value
     })
-    window.path.joinDirname('resources/src/assets/elementIcons/dendro.png').then((value) => {
+    window.path.joinDirnameAsset('elementIcons/dendro.png').then((value) => {
         elementAssets.value.dendro.ico = value
     })
-    window.path.joinDirname('resources/src/assets/elementBgs/anemo.png').then((value) => {
+    window.path.joinDirnameAsset('elementBgs/anemo.png').then((value) => {
         elementAssets.value.anemo.bg = value
     })
-    window.path.joinDirname('resources/src/assets/elementIcons/anemo.png').then((value) => {
+    window.path.joinDirnameAsset('elementIcons/anemo.png').then((value) => {
         elementAssets.value.anemo.ico = value
     })
 })
