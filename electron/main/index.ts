@@ -48,6 +48,10 @@ ipcMain.handle("enka:getPlayer", async (_event, uid) => {
   return result
 })
 
+ipcMain.handle("path:joinDirname", (_event, arg) => {
+  return path.join(process.cwd(), arg)
+})
+
 // The built directory structure
 //
 // ├─┬ dist-electron

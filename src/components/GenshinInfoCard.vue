@@ -1,42 +1,43 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+
 const uidInput = ref('')
 var uid = ''
 const playerInfoReady = ref(false)
 const playerInfoLoading = ref(false)
 const playerInfo = ref({})
 const showcaseIdx = ref(0)
-const elementAssets = {
+const elementAssets = ref({
     cryo: {
-        bg: './src/assets/elementBgs/cryo.png',
-        ico: './src/assets/elementIcons/cryo.png',
+        bg: '',
+        ico: ''
     },
     anemo: {
-        bg: './src/assets/elementBgs/anemo.png',
-        ico: './src/assets/elementIcons/anemo.png',
+        bg: '',
+        ico: ''
     },
     dendro: {
-        bg: './src/assets/elementBgs/dendro.png',
-        ico: './src/assets/elementIcons/dendro.png',
+        bg: '',
+        ico: ''
     },
     electro: {
-        bg: './src/assets/elementBgs/electro.png',
-        ico: './src/assets/elementIcons/electro.png',
+        bg: '',
+        ico: ''
     },
     geo: {
-        bg: './src/assets/elementBgs/geo.png',
-        ico: './src/assets/elementIcons/geo.png',
+        bg: '',
+        ico: ''
     },
     hydro: {
-        bg: './src/assets/elementBgs/hydro.png',
-        ico: './src/assets/elementIcons/hydro.png',
+        bg: '',
+        ico: ''
     },
     pyro: {
-        bg: './src/assets/elementBgs/pyro.png',
-        ico: './src/assets/elementIcons/pyro.png',
+        bg: '',
+        ico: ''
     },
-}
+})
 const ascLevelMap = [20, 40, 50, 60, 70, 80, 90]
 const propNameMap = new Map()
 const propShortNameMap = new Map()
@@ -145,6 +146,48 @@ onMounted(() => {
 
     setPropNameMaps()
     setArtifactPropsMaps()
+    window.path.joinDirname('resources/src/assets/elementBgs/cryo.png').then((value) => {
+        elementAssets.value.cryo.bg = value
+    })
+    window.path.joinDirname('resources/src/assets/elementIcons/cryo.png').then((value) => {
+        elementAssets.value.cryo.ico = value
+    })
+    window.path.joinDirname('resources/src/assets/elementBgs/pyro.png').then((value) => {
+        elementAssets.value.pyro.bg = value
+    })
+    window.path.joinDirname('resources/src/assets/elementIcons/pyro.png').then((value) => {
+        elementAssets.value.pyro.ico = value
+    })
+    window.path.joinDirname('resources/src/assets/elementBgs/electro.png').then((value) => {
+        elementAssets.value.electro.bg = value
+    })
+    window.path.joinDirname('resources/src/assets/elementIcons/electro.png').then((value) => {
+        elementAssets.value.electro.ico = value
+    })
+    window.path.joinDirname('resources/src/assets/elementBgs/hydro.png').then((value) => {
+        elementAssets.value.hydro.bg = value
+    })
+    window.path.joinDirname('resources/src/assets/elementIcons/hydro.png').then((value) => {
+        elementAssets.value.hydro.ico = value
+    })
+    window.path.joinDirname('resources/src/assets/elementBgs/geo.png').then((value) => {
+        elementAssets.value.geo.bg = value
+    })
+    window.path.joinDirname('resources/src/assets/elementIcons/geo.png').then((value) => {
+        elementAssets.value.geo.ico = value
+    })
+    window.path.joinDirname('resources/src/assets/elementBgs/dendro.png').then((value) => {
+        elementAssets.value.dendro.bg = value
+    })
+    window.path.joinDirname('resources/src/assets/elementIcons/dendro.png').then((value) => {
+        elementAssets.value.dendro.ico = value
+    })
+    window.path.joinDirname('resources/src/assets/elementBgs/anemo.png').then((value) => {
+        elementAssets.value.anemo.bg = value
+    })
+    window.path.joinDirname('resources/src/assets/elementIcons/anemo.png').then((value) => {
+        elementAssets.value.anemo.ico = value
+    })
 })
 
 const router = useRouter()
@@ -168,13 +211,13 @@ const requestInfo = () => {
 
 const getCharElementAssets = (id) => {
     const charStats = playerInfo.value.characters[id].stats
-    if (charStats.pyroEnergyCost.value && charStats.pyroEnergyCost.value > 0) { return elementAssets.pyro }
-    else if (charStats.cryoEnergyCost.value && charStats.cryoEnergyCost.value > 0) { return elementAssets.cryo }
-    else if (charStats.hydroEnergyCost.value && charStats.hydroEnergyCost.value > 0) { return elementAssets.hydro }
-    else if (charStats.electroEnergyCost.value && charStats.electroEnergyCost.value > 0) { return elementAssets.electro }
-    else if (charStats.geoEnergyCost.value && charStats.geoEnergyCost.value > 0) { return elementAssets.geo }
-    else if (charStats.anemoEnergyCost.value && charStats.anemoEnergyCost.value > 0) { return elementAssets.anemo }
-    else if (charStats.dendroEnergyCost.value && charStats.dendroEnergyCost.value > 0) { return elementAssets.dendro }
+    if (charStats.pyroEnergyCost.value && charStats.pyroEnergyCost.value > 0) { return elementAssets.value.pyro }
+    else if (charStats.cryoEnergyCost.value && charStats.cryoEnergyCost.value > 0) { return elementAssets.value.cryo }
+    else if (charStats.hydroEnergyCost.value && charStats.hydroEnergyCost.value > 0) { return elementAssets.value.hydro }
+    else if (charStats.electroEnergyCost.value && charStats.electroEnergyCost.value > 0) { return elementAssets.value.electro }
+    else if (charStats.geoEnergyCost.value && charStats.geoEnergyCost.value > 0) { return elementAssets.value.geo }
+    else if (charStats.anemoEnergyCost.value && charStats.anemoEnergyCost.value > 0) { return elementAssets.value.anemo }
+    else if (charStats.dendroEnergyCost.value && charStats.dendroEnergyCost.value > 0) { return elementAssets.value.dendro }
 }
 
 const getCharElementEnergy = (id) => {

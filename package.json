@@ -1,6 +1,6 @@
 {
-  "name": "miXED",
-  "version": "2.0.4",
+  "name": "miXeD",
+  "version": "2.1.0",
   "main": "dist-electron/main/index.js",
   "description": "All-in-one MiHOYO game launcher",
   "author": "HoraceHYY <3214442497@qq.com>",
@@ -43,6 +43,7 @@
     "electron-store": "^8.1.0",
     "element-plus": "^2.3.8",
     "enkanetwork.js": "^2.1.8",
+    "path": "^0.12.7",
     "sass": "^1.64.2"
   }
 }

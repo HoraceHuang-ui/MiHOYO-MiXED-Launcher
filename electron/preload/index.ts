@@ -35,6 +35,9 @@ contextBridge.exposeInMainWorld("win", {
     ipcRenderer.send("win:tray")
   }
 })
+contextBridge.exposeInMainWorld("path", {
+  joinDirname: (arg) => ipcRenderer.invoke("path:joinDirname", arg)
+})
 
 function domReady(
   condition: DocumentReadyState[] = ["complete", "interactive"]
