@@ -157,7 +157,7 @@ const requestInfo = () => {
             window.store.set('genshinInfo', resp)
             playerInfo.value = resp
             playerInfoLoading.value = false
-            router.go(0)
+            router.push('/tmpgspage')
         }).catch((err) => {
             console.error(err)
         })
@@ -276,9 +276,10 @@ const getArtifactSetInfo = (index) => {
             <el-text v-if="playerInfoLoading" class="absolute top-0 right-0 bottom-0 z-0"
                 style="margin-left: 1vw; right: 2vw; top: 3vh;">正在加载数据，请稍候……</el-text>
             <!-- 左上角头像、昵称 -->
+            <!-- playerInfo.player.profilePicture.assets.icon -->
             <div v-if="playerInfoReady" class="flex flex-row content-start items-center" style="width: 35vw;">
                 <el-avatar style="margin-left: 1vw;"
-                    :src="'https://enka.network/ui/' + playerInfo.player.profilePicture.assets.icon + '.png'"></el-avatar>
+                    :src="'https://enka.network/ui/' + (playerInfo.player.profilePicture.assets.costumes.length > 0 ? playerInfo.player.profilePicture.assets.costumes[0].icon : playerInfo.player.profilePicture.assets.icon) + '.png'"></el-avatar>
                 <div class="font-genshin" style="margin-left: 1vw; font-size: larger;">{{
                     playerInfo.player.username
                 }}</div>
