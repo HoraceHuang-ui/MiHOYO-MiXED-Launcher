@@ -52,16 +52,17 @@ const handleCommand = (command) => {
 </script>
 
 <template>
-    <TopHeader :selection="2" />
     <img class="bg-pic top-0 rounded-3xl" src="../assets/gsbanner.jpg" @touchmove.prevent @mousewheel.prevent />
     <el-scrollbar height="91vh" class="scroll-wrapper absolute">
         <div class="items-scroll flex flex-col content-center items-center">
             <div>
                 <div v-if="gsPath">
                     <div class="mx-2 my-2 flex flex-row rounded-full bg-yellow-400 font-genshin">
-                        <button @click="gsLaunch" class="ml-4 text-xl font-bold">原神启动</button>
-                        <el-dropdown class="h-full p-3" trigger="click" @command="handleCommand">
-                            <button class="text-xl font-bold">…</button>
+                        <button @click="gsLaunch"
+                            class="pl-4 pr-2 text-xl font-bold rounded-full hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">原神启动</button>
+                        <el-dropdown class="h-full p-1" trigger="click" @command="handleCommand">
+                            <button
+                                class="text-xl text-gray-900 font-bold p-2 rounded-full hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">…</button>
                             <template #dropdown>
                                 <el-dropdown-menu>
                                     <el-dropdown-item command="openLauncher">打开官方启动器</el-dropdown-item>
@@ -73,7 +74,7 @@ const handleCommand = (command) => {
                     </div>
                 </div>
                 <button v-else @click="gsImport"
-                    class="font-genshin p-3 mx-2 my-2 font-bold text-xl bg-yellow-400">原神导入</button>
+                    class="font-genshin p-3 mx-2 my-2 font-bold text-xl bg-yellow-400 transition-all">原神导入</button>
                 <button v-if="displayConfirm" @click="confirmPath"
                     class="p-3 mx-2 my-2 text-xl bg-white border-3 border-yellow-500">确认</button>
             </div>

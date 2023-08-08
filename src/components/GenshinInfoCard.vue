@@ -160,6 +160,7 @@ const requestInfo = () => {
             router.push('/tmpgspage')
         }).catch((err) => {
             console.error(err)
+            playerInfoLoading.value = false
         })
     playerInfoLoading.value = true
     console.log(uid)
@@ -317,15 +318,15 @@ const getArtifactSetInfo = (index) => {
             <!-- 角色头像列表 -->
             <div class="flex flex-row w-full justify-center z-50 relative">
                 <div v-for="(character, index) in playerInfo.player.showcase" class="relative" @click="showcaseIdx = index">
-                    <div class="absolute bottom-0 w-9 h-9 border-2 rounded-full bg-white"
+                    <div class="absolute bottom-0 w-9 h-9 border-2 rounded-full bg-white transition-all"
                         :class="{ 'border-blue-600 border-3': showcaseIdx == index }" style="left: 10px;"></div>
-                    <img class="char-side-icon rounded-full ml-1 w-12"
+                    <img class="char-side-icon rounded-full ml-1 w-12 hover:transform hover:scale-110 hover:-translate-y-1 active:scale-100 active:translate-y-0 transition-all"
                         :src="'https://enka.network/ui/' + (character.costumeId != '' ? character.assets.costumes[0].sideIconName : character.assets.sideIcon) + '.png'" />
                 </div>
             </div>
             <!-- 角色详情卡片 -->
             <div v-for="(character, index) in playerInfo.characters" class="z-0">
-                <div v-if="showcaseIdx == index" class="mt-4 w-full relative">
+                <div v-if="showcaseIdx == index" class="mt-4 w-full relative transition-all">
                     <!-- absolute： 卡片元素背景、元素图标 -->
                     <img class="relative z-0" :src="getCharElementAssets(index).bg"
                         style="border-radius: 4.5vh; height: 40vw;" />

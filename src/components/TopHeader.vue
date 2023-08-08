@@ -1,26 +1,25 @@
 <script setup>
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-const props = defineProps({
-    selection: Number
-})
+// const props = defineProps({
+//     selection: Number
+// })
 
 const pageNames = ['主页', '原神', '崩坏：星穹铁道']
+const selection = ref(0)
 
 const router = useRouter()
 const home = () => {
+    selection.value = 0
     router.push("/")
 }
 const genshin = () => {
+    selection.value = 1
     router.push("/gspage")
 }
 const starRail = () => {
+    selection.value = 2
     router.push("/srpage")
-}
-const clearAll = async () => {
-    await window.store.clear()
-}
-const clearPlayerInfo = async () => {
-    await window.store.delete("genshinInfo")
 }
 
 const winClose = () => {
@@ -39,15 +38,16 @@ const winMin = () => {
         </div> -->
         <div class="mt-3 ml-2 text-left flex flex-row" style="width: 35vw;">
             <img src="../../public/favicon.ico" class="h-6 mt-1" />
-            <div class="ml-2" style="margin-top: 2px;">miXeD Launcher · {{ pageNames[selection - 1] }}</div>
+            <div class="ml-2" style="margin-top: 2px;">miXeD Launcher · {{ pageNames[selection] }}</div>
         </div>
         <div class="no-drag flex flex-row h-full items-center justify-items-center">
-            <img src="../assets/homeicon.png" class="mx-2 rounded-lg opacity-60 h-8" @click="home"
-                :class="{ selected: props.selection == 1 }" />
-            <img src="../assets/gsicon.webp" class="mx-2 rounded-lg h-8" @click="genshin"
-                :class="{ selected: props.selection == 2 }" />
-            <img src="../assets/sricon.webp" class="mx-2 rounded-lg h-8" @click="starRail"
-                :class="{ selected: props.selection == 3 }" />
+            <img src="../assets/homeicon.png"
+                class="mx-2 rounded-lg opacity-60 h-8 transition-all hover:scale-110 active:scale-90" @click="home"
+                :class="{ 'selected hover:scale-100': selection == 0 }" />
+            <img src="../assets/gsicon.webp" class="mx-2 rounded-lg h-8 transition-all hover:scale-110 active:scale-90"
+                @click="genshin" :class="{ 'selected hover:scale-100': selection == 1 }" />
+            <img src="../assets/sricon.webp" class="mx-2 rounded-lg h-8 transition-all hover:scale-110 active:scale-90"
+                @click="starRail" :class="{ 'selected hover:scale-100': selection == 2 }" />
         </div>
         <div class="example focus no-drag" style="width: 35vw;">
             <div class="traffic-lights no-drag mt-2">

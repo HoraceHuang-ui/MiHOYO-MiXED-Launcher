@@ -35,14 +35,15 @@ const srLaunch = () => {
 </script>
 
 <template>
-    <TopHeader :selection="3" />
     <div class="bg">
         <img class="bg-pic rounded-3xl" src="../assets/srbanner.webp" />
         <div class="bottom-mask sticky bottom-0"></div>
         <div class="bottom-area sticky bottom-0">
             <div class="flex flex-row justify-center">
-                <button v-if="srPath" @click="srLaunch" class="p-3 mx-2 my-2 font-bold text-xl bg-yellow-400">星铁启动</button>
-                <button v-else @click="srImport" class="p-3 mx-2 my-2 font-bold text-xl bg-yellow-400">星铁导入</button>
+                <button v-if="srPath" @click="srLaunch"
+                    class="p-3 mx-2 my-2 font-bold text-xl bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-900 active:scale-90">星铁启动</button>
+                <button v-else @click="srImport" class="p-3 mx-2 my-2 font-bold text-xl bg-yellow-400
+                ">星铁导入</button>
                 <button v-if="displayConfirm" @click="confirmPath"
                     class="p-3 mx-2 my-2 text-xl bg-white border-3 border-yellow-500">确认</button>
             </div>

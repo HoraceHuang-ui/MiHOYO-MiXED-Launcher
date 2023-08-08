@@ -30,7 +30,6 @@ const starRail = async () => {
 </script>
 
 <template>
-    <TopHeader :selection="1" />
     <!-- @touchmove.prevent @mousewheel.prevent -->
     <div class="bg" @touchmove.prevent @mousewheel.prevent>
         <!-- <el-dropdown class="absolute right-2 top-2 z-50 font-bold text-lg rounded-2xl bg-yellow-400 p-3" size="large">
@@ -47,8 +46,10 @@ const starRail = async () => {
         <div class="sticky bottom-0" style="height: 60vh;"></div>
         <div class="bottom-area sticky">
             <h1 class="font-sans font-bold text-5xl" style="margin-bottom: 10px;">MiHOYO MiXED Launcher</h1>
-            <button v-if="gsPath" @click="genshin" class="p-3 mx-2 my-2 font-bold text-xl bg-yellow-400">原神启动</button>
-            <button v-if="srPath" @click="starRail" class="p-3 mx-2 my-2 font-bold text-xl bg-yellow-400">星铁启动</button>
+            <button v-if="gsPath" @click="genshin"
+                class="p-3 mx-2 my-2 font-bold text-xl bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">原神启动</button>
+            <button v-if="srPath" @click="starRail"
+                class="p-3 mx-2 my-2 font-bold text-xl bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">星铁启动</button>
         </div>
     </div>
 </template>

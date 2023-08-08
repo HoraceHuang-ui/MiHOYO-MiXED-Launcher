@@ -20,6 +20,7 @@ contextBridge.exposeInMainWorld("enka", {
   getPlayer: async (uid) => {
     console.log('ipcRenderer')
     const result = await ipcRenderer.invoke("enka:getPlayer", uid)
+    console.log(result)
     return result
   }
 })
