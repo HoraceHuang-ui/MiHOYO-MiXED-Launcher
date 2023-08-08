@@ -370,7 +370,7 @@ const getArtifactSetInfo = (index) => {
             <!-- 角色详情卡片 -->
             <div v-for="(character, index) in playerInfo.characters" class="z-0 relative w-full">
                 <div class="mt-4 w-full absolute top-0 left-0 right-0 transition-all"
-                    :class="{ 'opacity-0 translate-x-40': showcaseIdx < index }, { 'opacity-100': showcaseIdx == index }, { 'opacity-0 -translate-x-40': showcaseIdx > index }"
+                    :class="{ 'opacity-0 translate-x-40 pointer-events-none': showcaseIdx < index }, { 'opacity-100 pointer-events-auto': showcaseIdx == index }, { 'opacity-0 -translate-x-40 pointer-events-none': showcaseIdx > index }"
                     style="transition-duration: 300ms;">
                     <!-- absolute： 卡片元素背景、元素图标 -->
                     <img class="relative z-0" :src="getCharElementAssets(index).bg"
