@@ -267,7 +267,7 @@ const getArtifactSetInfo = (index) => {
 </script>
 
 <template>
-    <div class="bg-white" style="border-radius: 4.5vh;">
+    <div class="bg-white" style="border-radius: 4.5vh; height: 86.5vh;">
         <!-- HEADER -->
         <div class="flex flex-row w-full p-0 relative justify-between" style="height: 9vh;">
             <!-- 右上角名片 -->
@@ -314,7 +314,7 @@ const getArtifactSetInfo = (index) => {
             <div v-else style="width: 35vw" />
         </div>
         <!-- BODY -->
-        <div v-if="playerInfoReady && playerInfo.characters.length > 0">
+        <div v-if="playerInfoReady && playerInfo.characters.length > 0" class="relative">
             <!-- 角色头像列表 -->
             <div class="flex flex-row w-full justify-center z-50 relative">
                 <div v-for="(character, index) in playerInfo.player.showcase" class="relative" @click="showcaseIdx = index">
@@ -325,8 +325,10 @@ const getArtifactSetInfo = (index) => {
                 </div>
             </div>
             <!-- 角色详情卡片 -->
-            <div v-for="(character, index) in playerInfo.characters" class="z-0">
-                <div v-if="showcaseIdx == index" class="mt-4 w-full relative transition-all">
+            <div v-for="(character, index) in playerInfo.characters" class="z-0 relative w-full">
+                <div class="mt-4 w-full absolute top-0 left-0 right-0 transition-all"
+                    :class="{ 'opacity-0 translate-x-40': showcaseIdx < index }, { 'opacity-100': showcaseIdx == index }, { 'opacity-0 -translate-x-40': showcaseIdx > index }"
+                    style="transition-duration: 300ms;">
                     <!-- absolute： 卡片元素背景、元素图标 -->
                     <img class="relative z-0" :src="getCharElementAssets(index).bg"
                         style="border-radius: 4.5vh; height: 40vw;" />
