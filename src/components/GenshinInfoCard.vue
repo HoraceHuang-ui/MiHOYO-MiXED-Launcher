@@ -345,19 +345,30 @@ const getArtifactSetInfo = (index) => {
                         <div class="absolute bottom-2 left-2 z-20">
                             <div class="flex flex-col">
                                 <div class="flex flex-row relative">
-                                    <div v-for="skill in character.skills" class="rounded-full ml-2 h-8 mb-2 flex flex-row"
-                                        style="background-color: rgb(0 0 0 / 0.6); width: 72px;">
-                                        <img class="h-8 rounded-full"
-                                            :src="'https://enka.network/ui/' + skill.assets.icon + '.png'" />
-                                        <div class="text-center w-full mr-1 h-full align-middle" style="margin-top: 3px;">
-                                            <span
-                                                :class="{ 'text-orange-300': skill.level >= 10 }, { 'text-white': skill.level < 10 }"
-                                                class="text-base font-genshin">{{ skill.level }}</span>
+                                    <el-tooltip v-for="skill in character.skills" placement="top">
+                                        <template #content>
+                                            <span class="font-genshin text-base"> {{ skill.name }} </span>
+                                        </template>
+                                        <div class="rounded-full ml-2 h-8 mb-2 flex flex-row"
+                                            style="background-color: rgb(0 0 0 / 0.6); width: 72px;">
+                                            <img class="h-8 rounded-full"
+                                                :src="'https://enka.network/ui/' + skill.assets.icon + '.png'" />
+                                            <div class="text-center w-full mr-1 h-full align-middle"
+                                                style="margin-top: 3px;">
+                                                <span
+                                                    :class="{ 'text-orange-300': skill.level >= 10 }, { 'text-white': skill.level < 10 }"
+                                                    class="text-base font-genshin">{{ skill.level }}</span>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </el-tooltip>
                                 </div>
                                 <div class="flex flex-row relative">
-                                    <div v-for="idx in 6">
+                                    <el-tooltip v-for="idx in 6" placement="top">
+                                        <template #content>
+                                            <span class="font-genshin text-base"> {{ idx <=
+                                                character.constellationsList.length ? character.constellationsList[idx -
+                                                    1].name : '未解锁命之座' }} </span>
+                                        </template>
                                         <div v-if="idx <= character.constellationsList.length" class="relative">
                                             <div
                                                 class="absolute bottom-0 left-2 w-8 h-8 rounded-full bg-black z-20 opacity-70">
@@ -369,7 +380,7 @@ const getArtifactSetInfo = (index) => {
                                             <img src="../assets/locked.png"
                                                 class="w-8 opacity-70 ml-2 bg-black rounded-full" />
                                         </div>
-                                    </div>
+                                    </el-tooltip>
                                 </div>
                             </div>
                         </div>
