@@ -1,7 +1,5 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import TopHeader from '../components/TopHeader.vue'
-import GenshinInfoCard from '../components/GenshinInfoCard.vue'
 import { useRouter } from 'vue-router'
 
 const gsPath = ref('')

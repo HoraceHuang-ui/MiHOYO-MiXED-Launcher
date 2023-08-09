@@ -305,7 +305,6 @@ const getArtifactSetInfo = (index) => {
     } else {
         return "暂无圣遗物套装"
     }
-    return s
 }
 </script>
 
@@ -314,16 +313,15 @@ const getArtifactSetInfo = (index) => {
         <!-- HEADER -->
         <div class="flex flex-row w-full p-0 relative justify-between" style="height: 9vh;">
             <!-- 右上角名片 -->
-            <el-image v-if="playerInfoReady" class="absolute top-0 right-0 bottom-0 z-0"
-                :src="'https://enka.network/ui/' + playerInfo.player.namecard.assets.picPath[0] + '.png'">
-            </el-image>
-            <el-text v-if="playerInfoLoading" class="absolute top-0 right-0 bottom-0 z-0"
-                style="margin-left: 1vw; right: 2vw; top: 3vh;">正在加载数据，请稍候……</el-text>
+            <img v-if="playerInfoReady" class="absolute top-0 right-0 bottom-0 z-0" style="height: 9vh;"
+                :src="'https://enka.network/ui/' + playerInfo.player.namecard.assets.picPath[0] + '.png'" />
+            <div v-if="playerInfoLoading" class="absolute top-0 right-0 bottom-0 z-0"
+                style="margin-left: 1vw; right: 2vw; top: 3vh;">正在加载数据，请稍候……</div>
             <!-- 左上角头像、昵称 -->
             <!-- playerInfo.player.profilePicture.assets.icon -->
             <div v-if="playerInfoReady" class="flex flex-row content-start items-center" style="width: 35vw;">
-                <el-avatar style="margin-left: 1vw;"
-                    :src="'https://enka.network/ui/' + (playerInfo.player.profilePicture.assets.costumes.length > 0 ? playerInfo.player.profilePicture.assets.costumes[0].icon : playerInfo.player.profilePicture.assets.icon) + '.png'"></el-avatar>
+                <img class="rounded-full h-12 border-2 bg-slate-200" style="margin-left: 1vw;"
+                    :src="'https://enka.network/ui/' + (playerInfo.player.profilePicture.assets.costumes.length > 0 ? playerInfo.player.profilePicture.assets.costumes[0].icon : playerInfo.player.profilePicture.assets.icon) + '.png'" />
                 <div class="font-genshin" style="margin-left: 1vw; font-size: larger;">{{
                     playerInfo.player.username
                 }}</div>

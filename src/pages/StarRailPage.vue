@@ -1,6 +1,5 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import TopHeader from '../components/TopHeader.vue'
 
 const srPath = ref('')
 const displayConfirm = ref(false)

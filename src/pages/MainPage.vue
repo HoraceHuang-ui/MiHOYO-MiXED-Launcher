@@ -1,6 +1,5 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import TopHeader from '../components/TopHeader.vue'
 
 const gsPath = ref('')
 const srPath = ref('')
