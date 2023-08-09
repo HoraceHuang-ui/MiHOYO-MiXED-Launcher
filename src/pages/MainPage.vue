@@ -46,9 +46,9 @@ const starRail = async () => {
         <div class="bottom-area sticky">
             <h1 class="font-sans font-bold text-5xl" style="margin-bottom: 10px;">MiHOYO MiXED Launcher</h1>
             <button v-if="gsPath" @click="genshin"
-                class="p-3 mx-2 my-2 font-bold text-xl bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">原神启动</button>
+                class="p-3 mx-2 my-2 font-bold text-xl transition-all bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90">原神启动</button>
             <button v-if="srPath" @click="starRail"
-                class="p-3 mx-2 my-2 font-bold text-xl bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">星铁启动</button>
+                class="p-3 mx-2 my-2 font-bold text-xl transition-all bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90">星铁启动</button>
         </div>
     </div>
 </template>

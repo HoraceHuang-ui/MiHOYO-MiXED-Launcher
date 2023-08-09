@@ -40,7 +40,7 @@ const srLaunch = () => {
         <div class="bottom-area sticky bottom-0">
             <div class="flex flex-row justify-center">
                 <button v-if="srPath" @click="srLaunch"
-                    class="p-3 mx-2 my-2 font-bold text-xl bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-900 active:scale-90">星铁启动</button>
+                    class="p-3 mx-2 my-2 font-bold text-xl bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-900 active:scale-90 transition-all">星铁启动</button>
                 <button v-else @click="srImport" class="p-3 mx-2 my-2 font-bold text-xl bg-yellow-400
                 ">星铁导入</button>
                 <button v-if="displayConfirm" @click="confirmPath"
