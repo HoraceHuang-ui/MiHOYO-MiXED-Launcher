@@ -15,8 +15,10 @@ const gsImport = async () => {
         title: '选择原神根目录',
         properties: ['openDirectory']
     }).then((resp) => {
-        path.value = resp[0];
-        displayConfirm.value = true
+        if (resp.length > 0) {
+            path.value = resp[0]
+            displayConfirm.value = true
+        }
     }).catch((error) => {
         console.error('Error in showing dialog:', error);
     });
