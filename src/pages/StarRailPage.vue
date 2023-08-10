@@ -31,6 +31,15 @@ const srLaunch = () => {
     window.child.exec(srPath.value.concat('\\Game\\StarRail.exe'))
     window.win.tray()
 }
+
+const handleCommand = (command) => {
+    switch (command) {
+        case 'openLauncher': window.child.exec(srPath.value.concat('launcher.exe'))
+            break
+        case 'clearPath': window.store.delete('starRailPath')
+            break
+    }
+}
 </script>
 
 <template>
@@ -39,8 +48,21 @@ const srLaunch = () => {
         <div class="bottom-mask sticky bottom-0"></div>
         <div class="bottom-area sticky bottom-0">
             <div class="flex flex-row justify-center">
-                <button v-if="srPath" @click="srLaunch"
-                    class="p-3 mx-2 my-2 font-bold text-xl bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-900 active:scale-90 transition-all">星铁启动</button>
+                <div v-if="srPath" class="mx-2 my-2 flex flex-row rounded-full bg-yellow-400">
+                    <button @click="srLaunch"
+                        class="pl-4 pr-2 text-xl font-bold rounded-full hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">星铁启动</button>
+                    <el-dropdown class="h-full p-1" trigger="click" @command="handleCommand">
+                        <button
+                            class="font-genshin text-xl text-gray-900 font-bold p-2 rounded-full hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">…</button>
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item command="openLauncher">打开官方启动器</el-dropdown-item>
+                                <el-dropdown-item command="clearPath" divided>清除游戏路径</el-dropdown-item>
+                                <el-dropdown-item command="clearPlayerinfo">清除游戏数据</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
+                </div>
                 <button v-else @click="srImport" class="p-3 mx-2 my-2 font-bold text-xl bg-yellow-400
                 ">星铁导入</button>
                 <button v-if="displayConfirm" @click="confirmPath"
@@ -55,6 +77,10 @@ const srLaunch = () => {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.font-genshin {
+    font-family: genshin-font;
+}
 
 .bg-pic {
     width: 98vw;
