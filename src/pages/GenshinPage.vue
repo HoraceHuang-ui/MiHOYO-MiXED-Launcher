@@ -16,7 +16,7 @@ onMounted(async () => {
     window.store.get('genshinUpd')
         .then((resp) => {
             if (gsPath.value && !resp) {
-                if (timeDelta.value > 36) {
+                if (timeDelta.value > 41) {
                     ElMessageBox.confirm('距离原神下一个大版本更新还有 ' + (42 - timeDelta.value) + ' 天，点击“确定”以打开官方启动器进行预下载，且此版本不再接收此消息。',
                         '更新提示',
                         {
