@@ -309,7 +309,7 @@ const getArtifactSetInfo = (index) => {
 </script>
 
 <template>
-    <div class="bg-white" style="border-radius: 4.5vh; height: 86.5vh;">
+    <div class="bg-white" style="border-radius: 4.5vh;" :style="playerInfoReady ? 'height: 86.5vh;' : ''">
         <!-- HEADER -->
         <div class="flex flex-row w-full p-0 relative justify-between" style="height: 9vh;">
             <!-- 右上角名片 -->
@@ -328,8 +328,12 @@ const getArtifactSetInfo = (index) => {
             </div>
             <div v-else style="width: 35vw" />
             <div class="flex flex-row self-center">
-                <el-input v-model="uidInput" placeholder="输入uid以显示账号信息" @keyup.enter.native="requestInfo"
-                    style="width: 15vw;"></el-input>
+                <el-input size="large" v-model="uidInput" placeholder="在此输入uid" @keyup.enter.native="requestInfo"
+                    style="width: 15vw;" clearable>
+                    <template #append>
+                        <el-button @click="requestInfo" size="large">查询</el-button>
+                    </template>
+                </el-input>
             </div>
             <!-- 右侧 WL AR -->
             <div v-if="playerInfoReady" style="width: 35vw; position: relative;">

@@ -5,13 +5,13 @@ import { useRouter } from 'vue-router'
 const gsPath = ref('')
 const displayConfirm = ref(false)
 const path = ref('')
-const timeUpd3_8 = Date.parse("2023/07/05 10:00:00 UTC+8")
-const timeNow = ref(Date.now())
+const timeUpd3_8 = Date.parse("2023/07/05 10:30:00 UTC+8")
+const timeNow = Date.now()
 const timeDelta = ref(0)
 
 onMounted(async () => {
     gsPath.value = await window.store.get('genshinPath')
-    timeDelta.value = ((timeNow.value - timeUpd3_8) / 1000 / 3600 / 24).toFixed(0) % 42
+    timeDelta.value = ((timeNow - timeUpd3_8) / 1000 / 3600 / 24).toFixed(0) % 42
     window.store.set('genshinUpd', false)
     window.store.get('genshinUpd')
         .then((resp) => {
@@ -22,21 +22,22 @@ onMounted(async () => {
                         {
                             confirmButtonText: '确定',
                             cancelButtonText: '取消',
-                            type: 'warning'
+                            type: 'info'
                         }).then(() => {
                             window.child.exec(gsPath.value.concat('\\launcher.exe'))
                             window.store.set('genshinUpd', true)
-                        })
+                        }).catch(() => { })
                 } else if (timeDelta.value < 3) {
                     ElMessageBox.confirm('距离原神大版本更新已经过去' + timeDelta.value + ' 天，点击“确定”以打开官方启动器进行下载，且此版本不再接收此消息。',
                         '更新提示',
                         {
                             confirmButtonText: '确定',
-                            cancelButtonText: '取消'
+                            cancelButtonText: '取消',
+                            type: 'info'
                         }).then(() => {
                             window.child.exec(gsPath.value.concat('\\launcher.exe'))
                             window.store.set('genshinUpd', true)
-                        })
+                        }).catch(() => { })
                 }
             } else if (gsPath && timeDelta.value > 2 && timeDelta.value < 37) {
                 window.store.set('genshinUpd', false)
@@ -77,6 +78,7 @@ const handleCommand = (command) => {
             break
         case 'clearPath':
             window.store.delete('genshinPath')
+            window.store.delete('genshinUpd')
             gsPath.value = ''
             break
         case 'clearPlayerinfo':
