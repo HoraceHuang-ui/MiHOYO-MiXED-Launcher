@@ -111,7 +111,7 @@ async function createWindow() {
     return store.get(key)
   })
   ipcMain.on('store:set', (_event, key, value) => {
-    store.set(key, value)
+    store.set(key, JSON.parse(value))
   })
   ipcMain.on('store:delete', (_event, key) => {
     store.delete(key)

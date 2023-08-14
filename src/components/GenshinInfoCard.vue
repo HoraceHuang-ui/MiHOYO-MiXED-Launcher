@@ -129,6 +129,25 @@ const setArtifactPropsMaps = () => {
     artifactShortNameMap.set("饰金之梦", "饰金")
 }
 
+const mergeToPlayerinfo = (newArr) => {
+    for (let i = newArr.length - 1; i >= 0; i--) {
+        let newChar = newArr[i]
+        var exists = false
+        for (let j = playerInfo.value.characters.length - 1; j >= 0; j--) {
+            let oldChar = playerInfo.value.characters[j]
+            if (oldChar.characterId == newChar.characterId) {
+                playerInfo.value.characters[j] = newChar
+                exists = true
+                break
+            }
+        }
+        if (!exists) {
+            playerInfo.value.characters.unshift(newChar)
+        }
+    }
+    console.log(playerInfo.value)
+}
+
 onMounted(() => {
     window.store.get('genshinInfo')
         .then((value) => {
@@ -196,9 +215,16 @@ const requestInfo = () => {
     playerInfoReady.value = false
     window.enka.getPlayer(uid)
         .then((resp) => {
-            console.log(resp)
-            window.store.set('genshinInfo', resp)
-            playerInfo.value = resp
+            if (playerInfo.value.uid == resp.uid) {
+                console.log('uid equal')
+                mergeToPlayerinfo(resp.characters)
+                playerInfo.value.player = resp.player
+            } else {
+                console.log('uid not equal')
+                playerInfo.value = resp
+            }
+            console.log('aaaaaaaaa')
+            window.store.set('genshinInfo', JSON.stringify(playerInfo.value))
             playerInfoLoading.value = false
             router.push('/tmpgspage')
         }).catch((err) => {
@@ -362,7 +388,7 @@ const getArtifactSetInfo = (index) => {
         <div v-if="playerInfoReady && playerInfo.characters.length > 0" class="relative">
             <!-- 角色头像列表 -->
             <div class="flex flex-row w-full justify-center z-50 relative">
-                <div v-for="(character, index) in playerInfo.player.showcase" class="relative" @click="showcaseIdx = index">
+                <div v-for="(character, index) in playerInfo.characters" class="relative" @click="showcaseIdx = index">
                     <div class="absolute bottom-0 w-9 h-9 border-2 rounded-full bg-white transition-all"
                         :class="{ 'border-blue-600 border-3': showcaseIdx == index }" style="left: 10px;"></div>
                     <img class="char-side-icon rounded-full ml-1 w-12 hover:transform hover:scale-110 hover:-translate-y-1 active:scale-100 active:translate-y-0 transition-all"

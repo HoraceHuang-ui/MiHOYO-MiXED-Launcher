@@ -11,12 +11,12 @@ const timeDelta = ref(0)
 
 onMounted(async () => {
     gsPath.value = await window.store.get('genshinPath')
-    timeDelta.value = ((timeNow - timeUpd3_8) / 1000 / 3600 / 24).toFixed(0) % 42
+    timeDelta.value = ((timeNow - timeUpd3_8) / 1000 / 3600 / 24 - 0.5).toFixed(0) % 42
     window.store.set('genshinUpd', false)
     window.store.get('genshinUpd')
         .then((resp) => {
             if (gsPath.value && !resp) {
-                if (timeDelta.value > 41) {
+                if (timeDelta.value > 39) {
                     ElMessageBox.confirm('距离原神下一个大版本更新还有 ' + (42 - timeDelta.value) + ' 天，点击“确定”以打开官方启动器进行预下载，且此版本不再接收此消息。',
                         '更新提示',
                         {
