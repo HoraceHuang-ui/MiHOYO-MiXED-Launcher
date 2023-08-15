@@ -11,12 +11,12 @@ const timeDelta = ref(0)
 
 onMounted(async () => {
     gsPath.value = await window.store.get('genshinPath')
-    timeDelta.value = ((timeNow - timeUpd3_8) / 1000 / 3600 / 24 - 0.5).toFixed(0) % 42
+    timeDelta.value = Math.ceil((timeNow - timeUpd3_8) / 1000 / 3600 / 24 - 0.5) % 42
     window.store.set('genshinUpd', false)
     window.store.get('genshinUpd')
         .then((resp) => {
             if (gsPath.value && !resp) {
-                if (timeDelta.value > 39) {
+                if (timeDelta.value > 40) {
                     ElMessageBox.confirm('距离原神下一个大版本更新还有 ' + (42 - timeDelta.value) + ' 天，点击“确定”以打开官方启动器进行预下载，且此版本不再接收此消息。',
                         '更新提示',
                         {
@@ -27,8 +27,19 @@ onMounted(async () => {
                             window.child.exec(gsPath.value.concat('\\launcher.exe'))
                             window.store.set('genshinUpd', true)
                         }).catch(() => { })
-                } else if (timeDelta.value < 3) {
+                } else if (timeDelta.value > 0 && timeDelta.value < 3) {
                     ElMessageBox.confirm('距离原神大版本更新已经过去' + timeDelta.value + ' 天，点击“确定”以打开官方启动器进行下载，且此版本不再接收此消息。',
+                        '更新提示',
+                        {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'info'
+                        }).then(() => {
+                            window.child.exec(gsPath.value.concat('\\launcher.exe'))
+                            window.store.set('genshinUpd', true)
+                        }).catch(() => { })
+                } else if (timeDelta.value == 0) {
+                    ElMessageBox.confirm('原神已在今天进行大版本更新，点击“确定”以打开官方启动器进行下载，且此版本不再接收此消息。',
                         '更新提示',
                         {
                             confirmButtonText: '确定',

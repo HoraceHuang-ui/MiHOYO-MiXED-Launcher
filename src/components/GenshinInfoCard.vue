@@ -1,11 +1,15 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { ArrowLeftBold, ArrowRightBold } from '@element-plus/icons-vue'
 
 const uidInput = ref('')
 var uid = ''
+var charsPage = ref(0)
+const pages = ref(0)
 const playerInfoReady = ref(false)
 const playerInfoLoading = ref(false)
+const charsScrollbar = ref()
 const playerInfo = ref({})
 const showcaseIdx = ref(0)
 const elementAssets = ref({
@@ -133,7 +137,8 @@ const mergeToPlayerinfo = (newArr) => {
     for (let i = newArr.length - 1; i >= 0; i--) {
         let newChar = newArr[i]
         var exists = false
-        for (let j = playerInfo.value.characters.length - 1; j >= 0; j--) {
+        // for (let j = playerInfo.value.characters.length - 1; j >= 0; j--) {
+        for (let j = 0; j < playerInfo.value.characters.length; j++) {
             let oldChar = playerInfo.value.characters[j]
             if (oldChar.characterId == newChar.characterId) {
                 playerInfo.value.characters[j] = newChar
@@ -155,11 +160,13 @@ onMounted(() => {
                 playerInfoReady.value = true
                 uid = value.uid
                 uidInput.value = uid
+                playerInfo.value = value
+                pages.value = playerInfo.value.characters.length > 10
+                    ? Math.floor((playerInfo.value.characters.length - 10) / 6) + 1
+                    : 1
             }
-            playerInfo.value = value
             console.log(playerInfo.value)
         }).catch((err) => {
-            console.log('err')
             console.error(err)
         })
 
@@ -223,7 +230,30 @@ const requestInfo = () => {
                 console.log('uid not equal')
                 playerInfo.value = resp
             }
-            console.log('aaaaaaaaa')
+            playerInfo.value.characters.sort(function (a, b) {
+                // 等级
+                if (a.properties.level.val < b.properties.level.val) {
+                    return 1
+                } else if (a.properties.level.val > b.properties.level.val) {
+                    return -1
+                } else {
+                    // 突破等级
+                    if (a.properties.ascension.val < b.properties.ascension.val) {
+                        return 1
+                    } else if (a.properties.ascension.val > b.properties.ascension.val) {
+                        return -1
+                    } else {
+                        // 双爆分
+                        const critA = a.stats.critRate.value * 200 + a.stats.critDamage.value * 100
+                        const critB = b.stats.critRate.value * 200 + b.stats.critDamage.value * 100
+                        if (critA < critB) {
+                            return 1
+                        } else {
+                            return -1
+                        }
+                    }
+                }
+            })
             window.store.set('genshinInfo', JSON.stringify(playerInfo.value))
             playerInfoLoading.value = false
             router.push('/tmpgspage')
@@ -332,6 +362,27 @@ const getArtifactSetInfo = (index) => {
         return "暂无圣遗物套装"
     }
 }
+const charsPageNext = () => {
+    if (charsPage.value < pages.value) {
+        charsPage.value++
+        charsScrollbar.value.scrollTo({
+            // about 48 for each icon, 10 icons on each page
+            left: charsPage.value * 48 * 6,
+            top: 0,
+            behavior: "smooth"
+        })
+    }
+}
+const charsPagePrev = () => {
+    if (charsPage.value > 0) {
+        charsPage.value--
+        charsScrollbar.value.scrollTo({
+            left: charsPage.value * 48 * 6,
+            top: 0,
+            behavior: "smooth"
+        })
+    }
+}
 </script>
 
 <template>
@@ -386,13 +437,32 @@ const getArtifactSetInfo = (index) => {
         </div>
         <!-- BODY -->
         <div v-if="playerInfoReady && playerInfo.characters.length > 0" class="relative">
-            <!-- 角色头像列表 -->
-            <div class="flex flex-row w-full justify-center z-50 relative">
-                <div v-for="(character, index) in playerInfo.characters" class="relative" @click="showcaseIdx = index">
-                    <div class="absolute bottom-0 w-9 h-9 border-2 rounded-full bg-white transition-all"
-                        :class="{ 'border-blue-600 border-3': showcaseIdx == index }" style="left: 10px;"></div>
-                    <img class="char-side-icon rounded-full ml-1 w-12 hover:transform hover:scale-110 hover:-translate-y-1 active:scale-100 active:translate-y-0 transition-all"
-                        :src="'https://enka.network/ui/' + (character.costumeId != '' ? character.assets.costumes[0].sideIconName : character.assets.sideIcon) + '.png'" />
+            <!-- 角色头像列表 10人一页 -->
+            <div class="flex flex-row w-full justify-between">
+                <div class="relative z-50 w-1/4">
+                    <el-icon
+                        class="absolute right-2 top-3 rounded-full w-9 h-9 bg-white hover:bg-gray-200 active:-translate-x-1 transition-all opacity-80"
+                        @click="charsPagePrev" :class="charsPage === 0 ? 'disabled' : ''">
+                        <ArrowLeftBold />
+                    </el-icon>
+                </div>
+                <el-scrollbar ref="charsScrollbar" class="flex flex-row w-1/2" noresize>
+                    <div class="flex flex-row z-50 relative flex-nowrap w-max">
+                        <div v-for="(character, index) in playerInfo.characters" class="relative w-12 h-12"
+                            @click="showcaseIdx = index">
+                            <div class="absolute bottom-0 w-9 h-9 border-2 rounded-full bg-white transition-all"
+                                :class="{ 'border-blue-600 border-3': showcaseIdx == index }" style="left: 10px;"></div>
+                            <img class="absolute bottom-0 char-side-icon rounded-full ml-1 w-12 h-12 hover:transform hover:scale-110 hover:-translate-y-1 active:scale-100 active:translate-y-0 transition-all object-cover"
+                                :src="'https://enka.network/ui/' + (character.costumeId != '' ? character.assets.costumes[0].sideIconName : character.assets.sideIcon) + '.png'" />
+                        </div>
+                    </div>
+                </el-scrollbar>
+                <div class="relative z-50 w-1/4">
+                    <el-icon
+                        class="absolute left-2 top-3 rounded-full w-9 h-9 ml-2 bg-white hover:bg-gray-200 active:translate-x-1 transition-all opacity-80"
+                        @click="charsPageNext" :class="charsPage === pages ? 'disabled' : ''">
+                        <ArrowRightBold />
+                    </el-icon>
                 </div>
             </div>
             <!-- 角色详情卡片 -->
@@ -665,5 +735,9 @@ const getArtifactSetInfo = (index) => {
 
 .artifact-mask {
     -webkit-mask: linear-gradient(270deg, transparent 10%, white 60%)
+}
+
+.disabled {
+    @apply bg-gray-200 opacity-30 pointer-events-none
 }
 </style>
