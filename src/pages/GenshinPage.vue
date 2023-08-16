@@ -107,6 +107,10 @@ const handleCommand = (command) => {
             break
     }
 }
+
+const openLink = (url) => {
+    window.electron.openExtLink(url)
+}
 </script>
 
 <template>
@@ -115,8 +119,8 @@ const handleCommand = (command) => {
         @mousewheel.prevent />
     <el-carousel class="absolute left-16 top-64 z-50 w-96 rounded-xl" v-if="launcherInfoReady" arrow="hover"
         indicator-position="none" style="height: 178px;">
-        <el-carousel-item v-for="ban in launcherInfo.banner" class="px-2">
-            <img class=" object-scale-down rounded-xl" :src="ban.img" />
+        <el-carousel-item v-for="ban in launcherInfo.banner" @click="openLink(ban.url)">
+            <img class=" object-scale-down" :src="ban.img" />
         </el-carousel-item>
     </el-carousel>
     <el-scrollbar height="91vh" class="scroll-wrapper absolute z-40">

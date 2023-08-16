@@ -44,6 +44,11 @@ contextBridge.exposeInMainWorld("axios", {
     return result
   }
 })
+contextBridge.exposeInMainWorld("electron", {
+  openExtLink: (url) => {
+    ipcRenderer.send("elec:openExtLink", url)
+  }
+})
 
 function domReady(
   condition: DocumentReadyState[] = ["complete", "interactive"]

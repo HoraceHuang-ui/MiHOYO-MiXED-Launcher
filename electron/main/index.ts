@@ -155,6 +155,10 @@ async function createWindow() {
     return result.data
   })
 
+  ipcMain.on("elec:openExtLink", (_event, url) => {
+    shell.openExternal(url);
+  })
+
   // Test actively push message to the Electron-Renderer
   // win.webContents.on('did-finish-load', () => {
   //   win?.webContents.send('main-process-message', new Date().toLocaleString())
