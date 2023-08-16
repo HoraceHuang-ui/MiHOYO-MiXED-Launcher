@@ -10,6 +10,9 @@ const timeNow = Date.now()
 const timeDelta = ref(0)
 const launcherInfo = ref({})
 const launcherInfoReady = ref(false)
+const hideElements = ref(false)
+const tmpPrevScroll = ref(0)
+const scrollbarref = ref()
 
 onMounted(async () => {
     // 获取原神启动器信息
@@ -111,23 +114,35 @@ const handleCommand = (command) => {
 const openLink = (url) => {
     window.electron.openExtLink(url)
 }
+
+const handleScroll = ({ scrollTop }) => {
+    if (scrollTop > 0) {
+        hideElements.value = true
+    } else {
+        hideElements.value = false
+    }
+}
 </script>
 
 <template>
     <img class="bg-pic top-0 rounded-3xl"
         :src="launcherInfoReady ? launcherInfo.adv.background : './src/assets/gsbanner.png'" @touchmove.prevent
         @mousewheel.prevent />
-    <el-carousel class="absolute left-16 top-64 z-50 w-96 rounded-xl" v-if="launcherInfoReady" arrow="hover"
+    <div class="w-full h-full absolute top-0 right-0 left-0 bottom-0 transition-all"
+        style="background-color: rgb(255 255 255 / 0.5);" :class="hideElements ? 'opacity-100' : 'opacity-0'">
+    </div>
+    <el-carousel class="absolute left-16 top-64 z-50 w-96 rounded-xl transition-all" v-if="launcherInfoReady" arrow="hover"
+        :class="hideElements ? 'opacity-0 -translate-y-10 pointer-events-none' : 'opacity-100 pointer-events-auto'"
         indicator-position="none" style="height: 178px;">
         <el-carousel-item v-for="ban in launcherInfo.banner" @click="openLink(ban.url)">
             <img class=" object-scale-down" :src="ban.img" />
         </el-carousel-item>
     </el-carousel>
-    <el-scrollbar height="91vh" class="scroll-wrapper absolute z-40">
+    <el-scrollbar ref="scrollbarref" height="91vh" class="scroll-wrapper absolute z-40" @scroll="handleScroll">
         <div class="items-scroll flex flex-col content-center items-center w-full">
             <div class="w-full flex flex-row justify-between">
                 <div class="w-1"></div>
-                <div v-if="gsPath">
+                <div v-if="gsPath" class="transition-all" :class="hideElements ? ' -translate-x-96' : ''">
                     <div class="mx-2 my-3 flex flex-row rounded-full bg-yellow-400 font-genshin w-48">
                         <button @click="gsLaunch"
                             class="pl-4 px-4 text-2xl font-bold rounded-full w-48 h-16 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">原神启动</button>
