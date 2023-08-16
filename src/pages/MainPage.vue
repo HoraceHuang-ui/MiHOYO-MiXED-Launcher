@@ -30,7 +30,7 @@ const starRail = async () => {
 
 <template>
     <!-- @touchmove.prevent @mousewheel.prevent -->
-    <div class="bg" @touchmove.prevent @mousewheel.prevent>
+    <div @touchmove.prevent @mousewheel.prevent>
         <!-- <el-dropdown class="absolute right-2 top-2 z-50 font-bold text-lg rounded-2xl bg-yellow-400 p-3" size="large">
             打开启动器
             <template #dropdown>
@@ -41,7 +41,7 @@ const starRail = async () => {
                 </el-dropdown-menu>
             </template>
         </el-dropdown> -->
-        <img class="bg-pic rounded-3xl" src="../assets/gsbanner.jpg" />
+        <img class="bg-pic rounded-3xl" src="../assets/gsbanner.png" />
         <div class="sticky bottom-0" style="height: 60vh;"></div>
         <div class="bottom-area sticky">
             <h1 class="font-sans font-bold text-5xl" style="margin-bottom: 10px;">MiHOYO MiXED Launcher</h1>

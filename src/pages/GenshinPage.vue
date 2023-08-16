@@ -5,11 +5,20 @@ import { useRouter } from 'vue-router'
 const gsPath = ref('')
 const displayConfirm = ref(false)
 const path = ref('')
-const timeUpd3_8 = Date.parse("2023/07/05 10:30:00 UTC+8")
+const timeUpd3_8 = Date.parse("2023/07/05 12:00:00 UTC+8")
 const timeNow = Date.now()
 const timeDelta = ref(0)
+const launcherInfo = ref({})
+const launcherInfoReady = ref(false)
 
 onMounted(async () => {
+    // 获取原神启动器信息
+    window.axios.post('https://sdk-static.mihoyo.com/hk4e_cn/mdk/launcher/api/content?filter_adv=false&key=eYd89JmJ&language=zh-cn&launcher_id=18')
+        .then((value) => {
+            launcherInfo.value = value.data
+            launcherInfoReady.value = true
+            console.log(launcherInfo.value)
+        })
     gsPath.value = await window.store.get('genshinPath')
     timeDelta.value = Math.ceil((timeNow - timeUpd3_8) / 1000 / 3600 / 24 - 0.5) % 42
     window.store.set('genshinUpd', false)
@@ -101,17 +110,26 @@ const handleCommand = (command) => {
 </script>
 
 <template>
-    <img class="bg-pic top-0 rounded-3xl" src="../assets/gsbanner.jpg" @touchmove.prevent @mousewheel.prevent />
-    <el-scrollbar height="91vh" class="scroll-wrapper absolute">
-        <div class="items-scroll flex flex-col content-center items-center">
-            <div>
+    <img class="bg-pic top-0 rounded-3xl"
+        :src="launcherInfoReady ? launcherInfo.adv.background : './src/assets/gsbanner.png'" @touchmove.prevent
+        @mousewheel.prevent />
+    <el-carousel class="absolute left-16 top-64 z-50 w-96 rounded-xl" v-if="launcherInfoReady" arrow="hover"
+        indicator-position="none" style="height: 178px;">
+        <el-carousel-item v-for="ban in launcherInfo.banner" class="px-2">
+            <img class=" object-scale-down rounded-xl" :src="ban.img" />
+        </el-carousel-item>
+    </el-carousel>
+    <el-scrollbar height="91vh" class="scroll-wrapper absolute z-40">
+        <div class="items-scroll flex flex-col content-center items-center w-full">
+            <div class="w-full flex flex-row justify-between">
+                <div class="w-1"></div>
                 <div v-if="gsPath">
-                    <div class="mx-2 my-2 flex flex-row rounded-full bg-yellow-400 font-genshin">
+                    <div class="mx-2 my-3 flex flex-row rounded-full bg-yellow-400 font-genshin w-48">
                         <button @click="gsLaunch"
-                            class="pl-4 pr-2 text-xl font-bold rounded-full hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">原神启动</button>
-                        <el-dropdown class="h-full p-1" trigger="click" @command="handleCommand">
+                            class="pl-4 px-4 text-2xl font-bold rounded-full w-48 h-16 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">原神启动</button>
+                        <el-dropdown class="h-full px-1" trigger="click" @command="handleCommand">
                             <button
-                                class="text-xl text-gray-900 font-bold p-2 rounded-full hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">…</button>
+                                class="text-xl text-gray-900 font-bold px-2 h-16 rounded-full hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">…</button>
                             <template #dropdown>
                                 <el-dropdown-menu>
                                     <el-dropdown-item command="openLauncher">打开官方启动器</el-dropdown-item>
@@ -123,9 +141,9 @@ const handleCommand = (command) => {
                     </div>
                 </div>
                 <button v-else @click="gsImport"
-                    class="font-genshin p-3 mx-2 my-2 font-bold text-xl bg-yellow-400 transition-all">原神导入</button>
+                    class="font-genshin p-3 mx-2 my-3 font-bold text-xl bg-yellow-400 transition-all">原神导入</button>
                 <button v-if="displayConfirm" @click="confirmPath"
-                    class="p-3 mx-2 my-2 text-xl bg-white border-3 border-yellow-500">确认</button>
+                    class="p-3 mx-2 my-3 text-xl bg-white border-3 border-yellow-500">确认</button>
             </div>
             <div v-if="displayConfirm">{{ path }}</div>
             <GenshinInfoCard class="my-2 w-full mb-4 shadow-md"></GenshinInfoCard>
@@ -144,7 +162,7 @@ const handleCommand = (command) => {
 
 .bg-pic {
     width: 98vw;
-    -webkit-mask: linear-gradient(white, transparent)
+    -webkit-mask: linear-gradient(white 50%, transparent)
 }
 
 .scroll-wrapper {
@@ -154,7 +172,7 @@ const handleCommand = (command) => {
 }
 
 .items-scroll {
-    margin-top: 69vh;
+    margin-top: 67vh;
     width: 80vw;
 }
 </style>

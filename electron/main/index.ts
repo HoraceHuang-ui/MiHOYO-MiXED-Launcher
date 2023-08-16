@@ -1,4 +1,5 @@
 import { app, BrowserWindow, shell, ipcMain, nativeTheme, Tray, Menu } from 'electron'
+import axios from 'axios'
 import { release } from 'node:os'
 var path = require('path')
 
@@ -149,12 +150,10 @@ async function createWindow() {
     return path.join(assetsPath, arg)
   })
 
-  // win.on('show', () => {
-  //   tray.setHighlightMode('always')
-  // })
-  // win.on('hide', () => {
-  //   tray.setHighlightMode('never')
-  // })
+  ipcMain.handle("axios:post", async (_event, url) => {
+    const result = await axios.post(url)
+    return result.data
+  })
 
   // Test actively push message to the Electron-Renderer
   // win.webContents.on('did-finish-load', () => {

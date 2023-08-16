@@ -38,6 +38,12 @@ contextBridge.exposeInMainWorld("win", {
 contextBridge.exposeInMainWorld("path", {
   joinDirnameAsset: (arg) => ipcRenderer.invoke("path:joinDirnameAsset", arg)
 })
+contextBridge.exposeInMainWorld("axios", {
+  post: async (url) => {
+    const result = await ipcRenderer.invoke("axios:post", url)
+    return result
+  }
+})
 
 function domReady(
   condition: DocumentReadyState[] = ["complete", "interactive"]

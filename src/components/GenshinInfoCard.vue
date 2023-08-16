@@ -734,7 +734,7 @@ const charsPagePrev = () => {
 }
 
 .artifact-mask {
-    -webkit-mask: linear-gradient(270deg, transparent 10%, white 60%)
+    -webkit-mask: linear-gradient(270deg, transparent, white 60%)
 }
 
 .disabled {

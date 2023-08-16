@@ -1,0 +1,317 @@
+{
+    "retcode": 0,
+    "message": "OK",
+    "data": {
+        "adv": {
+            "background": "https://launcher-webstatic.mihoyo.com/launcher-public/2023/08/14/7f92b296633974293b1cc9ced73952f9_2267874619055857570.png",
+            "icon": "https://launcher-webstatic.mihoyo.com/launcher-public/2023/08/14/5d0d835da94aaf76f6c41a0a51cd51af_3635147868632833439.png",
+            "url": "https://webstatic.mihoyo.com/ys/event/e20210601blue_post/vert.html?page_sn=d5dda66067224184&bbs_presentation_style=fullscreen&utm_source=game&utm_medium=ys&utm_campaign=bt",
+            "version": "308",
+            "bg_checksum": "8b375f844058d43255c33e2e4e71483a"
+        },
+        "banner": [
+            {
+                "banner_id": "64dc050b48f1ddd6ee9b3fa1",
+                "name": "",
+                "img": "https://launcher-webstatic.mihoyo.com/launcher-public/2023/08/16/b8b5c60b90f6ba8589428d5eeeb6655d_1812264493960495119.jpg",
+                "url": "https://www.miyoushe.com/ys/article/42412123",
+                "order": "9"
+            },
+            {
+                "banner_id": "64dc4cf8854a3de983481b91",
+                "name": "",
+                "img": "https://launcher-webstatic.mihoyo.com/launcher-public/2023/08/16/abe5ea1b1b7db8a0300117786b68ad9e_3987202486070322564.png",
+                "url": "https://www.miyoushe.com/ys/article/42425449",
+                "order": "8"
+            },
+            {
+                "banner_id": "64d9a8a3854a3de983481b5d",
+                "name": "",
+                "img": "https://launcher-webstatic.mihoyo.com/launcher-public/2023/08/14/18919165557f0e8e814ae9dc01581c35_7675795769959981037.jpg",
+                "url": "https://www.miyoushe.com/ys/article/42347480",
+                "order": "7"
+            },
+            {
+                "banner_id": "64d9a8b0e8fad5fdfa86ac74",
+                "name": "",
+                "img": "https://launcher-webstatic.mihoyo.com/launcher-public/2023/08/14/e4788874f9e4c2d6b53e12bdb99bc0ab_538397037413511281.jpg",
+                "url": "https://www.miyoushe.com/ys/article/42347481",
+                "order": "6"
+            },
+            {
+                "banner_id": "64dc3c0ee8fad5fdfa86ac94",
+                "name": "",
+                "img": "https://launcher-webstatic.mihoyo.com/launcher-public/2023/08/16/380e41061fa734a29b7b123d435ae60a_6125933163151948938.jpg",
+                "url": "https://www.miyoushe.com/ys/article/42420982",
+                "order": "5"
+            },
+            {
+                "banner_id": "64dc508f48f1ddd6ee9b3fb4",
+                "name": "",
+                "img": "https://launcher-webstatic.mihoyo.com/launcher-public/2023/08/16/77048c980038231a9a702659bbb79d18_3558990698023872516.jpg",
+                "url": "https://www.bilibili.com/blackboard/activity-e5rYFFZky6.html?spm_id_from=333.337.0.0",
+                "order": "4"
+            },
+            {
+                "banner_id": "64dc4ba6854a3de983481b8f",
+                "name": "",
+                "img": "https://launcher-webstatic.mihoyo.com/launcher-public/2023/08/16/60bc2a5fa35dfc64853586abb28f8385_6730292274459639309.png",
+                "url": "https://webstatic.mihoyo.com/bbs/event/signin-ys/index.html?bbs_auth_required=true&act_id=e202009291139501&utm_source=bbs&utm_medium=mys&utm_campaign=arti",
+                "order": "3"
+            },
+            {
+                "banner_id": "64dc4d92854a3de983481b97",
+                "name": "",
+                "img": "https://launcher-webstatic.mihoyo.com/launcher-public/2023/08/16/490d0645ae2930ac863927478f329b60_5665854926598890767.png",
+                "url": "https://www.miyoushe.com/ys/article/42425094",
+                "order": "2"
+            },
+            {
+                "banner_id": "64dc4db4854a3de983481b99",
+                "name": "",
+                "img": "https://launcher-webstatic.mihoyo.com/launcher-public/2023/08/16/67d84d2c3e40a40af858f167e3880b4f_1851335595398048511.jpg",
+                "url": "https://www.miyoushe.com/ys/article/42425096",
+                "order": "1"
+            }
+        ],
+        "icon": [
+            {
+                "icon_id": "5f59f531c2252108e0732f81",
+                "img": "https://webstatic.mihoyo.com/upload/operation_location/2020/09/10/42754b4ac22707bbb4118b2ee27afb46_3208005001152691646.png",
+                "tittle": "访问米游社网页",
+                "url": "https://bbs.mihoyo.com/ys/",
+                "qr_img": "https://webstatic.mihoyo.com/upload/operation_location/2020/09/10/adf5e70037b7589753898de97a71d61d_4675986443201624147.png",
+                "qr_desc": "扫码下载App",
+                "img_hover": "https://webstatic.mihoyo.com/upload/operation_location/2020/09/10/86c5cb5c69937f7d36e779859f4e3cef_2556603683953586582.png",
+                "other_links": [],
+                "title": "访问米游社网页",
+                "icon_link": "",
+                "links": [
+                    {
+                        "title": "访问米游社网页",
+                        "url": "https://bbs.mihoyo.com/ys/"
+                    }
+                ]
+            },
+            {
+                "icon_id": "5f59f572de3abd0505238f62",
+                "img": "https://webstatic.mihoyo.com/upload/operation_location/2020/09/10/51dba766d047098f853fe7397061d8d4_3109101938585179389.png",
+                "tittle": "",
+                "url": "",
+                "qr_img": "https://webstatic.mihoyo.com/upload/operation_location/2020/09/10/44d417177635d6a3695707de7366b30e_4139948721292169318.jpg",
+                "qr_desc": "扫码关注微信公众号",
+                "img_hover": "https://webstatic.mihoyo.com/upload/operation_location/2020/09/10/b675a5f88bdac5538a26e8f1370e75b2_807677688932235266.png",
+                "other_links": [],
+                "title": "",
+                "icon_link": "",
+                "links": []
+            },
+            {
+                "icon_id": "5f59f59b2c6db1dacbfaf60d",
+                "img": "https://webstatic.mihoyo.com/upload/operation_location/2020/09/10/44b626bade6f93a3009405f2fabd951e_3131577337644276653.png",
+                "tittle": "访问官方微博",
+                "url": "https://weibo.com/ysmihoyo",
+                "qr_img": "https://webstatic.mihoyo.com/upload/operation_location/2020/09/10/5d6f54c193255413f2858f45ec84cc91_5049694121818728291.png",
+                "qr_desc": "扫码关注官方微博",
+                "img_hover": "https://webstatic.mihoyo.com/upload/operation_location/2020/09/10/b1b5dea6dafdeb71705752f02e16ff45_3928903044467491320.png",
+                "other_links": [],
+                "title": "访问官方微博",
+                "icon_link": "",
+                "links": [
+                    {
+                        "title": "访问官方微博",
+                        "url": "https://weibo.com/ysmihoyo"
+                    }
+                ]
+            },
+            {
+                "icon_id": "5f5b7ca3b10d9a70d0e47d86",
+                "img": "https://webstatic.mihoyo.com/upload/operation_location/2020/09/11/41dbaf011ef6fd782450e6b59255d410_2396120149109972020.png",
+                "tittle": "加入QQ群",
+                "url": "https://ys.mihoyo.com/launcher/18/zh-cn/qq?api_url=https%3A%2F%2Fapi-sdk.mihoyo.com%2Fhk4e_cn&prev=false",
+                "qr_img": "",
+                "qr_desc": "",
+                "img_hover": "https://webstatic.mihoyo.com/upload/operation_location/2020/09/11/d9b6a36596d49e8c2b262f3db8b271d9_6971507594010738352.png",
+                "other_links": [],
+                "title": "加入QQ群",
+                "icon_link": "https://ys.mihoyo.com/launcher/18/zh-cn/qq?api_url=https%3A%2F%2Fapi-sdk.mihoyo.com%2Fhk4e_cn&prev=false",
+                "links": [
+                    {
+                        "title": "加入QQ群",
+                        "url": "https://ys.mihoyo.com/launcher/18/zh-cn/qq?api_url=https%3A%2F%2Fapi-sdk.mihoyo.com%2Fhk4e_cn&prev=false"
+                    }
+                ]
+            },
+            {
+                "icon_id": "646c820086a0a6f8829443a9",
+                "img": "https://webstatic.mihoyo.com/upload/operation_location/2023/05/23/f39e0bc3d767b310b680c93e1d7580fd_1836939084794504401.png",
+                "tittle": "",
+                "url": "",
+                "qr_img": "https://webstatic.mihoyo.com/upload/operation_location/2023/05/23/8fe5c0a6532778faa8a365a136406273_3152718160637009922.png",
+                "qr_desc": "扫码使用移动端大地图",
+                "img_hover": "https://webstatic.mihoyo.com/upload/operation_location/2023/05/23/8be08793e4fe341062c93284f747715a_8174230195509264586.png",
+                "other_links": [],
+                "title": "",
+                "icon_link": "https://webstatic.mihoyo.com/ys/app/interactive-map/index.html?bbs_presentation_style=no_header&lang=zh-cn&utm_source=bbs&utm_medium=mys&utm_campaign=glbann&_markerFps=24#/map/2?shown_types=&center=2008.50,-1084.00&zoom=-3.00",
+                "links": [
+                    {
+                        "title": "访问大地图工具",
+                        "url": "https://webstatic.mihoyo.com/ys/app/interactive-map/index.html?bbs_presentation_style=no_header&lang=zh-cn&utm_source=bbs&utm_medium=mys&utm_campaign=glbann&_markerFps=24#/map/2?shown_types=&center=2008.50,-1084.00&zoom=-3.00"
+                    }
+                ]
+            },
+            {
+                "icon_id": "605077bbd90ba600951cd0e0",
+                "img": "https://webstatic.mihoyo.com/upload/operation_location/2021/03/16/40247bcc1f0092a7883949aade6619ac_3149808684055343336.png",
+                "tittle": "启动器常见问题FAQ",
+                "url": "https://bbs.mihoyo.com/ys/article/4004423",
+                "qr_img": "",
+                "qr_desc": "",
+                "img_hover": "https://webstatic.mihoyo.com/upload/operation_location/2021/03/16/021147ecf6824c3328d6c89b9c1b17e6_3771842119503074595.png",
+                "other_links": [
+                    {
+                        "title": "启动器意见集中反馈",
+                        "url": "https://bbs.mihoyo.com/ys/article/5780277"
+                    }
+                ],
+                "title": "启动器常见问题FAQ",
+                "icon_link": "https://www.miyoushe.com/ys/article/39655595",
+                "links": [
+                    {
+                        "title": "常用FAQ合集",
+                        "url": "https://www.miyoushe.com/ys/article/39655595"
+                    },
+                    {
+                        "title": "启动器意见集中反馈",
+                        "url": "https://bbs.mihoyo.com/ys/article/5780277"
+                    }
+                ]
+            }
+        ],
+        "post": [
+            {
+                "post_id": "64dc4d6848f1ddd6ee9b3fb0",
+                "type": "POST_TYPE_INFO",
+                "tittle": "冒险的新章，启程！——4.0版本枫丹探索小贴士",
+                "url": "https://www.miyoushe.com/ys/article/42425088",
+                "show_time": "08/16",
+                "order": "11",
+                "title": "冒险的新章，启程！——4.0版本枫丹探索小贴士"
+            },
+            {
+                "post_id": "64d9a98d854a3de983481b60",
+                "type": "POST_TYPE_INFO",
+                "tittle": "4.0版本「仿若无因飘落的轻雨」内容专题页上线！",
+                "url": "https://webstatic.mihoyo.com/ys/event/e20210601blue_post/vert.html?page_sn=d5dda66067224184&bbs_presentation_style=fullscreen&utm_source=game&utm_medium=ys&utm_campaign=news",
+                "show_time": "08/14",
+                "order": "10",
+                "title": "4.0版本「仿若无因飘落的轻雨」内容专题页上线！"
+            },
+            {
+                "post_id": "64daff28e8fad5fdfa86ac8e",
+                "type": "POST_TYPE_INFO",
+                "tittle": "「仿若无因飘落的轻雨」4.0版本活动速递第一期",
+                "url": "https://www.miyoushe.com/ys/article/42347814",
+                "show_time": "08/15",
+                "order": "9",
+                "title": "「仿若无因飘落的轻雨」4.0版本活动速递第一期"
+            },
+            {
+                "post_id": "64dc3c4d854a3de983481b8c",
+                "type": "POST_TYPE_ACTIVITY",
+                "tittle": "《原神》「嘟嘟通讯」特别活动",
+                "url": "https://www.miyoushe.com/ys/article/42420982",
+                "show_time": "08/16",
+                "order": "6",
+                "title": "《原神》「嘟嘟通讯」特别活动"
+            },
+            {
+                "post_id": "64dc4d3b48f1ddd6ee9b3fad",
+                "type": "POST_TYPE_ACTIVITY",
+                "tittle": "【有奖活动】「仿若无因飘落的轻雨」4.0版本攻略征集活动开启",
+                "url": "https://www.miyoushe.com/ys/article/42425092",
+                "show_time": "08/16",
+                "order": "5",
+                "title": "【有奖活动】「仿若无因飘落的轻雨」4.0版本攻略征集活动开启"
+            },
+            {
+                "post_id": "64dc052d854a3de983481b86",
+                "type": "POST_TYPE_ANNOUNCE",
+                "tittle": "「仿若无因飘落的轻雨」4.0版本更新说明",
+                "url": "https://www.miyoushe.com/ys/article/42412123",
+                "show_time": "08/16",
+                "order": "3",
+                "title": "「仿若无因飘落的轻雨」4.0版本更新说明"
+            },
+            {
+                "post_id": "64d9a92348f1ddd6ee9b3f85",
+                "type": "POST_TYPE_ANNOUNCE",
+                "tittle": "「光与影的戏术」祈愿：「惑光幻戏·林尼(火)」概率UP！",
+                "url": "https://www.miyoushe.com/ys/article/42347480",
+                "show_time": "08/14",
+                "order": "2",
+                "title": "「光与影的戏术」祈愿：「惑光幻戏·林尼(火)」概率UP！"
+            },
+            {
+                "post_id": "6256e5ecead15a5de7e9b55b",
+                "type": "POST_TYPE_ANNOUNCE",
+                "tittle": "PC版启动器常见问题FAQ",
+                "url": "https://bbs.mihoyo.com/ys/article/4004423",
+                "show_time": "04/12",
+                "order": "1",
+                "title": "PC版启动器常见问题FAQ"
+            }
+        ],
+        "qq": [
+            {
+                "qq_id": "5fe2a761b15384c3e4621420",
+                "name": "原神官方玩家群11",
+                "number": "512047400",
+                "code": "https://jq.qq.com/?_wv=1027&k=4dhAg811"
+            },
+            {
+                "qq_id": "630341a0076846a2964c3b0c",
+                "name": "原神官方玩家群6",
+                "number": "833020413",
+                "code": "https://jq.qq.com/?_wv=1027&k=CbMlPl71"
+            },
+            {
+                "qq_id": "62e8cd9adce7c714085fe1ba",
+                "name": "原神官方玩家群13",
+                "number": "1065215618",
+                "code": "https://jq.qq.com/?_wv=1027&k=EhPo14Sf"
+            },
+            {
+                "qq_id": "6387138c85c5331172c00fa2",
+                "name": "原神官方玩家群14",
+                "number": "597580157",
+                "code": "https://jq.qq.com/?_wv=1027&k=F8zmOWj8"
+            },
+            {
+                "qq_id": "5ff4250797a0a8616c2d5a7f",
+                "name": "原神官方玩家群16",
+                "number": "1060436102",
+                "code": "https://jq.qq.com/?_wv=1027&k=Ngm0OzFJ"
+            },
+            {
+                "qq_id": "63871a97ad426ef4bd17e36a",
+                "name": "原神官方玩家群17",
+                "number": "1038346920",
+                "code": "https://jq.qq.com/?_wv=1027&k=CpmY2Sqs"
+            }
+        ],
+        "more": {
+            "activity_link": "",
+            "announce_link": "",
+            "info_link": "",
+            "news_link": "",
+            "trends_link": "",
+            "supply_link": "",
+            "tools_link": ""
+        },
+        "links": {
+            "faq": "https://bbs.mihoyo.com/ys/article/4004423",
+            "version": "1"
+        }
+    }
+}
