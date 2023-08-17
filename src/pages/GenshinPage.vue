@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router'
+import { Loading } from '@element-plus/icons-vue'
 
 const gsPath = ref('')
 const displayConfirm = ref(false)
@@ -11,7 +12,6 @@ const timeDelta = ref(0)
 const launcherInfo = ref({})
 const launcherInfoReady = ref(false)
 const hideElements = ref(false)
-const tmpPrevScroll = ref(0)
 const scrollbarref = ref()
 
 onMounted(async () => {
@@ -24,7 +24,6 @@ onMounted(async () => {
         })
     gsPath.value = await window.store.get('genshinPath')
     timeDelta.value = Math.ceil((timeNow - timeUpd3_8) / 1000 / 3600 / 24 - 0.5) % 42
-    window.store.set('genshinUpd', false)
     window.store.get('genshinUpd')
         .then((resp) => {
             if (gsPath.value && !resp) {
@@ -116,7 +115,7 @@ const openLink = (url) => {
 }
 
 const handleScroll = ({ scrollTop }) => {
-    if (scrollTop > 0) {
+    if (scrollTop > 40) {
         hideElements.value = true
     } else {
         hideElements.value = false
@@ -125,49 +124,57 @@ const handleScroll = ({ scrollTop }) => {
 </script>
 
 <template>
-    <div class="bg-pic rounded-3xl" :class="hideElements ? 'scale-95' : ''" style="transition-duration: 300ms;">
-        <img class=" top-0 rounded-3xl transition-all" :class="hideElements ? 'blur-md scale-125 brightness-75' : ''"
-            style="transition-duration: 500ms;"
-            :src="launcherInfoReady ? launcherInfo.adv.background : './src/assets/gsbanner.png'" @touchmove.prevent
-            @mousewheel.prevent />
+    <div class="absolute pointer-events-none z-0 align-middle justify-center text-center" style="top: 45%; left: 45%;"
+        v-if="!launcherInfoReady">
+        <img src="../assets/kleeLoading.gif" class=" align-middle self-center object-scale-down" height="120" width="120" />
+        <div class="mt-3 font-genshin text-xl">加载中…</div>
     </div>
-    <el-carousel class="absolute left-16 top-64 z-50 rounded-xl transition-all" v-if="launcherInfoReady" arrow="hover"
-        :class="hideElements ? 'opacity-0 -translate-y-10 pointer-events-none' : 'opacity-100 pointer-events-auto'"
-        indicator-position="none" style="height: 182px; width: 396px;">
-        <el-carousel-item class=" cursor-pointer" v-for="ban in launcherInfo.banner" @click="openLink(ban.url)">
-            <img class=" object-scale-down" :src="ban.img" />
-        </el-carousel-item>
-    </el-carousel>
-    <el-scrollbar ref="scrollbarref" height="91vh" class="scroll-wrapper absolute z-40" @scroll="handleScroll">
-        <div class="items-scroll flex flex-col content-center items-center w-full">
-            <div class="w-full flex flex-row justify-between">
-                <div class="w-1"></div>
-                <div v-if="gsPath" class="transition-all" :class="hideElements ? ' -translate-x-96' : ''">
-                    <div class="mx-2 my-3 flex flex-row rounded-full bg-yellow-400 font-genshin w-48">
-                        <button @click="gsLaunch"
-                            class="pl-4 px-4 text-2xl font-bold rounded-full w-48 h-16 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">原神启动</button>
-                        <el-dropdown class="h-full px-1" trigger="click" @command="handleCommand">
-                            <button
-                                class="text-xl text-gray-900 font-bold px-2 h-16 rounded-full hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">…</button>
-                            <template #dropdown>
-                                <el-dropdown-menu>
-                                    <el-dropdown-item command="openLauncher">打开官方启动器</el-dropdown-item>
-                                    <el-dropdown-item command="clearPath" divided>清除游戏路径</el-dropdown-item>
-                                    <el-dropdown-item command="clearPlayerinfo">清除游戏数据</el-dropdown-item>
-                                </el-dropdown-menu>
-                            </template>
-                        </el-dropdown>
-                    </div>
-                </div>
-                <button v-else @click="gsImport"
-                    class="font-genshin p-3 mx-2 my-3 font-bold text-xl bg-yellow-400 transition-all">原神导入</button>
-                <button v-if="displayConfirm" @click="confirmPath"
-                    class="p-3 mx-2 my-3 text-xl bg-white border-3 border-yellow-500">确认</button>
-            </div>
-            <div v-if="displayConfirm">{{ path }}</div>
-            <GenshinInfoCard class="my-2 w-full mb-4 shadow-md"></GenshinInfoCard>
+    <div class="transition-all relative" :class="launcherInfoReady ? 'opacity-100' : 'opacity-0 blur-lg scale-90'"
+        style="width: 98vw; height: 92vh; transition-duration: 400ms;">
+        <div class="bg-pic rounded-3xl w-full h-full" :class="hideElements ? 'scale-95' : ''"
+            style="transition-duration: 300ms;">
+            <img class=" top-0 rounded-3xl transition-all" :class="hideElements ? 'blur-md scale-125 brightness-75' : ''"
+                style="transition-duration: 500ms;" :src="launcherInfoReady ? launcherInfo.adv.background : ''"
+                @touchmove.prevent @mousewheel.prevent />
         </div>
-    </el-scrollbar>
+        <el-carousel class="absolute left-16 top-64 z-50 rounded-xl transition-all" v-if="launcherInfoReady" arrow="hover"
+            :class="hideElements ? 'opacity-0 -translate-y-10 pointer-events-none' : 'opacity-100 pointer-events-auto'"
+            indicator-position="none" style="height: 182px; width: 396px;">
+            <el-carousel-item class=" cursor-pointer" v-for="ban in launcherInfo.banner" @click="openLink(ban.url)">
+                <img class=" object-scale-down" :src="ban.img" />
+            </el-carousel-item>
+        </el-carousel>
+        <el-scrollbar ref="scrollbarref" height="91vh" class="scroll-wrapper absolute z-40" @scroll="handleScroll">
+            <div class="items-scroll flex flex-col content-center items-center w-full">
+                <div class="w-full flex flex-row justify-between">
+                    <div class="w-1"></div>
+                    <div v-if="gsPath" class="transition-all" :class="hideElements ? ' -translate-x-96' : ''">
+                        <div class="mx-2 my-3 flex flex-row rounded-full bg-yellow-400 font-genshin w-48">
+                            <button @click="gsLaunch"
+                                class="pl-4 px-4 text-2xl font-bold rounded-full w-48 h-16 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">原神启动</button>
+                            <el-dropdown class="h-full px-1" trigger="click" @command="handleCommand">
+                                <button
+                                    class="text-xl text-gray-900 font-bold px-2 h-16 rounded-full hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">…</button>
+                                <template #dropdown>
+                                    <el-dropdown-menu>
+                                        <el-dropdown-item command="openLauncher">打开官方启动器</el-dropdown-item>
+                                        <el-dropdown-item command="clearPath" divided>清除游戏路径</el-dropdown-item>
+                                        <el-dropdown-item command="clearPlayerinfo">清除游戏数据</el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </template>
+                            </el-dropdown>
+                        </div>
+                    </div>
+                    <button v-else @click="gsImport"
+                        class="font-genshin p-3 mx-2 my-3 font-bold text-xl bg-yellow-400 transition-all">原神导入</button>
+                    <button v-if="displayConfirm" @click="confirmPath"
+                        class="p-3 mx-2 my-3 text-xl bg-white border-3 border-yellow-500">确认</button>
+                </div>
+                <div v-if="displayConfirm">{{ path }}</div>
+                <GenshinInfoCard class="my-2 w-full mb-4 shadow-md"></GenshinInfoCard>
+            </div>
+        </el-scrollbar>
+    </div>
 </template>
 
 <style scoped>
@@ -185,7 +192,7 @@ const handleScroll = ({ scrollTop }) => {
 }
 
 .scroll-wrapper {
-    top: 10vh;
+    top: 2vh;
     left: 10vw;
     border-radius: 5vh;
 }
