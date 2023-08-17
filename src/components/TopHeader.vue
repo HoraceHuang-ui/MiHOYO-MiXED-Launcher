@@ -31,7 +31,7 @@ const winMin = () => {
 </script>
 
 <template>
-    <div class="drag sticky flex flex-row justify-between z-50 top-0 w-full left-0 bg-white" style="height: 8vh;">
+    <div class="drag sticky flex flex-row justify-between z-50 top-0 w-full left-0" style="height: 8vh;">
         <!-- <div class="no-drag flex flex-row mt-3" style="width: 35vw;">
             <el-button @click="clearAll">清除全部</el-button>
             <el-button class="no-drag" @click="clearPlayerInfo">清除游戏数据</el-button>

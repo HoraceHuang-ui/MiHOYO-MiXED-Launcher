@@ -254,7 +254,7 @@ const requestInfo = () => {
                     }
                 }
             })
-            window.store.set('genshinInfo', JSON.stringify(playerInfo.value))
+            window.store.set('genshinInfo', JSON.stringify(playerInfo.value), true)
             playerInfoLoading.value = false
             router.push('/tmpgspage')
         }).catch((err) => {

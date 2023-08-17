@@ -55,7 +55,6 @@ var iconPath = path.join(process.env.PUBLIC, 'favicon.ico')
 var assetsPath = process.env.VITE_DEV_SERVER_URL ? '../../src/assets' : path.join(__dirname, '../../../src/assets')
 
 async function createWindow() {
-  nativeTheme.themeSource = "light"
   win = new BrowserWindow({
     title: 'Main window',
     icon: iconPath,
@@ -74,7 +73,7 @@ async function createWindow() {
     },
   })
   // win.setWindowButtonVisibility(true)
-
+  nativeTheme.themeSource = "light"
   if (process.env.VITE_DEV_SERVER_URL) { // electron-vite-vue#298
     win.loadURL(url)
     //win.loadFile('./dist/index.html')
@@ -111,8 +110,8 @@ async function createWindow() {
   ipcMain.handle('store:get', (_event, key) => {
     return store.get(key)
   })
-  ipcMain.on('store:set', (_event, key, value) => {
-    store.set(key, JSON.parse(value))
+  ipcMain.on('store:set', (_event, key, value, json) => {
+    store.set(key, json ? JSON.parse(value) : value)
   })
   ipcMain.on('store:delete', (_event, key) => {
     store.delete(key)

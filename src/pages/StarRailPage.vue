@@ -23,7 +23,7 @@ const srImport = async () => {
     });
 }
 const confirmPath = async () => {
-    await window.store.set('starRailPath', path.value)
+    await window.store.set('starRailPath', path.value, false)
     srPath.value = path.value
     displayConfirm.value = false
 }

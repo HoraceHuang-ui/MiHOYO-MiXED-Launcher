@@ -71,7 +71,7 @@ onMounted(async () => {
                             type: 'info'
                         }).then(() => {
                             window.child.exec(gsPath.value.concat('\\launcher.exe'))
-                            window.store.set('genshinUpd', true)
+                            window.store.set('genshinUpd', true, false)
                         }).catch(() => { })
                 } else if (timeDelta.value > 0 && timeDelta.value < 3) {
                     ElMessageBox.confirm('距离原神大版本更新已经过去' + timeDelta.value + ' 天，点击“确定”以打开官方启动器进行下载，且此版本不再接收此消息。',
@@ -82,7 +82,7 @@ onMounted(async () => {
                             type: 'info'
                         }).then(() => {
                             window.child.exec(gsPath.value.concat('\\launcher.exe'))
-                            window.store.set('genshinUpd', true)
+                            window.store.set('genshinUpd', true, false)
                         }).catch(() => { })
                 } else if (timeDelta.value == 0) {
                     ElMessageBox.confirm('原神已在今天进行大版本更新，点击“确定”以打开官方启动器进行下载，且此版本不再接收此消息。',
@@ -93,11 +93,11 @@ onMounted(async () => {
                             type: 'info'
                         }).then(() => {
                             window.child.exec(gsPath.value.concat('\\launcher.exe'))
-                            window.store.set('genshinUpd', true)
+                            window.store.set('genshinUpd', true, false)
                         }).catch(() => { })
                 }
             } else if (gsPath && timeDelta.value > 2 && timeDelta.value < 37) {
-                window.store.set('genshinUpd', false)
+                window.store.set('genshinUpd', false, false)
             }
         }).catch((err) => {
             console.error(err)
@@ -118,7 +118,7 @@ const gsImport = async () => {
     });
 }
 const confirmPath = async () => {
-    await window.store.set('genshinPath', path.value)
+    await window.store.set('genshinPath', path.value, false)
     gsPath.value = path.value
     displayConfirm.value = false
 }
@@ -152,6 +152,10 @@ const openLink = (url) => {
 const handleScroll = ({ scrollTop }) => {
     if (scrollTop > 0) {
         hideElements.value = true
+        if (displayConfirm.value) {
+            displayConfirm.value = false
+            path.value = ''
+        }
     } else {
         hideElements.value = false
     }
@@ -159,9 +163,10 @@ const handleScroll = ({ scrollTop }) => {
 </script>
 
 <template>
-    <div class="absolute pointer-events-none z-0 align-middle justify-center text-center" style="top: 45%; left: 45%;"
-        v-if="!launcherInfoReady">
-        <img src="../assets/kleeLoading.gif" class=" align-middle self-center object-scale-down" height="120" width="120" />
+    <div v-if="!launcherInfoReady" class="absolute pointer-events-none z-0 align-middle justify-center text-center"
+        style="top: 45%; left: 45%;">
+        <img src="../assets/kleeLoading.gif" class=" align-middle self-center object-scale-down" loading="eager"
+            height="120" width="120" />
         <div class="mt-3 font-genshin text-xl">加载中…</div>
     </div>
     <div class="transition-all relative" :class="launcherInfoReady ? 'opacity-100' : 'opacity-0 blur-lg scale-90'"
@@ -173,6 +178,7 @@ const handleScroll = ({ scrollTop }) => {
                 @touchmove.prevent @mousewheel.prevent />
         </div>
         <el-carousel class="absolute left-16 top-48 z-50 rounded-xl transition-all" v-if="launcherInfoReady" arrow="hover"
+            interval="5000"
             :class="hideElements ? 'opacity-0 -translate-y-10 pointer-events-none blur-md -translate-x-14 scale-110' : 'opacity-100 pointer-events-auto'"
             indicator-position="none" style="height: 182px; width: 396px; transition-duration: 500ms;">
             <el-carousel-item class=" cursor-pointer" v-for="ban in launcherInfo.banner" @click="openLink(ban.url)">
@@ -246,12 +252,18 @@ const handleScroll = ({ scrollTop }) => {
                             </el-dropdown>
                         </div>
                     </div>
-                    <button v-else @click="gsImport"
-                        class="font-genshin p-3 mx-2 my-3 font-bold text-xl bg-yellow-400 transition-all">原神导入</button>
-                    <button v-if="displayConfirm" @click="confirmPath"
-                        class="p-3 mx-2 my-3 text-xl bg-white border-3 border-yellow-500">确认</button>
+                    <div v-else>
+                        <div class="flex flex-row">
+                            <button @click="gsImport"
+                                class="mx-2 my-3 rounded-full h-16 text-2xl bg-yellow-400 font-genshin w-48 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all cursor-default"
+                                :class="hideElements ? ' -translate-x-96' : ''"
+                                style="transition-duration: 500ms;">原神导入</button>
+                            <button v-if="displayConfirm" @click="confirmPath"
+                                class="mx-2 my-3 px-3 rounded-full text-xl bg-white border-3 hover:bg-gray-200 active:bg-gray-500 active:scale-90 transition-all">确认</button>
+                        </div>
+                        <div v-if="displayConfirm" class="font-genshin">{{ path }}</div>
+                    </div>
                 </div>
-                <div v-if="displayConfirm">{{ path }}</div>
                 <GenshinInfoCard class="my-2 w-full mb-4 shadow-md"></GenshinInfoCard>
             </div>
         </el-scrollbar>
@@ -275,7 +287,7 @@ const handleScroll = ({ scrollTop }) => {
 .scroll-wrapper {
     top: 2vh;
     left: 10vw;
-    border-radius: 5vh;
+    border-radius: 5vh 5vh 0 0;
 }
 
 .items-scroll {

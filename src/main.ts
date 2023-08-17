@@ -5,6 +5,7 @@ import App from './App.vue'
 import router from "./router"
 import './assets/styles/fonts.css'
 import './assets/styles/traffic.scss'
+import 'element-plus/theme-chalk/dark/css-vars.css'
 
 const app = createApp(App)
 
