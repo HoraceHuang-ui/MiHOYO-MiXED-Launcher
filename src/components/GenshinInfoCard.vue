@@ -14,32 +14,32 @@ const playerInfo = ref({})
 const showcaseIdx = ref(0)
 const elementAssets = ref({
     cryo: {
-        bg: '',
-        ico: ''
+        bg: '../../src/assets/elementBgs/cryo.png',
+        ico: '../../src/assets/elementIcons/cryo.png'
     },
     anemo: {
-        bg: '',
-        ico: ''
+        bg: '../../src/assets/elementBgs/anemo.png',
+        ico: '../../src/assets/elementIcons/anemo.png'
     },
     dendro: {
-        bg: '',
-        ico: ''
+        bg: '../../src/assets/elementBgs/dendro.png',
+        ico: '../../src/assets/elementIcons/dendro.png'
     },
     electro: {
-        bg: '',
-        ico: ''
+        bg: '../../src/assets/elementBgs/electro.png',
+        ico: '../../src/assets/elementIcons/electro.png'
     },
     geo: {
-        bg: '',
-        ico: ''
+        bg: '../../src/assets/elementBgs/geo.png',
+        ico: '../../src/assets/elementIcons/geo.png'
     },
     hydro: {
-        bg: '',
-        ico: ''
+        bg: '../../src/assets/elementBgs/hydro.png',
+        ico: '../../src/assets/elementIcons/hydro.png'
     },
     pyro: {
-        bg: '',
-        ico: ''
+        bg: '../../src/assets/elementBgs/pyro.png',
+        ico: '../../src/assets/elementIcons/pyro.png'
     },
 })
 const ascLevelMap = [20, 40, 50, 60, 70, 80, 90]
@@ -172,48 +172,48 @@ onMounted(() => {
 
     setPropNameMaps()
     setArtifactPropsMaps()
-    window.path.joinDirnameAsset('elementBgs/cryo.png').then((value) => {
-        elementAssets.value.cryo.bg = value
-    })
-    window.path.joinDirnameAsset('elementIcons/cryo.png').then((value) => {
-        elementAssets.value.cryo.ico = value
-    })
-    window.path.joinDirnameAsset('elementBgs/pyro.png').then((value) => {
-        elementAssets.value.pyro.bg = value
-    })
-    window.path.joinDirnameAsset('elementIcons/pyro.png').then((value) => {
-        elementAssets.value.pyro.ico = value
-    })
-    window.path.joinDirnameAsset('elementBgs/electro.png').then((value) => {
-        elementAssets.value.electro.bg = value
-    })
-    window.path.joinDirnameAsset('elementIcons/electro.png').then((value) => {
-        elementAssets.value.electro.ico = value
-    })
-    window.path.joinDirnameAsset('elementBgs/hydro.png').then((value) => {
-        elementAssets.value.hydro.bg = value
-    })
-    window.path.joinDirnameAsset('elementIcons/hydro.png').then((value) => {
-        elementAssets.value.hydro.ico = value
-    })
-    window.path.joinDirnameAsset('elementBgs/geo.png').then((value) => {
-        elementAssets.value.geo.bg = value
-    })
-    window.path.joinDirnameAsset('elementIcons/geo.png').then((value) => {
-        elementAssets.value.geo.ico = value
-    })
-    window.path.joinDirnameAsset('elementBgs/dendro.png').then((value) => {
-        elementAssets.value.dendro.bg = value
-    })
-    window.path.joinDirnameAsset('elementIcons/dendro.png').then((value) => {
-        elementAssets.value.dendro.ico = value
-    })
-    window.path.joinDirnameAsset('elementBgs/anemo.png').then((value) => {
-        elementAssets.value.anemo.bg = value
-    })
-    window.path.joinDirnameAsset('elementIcons/anemo.png').then((value) => {
-        elementAssets.value.anemo.ico = value
-    })
+    // window.path.joinDirnameAsset('elementBgs/cryo.png').then((value) => {
+    //     elementAssets.value.cryo.bg = value
+    // })
+    // window.path.joinDirnameAsset('elementIcons/cryo.png').then((value) => {
+    //     elementAssets.value.cryo.ico = value
+    // })
+    // window.path.joinDirnameAsset('elementBgs/pyro.png').then((value) => {
+    //     elementAssets.value.pyro.bg = value
+    // })
+    // window.path.joinDirnameAsset('elementIcons/pyro.png').then((value) => {
+    //     elementAssets.value.pyro.ico = value
+    // })
+    // window.path.joinDirnameAsset('elementBgs/electro.png').then((value) => {
+    //     elementAssets.value.electro.bg = value
+    // })
+    // window.path.joinDirnameAsset('elementIcons/electro.png').then((value) => {
+    //     elementAssets.value.electro.ico = value
+    // })
+    // window.path.joinDirnameAsset('elementBgs/hydro.png').then((value) => {
+    //     elementAssets.value.hydro.bg = value
+    // })
+    // window.path.joinDirnameAsset('elementIcons/hydro.png').then((value) => {
+    //     elementAssets.value.hydro.ico = value
+    // })
+    // window.path.joinDirnameAsset('elementBgs/geo.png').then((value) => {
+    //     elementAssets.value.geo.bg = value
+    // })
+    // window.path.joinDirnameAsset('elementIcons/geo.png').then((value) => {
+    //     elementAssets.value.geo.ico = value
+    // })
+    // window.path.joinDirnameAsset('elementBgs/dendro.png').then((value) => {
+    //     elementAssets.value.dendro.bg = value
+    // })
+    // window.path.joinDirnameAsset('elementIcons/dendro.png').then((value) => {
+    //     elementAssets.value.dendro.ico = value
+    // })
+    // window.path.joinDirnameAsset('elementBgs/anemo.png').then((value) => {
+    //     elementAssets.value.anemo.bg = value
+    // })
+    // window.path.joinDirnameAsset('elementIcons/anemo.png').then((value) => {
+    //     elementAssets.value.anemo.ico = value
+    // })
 })
 
 const router = useRouter()
