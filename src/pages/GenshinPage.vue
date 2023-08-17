@@ -13,6 +13,7 @@ const launcherInfoReady = ref(false)
 const hideElements = ref(false)
 const scrollbarref = ref()
 const tabsModel = ref('aaa')
+const kleePath = ref('')
 
 const postTypeMap = new Map()
 
@@ -165,7 +166,7 @@ const handleScroll = ({ scrollTop }) => {
 <template>
     <div v-if="!launcherInfoReady" class="absolute pointer-events-none z-0 align-middle justify-center text-center"
         style="top: 45%; left: 45%;">
-        <img src="../assets/kleeLoading.gif" class=" align-middle self-center object-scale-down" loading="eager"
+        <img :src="'../../src/assets/kleeLoading.gif'" class=" align-middle self-center object-scale-down" loading="eager"
             height="120" width="120" />
         <div class="mt-3 font-genshin text-xl">加载中…</div>
     </div>
@@ -178,7 +179,7 @@ const handleScroll = ({ scrollTop }) => {
                 @touchmove.prevent @mousewheel.prevent />
         </div>
         <el-carousel class="absolute left-16 top-48 z-50 rounded-xl transition-all" v-if="launcherInfoReady" arrow="hover"
-            interval="5000"
+            :interval="5000"
             :class="hideElements ? 'opacity-0 -translate-y-10 pointer-events-none blur-md -translate-x-14 scale-110' : 'opacity-100 pointer-events-auto'"
             indicator-position="none" style="height: 182px; width: 396px; transition-duration: 500ms;">
             <el-carousel-item class=" cursor-pointer" v-for="ban in launcherInfo.banner" @click="openLink(ban.url)">
