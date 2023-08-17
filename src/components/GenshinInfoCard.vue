@@ -163,7 +163,7 @@ onMounted(() => {
                 playerInfo.value = value
                 pages.value = playerInfo.value.characters.length > 10
                     ? Math.floor((playerInfo.value.characters.length - 10) / 6) + 1
-                    : 1
+                    : 0
             }
             console.log(playerInfo.value)
         }).catch((err) => {
@@ -446,7 +446,7 @@ const charsPagePrev = () => {
                         <ArrowLeftBold />
                     </el-icon>
                 </div>
-                <el-scrollbar ref="charsScrollbar" class="flex flex-row w-1/2" noresize>
+                <el-scrollbar ref="charsScrollbar" class="flex flex-row w-1/2 justify-center" noresize>
                     <div class="flex flex-row z-50 relative flex-nowrap w-max">
                         <div v-for="(character, index) in playerInfo.characters" class="relative w-12 h-12"
                             @click="showcaseIdx = index">
