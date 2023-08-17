@@ -125,16 +125,16 @@ const handleScroll = ({ scrollTop }) => {
 </script>
 
 <template>
-    <img class="bg-pic top-0 rounded-3xl"
-        :src="launcherInfoReady ? launcherInfo.adv.background : './src/assets/gsbanner.png'" @touchmove.prevent
-        @mousewheel.prevent />
-    <div class="w-full h-full absolute top-0 right-0 left-0 bottom-0 transition-all"
-        style="background-color: rgb(255 255 255 / 0.5);" :class="hideElements ? 'opacity-100' : 'opacity-0'">
+    <div class="bg-pic rounded-3xl" :class="hideElements ? 'scale-95' : ''" style="transition-duration: 300ms;">
+        <img class=" top-0 rounded-3xl transition-all" :class="hideElements ? 'blur-md scale-125 brightness-75' : ''"
+            style="transition-duration: 500ms;"
+            :src="launcherInfoReady ? launcherInfo.adv.background : './src/assets/gsbanner.png'" @touchmove.prevent
+            @mousewheel.prevent />
     </div>
-    <el-carousel class="absolute left-16 top-64 z-50 w-96 rounded-xl transition-all" v-if="launcherInfoReady" arrow="hover"
+    <el-carousel class="absolute left-16 top-64 z-50 rounded-xl transition-all" v-if="launcherInfoReady" arrow="hover"
         :class="hideElements ? 'opacity-0 -translate-y-10 pointer-events-none' : 'opacity-100 pointer-events-auto'"
-        indicator-position="none" style="height: 178px;">
-        <el-carousel-item v-for="ban in launcherInfo.banner" @click="openLink(ban.url)">
+        indicator-position="none" style="height: 182px; width: 396px;">
+        <el-carousel-item class=" cursor-pointer" v-for="ban in launcherInfo.banner" @click="openLink(ban.url)">
             <img class=" object-scale-down" :src="ban.img" />
         </el-carousel-item>
     </el-carousel>
