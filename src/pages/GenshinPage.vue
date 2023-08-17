@@ -181,13 +181,15 @@ const handleScroll = ({ scrollTop }) => {
         </el-carousel>
         <el-tabs v-model="tabsModel"
             class="absolute left-16 top-96 z-50 rounded-xl transition-all backdrop-blur-md pl-3 pr-1"
-            v-if="launcherInfoReady" style="height: 150px; width: 396px; background-color: rgb(255 255 255 / 0.7);">
+            :class="hideElements ? 'opacity-0 -translate-y-2 pointer-events-none blur-md -translate-x-14 scale-110' : 'opacity-100 pointer-events-auto'"
+            v-if="launcherInfoReady"
+            style="height: 150px; width: 396px; background-color: rgb(255 255 255 / 0.7); transition-duration: 500ms;">
             <el-tab-pane label="资讯" name="aaa">
                 <el-scrollbar class="w-full h-full" max-height="90px">
                     <div class="h-max pr-2 pb-2">
                         <div v-for="post in postTypeMap.get('资讯')"
                             class="w-full justify-between flex flex-row p-1 pl-2 hover:bg-white bg-transparent rounded hover:shadow-md transition-all cursor-pointer"
-                            style="height: 28px;">
+                            style="height: 28px;" @click="openLink(post.url)">
                             <el-text class=" mr-1 font-genshin" truncated style="max-width: 320px;">{{ post.tittle
                             }}</el-text>
                             <el-text size="small">{{ post.show_time }}</el-text>
