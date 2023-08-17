@@ -1,7 +1,6 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { Loading } from '@element-plus/icons-vue'
 
 const gsPath = ref('')
 const displayConfirm = ref(false)
@@ -13,12 +12,48 @@ const launcherInfo = ref({})
 const launcherInfoReady = ref(false)
 const hideElements = ref(false)
 const scrollbarref = ref()
+const tabsModel = ref('aaa')
+
+const postTypeMap = new Map()
 
 onMounted(async () => {
     // 获取原神启动器信息
     window.axios.post('https://sdk-static.mihoyo.com/hk4e_cn/mdk/launcher/api/content?filter_adv=false&key=eYd89JmJ&language=zh-cn&launcher_id=18')
         .then((value) => {
             launcherInfo.value = value.data
+            launcherInfo.value.post.forEach(post => {
+                let tmp
+                switch (post.type) {
+                    case 'POST_TYPE_INFO':
+                        tmp = postTypeMap.get('资讯');
+                        if (tmp) {
+                            tmp.push(post);
+                            postTypeMap.set('资讯', tmp);
+                        } else {
+                            postTypeMap.set('资讯', [post]);
+                        }
+                        break
+                    case 'POST_TYPE_ANNOUNCE':
+                        tmp = postTypeMap.get('公告');
+                        if (tmp) {
+                            tmp.push(post);
+                            postTypeMap.set('公告', tmp);
+                        } else {
+                            postTypeMap.set('公告', [post]);
+                        }
+                        break
+                    case 'POST_TYPE_ACTIVITY':
+                        tmp = postTypeMap.get('活动');
+                        if (tmp) {
+                            tmp.push(post);
+                            postTypeMap.set('活动', tmp);
+                        } else {
+                            postTypeMap.set('活动', [post]);
+                        }
+                        break
+                }
+            });
+            console.log(postTypeMap)
             launcherInfoReady.value = true
             console.log(launcherInfo.value)
         })
@@ -115,7 +150,7 @@ const openLink = (url) => {
 }
 
 const handleScroll = ({ scrollTop }) => {
-    if (scrollTop > 40) {
+    if (scrollTop > 0) {
         hideElements.value = true
     } else {
         hideElements.value = false
@@ -131,24 +166,68 @@ const handleScroll = ({ scrollTop }) => {
     </div>
     <div class="transition-all relative" :class="launcherInfoReady ? 'opacity-100' : 'opacity-0 blur-lg scale-90'"
         style="width: 98vw; height: 92vh; transition-duration: 400ms;">
-        <div class="bg-pic rounded-3xl w-full h-full" :class="hideElements ? 'scale-95' : ''"
-            style="transition-duration: 300ms;">
+        <div class="bg-pic rounded-3xl w-full h-full" style="transition-duration: 500ms;"
+            :class="hideElements ? 'scale-95' : ''">
             <img class=" top-0 rounded-3xl transition-all" :class="hideElements ? 'blur-md scale-125 brightness-75' : ''"
                 style="transition-duration: 500ms;" :src="launcherInfoReady ? launcherInfo.adv.background : ''"
                 @touchmove.prevent @mousewheel.prevent />
         </div>
-        <el-carousel class="absolute left-16 top-64 z-50 rounded-xl transition-all" v-if="launcherInfoReady" arrow="hover"
-            :class="hideElements ? 'opacity-0 -translate-y-10 pointer-events-none' : 'opacity-100 pointer-events-auto'"
-            indicator-position="none" style="height: 182px; width: 396px;">
+        <el-carousel class="absolute left-16 top-48 z-50 rounded-xl transition-all" v-if="launcherInfoReady" arrow="hover"
+            :class="hideElements ? 'opacity-0 -translate-y-10 pointer-events-none blur-md -translate-x-14 scale-110' : 'opacity-100 pointer-events-auto'"
+            indicator-position="none" style="height: 182px; width: 396px; transition-duration: 500ms;">
             <el-carousel-item class=" cursor-pointer" v-for="ban in launcherInfo.banner" @click="openLink(ban.url)">
                 <img class=" object-scale-down" :src="ban.img" />
             </el-carousel-item>
         </el-carousel>
+        <el-tabs v-model="tabsModel"
+            class="absolute left-16 top-96 z-50 rounded-xl transition-all backdrop-blur-md pl-3 pr-1"
+            v-if="launcherInfoReady" style="height: 150px; width: 396px; background-color: rgb(255 255 255 / 0.7);">
+            <el-tab-pane label="资讯" name="aaa">
+                <el-scrollbar class="w-full h-full" max-height="90px">
+                    <div class="h-max pr-2 pb-2">
+                        <div v-for="post in postTypeMap.get('资讯')"
+                            class="w-full justify-between flex flex-row p-1 pl-2 hover:bg-white bg-transparent rounded hover:shadow-md transition-all cursor-pointer"
+                            style="height: 28px;">
+                            <el-text class=" mr-1 font-genshin" truncated style="max-width: 320px;">{{ post.tittle
+                            }}</el-text>
+                            <el-text size="small">{{ post.show_time }}</el-text>
+                        </div>
+                    </div>
+                </el-scrollbar>
+            </el-tab-pane>
+            <el-tab-pane label="活动" name="bbb">
+                <el-scrollbar class="w-full h-full" max-height="90px">
+                    <div class="h-max pr-2 pb-2">
+                        <div v-for="post in postTypeMap.get('活动')"
+                            class="w-full justify-between flex flex-row p-1 pl-2 hover:bg-white bg-transparent rounded hover:shadow-md transition-all cursor-pointer"
+                            style="height: 28px;">
+                            <el-text class=" mr-1 font-genshin" truncated style="max-width: 320px;">{{ post.tittle
+                            }}</el-text>
+                            <el-text size="small">{{ post.show_time }}</el-text>
+                        </div>
+                    </div>
+                </el-scrollbar>
+            </el-tab-pane>
+            <el-tab-pane label="公告" name="ccc">
+                <el-scrollbar class="w-full h-full" max-height="90px">
+                    <div class="h-max pr-2 pb-2">
+                        <div v-for="post in postTypeMap.get('公告')"
+                            class="w-full justify-between flex flex-row p-1 pl-2 hover:bg-white bg-transparent rounded hover:shadow-md transition-all cursor-pointer"
+                            style="height: 28px;">
+                            <el-text class=" font-genshin" truncated style="max-width: 320px;">{{ post.tittle
+                            }}</el-text>
+                            <el-text size="small">{{ post.show_time }}</el-text>
+                        </div>
+                    </div>
+                </el-scrollbar>
+            </el-tab-pane>
+        </el-tabs>
         <el-scrollbar ref="scrollbarref" height="91vh" class="scroll-wrapper absolute z-40" @scroll="handleScroll">
             <div class="items-scroll flex flex-col content-center items-center w-full">
                 <div class="w-full flex flex-row justify-between">
                     <div class="w-1"></div>
-                    <div v-if="gsPath" class="transition-all" :class="hideElements ? ' -translate-x-96' : ''">
+                    <div v-if="gsPath" class="transition-all" :class="hideElements ? ' -translate-x-96' : ''"
+                        style=" transition-duration: 500ms;">
                         <div class="mx-2 my-3 flex flex-row rounded-full bg-yellow-400 font-genshin w-48">
                             <button @click="gsLaunch"
                                 class="pl-4 px-4 text-2xl font-bold rounded-full w-48 h-16 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">原神启动</button>
