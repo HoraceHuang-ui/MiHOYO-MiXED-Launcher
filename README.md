@@ -26,7 +26,7 @@
 <p></p>
 
 - **原神启动页** Genshin Impact launcher page
-<img width="500" alt="微信截图_20230818161641" src="https://github.com/HoraceHuang-ui/MiHOYO-MiXED-Launcher/assets/67905897/01775c02-1345-4194-bacf-33df99400d37">
+<img width="500" alt="微信截图_20230818161641" src="https://github.com/HoraceHuang-ui/MiHOYO-MiXED-Launcher/assets/67905897/ee98c98b-13c0-4dc6-a238-22fa36acec5b">
 
 <p></p>
 
