@@ -23,6 +23,8 @@ declare module 'vue' {
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
     GenshinInfoCard: typeof import('./src/components/GenshinInfoCard.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    LauncherBanner: typeof import('./src/components/LauncherBanner.vue')['default']
+    LauncherPosts: typeof import('./src/components/LauncherPosts.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TopHeader: typeof import('./src/components/TopHeader.vue')['default']

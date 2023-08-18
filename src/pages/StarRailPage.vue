@@ -145,10 +145,6 @@ const handleCommand = (command) => {
     }
 }
 
-const openLink = (url) => {
-    window.electron.openExtLink(url)
-}
-
 const handleScroll = ({ scrollTop }) => {
     if (scrollTop > 0) {
         hideElements.value = true
@@ -177,59 +173,14 @@ const handleScroll = ({ scrollTop }) => {
                 :class="hideElements ? 'blur-md scale-125 brightness-75' : ''" style="transition-duration: 500ms;"
                 :src="launcherInfoReady ? launcherInfo.adv.background : ''" @touchmove.prevent @mousewheel.prevent />
         </div>
-        <el-carousel class="absolute left-16 top-48 z-50 rounded-xl transition-all" v-if="launcherInfoReady" arrow="hover"
-            :interval="5000"
+        <LauncherBanner class="absolute left-16 top-48 z-50 rounded-xl transition-all" v-if="launcherInfoReady"
+            :banners="launcherInfo.banner"
             :class="hideElements ? 'opacity-0 -translate-y-10 pointer-events-none blur-md -translate-x-14 scale-110' : 'opacity-100 pointer-events-auto'"
-            indicator-position="none" style="height: 182px; width: 396px; transition-duration: 500ms;">
-            <el-carousel-item class=" cursor-pointer" v-for="ban in launcherInfo.banner" @click="openLink(ban.url)">
-                <img class=" object-scale-down" :src="ban.img" />
-            </el-carousel-item>
-        </el-carousel>
-        <el-tabs v-model="tabsModel"
-            class="absolute left-16 top-96 z-50 rounded-xl transition-all backdrop-blur-md pl-3 pr-1"
+            style="height: 182px; width: 396px; transition-duration: 500ms;" />
+        <LauncherPosts :postTypeMap="postTypeMap" v-if="launcherInfoReady"
+            class="absolute left-16 top-96 z-50 rounded-xl transition-all backdrop-blur-md pl-3 pr-1 font-sr"
             :class="hideElements ? 'opacity-0 -translate-y-2 pointer-events-none blur-md -translate-x-14 scale-110' : 'opacity-100 pointer-events-auto'"
-            v-if="launcherInfoReady"
-            style="height: 125px; width: 396px; background-color: rgb(255 255 255 / 0.7); transition-duration: 500ms;">
-            <el-tab-pane label="资讯" name="aaa">
-                <el-scrollbar class="w-full h-full" max-height="65px">
-                    <div class="h-max pr-2 pb-2">
-                        <div v-for="post in postTypeMap.get('资讯')"
-                            class="w-full justify-between flex flex-row p-1 pl-2 hover:bg-white bg-transparent rounded hover:shadow-md transition-all cursor-pointer"
-                            style="height: 28px;" @click="openLink(post.url)">
-                            <el-text class=" mr-1 font-sr" truncated style="max-width: 320px;">{{ post.tittle
-                            }}</el-text>
-                            <el-text size="small">{{ post.show_time }}</el-text>
-                        </div>
-                    </div>
-                </el-scrollbar>
-            </el-tab-pane>
-            <el-tab-pane label="活动" name="bbb">
-                <el-scrollbar class="w-full h-full" max-height="65px">
-                    <div class="h-max pr-2 pb-2">
-                        <div v-for="post in postTypeMap.get('活动')"
-                            class="w-full justify-between flex flex-row p-1 pl-2 hover:bg-white bg-transparent rounded hover:shadow-md transition-all cursor-pointer"
-                            style="height: 28px;" @click="openLink(post.url)">
-                            <el-text class=" mr-1 font-sr" truncated style="max-width: 320px;">{{ post.tittle
-                            }}</el-text>
-                            <el-text size="small">{{ post.show_time }}</el-text>
-                        </div>
-                    </div>
-                </el-scrollbar>
-            </el-tab-pane>
-            <el-tab-pane label="公告" name="ccc">
-                <el-scrollbar class="w-full h-full" max-height="65px">
-                    <div class="h-max pr-2 pb-2">
-                        <div v-for="post in postTypeMap.get('公告')"
-                            class="w-full justify-between flex flex-row p-1 pl-2 hover:bg-white bg-transparent rounded hover:shadow-md transition-all cursor-pointer"
-                            style="height: 28px;" @click="openLink(post.url)">
-                            <el-text class=" font-sr" truncated style="max-width: 320px;">{{ post.tittle
-                            }}</el-text>
-                            <el-text size="small">{{ post.show_time }}</el-text>
-                        </div>
-                    </div>
-                </el-scrollbar>
-            </el-tab-pane>
-        </el-tabs>
+            style="height: 125px; width: 396px; background-color: rgb(255 255 255 / 0.7); transition-duration: 500ms;" />
         <el-scrollbar ref="scrollbarref" height="91vh" class="scroll-wrapper absolute z-40" @scroll="handleScroll">
             <div class="items-scroll flex flex-col content-center items-center w-full">
                 <div class="w-full flex flex-row justify-between">
@@ -241,12 +192,12 @@ const handleScroll = ({ scrollTop }) => {
                                 class="pl-4 px-4 text-2xl font-bold rounded-full w-48 h-16 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">星铁启动</button>
                             <el-dropdown class="h-full px-1" trigger="click" @command="handleCommand">
                                 <button
-                                    class="text-xl text-gray-900 font-bold px-2 h-16 rounded-full hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">…</button>
+                                    class="text-xl text-gray-900 font-bold px-2 mt-1 h-14 rounded-full hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">…</button>
                                 <template #dropdown>
                                     <el-dropdown-menu>
                                         <el-dropdown-item command="openLauncher">打开官方启动器</el-dropdown-item>
                                         <el-dropdown-item command="clearPath" divided>清除游戏路径</el-dropdown-item>
-                                        <el-dropdown-item command="clearPlayerinfo">清除游戏数据</el-dropdown-item>
+                                        <el-dropdown-item command="clearPlayerinfo" disabled>清除游戏数据</el-dropdown-item>
                                     </el-dropdown-menu>
                                 </template>
                             </el-dropdown>
@@ -293,12 +244,12 @@ const handleScroll = ({ scrollTop }) => {
 
 .scroll-wrapper {
     top: 2vh;
-    left: 10vw;
+    left: 8vw;
     border-radius: 5vh 5vh 0 0;
 }
 
 .items-scroll {
     margin-top: 67vh;
-    width: 80vw;
+    width: 82vw;
 }
 </style>
