@@ -35,5 +35,6 @@
 
 <p></p>
 
-- **崩坏：星穹铁道启动页（尚未实现启动器样式）** Honkai: Star Rail launcher page (launcher styles temporarily undone)
-<img width="500" alt="微信截图_20230817210454" src="https://github.com/HoraceHuang-ui/MiHOYO-MiXED-Launcher/assets/67905897/60b44b19-821f-4daf-a9ce-d6e3c762de4e">
+- **崩坏：星穹铁道启动页** Honkai: Star Rail launcher page
+<img width="500" alt="微信截图_20230818101942" src="https://github.com/HoraceHuang-ui/MiHOYO-MiXED-Launcher/assets/67905897/334679e2-c688-48da-97d2-b7cf348afd6c">
+
