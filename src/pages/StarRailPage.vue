@@ -95,7 +95,7 @@ onMounted(async () => {
                             window.store.set('starRailUpd', true, false)
                         }).catch(() => { })
                 }
-            } else if (srPath && timeDelta.value > 2 && timeDelta.value < 37) {
+            } else if (srPath.value && timeDelta.value > 2 && timeDelta.value < 37) {
                 window.store.set('starRailUpd', false, false)
             }
         }).catch((err) => {

@@ -57,7 +57,7 @@ onMounted(async () => {
             console.log(launcherInfo.value)
         })
     hiPath.value = await window.store.get('honkai3Path')
-    timeDelta.value = Math.ceil((timeNow - timeUpd1_2) / 1000 / 3600 / 24 - 0.5) % 42
+    timeDelta.value = Math.ceil((timeNow - timeUpd6_8) / 1000 / 3600 / 24 - 0.5) % 42
     window.store.get('honkai3Upd')
         .then((resp) => {
             if (hiPath.value && !resp) {
@@ -95,7 +95,7 @@ onMounted(async () => {
                             window.store.set('honkai3Upd', true, false)
                         }).catch(() => { })
                 }
-            } else if (srPath && timeDelta.value > 2 && timeDelta.value < 37) {
+            } else if (hiPath.value && timeDelta.value > 2 && timeDelta.value < 37) {
                 window.store.set('honkai3Upd', false, false)
             }
         }).catch((err) => {
@@ -121,8 +121,8 @@ const confirmPath = async () => {
     hiPath.value = path.value
     displayConfirm.value = false
 }
-const srLaunch = () => {
-    window.child.exec(srPath.value.concat('\\Game\\StarRail.exe'))
+const hiLaunch = () => {
+    window.child.exec(hiPath.value.concat('\\Games\\BH3.exe'))
     window.win.tray()
 }
 
@@ -184,7 +184,7 @@ const handleScroll = ({ scrollTop }) => {
             <div class="items-scroll flex flex-col content-center items-center w-full">
                 <div class="w-full flex flex-row justify-between">
                     <div class="w-1"></div>
-                    <div v-if="srPath" class="transition-all" :class="hideElements ? ' -translate-x-96' : ''"
+                    <div v-if="hiPath" class="transition-all" :class="hideElements ? ' -translate-x-96' : ''"
                         style=" transition-duration: 500ms;">
                         <div class="mx-2 my-3 flex flex-row rounded-full bg-yellow-400 w-48">
                             <button @click="hiLaunch"
@@ -204,7 +204,7 @@ const handleScroll = ({ scrollTop }) => {
                     </div>
                     <div v-else>
                         <div class="flex flex-row">
-                            <button @click="gsImport"
+                            <button @click="hiImport"
                                 class="mx-2 my-3 rounded-full h-16 text-2xl bg-yellow-400 w-48 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 font-bold transition-all cursor-default"
                                 :class="hideElements ? ' -translate-x-96' : ''"
                                 style="transition-duration: 500ms;">崩坏3导入</button>

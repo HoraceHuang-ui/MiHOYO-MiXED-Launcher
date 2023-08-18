@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 
 const gsPath = ref('')
 const srPath = ref('')
+const hiPath = ref('')
 
 onMounted(async () => {
     // For electron-store test
@@ -10,22 +11,23 @@ onMounted(async () => {
 
     gsPath.value = await window.store.get('genshinPath')
     srPath.value = await window.store.get('starRailPath')
+    hiPath.value = await window.store.get('honkai3Path')
 })
 
 const genshin = async () => {
-    console.log("click on genshin")
-    console.log(gsPath.value.concat('\\Genshin Impact Game\\YuanShen.exe'))
     window.child.exec(gsPath.value.concat('\\Genshin Impact Game\\YuanShen.exe'))
     window.win.tray()
 }
 
 const starRail = async () => {
-    console.log("click on starrail")
-    console.log(srPath.value.concat('\\Game\\StarRail.exe'))
     await window.child.exec(srPath.value.concat('\\Game\\StarRail.exe'))
     window.win.tray()
 }
 
+const honkai3 = async () => {
+    await window.child.exec(hiPath.value.concat('\\Games\\BH3.exe'))
+    window.win.tray()
+}
 </script>
 
 <template>
@@ -49,6 +51,8 @@ const starRail = async () => {
                 class="p-3 mx-2 my-2 font-bold text-xl transition-all bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90">原神启动</button>
             <button v-if="srPath" @click="starRail"
                 class="p-3 mx-2 my-2 font-bold text-xl transition-all bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90">星铁启动</button>
+            <button v-if="hiPath" @click="honkai3"
+                class="p-3 mx-2 my-2 font-bold text-xl transition-all bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90">崩坏3启动</button>
         </div>
     </div>
 </template>

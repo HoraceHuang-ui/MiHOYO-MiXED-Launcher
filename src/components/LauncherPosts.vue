@@ -17,7 +17,7 @@ const openLink = (url) => {
             <el-scrollbar class="w-full h-full" max-height="64px">
                 <div class="h-max pr-2 pb-2">
                     <div v-for="post in postTypeMap.get('资讯')"
-                        class="w-full justify-between flex flex-row p-1 pl-2 hover:bg-white bg-transparent rounded hover:shadow-md transition-all cursor-pointer"
+                        class="w-full justify-between flex flex-row p-1 pl-2 hover:bg-white rounded hover:shadow-md transition-all cursor-pointer"
                         style="height: 28px;" @click="openLink(post.url)">
                         <el-text class=" mr-1" truncated style="max-width: 320px;">{{ post.tittle
                         }}</el-text>
@@ -30,7 +30,7 @@ const openLink = (url) => {
             <el-scrollbar class="w-full h-full" max-height="64px">
                 <div class="h-max pr-2 pb-2">
                     <div v-for="post in postTypeMap.get('活动')"
-                        class="w-full justify-between flex flex-row p-1 pl-2 hover:bg-white bg-transparent rounded hover:shadow-md transition-all cursor-pointer"
+                        class="w-full justify-between flex flex-row p-1 pl-2 hover:bg-white rounded hover:shadow-md transition-all cursor-pointer"
                         style="height: 28px;" @click="openLink(post.url)">
                         <el-text class=" mr-1" truncated style="max-width: 320px;">{{ post.tittle
                         }}</el-text>
@@ -43,7 +43,7 @@ const openLink = (url) => {
             <el-scrollbar class="w-full h-full" max-height="64px">
                 <div class="h-max pr-2 pb-2">
                     <div v-for="post in postTypeMap.get('公告')"
-                        class="w-full justify-between flex flex-row p-1 pl-2 hover:bg-white bg-transparent rounded hover:shadow-md transition-all cursor-pointer"
+                        class="w-full justify-between flex flex-row p-1 pl-2 hover:bg-white rounded hover:shadow-md transition-all cursor-pointer"
                         style="height: 28px;" @click="openLink(post.url)">
                         <el-text class=" mr-1" truncated style="max-width: 320px;">{{ post.tittle
                         }}</el-text>
@@ -54,3 +54,9 @@ const openLink = (url) => {
         </el-tab-pane>
     </el-tabs>
 </template>
+
+<style scoped>
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+</style>

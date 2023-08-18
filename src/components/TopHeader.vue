@@ -65,7 +65,7 @@ const winMin = () => {
     </div>
 </template>
 
-<style>
+<style scoped>
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

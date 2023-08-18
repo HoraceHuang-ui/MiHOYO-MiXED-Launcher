@@ -15,3 +15,9 @@ const openLink = (url) => {
         </el-carousel-item>
     </el-carousel>
 </template>
+
+<style scoped>
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+</style>

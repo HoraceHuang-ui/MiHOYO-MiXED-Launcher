@@ -95,7 +95,7 @@ onMounted(async () => {
                             window.store.set('genshinUpd', true, false)
                         }).catch(() => { })
                 }
-            } else if (gsPath && timeDelta.value > 2 && timeDelta.value < 37) {
+            } else if (gsPath.value && timeDelta.value > 2 && timeDelta.value < 37) {
                 window.store.set('genshinUpd', false, false)
             }
         }).catch((err) => {
