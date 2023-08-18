@@ -21,7 +21,7 @@ const openLink = (url) => {
                         style="height: 28px;" @click="openLink(post.url)">
                         <el-text class=" mr-1" truncated style="max-width: 320px;">{{ post.tittle
                         }}</el-text>
-                        <el-text size="small" class=" font-sans">{{ post.show_time }}</el-text>
+                        <el-text size="small" class=" font-sans font-normal">{{ post.show_time }}</el-text>
                     </div>
                 </div>
             </el-scrollbar>
@@ -34,7 +34,7 @@ const openLink = (url) => {
                         style="height: 28px;" @click="openLink(post.url)">
                         <el-text class=" mr-1" truncated style="max-width: 320px;">{{ post.tittle
                         }}</el-text>
-                        <el-text size="small" class=" font-sans">{{ post.show_time }}</el-text>
+                        <el-text size="small" class=" font-sans font-normal">{{ post.show_time }}</el-text>
                     </div>
                 </div>
             </el-scrollbar>
@@ -47,7 +47,7 @@ const openLink = (url) => {
                         style="height: 28px;" @click="openLink(post.url)">
                         <el-text class=" mr-1" truncated style="max-width: 320px;">{{ post.tittle
                         }}</el-text>
-                        <el-text size="small" class=" font-sans">{{ post.show_time }}</el-text>
+                        <el-text size="small" class=" font-sans font-normal">{{ post.show_time }}</el-text>
                     </div>
                 </div>
             </el-scrollbar>

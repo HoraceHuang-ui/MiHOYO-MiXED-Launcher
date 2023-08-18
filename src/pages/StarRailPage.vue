@@ -12,7 +12,6 @@ const launcherInfo = ref({})
 const launcherInfoReady = ref(false)
 const hideElements = ref(false)
 const scrollbarref = ref()
-const tabsModel = ref('aaa')
 
 const postTypeMap = new Map()
 
@@ -227,10 +226,6 @@ const handleScroll = ({ scrollTop }) => {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-.font-genshin {
-    font-family: genshin-font;
-}
 
 .font-sr {
     font-family: sr-font;

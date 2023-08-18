@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router'
 //     selection: Number
 // })
 
-const pageNames = ['主页', '原神', '崩坏：星穹铁道']
+const pageNames = ['主页', '原神', '崩坏：星穹铁道', '崩坏3rd']
 const selection = ref(0)
 
 const router = useRouter()
@@ -20,6 +20,10 @@ const genshin = () => {
 const starRail = () => {
     selection.value = 2
     router.push("/srpage")
+}
+const honkai3 = () => {
+    selection.value = 3
+    router.push("/hipage")
 }
 
 const winClose = () => {
@@ -48,6 +52,8 @@ const winMin = () => {
                 @click="genshin" :class="{ 'selected hover:scale-100': selection == 1 }" />
             <img src="../assets/sricon.webp" class="mx-2 rounded-lg h-8 transition-all hover:scale-110 active:scale-90"
                 @click="starRail" :class="{ 'selected hover:scale-100': selection == 2 }" />
+            <img src="../assets/hi3icon.png" class="mx-2 rounded-lg h-8 transition-all hover:scale-110 active:scale-90"
+                @click="honkai3" :class="{ 'selected hover:scale-100': selection == 3 }" />
         </div>
         <div class="example focus no-drag" style="width: 35vw;">
             <div class="traffic-lights no-drag mt-2">
