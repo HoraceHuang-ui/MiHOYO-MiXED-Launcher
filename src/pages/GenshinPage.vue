@@ -209,7 +209,7 @@ const handleScroll = ({ scrollTop }) => {
                     <div class="h-max pr-2 pb-2">
                         <div v-for="post in postTypeMap.get('活动')"
                             class="w-full justify-between flex flex-row p-1 pl-2 hover:bg-white bg-transparent rounded hover:shadow-md transition-all cursor-pointer"
-                            style="height: 28px;">
+                            style="height: 28px;" @click="openLink(post.url)">
                             <el-text class=" mr-1 font-genshin" truncated style="max-width: 320px;">{{ post.tittle
                             }}</el-text>
                             <el-text size="small">{{ post.show_time }}</el-text>
@@ -222,7 +222,7 @@ const handleScroll = ({ scrollTop }) => {
                     <div class="h-max pr-2 pb-2">
                         <div v-for="post in postTypeMap.get('公告')"
                             class="w-full justify-between flex flex-row p-1 pl-2 hover:bg-white bg-transparent rounded hover:shadow-md transition-all cursor-pointer"
-                            style="height: 28px;">
+                            style="height: 28px;" @click="openLink(post.url)">
                             <el-text class=" font-genshin" truncated style="max-width: 320px;">{{ post.tittle
                             }}</el-text>
                             <el-text size="small">{{ post.show_time }}</el-text>
