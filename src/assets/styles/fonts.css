@@ -4,3 +4,10 @@
   font-weight: normal;
   font-style: normal;
 }
+
+@font-face {
+  font-family: "sr-font";
+  src: url("./starrail.ttf");
+  font-weight: normal;
+  font-style: normal;
+}

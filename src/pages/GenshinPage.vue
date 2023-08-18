@@ -13,7 +13,6 @@ const launcherInfoReady = ref(false)
 const hideElements = ref(false)
 const scrollbarref = ref()
 const tabsModel = ref('aaa')
-const kleePath = ref('')
 
 const postTypeMap = new Map()
 
