@@ -103,7 +103,7 @@ onMounted(async () => {
         })
 })
 
-const gsImport = async () => {
+const srImport = async () => {
     window.dialog.show({
         title: '选择星铁根目录',
         properties: ['openDirectory']
@@ -167,7 +167,7 @@ const handleScroll = ({ scrollTop }) => {
     <div class="transition-all relative" :class="launcherInfoReady ? 'opacity-100' : 'opacity-0 blur-lg scale-90'"
         style="width: 98vw; height: 92vh; transition-duration: 400ms;">
         <div class="bg-pic h-full w-full" style="transition-duration: 500ms; border-radius: 1.5rem 1.5rem 0 0;"
-            :class="hideElements ? 'scale-95' : ''">
+            :class="{ 'scale-95': hideElements }, { 'bg-mask': displayConfirm }">
             <img class=" top-0 rounded-3xl transition-all scale-105"
                 :class="hideElements ? 'blur-md scale-125 brightness-75' : ''" style="transition-duration: 500ms;"
                 :src="launcherInfoReady ? launcherInfo.adv.background : ''" @touchmove.prevent @mousewheel.prevent />
@@ -203,15 +203,18 @@ const handleScroll = ({ scrollTop }) => {
                         </div>
                     </div>
                     <div v-else>
-                        <div class="flex flex-row">
-                            <button @click="gsImport"
-                                class="mx-2 my-3 rounded-full h-16 text-2xl bg-yellow-400 font-sr w-48 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all cursor-default"
-                                :class="hideElements ? ' -translate-x-96' : ''"
-                                style="transition-duration: 500ms;">星铁导入</button>
-                            <button v-if="displayConfirm" @click="confirmPath"
-                                class="mx-2 my-3 px-3 rounded-full text-xl bg-white border-3 hover:bg-gray-200 active:bg-gray-500 active:scale-90 transition-all">确认</button>
+                        <div class="justify-between flex flex-row">
+                            <div class="w-1"></div>
+                            <div class="flex flex-row">
+                                <button @click="srImport"
+                                    class=" mx-2 my-3 rounded-full h-16 text-2xl bg-yellow-400 font-sr w-48 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all cursor-default"
+                                    :class="hideElements ? ' -translate-x-96' : ''"
+                                    style="transition-duration: 500ms;">星铁导入</button>
+                                <button v-if="displayConfirm" @click="confirmPath"
+                                    class="mx-2 my-3 px-3 rounded-full text-xl bg-white border-3 hover:bg-gray-200 active:bg-gray-500 active:scale-90 transition-all">确认</button>
+                            </div>
                         </div>
-                        <div v-if="displayConfirm" class="font-sr">{{ path }}</div>
+                        <div v-if="displayConfirm" class="font-sr text-right mr-4">{{ path }}</div>
                     </div>
                 </div>
                 <!-- <div
@@ -235,6 +238,10 @@ const handleScroll = ({ scrollTop }) => {
     width: 98vw;
     /* -webkit-mask: linear-gradient(white 50%, transparent) */
     -webkit-mask: linear-gradient(white, white);
+}
+
+.bg-mask {
+    -webkit-mask: linear-gradient(white 50%, transparent);
 }
 
 .scroll-wrapper {

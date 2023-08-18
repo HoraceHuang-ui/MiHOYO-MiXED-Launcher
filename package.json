@@ -1,6 +1,6 @@
 {
   "name": "miXeD",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "main": "dist-electron/main/index.js",
   "description": "All-in-one MiHOYO game launcher",
   "author": "HoraceHYY <3214442497@qq.com>",

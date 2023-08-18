@@ -203,15 +203,18 @@ const handleScroll = ({ scrollTop }) => {
                         </div>
                     </div>
                     <div v-else>
-                        <div class="flex flex-row">
-                            <button @click="gsImport"
-                                class="mx-2 my-3 rounded-full h-16 text-2xl bg-yellow-400 font-genshin w-48 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all cursor-default"
-                                :class="hideElements ? ' -translate-x-96' : ''"
-                                style="transition-duration: 500ms;">原神导入</button>
-                            <button v-if="displayConfirm" @click="confirmPath"
-                                class="mx-2 my-3 px-3 rounded-full text-xl bg-white border-3 hover:bg-gray-200 active:bg-gray-500 active:scale-90 transition-all">确认</button>
+                        <div class="justify-between flex flex-row">
+                            <div class="w-1"></div>
+                            <div class="flex flex-row">
+                                <button @click="gsImport"
+                                    class=" mx-2 my-3 rounded-full h-16 text-2xl bg-yellow-400 font-genshin w-48 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all cursor-default"
+                                    :class="hideElements ? ' -translate-x-96' : ''"
+                                    style="transition-duration: 500ms;">原神导入</button>
+                                <button v-if="displayConfirm" @click="confirmPath"
+                                    class="mx-2 my-3 px-3 rounded-full text-xl bg-white border-3 hover:bg-gray-200 active:bg-gray-500 active:scale-90 transition-all">确认</button>
+                            </div>
                         </div>
-                        <div v-if="displayConfirm" class="font-genshin">{{ path }}</div>
+                        <div v-if="displayConfirm" class="font-genshin text-right mr-4">{{ path }}</div>
                     </div>
                 </div>
                 <GenshinInfoCard class="my-2 w-full mb-4 shadow-md"></GenshinInfoCard>
