@@ -153,6 +153,10 @@ async function createWindow() {
     const result = await axios.post(url)
     return result.data
   })
+  ipcMain.handle("axios:get", async (_event, url) => {
+    const result = await axios.get(url)
+    return result
+  })
 
   ipcMain.on("elec:openExtLink", (_event, url) => {
     shell.openExternal(url);

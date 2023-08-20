@@ -42,6 +42,10 @@ contextBridge.exposeInMainWorld("axios", {
   post: async (url) => {
     const result = await ipcRenderer.invoke("axios:post", url)
     return result
+  },
+  get: async (url) => {
+    const result = await ipcRenderer.invoke("axios:get", url)
+    return result
   }
 })
 contextBridge.exposeInMainWorld("electron", {
