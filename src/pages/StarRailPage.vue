@@ -135,10 +135,10 @@ const handleCommand = (command) => {
             window.store.delete('starRailUpd')
             srPath.value = ''
             break
-        // case 'clearPlayerinfo':
-        //     window.store.delete('genshinInfo')
-        //     router.push('/tmpgspage')
-        //     break
+        case 'clearPlayerinfo':
+            window.store.delete('starRailInfo')
+            // router.push('/tmpgspage')
+            break
     }
 }
 
@@ -194,7 +194,7 @@ const handleScroll = ({ scrollTop }) => {
                                     <el-dropdown-menu>
                                         <el-dropdown-item command="openLauncher">打开官方启动器</el-dropdown-item>
                                         <el-dropdown-item command="clearPath" divided>清除游戏路径</el-dropdown-item>
-                                        <el-dropdown-item command="clearPlayerinfo" disabled>清除游戏数据</el-dropdown-item>
+                                        <el-dropdown-item command="clearPlayerinfo">清除游戏数据</el-dropdown-item>
                                     </el-dropdown-menu>
                                 </template>
                             </el-dropdown>

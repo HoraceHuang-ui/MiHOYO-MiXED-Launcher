@@ -41,7 +41,7 @@ const mergeToPlayerinfo = (newArr) => {
         // for (let j = playerInfo.value.characters.length - 1; j >= 0; j--) {
         for (let j = 0; j < playerInfo.value.characters.length; j++) {
             let oldChar = playerInfo.value.characters[j]
-            if (oldChar.characterId == newChar.characterId) {
+            if (oldChar.id == newChar.id) {
                 playerInfo.value.characters[j] = newChar
                 exists = true
                 break
@@ -57,10 +57,8 @@ const mergeToPlayerinfo = (newArr) => {
 const router = useRouter()
 const requestInfo = () => {
     uid = uidInput.value
-    playerInfoReady.value = false
     window.axios.get('https://api.mihomo.me/sr_info_parsed/' + uid + '?lang=cn')
-        .then((result) => {
-            const resp = JSON.parse(result)
+        .then((resp) => {
             if (playerInfoReady.value && playerInfo.value.player.uid == resp.player.uid) {
                 console.log('uid equal')
                 mergeToPlayerinfo(resp.characters)
@@ -69,6 +67,7 @@ const requestInfo = () => {
                 console.log('uid not equal')
                 playerInfo.value = resp
             }
+            playerInfoReady.value = false
 
             playerInfo.value.characters.sort(function (a, b) {
                 // 等级
@@ -96,6 +95,7 @@ const requestInfo = () => {
             })
             window.store.set('starRailInfo', JSON.stringify(playerInfo.value), true)
             playerInfoLoading.value = false
+            playerInfoReady.value = true
             // router.push('/tmpgspage')
         }).catch((err) => {
             console.error(err)
@@ -131,7 +131,7 @@ const charsPagePrev = () => {
 <template>
     <div class="bg-white" style="border-radius: 4.5vh;" :style="playerInfoReady ? 'height: 97vh;' : ''">
         <!-- HEADER -->
-        <div class="flex flex-row w-full p-0 relative justify-between" style="height: 9vh;">
+        <div class="flex flex-row w-full p-0 relative justify-between z-50" style="height: 9vh;">
             <!-- 右上角名片 -->
             <div v-if="playerInfoLoading" class="absolute top-0 right-0 bottom-0 z-0"
                 style="margin-left: 1vw; right: 2vw; top: 3vh;">正在加载数据，请稍候……</div>
@@ -178,14 +178,14 @@ const charsPagePrev = () => {
         <div v-if="playerInfoReady && playerInfo.characters.length > 0" class="relative">
             <!-- 角色头像列表 8人一页 -->
             <div class="flex flex-row w-full justify-between">
-                <div class="relative z-50 w-1/4">
+                <div class="relative z-50" style="width: 30%;">
                     <el-icon
                         class="absolute right-2 top-3 rounded-full w-9 h-9 bg-white hover:bg-gray-200 active:-translate-x-1 transition-all opacity-80"
                         @click="charsPagePrev" :class="charsPage === 0 ? 'disabled' : ''">
                         <ArrowLeftBold />
                     </el-icon>
                 </div>
-                <el-scrollbar ref="charsScrollbar" class="flex flex-row w-1/2 justify-center" noresize>
+                <el-scrollbar ref="charsScrollbar" class="flex flex-row justify-center" noresize style="width: 40%;">
                     <div class="flex flex-row z-50 relative flex-nowrap w-max">
                         <div v-for="(character, index) in playerInfo.characters" class="relative w-12 h-12"
                             @click="showcaseIdx = index">
@@ -196,7 +196,7 @@ const charsPagePrev = () => {
                         </div>
                     </div>
                 </el-scrollbar>
-                <div class="relative z-50 w-1/4">
+                <div class="relative z-50" style="width: 30%;">
                     <el-icon
                         class="absolute left-2 top-3 rounded-full w-9 h-9 ml-2 bg-white hover:bg-gray-200 active:translate-x-1 transition-all opacity-80"
                         @click="charsPageNext" :class="charsPage === pages ? 'disabled' : ''">
@@ -259,7 +259,7 @@ const charsPagePrev = () => {
 }
 
 .gacha-mask {
-    -webkit-mask: linear-gradient(transparent 5%, white 15%, white 85%, transparent)
+    -webkit-mask: linear-gradient(transparent 3%, white 12%, white 85%, transparent)
 }
 
 .left-gacha {
