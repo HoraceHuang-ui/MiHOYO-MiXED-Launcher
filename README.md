@@ -14,6 +14,7 @@
 # Credits
 - [electron-vite/electron-vite-vue](https://github.com/electron-vite/electron-vite-vue)
 - [Enka.Network](https://enka.network) | [API docs](https://github.com/EnkaNetwork/API-docs)
+- [Mar-7th/MiHoMo API](https://march7th.xiaohei.moe/zh/resource/mihomo_api.html) | [Mar-7th/StarRailRes](https://github.com/Mar-7th/StarRailRes)
 # 截图 / Screenshots
 - **进入应用时加载页面** Loading screen when entering app
 <img width="500" alt="微信截图_20230818161600" src="https://github.com/HoraceHuang-ui/MiHOYO-MiXED-Launcher/assets/67905897/ece4c240-c58d-4587-b411-35b347fb7881">
