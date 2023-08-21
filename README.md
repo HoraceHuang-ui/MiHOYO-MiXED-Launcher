@@ -11,6 +11,8 @@
   - [x] 获取数据 / Retrieve data
   - [x] 呈现数据 / Display data
 - [ ] **星铁分析玩家游戏数据。** Analyze player info for Honkai Star Rail.
+  - [x] 获取数据 / Retrieve data
+  - [ ] 呈现数据 / Display data
 # Credits
 - [electron-vite/electron-vite-vue](https://github.com/electron-vite/electron-vite-vue)
 - [Enka.Network](https://enka.network) | [API docs](https://github.com/EnkaNetwork/API-docs)
