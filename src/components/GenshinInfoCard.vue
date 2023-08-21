@@ -147,7 +147,7 @@ const mergeToPlayerinfo = (newArr) => {
             }
         }
         if (!exists) {
-            playerInfo.value.characters.unshift(newChar)
+            playerInfo.value.characters.push(newChar)
         }
     }
     console.log(playerInfo.value)

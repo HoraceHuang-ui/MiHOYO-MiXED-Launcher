@@ -27,6 +27,7 @@ declare module 'vue' {
     LauncherPosts: typeof import('./src/components/LauncherPosts.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    StarRailInfoCard: typeof import('./src/components/StarRailInfoCard.vue')['default']
     TopHeader: typeof import('./src/components/TopHeader.vue')['default']
   }
 }

@@ -52,9 +52,7 @@ onMounted(async () => {
                         break
                 }
             });
-            console.log(postTypeMap)
             launcherInfoReady.value = true
-            console.log(launcherInfo.value)
         })
     srPath.value = await window.store.get('starRailPath')
     timeDelta.value = Math.ceil((timeNow - timeUpd1_2) / 1000 / 3600 / 24 - 0.5) % 42
@@ -167,7 +165,7 @@ const handleScroll = ({ scrollTop }) => {
     <div class="transition-all relative" :class="launcherInfoReady ? 'opacity-100' : 'opacity-0 blur-lg scale-90'"
         style="width: 98vw; height: 92vh; transition-duration: 400ms;">
         <div class="bg-pic h-full w-full" style="transition-duration: 500ms; border-radius: 1.5rem 1.5rem 0 0;"
-            :class="{ 'scale-95': hideElements }, { 'bg-mask': displayConfirm }">
+            :class="hideElements ? 'scale-x-95 translate-y-3' : ''">
             <img class=" top-0 rounded-3xl transition-all scale-105"
                 :class="hideElements ? 'blur-md scale-125 brightness-75' : ''" style="transition-duration: 500ms;"
                 :src="launcherInfoReady ? launcherInfo.adv.background : ''" @touchmove.prevent @mousewheel.prevent />
@@ -217,9 +215,7 @@ const handleScroll = ({ scrollTop }) => {
                         <div v-if="displayConfirm" class="font-sr text-right mr-4">{{ path }}</div>
                     </div>
                 </div>
-                <!-- <div
-                    class="my-2 h-36 w-full mb-4 shadow-md text-center rounded-2xl bg-white bg-opacity-40 backdrop-blur-md">
-                    星穹铁道玩家信息尚未支持，敬请期待</div> -->
+                <StarRailInfoCard class="my-2 w-full shadow-md" style="height: 97vh;"></StarRailInfoCard>
             </div>
         </el-scrollbar>
     </div>
@@ -236,8 +232,8 @@ const handleScroll = ({ scrollTop }) => {
 
 .bg-pic {
     width: 98vw;
-    /* -webkit-mask: linear-gradient(white 50%, transparent) */
-    -webkit-mask: linear-gradient(white, white);
+    -webkit-mask: linear-gradient(white 50%, transparent)
+        /* -webkit-mask: linear-gradient(white, white); */
 }
 
 .bg-mask {
@@ -247,7 +243,7 @@ const handleScroll = ({ scrollTop }) => {
 .scroll-wrapper {
     top: 2vh;
     left: 8vw;
-    border-radius: 5vh 5vh 0 0;
+    border-radius: 4.5vh 4.5vh 0 0;
 }
 
 .items-scroll {

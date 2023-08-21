@@ -55,7 +55,7 @@ const winMin = () => {
             <img src="../assets/hi3icon.png" class="mx-2 rounded-lg h-8 transition-all hover:scale-110 active:scale-90"
                 @click="honkai3" :class="{ 'selected hover:scale-100': selection == 3 }" />
         </div>
-        <div class="example focus no-drag" style="width: 35vw;">
+        <div class="example focus drag" style="width: 35vw;">
             <div class="traffic-lights no-drag mt-2">
                 <button class="traffic-light traffic-light-maximize mx-1" id="maximize"></button>
                 <button class="traffic-light traffic-light-minimize mx-1" id="minimize" @click="winMin"></button>

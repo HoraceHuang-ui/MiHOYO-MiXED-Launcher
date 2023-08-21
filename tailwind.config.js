@@ -3,6 +3,7 @@ module.exports = {
   content: [
     "./index.html",
     "./src/components/GenshinInfoCard.vue",
+    "./src/components/StarRailInfoCard.vue",
     "./src/components/TopHeader.vue",
     "./src/components/LauncherBanner.vue",
     "./src/components/LauncherPosts.vue",
