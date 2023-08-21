@@ -167,7 +167,7 @@ const handleScroll = ({ scrollTop }) => {
     <div class="transition-all relative" :class="launcherInfoReady ? 'opacity-100' : 'opacity-0 blur-lg scale-90'"
         style="width: 98vw; height: 92vh; transition-duration: 400ms;">
         <div class="bg-pic rounded-3xl w-full h-full" style="transition-duration: 500ms;"
-            :class="hideElements ? 'scale-95' : ''">
+            :class="hideElements ? 'scale-x-95 translate-y-3' : ''">
             <img class=" top-0 rounded-3xl transition-all" :class="hideElements ? 'blur-md scale-125 brightness-75' : ''"
                 style="transition-duration: 500ms;" :src="launcherInfoReady ? launcherInfo.adv.background : ''"
                 @touchmove.prevent @mousewheel.prevent />
@@ -240,7 +240,7 @@ const handleScroll = ({ scrollTop }) => {
 .scroll-wrapper {
     top: 2vh;
     left: 9vw;
-    border-radius: 5vh 5vh 0 0;
+    border-radius: 4.5vh 4.5vh 0 0;
 }
 
 .items-scroll {
