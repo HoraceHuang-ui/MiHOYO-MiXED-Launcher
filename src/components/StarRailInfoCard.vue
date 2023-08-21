@@ -25,7 +25,7 @@ onMounted(() => {
                 uidInput.value = uid
                 playerInfo.value = value
                 pages.value = playerInfo.value.characters.length > 8
-                    ? Math.floor((playerInfo.value.characters.length - 8) / 4) + 1
+                    ? Math.floor((playerInfo.value.characters.length - 8) / 4 - 0.1) + 1
                     : 0
             }
             console.log(playerInfo.value)
@@ -178,14 +178,14 @@ const charsPagePrev = () => {
         <div v-if="playerInfoReady && playerInfo.characters.length > 0" class="relative">
             <!-- 角色头像列表 8人一页 -->
             <div class="flex flex-row w-full justify-between">
-                <div class="relative z-50" style="width: 30%;">
+                <div class="relative z-50" style="width: 30.5%;">
                     <el-icon
                         class="absolute right-2 top-3 rounded-full w-9 h-9 bg-white hover:bg-gray-200 active:-translate-x-1 transition-all opacity-80"
                         @click="charsPagePrev" :class="charsPage === 0 ? 'disabled' : ''">
                         <ArrowLeftBold />
                     </el-icon>
                 </div>
-                <el-scrollbar ref="charsScrollbar" class="flex flex-row justify-center" noresize style="width: 40%;">
+                <el-scrollbar ref="charsScrollbar" class="flex flex-row justify-center" noresize style="width: 39%;">
                     <div class="flex flex-row z-50 relative flex-nowrap w-max">
                         <div v-for="(character, index) in playerInfo.characters" class="relative w-12 h-12"
                             @click="showcaseIdx = index">
@@ -196,7 +196,7 @@ const charsPagePrev = () => {
                         </div>
                     </div>
                 </el-scrollbar>
-                <div class="relative z-50" style="width: 30%;">
+                <div class="relative z-50" style="width: 30.5%;">
                     <el-icon
                         class="absolute left-2 top-3 rounded-full w-9 h-9 ml-2 bg-white hover:bg-gray-200 active:translate-x-1 transition-all opacity-80"
                         @click="charsPageNext" :class="charsPage === pages ? 'disabled' : ''">

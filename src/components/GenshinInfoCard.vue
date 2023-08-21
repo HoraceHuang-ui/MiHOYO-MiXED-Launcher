@@ -162,7 +162,7 @@ onMounted(() => {
                 uidInput.value = uid
                 playerInfo.value = value
                 pages.value = playerInfo.value.characters.length > 10
-                    ? Math.floor((playerInfo.value.characters.length - 10) / 6) + 1
+                    ? Math.floor((playerInfo.value.characters.length - 10) / 6 - 0.1) + 1
                     : 0
             }
             console.log(playerInfo.value)
