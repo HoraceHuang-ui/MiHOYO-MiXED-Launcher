@@ -3,7 +3,7 @@ import MainPage from "./pages/MainPage.vue";
 import StarRailPage from "./pages/StarRailPage.vue";
 import GenshinPage from "./pages/GenshinPage.vue";
 import Honkai3Page from "./pages/Honkai3Page.vue";
-import tmpGsPage from "./pages/tmpGsPage.vue";
+import tmpPage from "./pages/tmpPage.vue";
 
 const router = VueRouter.createRouter({
   history: VueRouter.createWebHashHistory(),
@@ -29,9 +29,9 @@ const router = VueRouter.createRouter({
       component: Honkai3Page,
     },
     {
-      name: "tempGsPage",
-      path: "/tmpgspage",
-      component: tmpGsPage,
+      name: "tempPage",
+      path: "/tmppage",
+      component: tmpPage,
     },
   ],
 });

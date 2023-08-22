@@ -256,7 +256,12 @@ const requestInfo = () => {
             })
             window.store.set('genshinInfo', JSON.stringify(playerInfo.value), true)
             playerInfoLoading.value = false
-            router.push('/tmpgspage')
+            router.push({
+                name: 'tempPage',
+                query: {
+                    from: '/gspage'
+                }
+            })
         }).catch((err) => {
             console.error(err)
             playerInfoLoading.value = false

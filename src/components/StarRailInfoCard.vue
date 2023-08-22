@@ -95,8 +95,12 @@ const requestInfo = () => {
             })
             window.store.set('starRailInfo', JSON.stringify(playerInfo.value), true)
             playerInfoLoading.value = false
-            playerInfoReady.value = true
-            // router.push('/tmpgspage')
+            router.push({
+                name: 'tempPage',
+                query: {
+                    from: '/srpage'
+                }
+            })
         }).catch((err) => {
             console.error(err)
             playerInfoLoading.value = false

@@ -139,7 +139,12 @@ const handleCommand = (command) => {
             break
         case 'clearPlayerinfo':
             window.store.delete('genshinInfo')
-            router.push('/tmpgspage')
+            router.push({
+                name: 'tempGsPage',
+                query: {
+                    from: '/gspage'
+                }
+            })
             break
     }
 }

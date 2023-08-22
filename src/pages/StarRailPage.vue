@@ -137,7 +137,12 @@ const handleCommand = (command) => {
             break
         case 'clearPlayerinfo':
             window.store.delete('starRailInfo')
-            // router.push('/tmpgspage')
+            router.push({
+                name: 'tempPage',
+                query: {
+                    from: '/srpage'
+                }
+            })
             break
     }
 }
