@@ -46,7 +46,7 @@
     "axios": "^1.4.0",
     "electron-store": "^8.1.0",
     "element-plus": "^2.3.8",
-    "enkanetwork.js": "^2.1.8",
+    "enkanetwork.js": "^2.2.1",
     "path": "^0.12.7",
     "sass": "^1.64.2"
   }
