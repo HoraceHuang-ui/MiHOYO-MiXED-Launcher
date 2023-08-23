@@ -11,3 +11,10 @@
   font-weight: normal;
   font-style: normal;
 }
+
+@font-face {
+  font-family: "sr-sans-font";
+  src: url("./SDK_SC_Web.ttf");
+  font-weight: normal;
+  font-style: normal;
+}

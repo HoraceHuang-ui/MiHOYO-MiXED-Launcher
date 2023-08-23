@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ArrowLeftBold, ArrowRightBold } from '@element-plus/icons-vue'
+// import rankMap from '../textMaps/character_ranks.json' with { type: 'json' }
 
 const apiUrl = 'https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/'
 
@@ -15,8 +16,19 @@ const charsScrollbar = ref()
 const playerInfo = ref({})
 const showcaseIdx = ref(0)
 const ascLevelMap = [20, 30, 40, 50, 60, 70, 80]
+let rankMap = {}
+const ranksReady = ref(false)
 
 onMounted(() => {
+    fetch('../../src/textMaps/character_ranks.json')
+        .then(response => response.json())
+        .then(resp => {
+            rankMap = resp
+            ranksReady.value = true
+        })
+        .catch(error => {
+            console.error('Error loading JSON:', error);
+        });
     window.store.get('starRailInfo')
         .then((value) => {
             if (value) {
@@ -178,7 +190,7 @@ const findField = (range, field) => {
                     <el-tag size="large" round class="mr-2">
                         <div class="flex flex-row">
                             均衡
-                            <span class="font-sr" style="margin-left: 1ch; margin-top: 1px;">
+                            <span class="font-sr-sans" style="margin-left: 1ch; margin-top: 1px;">
                                 {{ playerInfo.player.world_level }}
                             </span>
                         </div>
@@ -186,7 +198,7 @@ const findField = (range, field) => {
                     <el-tag size="large" round class="mr-4">
                         <div class="flex flex-row">
                             等级
-                            <span class="font-sr" style="margin-left: 1ch; margin-top: 1px;">
+                            <span class="font-sr-sans" style="margin-left: 1ch; margin-top: 1px;">
                                 {{ playerInfo.player.level }}
                             </span>
                         </div>
@@ -246,16 +258,16 @@ const findField = (range, field) => {
                     </div>
                     <!-- 右侧详情 -->
                     <div class=" w-1/2 h-full absolute top-4 right-6 bottom-4 flex flex-col z-20">
-                        <!-- Lv. 90/90 角色名字-->
+                        <!-- Lv. 80/80 命途 角色名字-->
                         <div class="w-full text-right">
-                            <span class=" text-gray-200 font-sr text-2xl">
+                            <span class=" text-gray-200 font-sr-sans text-2xl">
                                 Lv. {{ character.level }} /
                             </span>
-                            <span class=" text-gray-400 text-2xl mr-4 font-serif">
+                            <span class=" text-gray-400 text-xl mr-4 font-sr-sans">
                                 {{ ascLevelMap[character.promotion] }}
                             </span>
                             <img class="inline h-8 mb-2" :src="apiUrl + character.path.icon" />
-                            <span class=" text-gray-200 bottom-0 text-xl font-sr mr-5 ml-2">{{ character.path.name
+                            <span class=" text-gray-200 bottom-0 text-xl font-sr-sans mr-5 ml-2">{{ character.path.name
                             }}</span>
                             <span class=" text-white font-sr text-5xl">{{ character.name }}</span>
                         </div>
@@ -264,37 +276,37 @@ const findField = (range, field) => {
                             class="mt-2 text-gray-200 text-lg text-left w-full rounded-xl p-2 pl-4 bg-black bg-opacity-20 backdrop-blur-md border-2 border-gray-300 grid grid-cols-3 grid-rows-2">
                             <div class="w-full justify-between">
                                 <span class="text-gray-300">生命</span>
-                                <span class="text-gray-200 text-right font-sr ml-3">{{
+                                <span class="text-gray-200 text-right font-sr-sans ml-3">{{
                                     Math.floor(character.attributes[0].value) + Math.floor(findField(character.additions,
                                         "hp").value)
                                 }}</span>
                             </div>
                             <div>
                                 <span class="text-gray-300">攻击</span>
-                                <span class="text-gray-200 text-right font-sr ml-3">{{
+                                <span class="text-gray-200 text-right font-sr-sans ml-3">{{
                                     Math.floor(character.attributes[1].value) + Math.floor(findField(character.additions,
                                         "atk").value) }}</span>
                             </div>
                             <div>
                                 <span class="text-gray-300">防御</span>
-                                <span class="text-gray-200 text-right font-sr ml-3">{{
+                                <span class="text-gray-200 text-right font-sr-sans ml-3">{{
                                     Math.floor(character.attributes[2].value) + Math.floor(findField(character.additions,
                                         "def").value) }}</span>
                             </div>
                             <div>
-                                <span class="text-gray-300">暴率</span>
-                                <span class="text-gray-200 text-right font-sr ml-3">{{
+                                <span class="text-gray-300">暴击率</span>
+                                <span class="text-gray-200 text-right font-sr-sans ml-3">{{
                                     ((character.attributes[4].value + findField(character.additions,
-                                        "crit_rate").value) * 100).toFixed(2) }}%</span>
+                                        "crit_rate").value) * 100).toFixed(1) }}%</span>
                             </div>
                             <div>
-                                <span class="text-gray-300">暴伤</span>
-                                <span class="text-gray-200 text-right font-sr ml-3">{{
+                                <span class="text-gray-300">暴击伤害</span>
+                                <span class="text-gray-200 text-right font-sr-sans ml-3">{{
                                     ((character.attributes[5].value + findField(character.additions,
-                                        "crit_dmg").value) * 100).toFixed(2) }}%</span>
+                                        "crit_dmg").value) * 100).toFixed(1) }}%</span>
                             </div>
                             <div class="mx-2 rounded-full text-sm bg-white bg-opacity-20 text-center">
-                                <span class=" align-middle font-bold">查看更多</span>
+                                <div class=" font-sr-sans" style="margin-top: 6px;">查看更多</div>
                             </div>
                         </div>
                         <!-- 右侧第二块：光锥 -->
@@ -302,7 +314,7 @@ const findField = (range, field) => {
                             style="height: 84px;">
                             <img class="object-cover w-36 h-full" :src="apiUrl + character.light_cone.preview" />
                             <div class="w-full h-full relative">
-                                <div class="flex flex-row justify-between ml-2 mt-4">
+                                <div class="flex flex-row justify-between ml-2 mt-2">
                                     <div>
                                         <span class="text-gray-200 font-sr text-2xl">
                                             {{ character.light_cone.name }}</span>
@@ -312,31 +324,32 @@ const findField = (range, field) => {
                                             ascLevelMap[character.light_cone.promotion] }}</span>
                                     </div>
                                     <div class="text-gray-200 mr-2 text-sm absolute right-0 top-0">叠影
-                                        <span class="text-gray-200 font-sr text-base">{{
+                                        <span class="text-gray-200 font-sr-sans text-base">{{
                                             character.light_cone.rank }}</span>
                                         阶
                                     </div>
                                 </div>
-                                <div class="text-gray-300 ml-2 text-left grid grid-cols-3">
+                                <div class="text-gray-300 ml-2 text-left grid grid-cols-3 mt-1">
                                     <div>
                                         生命值
-                                        <span class="text-gray-200 font-sr text-lg">{{
+                                        <span class="text-gray-200 font-sr-sans text-lg">{{
                                             character.light_cone.attributes[0].display }}</span>
                                     </div>
                                     <div>
                                         攻击力
-                                        <span class="text-gray-200 font-sr text-lg">{{
+                                        <span class="text-gray-200 font-sr-sans text-lg">{{
                                             character.light_cone.attributes[1].display }}</span>
                                     </div>
                                     <div>
                                         防御力
-                                        <span class="text-gray-200 font-sr text-lg">{{
+                                        <span class="text-gray-200 font-sr-sans text-lg">{{
                                             character.light_cone.attributes[2].display }}</span>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
+                        <!-- 右侧第三块：行迹 -->
+
                     </div>
                 </div>
             </div>
@@ -351,6 +364,10 @@ const findField = (range, field) => {
 
 .font-sr {
     font-family: sr-font;
+}
+
+.font-sr-sans {
+    font-family: sr-sans-font;
 }
 
 .char-side-icon {
