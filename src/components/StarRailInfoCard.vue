@@ -165,13 +165,21 @@ const charsPagePrev = () => {
 }
 
 const findField = (range, field) => {
+    console.log('find field: ' + field)
     for (var i = 0; i < range.length; i++) {
         const element = range[i]
         if (element.field === field) {
             return element
         }
     }
-    return undefined
+    return {
+        "field": "",
+        "name": "",
+        "icon": "",
+        "value": 0,
+        "display": "",
+        "percent": false
+    }
 }
 
 const parseRankDesc = (str) => {
@@ -179,6 +187,7 @@ const parseRankDesc = (str) => {
 }
 
 const getOuterSets = (sets) => {
+    console.log('get outer sets')
     if (sets.length == 0) { return '暂无套装' }
     else if (sets.length == 1) {
         return sets[0].id[0] == '3' ? '暂无套装' : (sets[0].name + ' 2')
@@ -193,6 +202,7 @@ const getOuterSets = (sets) => {
     }
 }
 const getInnerSet = (sets) => {
+    console.log('get inner set')
     if (sets.length > 0 && sets[sets.length - 1].id[0] == '3') {
         return sets[sets.length - 1].name
     } else {
@@ -206,6 +216,7 @@ const showCharDetails = (index) => {
 }
 
 const trimAdditions = (additions) => {
+    console.log('trim additions')
     const map = ['atk', 'hp', 'def', 'spd', 'crit_rate', 'crit_dmg']
     var tmp = [...additions]
     for (var i = 0; i < tmp.length; i++) {
@@ -226,7 +237,7 @@ const trimAdditions = (additions) => {
                 <DialogListItem class="font-sr-sans" name="生命值">
                     <div class="font-sr-sans">
                         <span>{{ playerInfo.characters[charDialogId].attributes[0].display }}</span>
-                        <span v-if="findField(playerInfo.characters[charDialogId].additions, 'hp')"
+                        <span v-if="findField(playerInfo.characters[charDialogId].additions, 'hp').name !== ''"
                             class="ml-1 text-green-700">+{{ findField(playerInfo.characters[charDialogId].additions,
                                 "hp").display }}</span>
                     </div>
@@ -234,7 +245,7 @@ const trimAdditions = (additions) => {
                 <DialogListItem class="font-sr-sans" name="攻击力">
                     <div class="font-sr-sans">
                         <span>{{ playerInfo.characters[charDialogId].attributes[1].display }}</span>
-                        <span v-if="findField(playerInfo.characters[charDialogId].additions, 'atk')"
+                        <span v-if="findField(playerInfo.characters[charDialogId].additions, 'atk') !== ''"
                             class="ml-1 text-green-700">+{{ findField(playerInfo.characters[charDialogId].additions,
                                 "atk").display }}</span>
                     </div>
@@ -242,7 +253,7 @@ const trimAdditions = (additions) => {
                 <DialogListItem class="font-sr-sans" name="防御力">
                     <div class="font-sr-sans">
                         <span>{{ playerInfo.characters[charDialogId].attributes[2].display }}</span>
-                        <span v-if="findField(playerInfo.characters[charDialogId].additions, 'def')"
+                        <span v-if="findField(playerInfo.characters[charDialogId].additions, 'def') !== ''"
                             class="ml-1 text-green-700">+{{ findField(playerInfo.characters[charDialogId].additions,
                                 "def").display }}</span>
                     </div>
@@ -250,7 +261,7 @@ const trimAdditions = (additions) => {
                 <DialogListItem class="font-sr-sans" name="速度">
                     <div class="font-sr-sans">
                         <span>{{ playerInfo.characters[charDialogId].attributes[3].display }}</span>
-                        <span v-if="findField(playerInfo.characters[charDialogId].additions, 'spd')"
+                        <span v-if="findField(playerInfo.characters[charDialogId].additions, 'spd') !== ''"
                             class="ml-1 text-green-700">+{{ findField(playerInfo.characters[charDialogId].additions,
                                 "spd").display }}</span>
                     </div>
