@@ -307,7 +307,7 @@ const parseRankDesc = (str) => {
                         </div>
                         <!-- 右侧第一块：属性 -->
                         <div
-                            class="mt-2 text-gray-200 text-lg text-left w-full rounded-xl p-2 pl-4 bg-black bg-opacity-20 backdrop-blur-md border-2 border-gray-300 grid grid-cols-3 grid-rows-2">
+                            class="mt-2 text-gray-200 text-lg text-left w-full rounded-xl p-2 pl-4 bg-black bg-opacity-20 backdrop-blur-md grid grid-cols-3 grid-rows-2">
                             <div class="w-full justify-between">
                                 <span class="text-gray-300">生命</span>
                                 <span class="text-gray-200 text-right font-sr-sans ml-3">{{
@@ -344,7 +344,7 @@ const parseRankDesc = (str) => {
                             </div>
                         </div>
                         <!-- 右侧第二块：光锥 -->
-                        <div class="mt-2 w-full rounded-xl flex flex-row bg-black bg-opacity-20 backdrop-blur-md border-2 border-gray-300"
+                        <div class="mt-2 w-full rounded-xl flex flex-row bg-black bg-opacity-20 backdrop-blur-md"
                             style="height: 84px;">
                             <img class="object-cover w-36 h-full" :src="apiUrl + character.light_cone.preview" />
                             <div class="w-full h-full relative">
@@ -383,7 +383,36 @@ const parseRankDesc = (str) => {
                             </div>
                         </div>
                         <!-- 右侧第三块：行迹 -->
-
+                        <div
+                            class="mt-2 px-2 py-3 w-full rounded-xl bg-black bg-opacity-20 backdrop-blur-md grid grid-cols-4 grid-rows-1">
+                            <el-tooltip v-for="idx in 4" placement="left">
+                                <template #content>
+                                    <div class=" max-w-md">
+                                        <div class="font-sr text-xl">
+                                            {{ character.skills[idx - 1].name }}
+                                        </div>
+                                        <div class="font-sr-sans text-sm mt-1">
+                                            {{
+                                                character.skills[idx - 1].simple_desc ? character.skills[idx - 1].simple_desc :
+                                                character.skills[idx - 1].desc
+                                            }}</div>
+                                    </div>
+                                </template>
+                                <div class="h-full flex flex-row cursor-default">
+                                    <div class="h-12 w-12 p-1 rounded-full border-2 bg-opacity-50"
+                                        :style="{ borderColor: character.element.color }, { backgroundColor: character.element.color }">
+                                        <img :src="apiUrl + character.skills[idx - 1].icon" />
+                                    </div>
+                                    <div v-if="character.skills[idx - 1].level >= character.skills[idx - 1].max_level * 2 / 3"
+                                        class="ml-2 mt-2 text-orange-300 text-xl align-middle h-full font-sr-sans">MAX
+                                    </div>
+                                    <div v-else class="ml-2 mt-2 text-gray-200 text-lg align-middle h-full font-sr-sans">
+                                        {{ character.skills[idx - 1].level }} /
+                                        <span class="text-gray-400">{{ character.skills[idx - 1].max_level * 2 / 3 }}</span>
+                                    </div>
+                                </div>
+                            </el-tooltip>
+                        </div>
                     </div>
                 </div>
             </div>
