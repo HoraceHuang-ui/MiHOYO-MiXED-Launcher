@@ -39,7 +39,12 @@
 <p></p>
 
 - **崩坏：星穹铁道启动页** Honkai: Star Rail launcher page
-<img width="500" alt="微信截图_20230818161733" src="https://github.com/HoraceHuang-ui/MiHOYO-MiXED-Launcher/assets/67905897/d11aa9dc-0645-409e-9005-b3cab597cbf6">
+<img width="500" alt="微信截图_20230823161806" src="https://github.com/HoraceHuang-ui/MiHOYO-MiXED-Launcher/assets/67905897/43efa2ce-4113-4171-b133-807cf0817e47">
+
+<p></p>
+
+- **崩坏：星穹铁道玩家信息（从启动页滚动即可）** Honkai: Star Rail player info (accessed by scrolling on Honkai: Star Rail launcher page)
+<img width="500" alt="微信截图_20230823161824" src="https://github.com/HoraceHuang-ui/MiHOYO-MiXED-Launcher/assets/67905897/cfdce11d-56da-42e0-b4b6-9b6735a102d7">
 
 <p></p>
 
