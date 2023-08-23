@@ -18,8 +18,26 @@ const showcaseIdx = ref(0)
 const ascLevelMap = [20, 30, 40, 50, 60, 70, 80]
 let rankMap = {}
 const ranksReady = ref(false)
+const relicSetIdNameMap = new Map()
+const setRelicIdNameMap = () => {
+    relicSetIdNameMap.set("101", "过客")
+    relicSetIdNameMap.set("102", "快枪手")
+    relicSetIdNameMap.set("103", "圣骑士")
+    relicSetIdNameMap.set("104", "冰套")
+    relicSetIdNameMap.set("105", "拳王")
+    relicSetIdNameMap.set("106", "铁卫")
+    relicSetIdNameMap.set("107", "火套")
+    relicSetIdNameMap.set("108", "量子")
+    relicSetIdNameMap.set("109", "雷套")
+    relicSetIdNameMap.set("110", "风套")
+    relicSetIdNameMap.set("111", "怪盗")
+    relicSetIdNameMap.set("112", "虚数")
+    relicSetIdNameMap.set("113", "莳者")
+    relicSetIdNameMap.set("114", "信使")
+}
 
 onMounted(() => {
+    setRelicIdNameMap()
     fetch('../../src/textMaps/character_ranks.json')
         .then(response => response.json())
         .then(resp => {
@@ -162,6 +180,28 @@ const findField = (range, field) => {
 
 const parseRankDesc = (str) => {
     return str.replace('\\n', '\n')
+}
+
+const getInnerSets = (sets) => {
+    if (sets.length == 0) { return '暂无套装' }
+    else if (sets.length == 1) {
+        return sets[0].id[0] == '3' ? '暂无套装' : (sets[0].name + ' 2')
+    } else {
+        if (sets[1].id[0] == '3') {
+            return sets[0].name + ' 2'
+        } else if (sets[1].num == 2) {
+            return relicSetIdNameMap.get(sets[0].id) + ' 2 + ' + relicSetIdNameMap.get(sets[1].id) + ' 2'
+        } else {
+            return sets[0].name + ' 4'
+        }
+    }
+}
+const getOuterSet = (sets) => {
+    if (sets.length > 0 && sets[sets.length - 1].id[0] == '3') {
+        return sets[sets.length - 1].name
+    } else {
+        return '暂无套装'
+    }
 }
 </script>
 
@@ -307,7 +347,7 @@ const parseRankDesc = (str) => {
                         </div>
                         <!-- 右侧第一块：属性 -->
                         <div
-                            class="mt-2 text-gray-200 text-lg text-left w-full rounded-xl p-2 pl-4 bg-black bg-opacity-20 backdrop-blur-md grid grid-cols-3 grid-rows-2">
+                            class="mt-2 text-gray-200 text-lg text-left w-full rounded-xl px-2 py-3 pl-4 bg-black bg-opacity-20 backdrop-blur-md grid grid-cols-3 grid-rows-2">
                             <div class="w-full justify-between">
                                 <span class="text-gray-300">生命</span>
                                 <span class="text-gray-200 text-right font-sr-sans ml-3">{{
@@ -345,10 +385,10 @@ const parseRankDesc = (str) => {
                         </div>
                         <!-- 右侧第二块：光锥 -->
                         <div class="mt-2 w-full rounded-xl flex flex-row bg-black bg-opacity-20 backdrop-blur-md"
-                            style="height: 84px;">
+                            style="height: 90px;">
                             <img class="object-cover w-36 h-full" :src="apiUrl + character.light_cone.preview" />
                             <div class="w-full h-full relative">
-                                <div class="flex flex-row justify-between ml-2 mt-2">
+                                <div class="flex flex-row justify-between ml-2 mt-3">
                                     <div>
                                         <span class="text-gray-200 font-sr text-2xl">
                                             {{ character.light_cone.name }}</span>
@@ -419,7 +459,7 @@ const parseRankDesc = (str) => {
                             :autoplay="false">
                             <el-carousel-item v-for="relic in character.relics"
                                 class="pb-2 pr-2 pl-4 flex flex-row h-40 text-gray-200">
-                                <img style="height: 100%;" class="artifact-mask w-28 object-cover"
+                                <img style="height: 100%; margin-left: -20px;" class="artifact-mask w-36 object-cover"
                                     :src="apiUrl + relic.icon" />
                                 <div class=" w-full h-full relative">
                                     <div class="text-gray-400 font-sr absolute right-0 top-1">
@@ -451,6 +491,28 @@ const parseRankDesc = (str) => {
                                 </div>
                             </el-carousel-item>
                         </el-carousel>
+                        <div v-else class="mt-2 w-full h-40 rounded-xl pt-16 text-gray-200 text-center align-middle"
+                            style="background-color: rgb(0 0 0 / 0.6);">暂未装配遗器</div>
+                        <div v-if="character.relics && character.relics.length > 0" class="flex flex-row justify-between">
+                            <div class=" text-gray-900 ml-1 mt-1">
+                                <div class="inline rounded-full bg-gray-200 p-1 px-2 font-sr-sans middle">内</div>
+                                <span class="text-gray-100 font-sr ml-2"> {{ getInnerSets(character.relic_sets) }}</span>
+                            </div>
+                            <div class="text-gray-900 mt-1 mr-1 font-sr">
+                                <span class="text-gray-100 mr-2">{{ getOuterSet(character.relic_sets) }}</span>
+                                <div class="inline rounded-full bg-gray-200 p-1 px-2 font-sr-sans middle">外</div>
+
+                            </div>
+                        </div>
+                        <div v-else class="flex flex-row justify-between">
+                            <div class="text-gray-200 ml-1 mt-1 font-sr">
+                                内圈：
+                                <span class="text-gray-100">暂无套装</span>
+                            </div>
+                            <div class="text-gray-100 mt-1 mr-1 font-sr">
+                                外圈：暂无套装
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
