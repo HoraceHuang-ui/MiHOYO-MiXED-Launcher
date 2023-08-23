@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ArrowLeftBold, ArrowRightBold } from '@element-plus/icons-vue'
+import DialogListItem from './DialogListItem.vue'
 // import rankMap from '../textMaps/character_ranks.json' with { type: 'json' }
 
 const apiUrl = 'https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/'
@@ -18,6 +19,8 @@ const showcaseIdx = ref(0)
 const ascLevelMap = [20, 30, 40, 50, 60, 70, 80]
 let rankMap = {}
 const ranksReady = ref(false)
+const charDialogShow = ref(false)
+const charDialogId = ref(0)
 const relicSetIdNameMap = new Map()
 const setRelicIdNameMap = () => {
     relicSetIdNameMap.set("101", "过客")
@@ -182,7 +185,7 @@ const parseRankDesc = (str) => {
     return str.replace('\\n', '\n')
 }
 
-const getInnerSets = (sets) => {
+const getOuterSets = (sets) => {
     if (sets.length == 0) { return '暂无套装' }
     else if (sets.length == 1) {
         return sets[0].id[0] == '3' ? '暂无套装' : (sets[0].name + ' 2')
@@ -196,17 +199,75 @@ const getInnerSets = (sets) => {
         }
     }
 }
-const getOuterSet = (sets) => {
+const getInnerSet = (sets) => {
     if (sets.length > 0 && sets[sets.length - 1].id[0] == '3') {
         return sets[sets.length - 1].name
     } else {
         return '暂无套装'
     }
 }
+
+const showCharDetails = (index) => {
+    charDialogId.value = index
+    charDialogShow.value = true
+}
+
+const trimAdditions = (additions) => {
+    const map = ['atk', 'hp', 'def', 'spd', 'crit_rate', 'crit_dmg']
+    var tmp = [...additions]
+    for (var i = 0; i < tmp.length; i++) {
+        if (map.indexOf(tmp[i].field) != -1) {
+            tmp.splice(i, 1)
+            i--
+        }
+    }
+    return tmp
+}
 </script>
 
 <template>
     <div class="bg-white" style="border-radius: 4.5vh;" :style="playerInfoReady ? 'height: 97vh;' : ''">
+        <el-dialog v-if="playerInfoReady" v-model="charDialogShow"
+            :title="playerInfo.characters[charDialogId].name + ' 角色详情'" width="30%">
+            <div class="flex flex-col content-center justify-center w-full px-5">
+                <DialogListItem class="font-sr-sans" name="生命值">
+                    <div class="font-sr-sans">
+                        <span>{{ playerInfo.characters[charDialogId].attributes[0].display }}</span>
+                        <span class="ml-1 text-green-700">+{{ findField(playerInfo.characters[charDialogId].additions,
+                            "hp").display }}</span>
+                    </div>
+                </DialogListItem>
+                <DialogListItem class="font-sr-sans" name="攻击力">
+                    <div class="font-sr-sans">
+                        <span>{{ playerInfo.characters[charDialogId].attributes[1].display }}</span>
+                        <span class="ml-1 text-green-700">+{{ findField(playerInfo.characters[charDialogId].additions,
+                            "atk").display }}</span>
+                    </div>
+                </DialogListItem>
+                <DialogListItem class="font-sr-sans" name="防御力">
+                    <div class="font-sr-sans">
+                        <span>{{ playerInfo.characters[charDialogId].attributes[2].display }}</span>
+                        <span class="ml-1 text-green-700">+{{ findField(playerInfo.characters[charDialogId].additions,
+                            "def").display }}</span>
+                    </div>
+                </DialogListItem>
+                <DialogListItem class="font-sr-sans" name="速度">
+                    <div class="font-sr-sans">
+                        <span>{{ playerInfo.characters[charDialogId].attributes[3].display }}</span>
+                        <span class="ml-1 text-green-700">+{{ findField(playerInfo.characters[charDialogId].additions,
+                            "spd").display }}</span>
+                    </div>
+                </DialogListItem>
+                <DialogListItem class="font-sr-sans" name="暴击率"
+                    :val="((playerInfo.characters[charDialogId].attributes[4].value + findField(playerInfo.characters[charDialogId].additions, 'crit_rate').value) * 100).toFixed(1) + '%'">
+                </DialogListItem>
+                <DialogListItem class="font-sr-sans" name="暴击伤害"
+                    :val="((playerInfo.characters[charDialogId].attributes[5].value + findField(playerInfo.characters[charDialogId].additions, 'crit_dmg').value) * 100).toFixed(1) + '%'">
+                </DialogListItem>
+                <DialogListItem v-for="attr in trimAdditions(playerInfo.characters[charDialogId].additions)"
+                    class="font-sr-sans" :name="attr.name" :val="attr.display" />
+            </div>
+        </el-dialog>
         <!-- HEADER -->
         <div class="flex flex-row w-full p-0 relative justify-between z-50" style="height: 9vh;">
             <!-- 右上角名片 -->
@@ -379,7 +440,8 @@ const getOuterSet = (sets) => {
                                     ((character.attributes[5].value + findField(character.additions,
                                         "crit_dmg").value) * 100).toFixed(1) }}%</span>
                             </div>
-                            <div class="mx-2 rounded-full text-sm bg-white bg-opacity-20 text-center">
+                            <div class="mx-2 rounded-full text-sm bg-white bg-opacity-20 text-center hover:bg-opacity-30 active:scale-95 active:bg-opacity-40 cursor-default transition-all"
+                                @click="showCharDetails(index)">
                                 <div class=" font-sr-sans" style="margin-top: 6px;">查看更多</div>
                             </div>
                         </div>
@@ -387,7 +449,7 @@ const getOuterSet = (sets) => {
                         <div v-if="character.light_cone"
                             class="mt-2 w-full rounded-xl flex flex-row bg-black bg-opacity-20 backdrop-blur-md"
                             style="height: 90px;">
-                            <img class="object-cover w-36 h-full" :src="apiUrl + character.light_cone.preview" />
+                            <img class="object-cover w-44 h-full" :src="apiUrl + character.light_cone.preview" />
                             <div class="w-full h-full relative">
                                 <div class="flex flex-row justify-between ml-2 mt-3">
                                     <div>
@@ -431,33 +493,34 @@ const getOuterSet = (sets) => {
                         <!-- 右侧第三块：行迹 -->
                         <div
                             class="mt-2 px-2 py-3 w-full rounded-xl bg-black bg-opacity-20 backdrop-blur-md grid grid-cols-4 grid-rows-1">
-                            <el-tooltip v-for="idx in 4" placement="left">
-                                <template #content>
-                                    <div class=" max-w-md">
-                                        <div class="font-sr text-xl">
-                                            {{ character.skills[idx - 1].name }}
+                            <div v-for="idx in 4" class="h-full flex flex-row cursor-default">
+                                <el-tooltip placement="left">
+                                    <template #content>
+                                        <div class=" max-w-md">
+                                            <div class="font-sr text-xl">
+                                                {{ character.skills[idx - 1].name }}
+                                            </div>
+                                            <div class="font-sr-sans text-sm mt-1">
+                                                {{
+                                                    character.skills[idx - 1].simple_desc ? character.skills[idx -
+                                                        1].simple_desc :
+                                                    character.skills[idx - 1].desc
+                                                }}</div>
                                         </div>
-                                        <div class="font-sr-sans text-sm mt-1">
-                                            {{
-                                                character.skills[idx - 1].simple_desc ? character.skills[idx - 1].simple_desc :
-                                                character.skills[idx - 1].desc
-                                            }}</div>
-                                    </div>
-                                </template>
-                                <div class="h-full flex flex-row cursor-default">
+                                    </template>
                                     <div class="h-12 w-12 p-1 rounded-full border-2 bg-opacity-50"
                                         :style="{ borderColor: character.element.color }, { backgroundColor: character.element.color }">
                                         <img :src="apiUrl + character.skills[idx - 1].icon" />
                                     </div>
-                                    <div v-if="character.skills[idx - 1].level >= character.skills[idx - 1].max_level * 2 / 3"
-                                        class="ml-2 mt-2 text-orange-300 text-xl align-middle h-full font-sr-sans">MAX
-                                    </div>
-                                    <div v-else class="ml-2 mt-2 text-gray-200 text-lg align-middle h-full font-sr-sans">
-                                        {{ character.skills[idx - 1].level }} /
-                                        <span class="text-gray-400">{{ character.skills[idx - 1].max_level * 2 / 3 }}</span>
-                                    </div>
+                                </el-tooltip>
+                                <div v-if="character.skills[idx - 1].level >= character.skills[idx - 1].max_level * 2 / 3"
+                                    class="ml-2 mt-2 text-orange-300 text-xl align-middle h-full font-sr-sans">MAX
                                 </div>
-                            </el-tooltip>
+                                <div v-else class="ml-2 mt-2 text-gray-200 text-lg align-middle h-full font-sr-sans">
+                                    {{ character.skills[idx - 1].level }} /
+                                    <span class="text-gray-400">{{ character.skills[idx - 1].max_level * 2 / 3 }}</span>
+                                </div>
+                            </div>
                         </div>
                         <!-- 右侧第四块：遗器 -->
                         <el-carousel v-if="character.relics && character.relics.length > 0"
@@ -502,22 +565,22 @@ const getOuterSet = (sets) => {
                             暂未装配遗器</div>
                         <div v-if="character.relics && character.relics.length > 0" class="flex flex-row justify-between">
                             <div class=" text-gray-900 ml-1 mt-1">
-                                <div class="inline rounded-full bg-gray-200 p-1 px-2 font-sr-sans middle">内</div>
-                                <span class="text-gray-100 font-sr ml-2">{{ getInnerSets(character.relic_sets) }}</span>
+                                <div class="inline rounded-full bg-gray-200 p-1 px-2 font-sr-sans middle">外</div>
+                                <span class="text-gray-100 font-sr ml-2">{{ getOuterSets(character.relic_sets) }}</span>
                             </div>
                             <div class="text-gray-900 mt-1 mr-1 font-sr">
-                                <span class="text-gray-100 mr-2">{{ getOuterSet(character.relic_sets) }}</span>
-                                <div class="inline rounded-full bg-gray-200 p-1 px-2 font-sr-sans middle">外</div>
+                                <span class="text-gray-100 mr-2">{{ getInnerSet(character.relic_sets) }}</span>
+                                <div class="inline rounded-full bg-gray-200 p-1 px-2 font-sr-sans middle">内</div>
                             </div>
                         </div>
                         <div v-else class="flex flex-row justify-between">
                             <div class=" text-gray-900 ml-1 mt-1">
-                                <div class="inline rounded-full bg-gray-200 p-1 px-2 font-sr-sans middle">内</div>
+                                <div class="inline rounded-full bg-gray-200 p-1 px-2 font-sr-sans middle">外</div>
                                 <span class="text-gray-100 font-sr ml-2">暂无套装</span>
                             </div>
                             <div class="text-gray-900 mt-1 mr-1 font-sr">
                                 <span class="text-gray-100 mr-2">暂无套装</span>
-                                <div class="inline rounded-full bg-gray-200 p-1 px-2 font-sr-sans middle">外</div>
+                                <div class="inline rounded-full bg-gray-200 p-1 px-2 font-sr-sans middle">内</div>
                             </div>
                         </div>
                     </div>

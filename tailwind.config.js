@@ -7,6 +7,7 @@ module.exports = {
     "./src/components/TopHeader.vue",
     "./src/components/LauncherBanner.vue",
     "./src/components/LauncherPosts.vue",
+    "./src/components/DialogListItem.vue",
     "./src/pages/MainPage.vue",
     "./src/pages/GenshinPage.vue",
     "./src/pages/StarRailPage.vue",
