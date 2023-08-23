@@ -349,20 +349,20 @@ const getOuterSet = (sets) => {
                         <div
                             class="mt-2 text-gray-200 text-lg text-left w-full rounded-xl px-2 py-3 pl-4 bg-black bg-opacity-20 backdrop-blur-md grid grid-cols-3 grid-rows-2">
                             <div class="w-full justify-between">
-                                <span class="text-gray-300">生命</span>
+                                <span class="text-gray-300">生命值</span>
                                 <span class="text-gray-200 text-right font-sr-sans ml-3">{{
                                     Math.floor(character.attributes[0].value) + Math.floor(findField(character.additions,
                                         "hp").value)
                                 }}</span>
                             </div>
                             <div>
-                                <span class="text-gray-300">攻击</span>
+                                <span class="text-gray-300">攻击力</span>
                                 <span class="text-gray-200 text-right font-sr-sans ml-3">{{
                                     Math.floor(character.attributes[1].value) + Math.floor(findField(character.additions,
                                         "atk").value) }}</span>
                             </div>
                             <div>
-                                <span class="text-gray-300">防御</span>
+                                <span class="text-gray-300">防御力</span>
                                 <span class="text-gray-200 text-right font-sr-sans ml-3">{{
                                     Math.floor(character.attributes[2].value) + Math.floor(findField(character.additions,
                                         "def").value) }}</span>
