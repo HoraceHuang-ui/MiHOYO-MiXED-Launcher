@@ -130,6 +130,23 @@ const charsPagePrev = () => {
         })
     }
 }
+
+const findField = (range, field) => {
+    for (var i = 0; i < range.length; i++) {
+        const element = range[i]
+        if (element.field === field) {
+            return element
+        }
+    }
+    return {
+        "field": "",
+        "name": "",
+        "icon": "",
+        "value": 0,
+        "display": "",
+        "percent": false
+    }
+}
 </script>
 
 <template>
@@ -156,7 +173,7 @@ const charsPagePrev = () => {
                 </el-input>
             </div>
             <!-- 右侧 WL AR -->
-            <div v-if="playerInfoReady" style="width: 35vw; position: relative;">
+            <div v-if="playerInfoReady && !playerInfoLoading" style="width: 35vw; position: relative;">
                 <div class="h-full flex flex-row justify-end items-center">
                     <el-tag size="large" round class="mr-2">
                         <div class="flex flex-row">
@@ -241,6 +258,84 @@ const charsPagePrev = () => {
                             <span class=" text-gray-200 bottom-0 text-xl font-sr mr-5 ml-2">{{ character.path.name
                             }}</span>
                             <span class=" text-white font-sr text-5xl">{{ character.name }}</span>
+                        </div>
+                        <!-- 右侧第一块：属性 -->
+                        <div
+                            class="mt-2 text-gray-200 text-lg text-left w-full rounded-xl p-2 pl-4 bg-black bg-opacity-20 backdrop-blur-md border-2 border-gray-300 grid grid-cols-3 grid-rows-2">
+                            <div class="w-full justify-between">
+                                <span class="text-gray-300">生命</span>
+                                <span class="text-gray-200 text-right font-sr ml-3">{{
+                                    Math.floor(character.attributes[0].value) + Math.floor(findField(character.additions,
+                                        "hp").value)
+                                }}</span>
+                            </div>
+                            <div>
+                                <span class="text-gray-300">攻击</span>
+                                <span class="text-gray-200 text-right font-sr ml-3">{{
+                                    Math.floor(character.attributes[1].value) + Math.floor(findField(character.additions,
+                                        "atk").value) }}</span>
+                            </div>
+                            <div>
+                                <span class="text-gray-300">防御</span>
+                                <span class="text-gray-200 text-right font-sr ml-3">{{
+                                    Math.floor(character.attributes[2].value) + Math.floor(findField(character.additions,
+                                        "def").value) }}</span>
+                            </div>
+                            <div>
+                                <span class="text-gray-300">暴率</span>
+                                <span class="text-gray-200 text-right font-sr ml-3">{{
+                                    ((character.attributes[4].value + findField(character.additions,
+                                        "crit_rate").value) * 100).toFixed(2) }}%</span>
+                            </div>
+                            <div>
+                                <span class="text-gray-300">暴伤</span>
+                                <span class="text-gray-200 text-right font-sr ml-3">{{
+                                    ((character.attributes[5].value + findField(character.additions,
+                                        "crit_dmg").value) * 100).toFixed(2) }}%</span>
+                            </div>
+                            <div class="mx-2 rounded-full text-sm bg-white bg-opacity-20 text-center">
+                                <span class=" align-middle font-bold">查看更多</span>
+                            </div>
+                        </div>
+                        <!-- 右侧第二块：光锥 -->
+                        <div class="mt-2 w-full rounded-xl flex flex-row bg-black bg-opacity-20 backdrop-blur-md border-2 border-gray-300"
+                            style="height: 84px;">
+                            <img class="object-cover w-36 h-full" :src="apiUrl + character.light_cone.preview" />
+                            <div class="w-full h-full relative">
+                                <div class="flex flex-row justify-between ml-2 mt-4">
+                                    <div>
+                                        <span class="text-gray-200 font-sr text-2xl">
+                                            {{ character.light_cone.name }}</span>
+                                        <span class="text-gray-200 font-sr text-xl"> Lv. {{
+                                            character.light_cone.level }} /</span>
+                                        <span class="text-gray-300 ml-1 font-serif">{{
+                                            ascLevelMap[character.light_cone.promotion] }}</span>
+                                    </div>
+                                    <div class="text-gray-200 mr-2 text-sm absolute right-0 top-0">叠影
+                                        <span class="text-gray-200 font-sr text-base">{{
+                                            character.light_cone.rank }}</span>
+                                        阶
+                                    </div>
+                                </div>
+                                <div class="text-gray-300 ml-2 text-left grid grid-cols-3">
+                                    <div>
+                                        生命值
+                                        <span class="text-gray-200 font-sr text-lg">{{
+                                            character.light_cone.attributes[0].display }}</span>
+                                    </div>
+                                    <div>
+                                        攻击力
+                                        <span class="text-gray-200 font-sr text-lg">{{
+                                            character.light_cone.attributes[1].display }}</span>
+                                    </div>
+                                    <div>
+                                        防御力
+                                        <span class="text-gray-200 font-sr text-lg">{{
+                                            character.light_cone.attributes[2].display }}</span>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>
