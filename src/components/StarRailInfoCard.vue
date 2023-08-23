@@ -159,6 +159,10 @@ const findField = (range, field) => {
         "percent": false
     }
 }
+
+const parseRankDesc = (str) => {
+    return str.replace('\\n', '\n')
+}
 </script>
 
 <template>
@@ -255,6 +259,36 @@ const findField = (range, field) => {
                         style="height: 130%;">
                         <img class="gacha-mask inline-block object-cover left-0 top-20 absolute z-10" loading="lazy"
                             style="height: 650px;" :src="apiUrl + character.portrait" />
+                    </div>
+                    <!-- 左下角星魂 -->
+                    <div class="absolute bottom-2 left-2 z-20">
+                        <div class="flex flex-col">
+                            <div class="flex flex-row relative">
+                                <el-tooltip v-for="idx in 6" placement="top">
+                                    <template #content>
+                                        <div class=" max-w-lg" v-if="ranksReady">
+                                            <div class="font-sr text-xl">
+                                                {{ rankMap[character.id + "0" + idx.toString()].name }}
+                                                <span v-if="idx > character.rank"
+                                                    class="ml-1 text-base text-gray-200">（未解锁）</span>
+                                            </div>
+                                            <div class="font-sr-sans text-sm mt-1">{{
+                                                parseRankDesc(rankMap[character.id + "0" + idx.toString()].desc)
+                                            }}</div>
+                                        </div>
+                                    </template>
+                                    <div v-if="idx <= character.rank" class="relative">
+                                        <div class="absolute bottom-0 left-2 w-8 h-8 rounded-full bg-black z-20 opacity-70">
+                                        </div>
+                                        <img class="relative h-8 rounded-full ml-2 z-30"
+                                            :src="apiUrl + character.rank_icons[idx - 1]" />
+                                    </div>
+                                    <div v-else>
+                                        <img src="../assets/locked.png" class="w-8 opacity-70 ml-2 bg-black rounded-full" />
+                                    </div>
+                                </el-tooltip>
+                            </div>
+                        </div>
                     </div>
                     <!-- 右侧详情 -->
                     <div class=" w-1/2 h-full absolute top-4 right-6 bottom-4 flex flex-col z-20">
