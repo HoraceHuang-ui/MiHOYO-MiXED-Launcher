@@ -384,7 +384,8 @@ const getOuterSet = (sets) => {
                             </div>
                         </div>
                         <!-- 右侧第二块：光锥 -->
-                        <div class="mt-2 w-full rounded-xl flex flex-row bg-black bg-opacity-20 backdrop-blur-md"
+                        <div v-if="character.light_cone"
+                            class="mt-2 w-full rounded-xl flex flex-row bg-black bg-opacity-20 backdrop-blur-md"
                             style="height: 90px;">
                             <img class="object-cover w-36 h-full" :src="apiUrl + character.light_cone.preview" />
                             <div class="w-full h-full relative">
@@ -421,6 +422,11 @@ const getOuterSet = (sets) => {
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div v-else
+                            class="mt-2 w-full rounded-xl align-middle text-center bg-black bg-opacity-20 backdrop-blur-md"
+                            style="height: 90px;">
+                            暂未装配光锥
                         </div>
                         <!-- 右侧第三块：行迹 -->
                         <div
