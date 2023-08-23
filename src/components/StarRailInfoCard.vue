@@ -491,26 +491,27 @@ const getOuterSet = (sets) => {
                                 </div>
                             </el-carousel-item>
                         </el-carousel>
-                        <div v-else class="mt-2 w-full h-40 rounded-xl pt-16 text-gray-200 text-center align-middle"
-                            style="background-color: rgb(0 0 0 / 0.6);">暂未装配遗器</div>
+                        <div v-else
+                            class="mt-2 w-full h-40 rounded-xl pt-16 text-gray-200 text-center align-middle bg-black bg-opacity-20 backdrop-blur-md">
+                            暂未装配遗器</div>
                         <div v-if="character.relics && character.relics.length > 0" class="flex flex-row justify-between">
                             <div class=" text-gray-900 ml-1 mt-1">
                                 <div class="inline rounded-full bg-gray-200 p-1 px-2 font-sr-sans middle">内</div>
-                                <span class="text-gray-100 font-sr ml-2"> {{ getInnerSets(character.relic_sets) }}</span>
+                                <span class="text-gray-100 font-sr ml-2">{{ getInnerSets(character.relic_sets) }}</span>
                             </div>
                             <div class="text-gray-900 mt-1 mr-1 font-sr">
                                 <span class="text-gray-100 mr-2">{{ getOuterSet(character.relic_sets) }}</span>
                                 <div class="inline rounded-full bg-gray-200 p-1 px-2 font-sr-sans middle">外</div>
-
                             </div>
                         </div>
                         <div v-else class="flex flex-row justify-between">
-                            <div class="text-gray-200 ml-1 mt-1 font-sr">
-                                内圈：
-                                <span class="text-gray-100">暂无套装</span>
+                            <div class=" text-gray-900 ml-1 mt-1">
+                                <div class="inline rounded-full bg-gray-200 p-1 px-2 font-sr-sans middle">内</div>
+                                <span class="text-gray-100 font-sr ml-2">暂无套装</span>
                             </div>
-                            <div class="text-gray-100 mt-1 mr-1 font-sr">
-                                外圈：暂无套装
+                            <div class="text-gray-900 mt-1 mr-1 font-sr">
+                                <span class="text-gray-100 mr-2">暂无套装</span>
+                                <div class="inline rounded-full bg-gray-200 p-1 px-2 font-sr-sans middle">外</div>
                             </div>
                         </div>
                     </div>
