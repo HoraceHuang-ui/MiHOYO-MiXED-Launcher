@@ -171,14 +171,7 @@ const findField = (range, field) => {
             return element
         }
     }
-    return {
-        "field": "",
-        "name": "",
-        "icon": "",
-        "value": 0,
-        "display": "",
-        "percent": false
-    }
+    return undefined
 }
 
 const parseRankDesc = (str) => {
@@ -233,29 +226,33 @@ const trimAdditions = (additions) => {
                 <DialogListItem class="font-sr-sans" name="生命值">
                     <div class="font-sr-sans">
                         <span>{{ playerInfo.characters[charDialogId].attributes[0].display }}</span>
-                        <span class="ml-1 text-green-700">+{{ findField(playerInfo.characters[charDialogId].additions,
-                            "hp").display }}</span>
+                        <span v-if="findField(playerInfo.characters[charDialogId].additions, 'hp')"
+                            class="ml-1 text-green-700">+{{ findField(playerInfo.characters[charDialogId].additions,
+                                "hp").display }}</span>
                     </div>
                 </DialogListItem>
                 <DialogListItem class="font-sr-sans" name="攻击力">
                     <div class="font-sr-sans">
                         <span>{{ playerInfo.characters[charDialogId].attributes[1].display }}</span>
-                        <span class="ml-1 text-green-700">+{{ findField(playerInfo.characters[charDialogId].additions,
-                            "atk").display }}</span>
+                        <span v-if="findField(playerInfo.characters[charDialogId].additions, 'atk')"
+                            class="ml-1 text-green-700">+{{ findField(playerInfo.characters[charDialogId].additions,
+                                "atk").display }}</span>
                     </div>
                 </DialogListItem>
                 <DialogListItem class="font-sr-sans" name="防御力">
                     <div class="font-sr-sans">
                         <span>{{ playerInfo.characters[charDialogId].attributes[2].display }}</span>
-                        <span class="ml-1 text-green-700">+{{ findField(playerInfo.characters[charDialogId].additions,
-                            "def").display }}</span>
+                        <span v-if="findField(playerInfo.characters[charDialogId].additions, 'def')"
+                            class="ml-1 text-green-700">+{{ findField(playerInfo.characters[charDialogId].additions,
+                                "def").display }}</span>
                     </div>
                 </DialogListItem>
                 <DialogListItem class="font-sr-sans" name="速度">
                     <div class="font-sr-sans">
                         <span>{{ playerInfo.characters[charDialogId].attributes[3].display }}</span>
-                        <span class="ml-1 text-green-700">+{{ findField(playerInfo.characters[charDialogId].additions,
-                            "spd").display }}</span>
+                        <span v-if="findField(playerInfo.characters[charDialogId].additions, 'spd')"
+                            class="ml-1 text-green-700">+{{ findField(playerInfo.characters[charDialogId].additions,
+                                "spd").display }}</span>
                     </div>
                 </DialogListItem>
                 <DialogListItem class="font-sr-sans" name="暴击率"
