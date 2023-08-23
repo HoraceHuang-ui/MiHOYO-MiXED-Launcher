@@ -413,6 +413,44 @@ const parseRankDesc = (str) => {
                                 </div>
                             </el-tooltip>
                         </div>
+                        <!-- 右侧第四块：遗器 -->
+                        <el-carousel v-if="character.relics && character.relics.length > 0"
+                            class="mt-2 w-full h-40 rounded-xl bg-black bg-opacity-20 backdrop-blur-md" arrow="never"
+                            :autoplay="false">
+                            <el-carousel-item v-for="relic in character.relics"
+                                class="pb-2 pr-2 pl-4 flex flex-row h-40 text-gray-200">
+                                <img style="height: 100%;" class="artifact-mask w-28 object-cover"
+                                    :src="apiUrl + relic.icon" />
+                                <div class=" w-full h-full relative">
+                                    <div class="text-gray-400 font-sr absolute right-0 top-1">
+                                        {{ relic.name }}
+                                    </div>
+                                    <!-- 主词条、等级 -->
+                                    <div class="text-left mt-7 w-full flex flex-row">
+                                        <span class="text-gray-200 text-xl">{{ relic.main_affix.name }}</span>
+                                        <span class="text-gray-200 text-3xl ml-2 font-sr-sans">{{ relic.main_affix.display
+                                        }}</span>
+                                        <div :class="{ 'border-orange-400 bg-orange-900 text-orange-300': relic.rarity == 5 },
+                                            { 'border-purple-400 bg-purple-900 text-purple-300': relic.rarity == 4 },
+                                            { 'border-blue-400 bg-blue-900 text-blue-300': relic.rarity == 3 },
+                                            { 'border-green-400 bg-green-900 text-green-300': relic.rarity == 2 }"
+                                            class="h-full justify-end mt-1 ml-2 font-sr-sans rounded-full border px-2">
+                                            +{{ relic.level }}
+                                        </div>
+                                    </div>
+                                    <!-- 副词条 -->
+                                    <div v-if="relic.sub_affix && relic.sub_affix.length > 0"
+                                        class="grid grid-cols-2 mt-2 grid-rows-2 gap-1 w-full text-left">
+                                        <div v-for="substat in relic.sub_affix">
+                                            <span class="text-gray-300 text-lg">{{ substat.name }}</span>
+                                            <span class="text-gray-200 font-sr-sans text-xl ml-2">{{ substat.display
+                                            }}</span>
+                                        </div>
+                                    </div>
+                                    <div v-else class="mt-2 text-left text-gray-300 text-lg">暂无副词条</div>
+                                </div>
+                            </el-carousel-item>
+                        </el-carousel>
                     </div>
                 </div>
             </div>
