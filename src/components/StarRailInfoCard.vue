@@ -165,7 +165,6 @@ const charsPagePrev = () => {
 }
 
 const findField = (range, field) => {
-    console.log('find field: ' + field)
     for (var i = 0; i < range.length; i++) {
         const element = range[i]
         if (element.field === field) {
@@ -187,7 +186,6 @@ const parseRankDesc = (str) => {
 }
 
 const getOuterSets = (sets) => {
-    console.log('get outer sets')
     if (sets.length == 0) { return '暂无套装' }
     else if (sets.length == 1) {
         return sets[0].id[0] == '3' ? '暂无套装' : (sets[0].name + ' 2')
@@ -202,7 +200,6 @@ const getOuterSets = (sets) => {
     }
 }
 const getInnerSet = (sets) => {
-    console.log('get inner set')
     if (sets.length > 0 && sets[sets.length - 1].id[0] == '3') {
         return sets[sets.length - 1].name
     } else {
@@ -216,7 +213,6 @@ const showCharDetails = (index) => {
 }
 
 const trimAdditions = (additions) => {
-    console.log('trim additions')
     const map = ['atk', 'hp', 'def', 'spd', 'crit_rate', 'crit_dmg']
     var tmp = [...additions]
     for (var i = 0; i < tmp.length; i++) {
@@ -381,7 +377,7 @@ const trimAdditions = (additions) => {
                                                 <span v-if="idx > character.rank"
                                                     class="ml-1 text-base text-gray-200">（未解锁）</span>
                                             </div>
-                                            <div class="font-sr-sans text-sm mt-1">{{
+                                            <div class="font-sr-sans text-sm mt-1 whitespace-pre-wrap">{{
                                                 parseRankDesc(rankMap[character.id + "0" + idx.toString()].desc)
                                             }}</div>
                                         </div>

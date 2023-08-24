@@ -4,6 +4,7 @@ import { ref, onMounted } from 'vue'
 const gsPath = ref('')
 const srPath = ref('')
 const hiPath = ref('')
+const transitionShow = ref(false)
 
 onMounted(async () => {
     // For electron-store test
@@ -12,6 +13,7 @@ onMounted(async () => {
     gsPath.value = await window.store.get('genshinPath')
     srPath.value = await window.store.get('starRailPath')
     hiPath.value = await window.store.get('honkai3Path')
+    transitionShow.value = true
 })
 
 const genshin = async () => {
@@ -32,7 +34,8 @@ const honkai3 = async () => {
 
 <template>
     <!-- @touchmove.prevent @mousewheel.prevent -->
-    <div @touchmove.prevent @mousewheel.prevent>
+    <div @touchmove.prevent @mousewheel.prevent :class="transitionShow ? '' : 'opacity-0 blur-lg scale-90'"
+        style="transition-duration: 400ms;">
         <!-- <el-dropdown class="absolute right-2 top-2 z-50 font-bold text-lg rounded-2xl bg-yellow-400 p-3" size="large">
             打开启动器
             <template #dropdown>
