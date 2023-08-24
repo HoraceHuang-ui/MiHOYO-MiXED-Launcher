@@ -4,7 +4,7 @@
 - [x] **支持启动游戏。** Game launch available.
 - [x] **支持自定义游戏路径。** Game path customizable.
 - [x] **支持原神、星铁、崩坏3。** `Genshin Impact`, `Honkai Star Rail`, `Honkai Impact 3rd` supported.
-- [ ] **待支持撅区零。** `Honkai Impact 3rd`, `Zenless Zone Zero` to be supported.
+- [ ] **待支持撅区零。** `Zenless Zone Zero` to be supported.
 - [ ] **界面、用户体验优化。** UI/UX optimization.
 - [ ] **国际化支持。** I18n.
 - [x] **原神分析玩家游戏数据。** Analyze player info for Genshin Impact.
