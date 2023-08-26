@@ -13,11 +13,11 @@ const playerInfoLoading = ref(false)
 const uidInput = ref('')
 var uid = ''
 var charsPage = ref(0)
-const pages = computed(() => {
+const pages = computed(() =>
     playerInfo.value.characters && playerInfo.value.characters.length > 10
         ? Math.floor((playerInfo.value.characters.length - 10) / 6 - 0.1) + 1
         : 0
-})
+)
 const charsScrollbar = ref()
 const showcaseIdx = ref(0)
 const ascLevelMap = [20, 30, 40, 50, 60, 70, 80]
