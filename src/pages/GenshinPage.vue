@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 
 const gsPath = ref('')
@@ -7,7 +7,9 @@ const displayConfirm = ref(false)
 const path = ref('')
 const timeUpd3_8 = Date.parse("2023/07/05 12:00:00 UTC+8")
 const timeNow = Date.now()
-const timeDelta = ref(0)
+const timeDelta = computed(() => {
+    Math.ceil((timeNow - timeUpd3_8) / 1000 / 3600 / 24 - 0.5) % 42
+})
 const launcherInfo = ref({})
 const launcherInfoReady = ref(false)
 const launcherInfoFailed = ref(false)
@@ -62,7 +64,6 @@ onMounted(async () => {
             errMsg.value = err.toString()
         })
     gsPath.value = await window.store.get('genshinPath')
-    timeDelta.value = Math.ceil((timeNow - timeUpd3_8) / 1000 / 3600 / 24 - 0.5) % 42
     window.store.get('genshinUpd')
         .then((resp) => {
             if (gsPath.value && !resp) {

@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 
 const srPath = ref('')
@@ -7,7 +7,9 @@ const displayConfirm = ref(false)
 const path = ref('')
 const timeUpd1_2 = Date.parse("2023/07/19 12:00:00 UTC+8")
 const timeNow = Date.now()
-const timeDelta = ref(0)
+const timeDelta = computed(() => {
+    Math.ceil((timeNow - timeUpd1_2) / 1000 / 3600 / 24 - 0.5) % 42
+})
 const launcherInfo = ref({})
 const launcherInfoReady = ref(false)
 const launcherInfoFailed = ref(false)
@@ -60,7 +62,6 @@ onMounted(async () => {
             errMsg.value = err.toString()
         })
     srPath.value = await window.store.get('starRailPath')
-    timeDelta.value = Math.ceil((timeNow - timeUpd1_2) / 1000 / 3600 / 24 - 0.5) % 42
     window.store.get('starRailUpd')
         .then((resp) => {
             if (srPath.value && !resp) {

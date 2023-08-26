@@ -1,13 +1,15 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 
 const hiPath = ref('')
 const displayConfirm = ref(false)
 const path = ref('')
-const timeUpd6_8 = Date.parse("2023/07/6 12:00:00 UTC+8")
+const timeUpd6_8 = Date.parse("2023/07/06 12:00:00 UTC+8")
 const timeNow = Date.now()
-const timeDelta = ref(0)
+const timeDelta = computed(() => {
+    Math.ceil((timeNow - timeUpd6_8) / 1000 / 3600 / 24 - 0.5) % 42
+})
 const launcherInfo = ref({})
 const launcherInfoReady = ref(false)
 const launcherInfoFailed = ref(false)
@@ -61,7 +63,6 @@ onMounted(async () => {
             errMsg.value = err.toString()
         })
     hiPath.value = await window.store.get('honkai3Path')
-    timeDelta.value = Math.ceil((timeNow - timeUpd6_8) / 1000 / 3600 / 24 - 0.5) % 42
     window.store.get('honkai3Upd')
         .then((resp) => {
             if (hiPath.value && !resp) {
