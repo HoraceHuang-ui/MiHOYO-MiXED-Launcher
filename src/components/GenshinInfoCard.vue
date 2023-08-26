@@ -1,18 +1,23 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { ArrowLeftBold, ArrowRightBold } from '@element-plus/icons-vue'
+
+const playerInfo = ref({})
 
 const uidInput = ref('')
 var uid = ''
 var charsPage = ref(0)
-const pages = ref(0)
+const pages = computed(() =>
+    playerInfo.value.characters && playerInfo.value.characters.length > 10
+        ? Math.floor((playerInfo.value.characters.length - 10) / 6 - 0.1) + 1
+        : 0
+)
 const playerInfoReady = ref(false)
 const playerInfoLoading = ref(false)
 const charsScrollbar = ref()
-const playerInfo = ref({})
 const showcaseIdx = ref(0)
-const elementAssets = ref({
+const elementAssets = {
     cryo: {
         bg: '../../src/assets/elementBgs/cryo.png',
         ico: '../../src/assets/elementIcons/cryo.png'
@@ -41,7 +46,7 @@ const elementAssets = ref({
         bg: '../../src/assets/elementBgs/pyro.png',
         ico: '../../src/assets/elementIcons/pyro.png'
     },
-})
+}
 const ascLevelMap = [20, 40, 50, 60, 70, 80, 90]
 const propNameMap = new Map()
 const propShortNameMap = new Map()
@@ -161,9 +166,6 @@ onMounted(() => {
                 uid = value.uid
                 uidInput.value = uid
                 playerInfo.value = value
-                pages.value = playerInfo.value.characters.length > 10
-                    ? Math.floor((playerInfo.value.characters.length - 10) / 6 - 0.1) + 1
-                    : 0
             }
             console.log(playerInfo.value)
         }).catch((err) => {
@@ -172,48 +174,6 @@ onMounted(() => {
 
     setPropNameMaps()
     setArtifactPropsMaps()
-    // window.path.joinDirnameAsset('elementBgs/cryo.png').then((value) => {
-    //     elementAssets.value.cryo.bg = value
-    // })
-    // window.path.joinDirnameAsset('elementIcons/cryo.png').then((value) => {
-    //     elementAssets.value.cryo.ico = value
-    // })
-    // window.path.joinDirnameAsset('elementBgs/pyro.png').then((value) => {
-    //     elementAssets.value.pyro.bg = value
-    // })
-    // window.path.joinDirnameAsset('elementIcons/pyro.png').then((value) => {
-    //     elementAssets.value.pyro.ico = value
-    // })
-    // window.path.joinDirnameAsset('elementBgs/electro.png').then((value) => {
-    //     elementAssets.value.electro.bg = value
-    // })
-    // window.path.joinDirnameAsset('elementIcons/electro.png').then((value) => {
-    //     elementAssets.value.electro.ico = value
-    // })
-    // window.path.joinDirnameAsset('elementBgs/hydro.png').then((value) => {
-    //     elementAssets.value.hydro.bg = value
-    // })
-    // window.path.joinDirnameAsset('elementIcons/hydro.png').then((value) => {
-    //     elementAssets.value.hydro.ico = value
-    // })
-    // window.path.joinDirnameAsset('elementBgs/geo.png').then((value) => {
-    //     elementAssets.value.geo.bg = value
-    // })
-    // window.path.joinDirnameAsset('elementIcons/geo.png').then((value) => {
-    //     elementAssets.value.geo.ico = value
-    // })
-    // window.path.joinDirnameAsset('elementBgs/dendro.png').then((value) => {
-    //     elementAssets.value.dendro.bg = value
-    // })
-    // window.path.joinDirnameAsset('elementIcons/dendro.png').then((value) => {
-    //     elementAssets.value.dendro.ico = value
-    // })
-    // window.path.joinDirnameAsset('elementBgs/anemo.png').then((value) => {
-    //     elementAssets.value.anemo.bg = value
-    // })
-    // window.path.joinDirnameAsset('elementIcons/anemo.png').then((value) => {
-    //     elementAssets.value.anemo.ico = value
-    // })
 })
 
 const router = useRouter()
@@ -272,13 +232,13 @@ const requestInfo = () => {
 
 const getCharElementAssets = (id) => {
     const charStats = playerInfo.value.characters[id].stats
-    if (charStats.pyroEnergyCost.value && charStats.pyroEnergyCost.value > 0) { return elementAssets.value.pyro }
-    else if (charStats.cryoEnergyCost.value && charStats.cryoEnergyCost.value > 0) { return elementAssets.value.cryo }
-    else if (charStats.hydroEnergyCost.value && charStats.hydroEnergyCost.value > 0) { return elementAssets.value.hydro }
-    else if (charStats.electroEnergyCost.value && charStats.electroEnergyCost.value > 0) { return elementAssets.value.electro }
-    else if (charStats.geoEnergyCost.value && charStats.geoEnergyCost.value > 0) { return elementAssets.value.geo }
-    else if (charStats.anemoEnergyCost.value && charStats.anemoEnergyCost.value > 0) { return elementAssets.value.anemo }
-    else if (charStats.dendroEnergyCost.value && charStats.dendroEnergyCost.value > 0) { return elementAssets.value.dendro }
+    if (charStats.pyroEnergyCost.value && charStats.pyroEnergyCost.value > 0) { return elementAssets.pyro }
+    else if (charStats.cryoEnergyCost.value && charStats.cryoEnergyCost.value > 0) { return elementAssets.cryo }
+    else if (charStats.hydroEnergyCost.value && charStats.hydroEnergyCost.value > 0) { return elementAssets.hydro }
+    else if (charStats.electroEnergyCost.value && charStats.electroEnergyCost.value > 0) { return elementAssets.electro }
+    else if (charStats.geoEnergyCost.value && charStats.geoEnergyCost.value > 0) { return elementAssets.geo }
+    else if (charStats.anemoEnergyCost.value && charStats.anemoEnergyCost.value > 0) { return elementAssets.anemo }
+    else if (charStats.dendroEnergyCost.value && charStats.dendroEnergyCost.value > 0) { return elementAssets.dendro }
 }
 
 const getCharElementEnergy = (id) => {
@@ -547,8 +507,8 @@ const charsPagePrev = () => {
                                 <span class=" text-white font-genshin text-5xl font-bold">{{ character.name }}</span>
                             </div>
                             <!-- 详情第一块：属性 -->
-                            <div class="mt-2 text-gray-200 text-lg text-left w-full rounded-xl p-2 pl-4 grid grid-cols-3 grid-rows-3"
-                                style="background-color: rgba(0, 0, 0, 0.5);">
+                            <div
+                                class="mt-2 text-gray-200 text-lg text-left w-full rounded-xl p-2 pl-4 grid grid-cols-3 grid-rows-3 bg-opacity-20 bg-black backdrop-blur-lg">
                                 <div class="w-full justify-between" style="grid-column: 1; grid-row: 1;">
                                     <span class="text-gray-300">生命</span>
                                     <span class="text-gray-200 text-right font-genshin ml-3">{{
@@ -602,8 +562,8 @@ const charsPagePrev = () => {
                                 </div>
                             </div>
                             <!-- 详情第二块：武器 -->
-                            <div class="mt-2 w-full rounded-xl flex flex-row"
-                                style="background-color: rgb(0 0 0 / 0.6); height: 84px;">
+                            <div class="mt-2 w-full rounded-xl flex flex-row bg-opacity-20 bg-black backdrop-blur-lg"
+                                style="height: 84px;">
                                 <img class="h-full"
                                     :src="'https://enka.network/ui/' + character.equipment.weapon.assets.awakenIcon + '.png'" />
                                 <div class="w-full h-full relative">
@@ -642,8 +602,8 @@ const charsPagePrev = () => {
                             </div>
                             <!-- 详情第三块：圣遗物 -->
                             <el-carousel v-if="character.equipment.artifacts && character.equipment.artifacts.length > 0"
-                                class="mt-2 w-full h-40 rounded-xl " arrow="never" :autoplay="false"
-                                style="background-color: rgb(0 0 0 / 0.6);">
+                                class="mt-2 w-full h-40 rounded-xl bg-opacity-20 bg-black backdrop-blur-lg" arrow="never"
+                                :autoplay="false">
                                 <el-carousel-item v-for="artifact in character.equipment.artifacts"
                                     class="pb-2 pr-2 pl-4 flex flex-row h-40 text-gray-200">
                                     <img style="height: 140%; margin-left: -15px; margin-top: -45px;"
@@ -685,8 +645,9 @@ const charsPagePrev = () => {
                                     </div>
                                 </el-carousel-item>
                             </el-carousel>
-                            <div v-else class="mt-2 w-full h-40 rounded-xl pt-16 text-gray-200 text-center align-middle"
-                                style="background-color: rgb(0 0 0 / 0.6);">暂未装配圣遗物</div>
+                            <div v-else
+                                class="mt-2 w-full h-40 rounded-xl pt-16 text-gray-200 text-center align-middle bg-opacity-20 bg-black backdrop-blur-lg">
+                                暂未装配圣遗物</div>
                             <div v-if="character.equipment.artifacts && character.equipment.artifacts.length > 0"
                                 class="flex flex-row justify-between">
                                 <div class="text-gray-200 ml-1 mt-1 font-genshin">

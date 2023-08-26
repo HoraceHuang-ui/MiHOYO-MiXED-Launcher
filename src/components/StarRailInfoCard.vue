@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { ArrowLeftBold, ArrowRightBold } from '@element-plus/icons-vue'
 import DialogListItem from './DialogListItem.vue'
@@ -7,14 +7,18 @@ import DialogListItem from './DialogListItem.vue'
 
 const apiUrl = 'https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/'
 
+const playerInfo = ref({})
 const playerInfoReady = ref(false)
 const playerInfoLoading = ref(false)
 const uidInput = ref('')
 var uid = ''
 var charsPage = ref(0)
-const pages = ref(0)
+const pages = computed(() => {
+    playerInfo.value.characters && playerInfo.value.characters.length > 10
+        ? Math.floor((playerInfo.value.characters.length - 10) / 6 - 0.1) + 1
+        : 0
+})
 const charsScrollbar = ref()
-const playerInfo = ref({})
 const showcaseIdx = ref(0)
 const ascLevelMap = [20, 30, 40, 50, 60, 70, 80]
 let rankMap = {}
@@ -41,7 +45,7 @@ const setRelicIdNameMap = () => {
 
 onMounted(() => {
     setRelicIdNameMap()
-    fetch('../../src/textMaps/character_ranks.json')
+    fetch('../textMaps/character_ranks.json')
         .then(response => response.json())
         .then(resp => {
             rankMap = resp
@@ -57,9 +61,6 @@ onMounted(() => {
                 uid = value.player.uid
                 uidInput.value = uid
                 playerInfo.value = value
-                pages.value = playerInfo.value.characters.length > 8
-                    ? Math.floor((playerInfo.value.characters.length - 8) / 4 - 0.1) + 1
-                    : 0
             }
             console.log(playerInfo.value)
         }).catch((err) => {
@@ -90,7 +91,7 @@ const mergeToPlayerinfo = (newArr) => {
 const router = useRouter()
 const requestInfo = () => {
     uid = uidInput.value
-    window.axios.get('https://api.mihomo.me/sr_info_parsed/' + uid + '?lang=cn')
+    window.axios.get('https://api.mihomo.me/sr_info_parsed/' + uid + '?lang=en')
         .then((resp) => {
             if (playerInfoReady.value && playerInfo.value.player.uid == resp.player.uid) {
                 console.log('uid equal')
@@ -361,9 +362,9 @@ const trimAdditions = (additions) => {
                 <div class="flex flex-row h-full absolute top-0 left-0 right-0 bottom-0 z-10">
                     <!-- 立绘 -->
                     <div class="left-gacha w-7/12 inline-block object-cover absolute left-0 bottom-0 z-10"
-                        style="height: 130%;">
-                        <img class="gacha-mask inline-block object-cover left-0 top-20 absolute z-10" loading="lazy"
-                            style="height: 650px;" :src="apiUrl + character.portrait" />
+                        style="height: 117%;">
+                        <img class="gacha-mask inline-block object-cover bottom-0 left-0 absolute z-10" loading="lazy"
+                            style="height: 100%;" :src="apiUrl + character.portrait" />
                     </div>
                     <!-- 左下角星魂 -->
                     <div class="absolute bottom-2 left-2 z-20">
@@ -612,7 +613,7 @@ const trimAdditions = (additions) => {
 }
 
 .gacha-mask {
-    -webkit-mask: linear-gradient(transparent 3%, white 12%, white 85%, transparent)
+    -webkit-mask: linear-gradient(transparent 5%, white 14%, white 85%, transparent)
 }
 
 .left-gacha {
