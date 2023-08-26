@@ -10,6 +10,8 @@ const timeNow = Date.now()
 const timeDelta = ref(0)
 const launcherInfo = ref({})
 const launcherInfoReady = ref(false)
+const launcherInfoFailed = ref(false)
+const errMsg = ref('')
 const hideElements = ref(false)
 const scrollbarref = ref()
 
@@ -52,9 +54,11 @@ onMounted(async () => {
                         break
                 }
             });
-            console.log(postTypeMap)
             launcherInfoReady.value = true
             console.log(launcherInfo.value)
+        }).catch((err) => {
+            launcherInfoFailed.value = true
+            errMsg.value = err
         })
     hiPath.value = await window.store.get('honkai3Path')
     timeDelta.value = Math.ceil((timeNow - timeUpd6_8) / 1000 / 3600 / 24 - 0.5) % 42
@@ -126,7 +130,6 @@ const hiLaunch = () => {
     window.win.tray()
 }
 
-// const router = useRouter()
 const handleCommand = (command) => {
     switch (command) {
         case 'openLauncher':
@@ -160,14 +163,33 @@ const handleScroll = ({ scrollTop }) => {
         hideElements.value = false
     }
 }
+
+const router = useRouter()
+const refresh = () => {
+    router.push({
+        name: 'tempPage',
+        query: {
+            from: '/hipage'
+        }
+    })
+}
 </script>
 
 <template>
-    <div v-if="!launcherInfoReady" class="absolute pointer-events-none z-0 align-middle justify-center text-center"
-        style="top: 45%; left: 45%;">
+    <div v-if="!launcherInfoFailed && !launcherInfoReady"
+        class="absolute pointer-events-none z-0 align-middle justify-center text-center" style="top: 45%; left: 45%;">
         <img :src="'../../src/assets/kleeLoading.gif'" class=" align-middle self-center object-scale-down" loading="eager"
             height="120" width="120" />
         <div class="mt-3 text-xl">加载中…</div>
+    </div>
+    <div v-else-if="launcherInfoFailed" class="absolute z-10 items-center justify-center text-center -translate-x-1/2"
+        style="margin-left: 50%; margin-top: 25vh;">
+        <img :src="'../../src/assets/hi3Failed.png'" class="object-scale-down -translate-x-1/2" style="margin-left: 50%;"
+            loading="eager" height="120" width="120" />
+        <div class="mt-3 font-semibold text-xl">加载失败</div>
+        <div class=" hover:underline active:text-orange-300 text-blue-500 cursor-pointer w-8 -translate-x-1/2"
+            style="margin-left: 50%;" @click="refresh">刷新</div>
+        <div class="text-center max-w-xl mt-5">{{ errMsg }}</div>
     </div>
     <div class="transition-all relative" :class="launcherInfoReady ? 'opacity-100' : 'opacity-0 blur-lg scale-90'"
         style="width: 98vw; height: 92vh; transition-duration: 400ms;">
