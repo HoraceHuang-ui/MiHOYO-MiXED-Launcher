@@ -27,6 +27,7 @@ declare module 'vue' {
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     LauncherBanner: typeof import('./src/components/LauncherBanner.vue')['default']
     LauncherPosts: typeof import('./src/components/LauncherPosts.vue')['default']
+    LoadFailedBlock: typeof import('./src/components/LoadFailedBlock.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     StarRailInfoCard: typeof import('./src/components/StarRailInfoCard.vue')['default']

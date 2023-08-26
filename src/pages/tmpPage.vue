@@ -8,3 +8,5 @@ onMounted(() => {
     router.push(route.query.from)
 })
 </script>
+
+<template></template>

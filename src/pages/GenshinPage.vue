@@ -59,7 +59,7 @@ onMounted(async () => {
             console.log(launcherInfo.value)
         }).catch((err) => {
             launcherInfoFailed.value = true
-            errMsg.value = err
+            errMsg.value = err.toString()
         })
     gsPath.value = await window.store.get('genshinPath')
     timeDelta.value = Math.ceil((timeNow - timeUpd3_8) / 1000 / 3600 / 24 - 0.5) % 42
@@ -179,15 +179,9 @@ const refresh = () => {
             height="120" width="120" />
         <div class="mt-3 font-genshin text-xl">加载中…</div>
     </div>
-    <div v-else-if="launcherInfoFailed" class="absolute z-10 items-center justify-center text-center -translate-x-1/2"
-        style="margin-left: 50%; margin-top: 25vh;">
-        <img :src="'../../src/assets/kleeFailed.png'" class="object-scale-down -translate-x-1/2" style="margin-left: 50%;"
-            loading="eager" height="120" width="120" />
-        <div class="mt-3 font-genshin text-xl">加载失败</div>
-        <div class=" hover:underline active:text-orange-300 text-blue-500 cursor-pointer w-8 -translate-x-1/2"
-            style="margin-left: 50%;" @click="refresh">刷新</div>
-        <div class="text-center max-w-xl mt-5">{{ errMsg }}</div>
-    </div>
+    <LoadFailedBlock v-else-if="launcherInfoFailed" class="absolute z-10 -translate-x-1/2"
+        style="margin-left: 50%; margin-top: 25vh;" :gameNo="0" :errMsg="errMsg">
+    </LoadFailedBlock>
     <div class="transition-all relative" :class="launcherInfoReady ? 'opacity-100' : 'opacity-0 blur-lg scale-90'"
         style="width: 98vw; height: 92vh; transition-duration: 400ms;">
         <div class="bg-pic rounded-3xl w-full h-full" style="transition-duration: 500ms;"
