@@ -7,9 +7,9 @@ const displayConfirm = ref(false)
 const path = ref('')
 const timeUpd6_8 = Date.parse("2023/07/06 12:00:00 UTC+8")
 const timeNow = Date.now()
-const timeDelta = computed(() => {
+const timeDelta = computed(() =>
     Math.ceil((timeNow - timeUpd6_8) / 1000 / 3600 / 24 - 0.5) % 42
-})
+)
 const launcherInfo = ref({})
 const launcherInfoReady = ref(false)
 const launcherInfoFailed = ref(false)
