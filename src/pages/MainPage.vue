@@ -58,8 +58,7 @@ const setPic = async () => {
 <template>
     <div @touchmove.prevent @mousewheel.prevent :class="transitionShow ? '' : 'opacity-0 blur-lg scale-90'"
         style="transition-duration: 400ms;">
-        <img class="bg-pic rounded-3xl object-contain" id="bgImage"
-            :src="bgPath ? bgPath : '../../src/assets/gsbanner.png'" />
+        <img class="bg-pic object-cover" id="bgImage" :src="bgPath ? bgPath : '../../src/assets/gsbanner.png'" />
         <div class="sticky bottom-0" style="height: 60vh;"></div>
         <div class="bottom-area sticky">
             <h1 class="font-sans font-bold text-5xl" style="margin-bottom: 10px;">MiHOYO MiXED Launcher</h1>
@@ -86,7 +85,9 @@ const setPic = async () => {
 
 .bg-pic {
     width: 98vw;
-    -webkit-mask: linear-gradient(white, transparent)
+    height: 92vh;
+    border-radius: 24px 24px 0 0;
+    -webkit-mask: linear-gradient(white 30%, rgb(255 255 255 / 0.1))
 }
 
 .bottom-area {
