@@ -82,7 +82,7 @@ const resetPic = () => {
                 <Picture />
             </el-icon>
         </div>
-        <div v-if="bgPath !== DEFAULT_BG"
+        <div v-if="bgPath && bgPath !== DEFAULT_BG"
             class="rounded-full absolute left-20 bottom-4 w-10 h-10 bg-white hover:bg-gray-100 active:bg-gray-400 active:scale-90 transition-all"
             @click="resetPic">
             <el-icon :size="20" class="w-full h-full">

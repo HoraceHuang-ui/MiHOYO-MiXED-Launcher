@@ -43,6 +43,7 @@
     "src/assets/elementBgs/*",
     "src/assets/elementIcons/*",
     "src/assets/kleeLoading.gif",
+    "src/assets/gsbanner.png",
     "src/textMaps/*",
   ],
 }
