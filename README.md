@@ -23,8 +23,8 @@
 
 <p></p>
 
-- **应用主页（背景图片待定）** App main page, background image TBD
-<img width="500" alt="微信截图_20230818161522" src="https://github.com/HoraceHuang-ui/MiHOYO-MiXED-Launcher/assets/67905897/ed225110-0b6d-4ee6-9c0c-231510cdc370">
+- **应用主页（背景图片可自定义）** App main page, background image customizable
+<img width="500" alt="微信截图_20230827162604" src="https://github.com/HoraceHuang-ui/MiHOYO-MiXED-Launcher/assets/67905897/2340f76c-c258-40ce-8863-d71e0046a2d4">
 
 <p></p>
 
@@ -34,7 +34,7 @@
 <p></p>
 
 - **原神玩家信息（从启动页滚动即可）** Genshin Impact player info (accessed by scrolling on Genshin Impact launcher page)
-<img width="500" alt="微信截图_20230818161705" src="https://github.com/HoraceHuang-ui/MiHOYO-MiXED-Launcher/assets/67905897/407de9f6-a86a-40b5-9ee1-8809235cf5de">
+<img width="500" alt="微信截图_20230827162742" src="https://github.com/HoraceHuang-ui/MiHOYO-MiXED-Launcher/assets/67905897/fe9a3c16-dbe8-4372-979d-18e7b0febe1e">
 
 <p></p>
 
@@ -44,7 +44,7 @@
 <p></p>
 
 - **崩坏：星穹铁道玩家信息（从启动页滚动即可）** Honkai: Star Rail player info (accessed by scrolling on Honkai: Star Rail launcher page)
-<img width="500" alt="微信截图_20230823161824" src="https://github.com/HoraceHuang-ui/MiHOYO-MiXED-Launcher/assets/67905897/cfdce11d-56da-42e0-b4b6-9b6735a102d7">
+<img width="500" alt="微信截图_20230827162839" src="https://github.com/HoraceHuang-ui/MiHOYO-MiXED-Launcher/assets/67905897/9ddc5022-913f-4266-ab83-c926ce780a07">
 
 <p></p>
 
