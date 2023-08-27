@@ -1,6 +1,7 @@
 import { app, BrowserWindow, shell, ipcMain, nativeTheme, Tray, Menu } from 'electron'
 import axios from 'axios'
 import { release } from 'node:os'
+const fs = require('fs').promises
 var path = require('path')
 
 const Store = require('electron-store');
@@ -50,6 +51,11 @@ const preload = path.join(__dirname, '../preload/index.js')
 const url = process.env.VITE_DEV_SERVER_URL
 const indexHtml = path.join(process.env.DIST, 'index.html')
 let tray = null
+const imageFolder = path.join(app.getPath('userData'), 'images');
+
+// if (!fs.existsSync(imageFolder)) {
+//   fs.mkdir(imageFolder);
+// }
 
 var iconPath = path.join(process.env.PUBLIC, 'favicon.ico')
 var assetsPath = process.env.VITE_DEV_SERVER_URL ? '../../src/assets' : path.join(__dirname, '../../../src/assets')
@@ -138,9 +144,39 @@ async function createWindow() {
       return []; // 对话框被取消，返回空数组
     }
   });
+
+  ipcMain.handle('dialog:showAndCopy', async (_event, options) => {
+    try {
+      const result = await dialog.showOpenDialog(options)
+      if (!result.canceled && result.filePaths.length > 0) {
+        try {
+            await fs.access(imageFolder);
+        } catch {
+            await fs.mkdir(imageFolder);
+        }
+
+        const sourcePath = result.filePaths[0];
+
+        const dataURL = await fs.readFile(sourcePath, 'base64')
+            .then(data => `data:image/png;base64,${data}`);
+
+        return dataURL;
+
+        // const targetPath = path.join(imageFolder, path.basename(sourcePath));
+        
+        // await fs.copyFile(sourcePath, targetPath)
+        // console.log(targetPath)
+        // return targetPath
+      } else {
+        return ''
+      }
+    } catch (err) {
+      console.error('Error copying image:', err);
+      throw err;
+    }
+  });
   
   ipcMain.handle("enka:getPlayer", async (_event, uid) => {
-    console.log('ipcMain invoke')
     const result = await enka.getPlayer(uid)
     return result
   })

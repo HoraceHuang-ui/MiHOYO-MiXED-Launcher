@@ -14,6 +14,10 @@ contextBridge.exposeInMainWorld("dialog", {
   show: async (options) => {
     const result = await ipcRenderer.invoke("dialog:show", options)
     return result
+  },
+  showAndCopy: async (options) => {
+    const result = await ipcRenderer.invoke("dialog:showAndCopy", options)
+    return result
   }
 })
 contextBridge.exposeInMainWorld("enka", {

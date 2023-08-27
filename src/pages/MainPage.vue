@@ -1,10 +1,12 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { Picture } from '@element-plus/icons-vue'
 
 const gsPath = ref('')
 const srPath = ref('')
 const hiPath = ref('')
 const transitionShow = ref(false)
+const bgPath = ref('')
 
 onMounted(async () => {
     // For electron-store test
@@ -13,6 +15,9 @@ onMounted(async () => {
     gsPath.value = await window.store.get('genshinPath')
     srPath.value = await window.store.get('starRailPath')
     hiPath.value = await window.store.get('honkai3Path')
+    bgPath.value = await window.store.get('mainBgPath')
+    const imgElement = document.getElementById('bgImage');
+    imgElement.src = bgPath.value ? bgPath.value : '../../src/assets/gsbanner.png';
     transitionShow.value = true
 })
 
@@ -30,23 +35,31 @@ const honkai3 = async () => {
     await window.child.exec(hiPath.value.concat('\\Games\\BH3.exe'))
     window.win.tray()
 }
+
+const setPic = async () => {
+    window.dialog.showAndCopy({
+        title: '选择背景图片路径',
+        properties: ['openFile'],
+        filters: [{ name: '图片', extensions: ['jpg', 'png', 'webp'] }]
+    }).then((resp) => {
+        if (resp) {
+            bgPath.value = resp
+            window.store.set('mainBgPath', bgPath.value, false)
+
+            const imgElement = document.getElementById('bgImage');
+            imgElement.src = resp;
+        }
+    }).catch((error) => {
+        console.error('Error in showing dialog:', error);
+    });
+}
 </script>
 
 <template>
-    <!-- @touchmove.prevent @mousewheel.prevent -->
     <div @touchmove.prevent @mousewheel.prevent :class="transitionShow ? '' : 'opacity-0 blur-lg scale-90'"
         style="transition-duration: 400ms;">
-        <!-- <el-dropdown class="absolute right-2 top-2 z-50 font-bold text-lg rounded-2xl bg-yellow-400 p-3" size="large">
-            打开启动器
-            <template #dropdown>
-                <el-dropdown-menu>
-                    <el-dropdown-item>
-                        aaa
-                    </el-dropdown-item>
-                </el-dropdown-menu>
-            </template>
-        </el-dropdown> -->
-        <img class="bg-pic rounded-3xl" src="../assets/gsbanner.png" />
+        <img class="bg-pic rounded-3xl object-contain" id="bgImage"
+            :src="bgPath ? bgPath : '../../src/assets/gsbanner.png'" />
         <div class="sticky bottom-0" style="height: 60vh;"></div>
         <div class="bottom-area sticky">
             <h1 class="font-sans font-bold text-5xl" style="margin-bottom: 10px;">MiHOYO MiXED Launcher</h1>
@@ -56,6 +69,12 @@ const honkai3 = async () => {
                 class="p-3 mx-2 my-2 font-bold text-xl transition-all bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90">星铁启动</button>
             <button v-if="hiPath" @click="honkai3"
                 class="p-3 mx-2 my-2 font-bold text-xl transition-all bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90">崩坏3启动</button>
+        </div>
+        <div class="rounded-full absolute left-8 bottom-4 w-10 h-10 bg-white hover:bg-gray-100 active:bg-gray-400 active:scale-90 transition-all"
+            @click="setPic">
+            <el-icon :size="20" class="w-full h-full">
+                <Picture />
+            </el-icon>
         </div>
     </div>
 </template>
