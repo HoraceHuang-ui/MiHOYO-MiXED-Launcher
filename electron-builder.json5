@@ -43,5 +43,6 @@
     "src/assets/elementBgs/*",
     "src/assets/elementIcons/*",
     "src/assets/kleeLoading.gif",
+    "src/textMaps/*",
   ],
 }

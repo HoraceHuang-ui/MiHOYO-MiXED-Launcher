@@ -45,7 +45,7 @@ const setRelicIdNameMap = () => {
 
 onMounted(() => {
     setRelicIdNameMap()
-    fetch('./src/textMaps/character_ranks.json')
+    fetch('../../src/textMaps/character_ranks.json')
         .then(response => response.json())
         .then(resp => {
             rankMap = resp
