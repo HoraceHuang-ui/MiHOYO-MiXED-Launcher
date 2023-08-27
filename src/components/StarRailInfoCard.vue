@@ -234,7 +234,7 @@ const trimAdditions = (additions) => {
                 <DialogListItem class="font-sr-sans" name="生命值">
                     <div class="font-sr-sans">
                         <span>{{ playerInfo.characters[charDialogId].attributes[0].display }}</span>
-                        <span v-if="findField(playerInfo.characters[charDialogId].additions, 'hp').name !== ''"
+                        <span v-if="findField(playerInfo.characters[charDialogId].additions, 'hp').display !== ''"
                             class="ml-1 text-blue-500">+{{ findField(playerInfo.characters[charDialogId].additions,
                                 "hp").display }}</span>
                     </div>
@@ -242,7 +242,7 @@ const trimAdditions = (additions) => {
                 <DialogListItem class="font-sr-sans" name="攻击力">
                     <div class="font-sr-sans">
                         <span>{{ playerInfo.characters[charDialogId].attributes[1].display }}</span>
-                        <span v-if="findField(playerInfo.characters[charDialogId].additions, 'atk') !== ''"
+                        <span v-if="findField(playerInfo.characters[charDialogId].additions, 'atk').display !== ''"
                             class="ml-1 text-blue-500">+{{ findField(playerInfo.characters[charDialogId].additions,
                                 "atk").display }}</span>
                     </div>
@@ -250,7 +250,7 @@ const trimAdditions = (additions) => {
                 <DialogListItem class="font-sr-sans" name="防御力">
                     <div class="font-sr-sans">
                         <span>{{ playerInfo.characters[charDialogId].attributes[2].display }}</span>
-                        <span v-if="findField(playerInfo.characters[charDialogId].additions, 'def') !== ''"
+                        <span v-if="findField(playerInfo.characters[charDialogId].additions, 'def').display !== ''"
                             class="ml-1 text-blue-500">+{{ findField(playerInfo.characters[charDialogId].additions,
                                 "def").display }}</span>
                     </div>
@@ -258,7 +258,7 @@ const trimAdditions = (additions) => {
                 <DialogListItem class="font-sr-sans" name="速度">
                     <div class="font-sr-sans">
                         <span>{{ playerInfo.characters[charDialogId].attributes[3].display }}</span>
-                        <span v-if="findField(playerInfo.characters[charDialogId].additions, 'spd') !== ''"
+                        <span v-if="findField(playerInfo.characters[charDialogId].additions, 'spd').display !== ''"
                             class="ml-1 text-blue-500">+{{ findField(playerInfo.characters[charDialogId].additions,
                                 "spd").display }}</span>
                     </div>
