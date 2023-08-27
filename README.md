@@ -23,7 +23,7 @@
 
 <p></p>
 
-- **应用主页（背景图片可自定义）** App main page, background image customizable
+- **应用主页（背景图片可自定义）** App main page, background image customizable (Pixiv @anna_drw01)
 <img width="500" alt="微信截图_20230827162604" src="https://github.com/HoraceHuang-ui/MiHOYO-MiXED-Launcher/assets/67905897/2340f76c-c258-40ce-8863-d71e0046a2d4">
 
 <p></p>
