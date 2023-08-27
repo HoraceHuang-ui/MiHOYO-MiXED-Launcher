@@ -1,12 +1,14 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { Picture } from '@element-plus/icons-vue'
+import { Picture, RefreshLeft } from '@element-plus/icons-vue'
 
 const gsPath = ref('')
 const srPath = ref('')
 const hiPath = ref('')
 const transitionShow = ref(false)
 const bgPath = ref('')
+
+const DEFAULT_BG = '../../src/assets/gsbanner.png'
 
 onMounted(async () => {
     // For electron-store test
@@ -17,7 +19,7 @@ onMounted(async () => {
     hiPath.value = await window.store.get('honkai3Path')
     bgPath.value = await window.store.get('mainBgPath')
     const imgElement = document.getElementById('bgImage');
-    imgElement.src = bgPath.value ? bgPath.value : '../../src/assets/gsbanner.png';
+    imgElement.src = bgPath.value ? bgPath.value : DEFAULT_BG;
     transitionShow.value = true
 })
 
@@ -53,6 +55,11 @@ const setPic = async () => {
         console.error('Error in showing dialog:', error);
     });
 }
+
+const resetPic = () => {
+    bgPath.value = DEFAULT_BG
+    window.store.delete('mainBgPath')
+}
 </script>
 
 <template>
@@ -73,6 +80,13 @@ const setPic = async () => {
             @click="setPic">
             <el-icon :size="20" class="w-full h-full">
                 <Picture />
+            </el-icon>
+        </div>
+        <div v-if="bgPath !== DEFAULT_BG"
+            class="rounded-full absolute left-20 bottom-4 w-10 h-10 bg-white hover:bg-gray-100 active:bg-gray-400 active:scale-90 transition-all"
+            @click="resetPic">
+            <el-icon :size="20" class="w-full h-full">
+                <RefreshLeft />
             </el-icon>
         </div>
     </div>
