@@ -543,7 +543,7 @@ const trimStats = (stats) => {
                         <div class="left-gacha w-2/3 inline-block object-cover absolute left-0 bottom-0 z-10"
                             style="height: 115%;">
                             <!-- :src="'https://enka.network/ui/' + (character.costumeId != '' ? character.assets.costumes[0].art : character.assets.gachaIcon) + '.png'" -->
-                            <img class="gacha-mask inline-block object-cover bottom-0 left-0 absolute z-10 h-full"
+                            <img class="gacha-mask inline-block object-cover bottom-0 left-0 absolute z-10 h-full pointer-events-none"
                                 loading="lazy" :src="'https://enka.network/ui/' + character.assets.gachaIcon + '.png'" />
                         </div>
                         <!-- 左下角天赋、命之座 -->
@@ -554,7 +554,7 @@ const trimStats = (stats) => {
                                         <template #content>
                                             <span class="font-genshin text-base"> {{ skill.name }} </span>
                                         </template>
-                                        <div class="rounded-full ml-2 h-8 mb-2 flex flex-row"
+                                        <div class="rounded-full ml-2 h-8 mb-2 flex flex-row cursor-default"
                                             style="background-color: rgb(0 0 0 / 0.6); width: 72px;">
                                             <img class="h-8 rounded-full"
                                                 :src="'https://enka.network/ui/' + skill.assets.icon + '.png'" />
@@ -570,7 +570,7 @@ const trimStats = (stats) => {
                                 <div class="flex flex-row relative">
                                     <el-tooltip v-for="idx in 6" placement="top">
                                         <template #content>
-                                            <span class="font-genshin text-base"> {{ idx <=
+                                            <span class="font-genshin text-base point"> {{ idx <=
                                                 character.constellationsList.length ? character.constellationsList[idx -
                                                     1].name : '未解锁命之座' }} </span>
                                         </template>

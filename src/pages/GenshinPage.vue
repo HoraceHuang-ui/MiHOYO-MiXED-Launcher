@@ -207,7 +207,9 @@ const refresh = () => {
                         style=" transition-duration: 500ms;">
                         <div class="mx-2 my-3 flex flex-row rounded-full bg-yellow-400 font-genshin w-48">
                             <button @click="gsLaunch"
-                                class="pl-4 px-4 text-2xl font-bold rounded-full w-48 h-16 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">原神启动</button>
+                                class="pl-4 px-4 text-2xl font-bold rounded-full w-48 h-16 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">
+                                原神启动
+                            </button>
                             <el-dropdown class="h-full px-1" trigger="click" @command="handleCommand">
                                 <button
                                     class="text-xl text-gray-900 font-bold px-2 h-16 rounded-full hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">…</button>
@@ -230,7 +232,7 @@ const refresh = () => {
                                     :class="hideElements ? ' -translate-x-96' : ''"
                                     style="transition-duration: 500ms;">原神导入</button>
                                 <button v-if="displayConfirm" @click="confirmPath"
-                                    class="mx-2 my-3 px-3 rounded-full text-xl bg-white border-3 hover:bg-gray-200 active:bg-gray-500 active:scale-90 transition-all">确认</button>
+                                    class="mx-2 my-3 px-3 rounded-full text-xl bg-white border-3 hover:bg-gray-200 active:bg-gray-500 active:scale-90 transition-all cursor-default">确认</button>
                             </div>
                         </div>
                         <div v-if="displayConfirm" class="font-genshin text-right mr-4">{{ path }}</div>
