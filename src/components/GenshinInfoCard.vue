@@ -48,6 +48,35 @@ const elementAssets = {
     },
 }
 const ascLevelMap = [20, 40, 50, 60, 70, 80, 90]
+const charDialogShow = ref(false)
+const charDialogId = ref(0)
+const statNameMap = new Map()
+const setStatNameMap = () => {
+    statNameMap.set('critRate', '暴击率')
+    statNameMap.set('critDamage', '暴击伤害')
+    statNameMap.set('energyRecharge', '元素充能效率')
+    statNameMap.set('healingBonus', '治疗加成')
+    statNameMap.set('incomingHealingBonus', '受治疗加成')
+    statNameMap.set('elementalMastery', '元素精通')  // nullable
+    statNameMap.set('physicalRes', '物理抗性')
+    statNameMap.set('physicalDamageBonus', '物理伤害加成')
+    statNameMap.set('pyroDamageBonus', '火元素伤害加成')
+    statNameMap.set('electroDamageBonus', '雷元素伤害加成')
+    statNameMap.set('hydroDamageBonus', '水元素伤害加成')
+    statNameMap.set('dendroDamageBonus', '草元素伤害加成')
+    statNameMap.set('anemoDamageBonus', '风元素伤害加成')
+    statNameMap.set('geoDamageBonus', '岩元素伤害加成')
+    statNameMap.set('cryoDamageBonus', '冰元素伤害加成')
+    statNameMap.set('pyroRes', '火元素抗性')
+    statNameMap.set('electroRes', '雷元素抗性')
+    statNameMap.set('hydroRes', '水元素抗性')
+    statNameMap.set('dendroRes', '草元素抗性')
+    statNameMap.set('anemoRes', '风元素抗性')
+    statNameMap.set('geoRes', '岩元素抗性')
+    statNameMap.set('cryoRes', '冰元素抗性')
+    statNameMap.set('cooldownReduction', '冷却时间减少')
+    statNameMap.set('shieldStrength', '护盾强效')
+}
 const propNameMap = new Map()
 const propShortNameMap = new Map()
 const setPropNameMaps = () => {
@@ -174,6 +203,7 @@ onMounted(() => {
 
     setPropNameMaps()
     setArtifactPropsMaps()
+    setStatNameMap()
 })
 
 const router = useRouter()
@@ -272,6 +302,10 @@ const showPercentage = (prop) => {
     return (prop.endsWith("HURT") || prop.endsWith("CRITICAL") || prop.endsWith("PERCENT") || prop.endsWith("ADD") || prop.endsWith("EFFICIENCY")) ? '%' : ''
 }
 
+const getStatName = (stat) => {
+    return statNameMap.get(stat)
+}
+
 const calcCritScoreTotal = (index) => {
     var score = 0.0
     const artifacts = playerInfo.value.characters[index].equipment.artifacts
@@ -348,10 +382,72 @@ const charsPagePrev = () => {
         })
     }
 }
+
+const showCharDetails = (index) => {
+    charDialogId.value = index
+    charDialogShow.value = true
+}
+
+const trimStats = (stats) => {
+    const trim = ['baseHp', 'hpPercentage', 'maxHp', 'currentHp', 'baseAtk', 'atk', 'atkPercentage', 'def', 'baseDef', 'defPercentage', 'Cost', 'Energy', 'Mastery'];
+    var res = { ...stats };
+    var entries = Object.entries(stats);
+
+    for (var [stat, val] of entries) {
+        var flag = false;
+        for (var t of trim) {
+            if (stat.endsWith(t) || val.value === '' || val.value === '0') {
+                flag = true;
+                break;
+            }
+        }
+        if (flag) {
+            delete res[stat];
+        }
+    }
+
+    return res;
+};
 </script>
 
 <template>
     <div class="bg-white" style="border-radius: 4.5vh;" :style="playerInfoReady ? 'height: 86.5vh;' : ''">
+        <el-dialog v-if="playerInfoReady" v-model="charDialogShow"
+            :title="playerInfo.characters[charDialogId].name + ' 角色详情'" width="30%">
+            <div class="flex flex-col content-center justify-center w-full px-5">
+                <DialogListItem class="font-genshin" name="生命值">
+                    <div class="font-genshin">
+                        <span>{{ parseInt(playerInfo.characters[charDialogId].stats.baseHp.value) }}</span>
+                        <span
+                            v-if="parseInt(playerInfo.characters[charDialogId].stats.maxHp.value) != parseInt(playerInfo.characters[charDialogId].stats.baseHp.value)"
+                            class="ml-1 text-blue-500">+{{ parseInt(playerInfo.characters[charDialogId].stats.maxHp.value)
+                                - parseInt(playerInfo.characters[charDialogId].stats.baseHp.value) }}</span>
+                    </div>
+                </DialogListItem>
+                <DialogListItem class="font-genshin" name="攻击力">
+                    <div class="font-genshin">
+                        <span>{{ parseInt(playerInfo.characters[charDialogId].stats.baseAtk.value) }}</span>
+                        <span
+                            v-if="parseInt(playerInfo.characters[charDialogId].stats.atk.value) != parseInt(playerInfo.characters[charDialogId].stats.baseAtk.value)"
+                            class="ml-1 text-blue-500">+{{ parseInt(playerInfo.characters[charDialogId].stats.atk.value) -
+                                parseInt(playerInfo.characters[charDialogId].stats.baseAtk.value) }}</span>
+                    </div>
+                </DialogListItem>
+                <DialogListItem class="font-genshin" name="防御力">
+                    <div class="font-genshin">
+                        <span>{{ parseInt(playerInfo.characters[charDialogId].stats.baseDef.value) }}</span>
+                        <span
+                            v-if="parseInt(playerInfo.characters[charDialogId].stats.def.value) != parseInt(playerInfo.characters[charDialogId].stats.baseDef.value)"
+                            class="ml-1 text-blue-500">+{{ parseInt(playerInfo.characters[charDialogId].stats.def.value) -
+                                parseInt(playerInfo.characters[charDialogId].stats.baseDef.value) }}</span>
+                    </div>
+                </DialogListItem>
+                <DialogListItem class="font-genshin" name="元素精通"
+                    :val="playerInfo.characters[charDialogId].stats.elementalMastery.value ? parseInt(playerInfo.characters[charDialogId].stats.elementalMastery.value) : '0'" />
+                <DialogListItem v-for="(stat, key) in trimStats(playerInfo.characters[charDialogId].stats)"
+                    class="font-genshin" :name="getStatName(key)" :val="(stat.value * 100).toFixed(2).toString() + '%'" />
+            </div>
+        </el-dialog>
         <!-- HEADER -->
         <div class="flex flex-row w-full p-0 relative justify-between" style="height: 9vh;">
             <!-- 右上角名片 -->
@@ -546,19 +642,21 @@ const charsPagePrev = () => {
                                         getCharElementEnergy(index)
                                     }}</span>
                                 </div>
-                                <div class="grid grid-cols-2 grid-rows-1" style="grid-column: 1 / 4; grid-row: 3;">
-                                    <div style="grid-column: 1; grid-row: 1;">
-                                        <span class="text-gray-300">暴击率</span>
-                                        <span class="text-gray-200 text-right font-genshin ml-3">{{
-                                            (character.stats.critRate.value * 100).toFixed(1)
-                                        }}%</span>
-                                    </div>
-                                    <div style="grid-column: 2; grid-row: 1;">
-                                        <span class="text-gray-300">暴击伤害</span>
-                                        <span class="text-gray-200 text-right font-genshin ml-3">{{
-                                            (character.stats.critDamage.value * 100).toFixed(1)
-                                        }}%</span>
-                                    </div>
+                                <div style="grid-column: 1; grid-row: 3;">
+                                    <span class="text-gray-300">暴率</span>
+                                    <span class="text-gray-200 text-right font-genshin ml-3">{{
+                                        (character.stats.critRate.value * 100).toFixed(1)
+                                    }}%</span>
+                                </div>
+                                <div style="grid-column: 2; grid-row: 3;">
+                                    <span class="text-gray-300">暴伤</span>
+                                    <span class="text-gray-200 text-right font-genshin ml-3">{{
+                                        (character.stats.critDamage.value * 100).toFixed(1)
+                                    }}%</span>
+                                </div>
+                                <div class="mx-2 rounded-full text-sm bg-white bg-opacity-20 text-center hover:bg-opacity-30 active:scale-95 active:bg-opacity-40 cursor-default transition-all px-1"
+                                    @click="showCharDetails(index)" style="grid-column: 3; grid-row: 3;">
+                                    <div class="font-genshin" style="margin-top: 5px;">查看更多</div>
                                 </div>
                             </div>
                             <!-- 详情第二块：武器 -->
