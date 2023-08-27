@@ -91,7 +91,7 @@ const mergeToPlayerinfo = (newArr) => {
 const router = useRouter()
 const requestInfo = () => {
     uid = uidInput.value
-    window.axios.get('https://api.mihomo.me/sr_info_parsed/' + uid + '?lang=en')
+    window.axios.get('https://api.mihomo.me/sr_info_parsed/' + uid + '?lang=cn')
         .then((resp) => {
             if (playerInfoReady.value && playerInfo.value.player.uid == resp.player.uid) {
                 console.log('uid equal')
