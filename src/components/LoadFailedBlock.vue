@@ -6,7 +6,7 @@ const props = defineProps({
     errMsg: String
 })
 
-const imgs = ['../../src/assets/kleeFailed.png', '../../src/assets/wuwuboFailed.png', '../../src/assets/hi3Failed.png']
+const imgs = ['../../src/assets/failedEmojis/kleeFailed.png', '../../src/assets/failedEmojis/wuwuboFailed.png', '../../src/assets/failedEmojis/hi3Failed.png']
 const sources = ['/gspage', '/srpage', '/hipage']
 
 const router = useRouter()

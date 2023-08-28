@@ -30,20 +30,11 @@
     deleteAppDataOnUninstall: false,
   },
   extraResources: [
-    /*{
-      from: "./src/assets/elementBgs",
-      to: "./app.asar/dist/assets/elementBgs",
-      filter: ["*"],
-    },
-    {
-      from: "./src/assets/elementIcons",
-      to: "./app.asar/dist/assets/elementIcons",
-      filter: ["*"],
-    },*/
     "src/assets/elementBgs/*",
     "src/assets/elementIcons/*",
     "src/assets/kleeLoading.gif",
     "src/assets/gsbanner.png",
+    "src/assets/failedEmojis/*",
     "src/textMaps/*",
   ],
 }
