@@ -60,6 +60,35 @@ const imageFolder = path.join(app.getPath('userData'), 'images');
 var iconPath = path.join(process.env.PUBLIC, 'favicon.ico')
 var assetsPath = process.env.VITE_DEV_SERVER_URL ? '../../src/assets' : path.join(__dirname, '../../../src/assets')
 
+async function createWindow() {
+  win = new BrowserWindow({
+    title: 'Main window',
+    icon: iconPath,
+    width: 1200,
+    height: 700,
+    resizable: false,
+    // transparent: true,
+    frame: false,
+    webPreferences: {
+      preload,
+      // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
+      // Consider using contextBridge.exposeInMainWorld
+      // Read more on https://www.electronjs.org/docs/latest/tutorial/context-isolation
+      nodeIntegration: false,
+      contextIsolation: true,
+    },
+  })
+
+  const contextMenu = Menu.buildFromTemplate([
+    { label: '退出', click: () => {win.destroy()} },
+  ])
+  tray = new Tray(path.join(process.env.PUBLIC, 'favicon.ico'))
+  tray.setToolTip('miXeD')
+  tray.setContextMenu(contextMenu)
+  tray.on('click', ()=>{ 
+      win.isVisible() ? win.hide() : win.show()
+      win.isVisible() ? win.setSkipTaskbar(false) : win.setSkipTaskbar(true)
+  })
   // ---------- Window actions ----------
   ipcMain.on('win:close', () => {
     win.close()
@@ -157,36 +186,6 @@ var assetsPath = process.env.VITE_DEV_SERVER_URL ? '../../src/assets' : path.joi
 
   ipcMain.on("elec:openExtLink", (_event, url) => {
     shell.openExternal(url);
-  })
-
-async function createWindow() {
-  win = new BrowserWindow({
-    title: 'Main window',
-    icon: iconPath,
-    width: 1200,
-    height: 700,
-    resizable: false,
-    // transparent: true,
-    frame: false,
-    webPreferences: {
-      preload,
-      // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
-      // Consider using contextBridge.exposeInMainWorld
-      // Read more on https://www.electronjs.org/docs/latest/tutorial/context-isolation
-      nodeIntegration: false,
-      contextIsolation: true,
-    },
-  })
-
-  const contextMenu = Menu.buildFromTemplate([
-    { label: '退出', click: () => {win.destroy()} },
-  ])
-  tray = new Tray(path.join(process.env.PUBLIC, 'favicon.ico'))
-  tray.setToolTip('miXeD')
-  tray.setContextMenu(contextMenu)
-  tray.on('click', ()=>{ 
-      win.isVisible() ? win.hide() : win.show()
-      win.isVisible() ? win.setSkipTaskbar(false) : win.setSkipTaskbar(true)
   })
 
   // --------- Window configs ------------
