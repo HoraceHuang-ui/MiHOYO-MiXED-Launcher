@@ -60,46 +60,7 @@ const imageFolder = path.join(app.getPath('userData'), 'images');
 var iconPath = path.join(process.env.PUBLIC, 'favicon.ico')
 var assetsPath = process.env.VITE_DEV_SERVER_URL ? '../../src/assets' : path.join(__dirname, '../../../src/assets')
 
-async function createWindow() {
-  win = new BrowserWindow({
-    title: 'Main window',
-    icon: iconPath,
-    width: 1200,
-    height: 700,
-    resizable: false,
-    // transparent: true,
-    frame: false,
-    webPreferences: {
-      preload,
-      // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
-      // Consider using contextBridge.exposeInMainWorld
-      // Read more on https://www.electronjs.org/docs/latest/tutorial/context-isolation
-      nodeIntegration: false,
-      contextIsolation: true,
-    },
-  })
-  // win.setWindowButtonVisibility(true)
-  nativeTheme.themeSource = "light"
-  if (process.env.VITE_DEV_SERVER_URL) { // electron-vite-vue#298
-    win.loadURL(url)
-    //win.loadFile('./dist/index.html')
-    // Open devTool if the app is not packaged
-    win.webContents.openDevTools()
-  } else {
-    win.loadFile(indexHtml)
-  }
-
   // ---------- Window actions ----------
-  const contextMenu = Menu.buildFromTemplate([
-    { label: '退出', click: () => {win.destroy()} },
-  ])
-  tray = new Tray(path.join(process.env.PUBLIC, 'favicon.ico'))
-  tray.setToolTip('miXeD')
-  tray.setContextMenu(contextMenu)
-  tray.on('click', ()=>{ 
-      win.isVisible() ? win.hide() : win.show()
-      win.isVisible() ? win.setSkipTaskbar(false) : win.setSkipTaskbar(true)
-  })
   ipcMain.on('win:close', () => {
     win.close()
   })
@@ -137,17 +98,17 @@ async function createWindow() {
   })
 
   ipcMain.handle('dialog:show', async (_event, options) => {
-    const result = await dialog.showOpenDialog(options);
+    const result = await dialog.showOpenDialog(win, options);
     if (!result.canceled) {
-      return result.filePaths; // 返回选择的目录路径
+      return result.filePaths;
     } else {
-      return []; // 对话框被取消，返回空数组
+      return [];
     }
   });
 
   ipcMain.handle('dialog:showAndCopy', async (_event, options) => {
     try {
-      const result = await dialog.showOpenDialog(options)
+      const result = await dialog.showOpenDialog(win, options)
       if (!result.canceled && result.filePaths.length > 0) {
         try {
             await fs.access(imageFolder);
@@ -197,6 +158,48 @@ async function createWindow() {
   ipcMain.on("elec:openExtLink", (_event, url) => {
     shell.openExternal(url);
   })
+
+async function createWindow() {
+  win = new BrowserWindow({
+    title: 'Main window',
+    icon: iconPath,
+    width: 1200,
+    height: 700,
+    resizable: false,
+    // transparent: true,
+    frame: false,
+    webPreferences: {
+      preload,
+      // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
+      // Consider using contextBridge.exposeInMainWorld
+      // Read more on https://www.electronjs.org/docs/latest/tutorial/context-isolation
+      nodeIntegration: false,
+      contextIsolation: true,
+    },
+  })
+
+  const contextMenu = Menu.buildFromTemplate([
+    { label: '退出', click: () => {win.destroy()} },
+  ])
+  tray = new Tray(path.join(process.env.PUBLIC, 'favicon.ico'))
+  tray.setToolTip('miXeD')
+  tray.setContextMenu(contextMenu)
+  tray.on('click', ()=>{ 
+      win.isVisible() ? win.hide() : win.show()
+      win.isVisible() ? win.setSkipTaskbar(false) : win.setSkipTaskbar(true)
+  })
+
+  // --------- Window configs ------------
+  // win.setWindowButtonVisibility(true)
+  nativeTheme.themeSource = "light"
+  if (process.env.VITE_DEV_SERVER_URL) { // electron-vite-vue#298
+    win.loadURL(url)
+    //win.loadFile('./dist/index.html')
+    // Open devTool if the app is not packaged
+    win.webContents.openDevTools()
+  } else {
+    win.loadFile(indexHtml)
+  }
 
   // Test actively push message to the Electron-Renderer
   // win.webContents.on('did-finish-load', () => {
