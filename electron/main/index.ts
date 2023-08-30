@@ -79,6 +79,18 @@ async function createWindow() {
     },
   })
 
+  // --------- Window configs ------------
+  // win.setWindowButtonVisibility(true)
+  nativeTheme.themeSource = "light"
+  if (process.env.VITE_DEV_SERVER_URL) { // electron-vite-vue#298
+    win.loadURL(url)
+    //win.loadFile('./dist/index.html')
+    // Open devTool if the app is not packaged
+    win.webContents.openDevTools()
+  } else {
+    win.loadFile(indexHtml)
+  }
+
   const contextMenu = Menu.buildFromTemplate([
     { label: '退出', click: () => {win.destroy()} },
   ])
@@ -187,18 +199,6 @@ async function createWindow() {
   ipcMain.on("elec:openExtLink", (_event, url) => {
     shell.openExternal(url);
   })
-
-  // --------- Window configs ------------
-  // win.setWindowButtonVisibility(true)
-  nativeTheme.themeSource = "light"
-  if (process.env.VITE_DEV_SERVER_URL) { // electron-vite-vue#298
-    win.loadURL(url)
-    //win.loadFile('./dist/index.html')
-    // Open devTool if the app is not packaged
-    win.webContents.openDevTools()
-  } else {
-    win.loadFile(indexHtml)
-  }
 
   // Test actively push message to the Electron-Renderer
   // win.webContents.on('did-finish-load', () => {
