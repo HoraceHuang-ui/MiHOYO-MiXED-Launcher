@@ -79,28 +79,6 @@ async function createWindow() {
     },
   })
 
-  // --------- Window configs ------------
-  // win.setWindowButtonVisibility(true)
-  nativeTheme.themeSource = "light"
-  if (process.env.VITE_DEV_SERVER_URL) { // electron-vite-vue#298
-    win.loadURL(url)
-    //win.loadFile('./dist/index.html')
-    // Open devTool if the app is not packaged
-    win.webContents.openDevTools()
-  } else {
-    win.loadFile(indexHtml)
-  }
-
-  const contextMenu = Menu.buildFromTemplate([
-    { label: '退出', click: () => {win.destroy()} },
-  ])
-  tray = new Tray(path.join(process.env.PUBLIC, 'favicon.ico'))
-  tray.setToolTip('miXeD')
-  tray.setContextMenu(contextMenu)
-  tray.on('click', ()=>{ 
-      win.isVisible() ? win.hide() : win.show()
-      win.isVisible() ? win.setSkipTaskbar(false) : win.setSkipTaskbar(true)
-  })
   // ---------- Window actions ----------
   ipcMain.on('win:close', () => {
     win.close()
@@ -131,8 +109,8 @@ async function createWindow() {
   ipcMain.on('child:exec', (_event, path) => {
     child.execFile(path, function (err, data) {
       if (err) {
-          console.error(err)
-          return
+        console.error(err)
+        return
       }
       console.log(data.toString())
     })
@@ -152,20 +130,20 @@ async function createWindow() {
       const result = await dialog.showOpenDialog(win, options)
       if (!result.canceled && result.filePaths.length > 0) {
         try {
-            await fs.access(imageFolder);
+          await fs.access(imageFolder);
         } catch {
-            await fs.mkdir(imageFolder);
+          await fs.mkdir(imageFolder);
         }
 
         const sourcePath = result.filePaths[0];
 
         const dataURL = await fs.readFile(sourcePath, 'base64')
-            .then(data => `data:image/png;base64,${data}`);
+          .then(data => `data:image/png;base64,${data}`);
 
         return dataURL;
 
         // const targetPath = path.join(imageFolder, path.basename(sourcePath));
-        
+
         // await fs.copyFile(sourcePath, targetPath)
         // console.log(targetPath)
         // return targetPath
@@ -177,7 +155,7 @@ async function createWindow() {
       throw err;
     }
   });
-  
+
   ipcMain.handle("enka:getPlayer", async (_event, uid) => {
     const result = await enka.getPlayer(uid)
     return result
@@ -198,6 +176,29 @@ async function createWindow() {
 
   ipcMain.on("elec:openExtLink", (_event, url) => {
     shell.openExternal(url);
+  })
+
+  // --------- Window configs ------------
+  // win.setWindowButtonVisibility(true)
+  nativeTheme.themeSource = "light"
+  if (process.env.VITE_DEV_SERVER_URL) { // electron-vite-vue#298
+    win.loadURL(url)
+    //win.loadFile('./dist/index.html')
+    // Open devTool if the app is not packaged
+    win.webContents.openDevTools()
+  } else {
+    win.loadFile(indexHtml)
+  }
+
+  const contextMenu = Menu.buildFromTemplate([
+    { label: '退出', click: () => { win.destroy() } },
+  ])
+  tray = new Tray(path.join(process.env.PUBLIC, 'favicon.ico'))
+  tray.setToolTip('miXeD')
+  tray.setContextMenu(contextMenu)
+  tray.on('click', () => {
+    win.isVisible() ? win.hide() : win.show()
+    win.isVisible() ? win.setSkipTaskbar(false) : win.setSkipTaskbar(true)
   })
 
   // Test actively push message to the Electron-Renderer
