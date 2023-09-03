@@ -412,8 +412,8 @@ const trimStats = (stats) => {
 
 <template>
     <div class="bg-white" style="border-radius: 4.5vh;" :style="playerInfoReady ? 'height: 86.5vh;' : ''">
-        <el-dialog v-if="playerInfoReady" v-model="charDialogShow"
-            :title="playerInfo.characters[charDialogId].name + ' 角色详情'" width="30%">
+        <el-dialog v-if="playerInfoReady && playerInfo.characters && playerInfo.characters.length > 0"
+            v-model="charDialogShow" :title="playerInfo.characters[charDialogId].name + ' 角色详情'" width="30%">
             <div class="flex flex-col content-center justify-center w-full px-5">
                 <DialogListItem class="font-genshin" name="生命值">
                     <div class="font-genshin">
@@ -497,7 +497,7 @@ const trimStats = (stats) => {
             <div v-else style="width: 35vw" />
         </div>
         <!-- BODY -->
-        <div v-if="playerInfoReady && playerInfo.characters.length > 0" class="relative">
+        <div v-if="playerInfoReady && playerInfo.characters && playerInfo.characters.length > 0" class="relative">
             <!-- 角色头像列表 10人一页 -->
             <div class="flex flex-row w-full justify-between">
                 <div class="relative z-50 w-1/4">
