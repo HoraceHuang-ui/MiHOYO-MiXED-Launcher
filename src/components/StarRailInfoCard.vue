@@ -22,6 +22,27 @@ const charsScrollbar = ref()
 const showcaseIdx = ref(0)
 const ascLevelMap = [20, 30, 40, 50, 60, 70, 80]
 let rankMap = {}
+// const rankAdditions = ref([])
+const rankAdditions = computed(() => {
+    let res = {}
+    playerInfo.value.characters.forEach((character, index) => {
+        const rank = character.rank
+        if (rank >= 3 && rank < 5) {
+            rankMap[character.id + "03"].level_up_skills.forEach(obj => {
+                res[obj.id] = obj.num
+            })
+        } else if (rank >= 5) {
+            rankMap[character.id + "03"].level_up_skills.forEach(obj => {
+                res[obj.id] = obj.num
+            })
+            rankMap[character.id + "05"].level_up_skills.forEach(obj => {
+                res[obj.id] = obj.num
+            })
+        }
+    })
+    console.log(res)
+    return res
+})
 const ranksReady = ref(false)
 const charDialogShow = ref(false)
 const charDialogId = ref(0)
@@ -181,6 +202,21 @@ const findField = (range, field) => {
         "percent": false
     }
 }
+
+// const findRankSkillId = (characterIdx, id) => {
+//     let range = rankAdditions.value[characterIdx]
+//     console.log(rankAdditions.value[characterIdx])
+//     for (var i = 0; i < range.length; i++) {
+//         const element = range[i]
+//         if (element.id === id) {
+//             return element
+//         }
+//     }
+//     return {
+//         "id": "",
+//         "num": 0
+//     }
+// }
 
 const parseRankDesc = (str) => {
     return str.replace('\\n', '\n')
@@ -521,9 +557,19 @@ const trimAdditions = (additions) => {
                                 <div v-if="character.skill_trees[idx - 1].level >= character.skill_trees[idx - 1].max_level"
                                     class="ml-2 mt-2 text-orange-300 text-xl align-middle h-full font-sr-sans">MAX
                                 </div>
-                                <div v-else class="ml-2 mt-2 text-gray-200 text-lg align-middle h-full font-sr-sans">
-                                    {{ character.skill_trees[idx - 1].level }} <span class="text-gray-400">/{{
-                                        character.skill_trees[idx - 1].max_level }}</span>
+                                <div v-else class="ml-2 mt-2 text-lg align-middle h-full font-sr-sans">
+                                    <div class="text-gray-200" v-if="!rankAdditions[character.skills[idx - 1].id]">
+                                        {{ character.skill_trees[idx - 1].level }} <span class="text-gray-400">/{{
+                                            character.skill_trees[idx - 1].max_level }}</span>
+                                    </div>
+                                    <div v-else class=" text-blue-300">
+                                        {{ character.skill_trees[idx - 1].level + rankAdditions[character.skills[idx -
+                                            1].id]
+                                        }} <span class="text-gray-400">/{{
+    character.skill_trees[idx - 1].max_level + rankAdditions[character.skills[idx -
+        1].id]
+}}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
