@@ -518,12 +518,12 @@ const trimAdditions = (additions) => {
                                         <img :src="apiUrl + character.skills[idx - 1].icon" />
                                     </div>
                                 </el-tooltip>
-                                <div v-if="character.skills[idx - 1].level >= character.skills[idx - 1].max_level * 2 / 3"
+                                <div v-if="character.skill_trees[idx - 1].level >= character.skill_trees[idx - 1].max_level"
                                     class="ml-2 mt-2 text-orange-300 text-xl align-middle h-full font-sr-sans">MAX
                                 </div>
                                 <div v-else class="ml-2 mt-2 text-gray-200 text-lg align-middle h-full font-sr-sans">
-                                    {{ character.skills[idx - 1].level }} /
-                                    <span class="text-gray-400">{{ character.skills[idx - 1].max_level * 2 / 3 }}</span>
+                                    {{ character.skill_trees[idx - 1].level }} <span class="text-gray-400">/{{
+                                        character.skill_trees[idx - 1].max_level }}</span>
                                 </div>
                             </div>
                         </div>
