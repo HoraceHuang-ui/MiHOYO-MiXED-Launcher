@@ -562,7 +562,7 @@ const trimAdditions = (additions) => {
                                         {{ character.skill_trees[idx - 1].level }} <span class="text-gray-400">/{{
                                             character.skill_trees[idx - 1].max_level }}</span>
                                     </div>
-                                    <div v-else class=" text-blue-300">
+                                    <div v-else class=" text-cyan-400">
                                         {{ character.skill_trees[idx - 1].level + rankAdditions[character.skills[idx -
                                             1].id]
                                         }} <span class="text-gray-400">/{{
