@@ -22,8 +22,12 @@ const charsScrollbar = ref()
 const showcaseIdx = ref(0)
 const ascLevelMap = [20, 30, 40, 50, 60, 70, 80]
 let rankMap = {}
+const ranksReady = ref(false)
 // const rankAdditions = ref([])
 const rankAdditions = computed(() => {
+    if (!ranksReady.value || !playerInfoReady.value) {
+        return {}
+    }
     let res = {}
     playerInfo.value.characters.forEach((character, index) => {
         const rank = character.rank
@@ -43,7 +47,6 @@ const rankAdditions = computed(() => {
     console.log(res)
     return res
 })
-const ranksReady = ref(false)
 const charDialogShow = ref(false)
 const charDialogId = ref(0)
 const relicSetIdNameMap = new Map()
