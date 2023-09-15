@@ -210,6 +210,7 @@ const router = useRouter()
 const requestInfo = () => {
     uid = uidInput.value
     playerInfoReady.value = false
+    console.log(uidInput.value)
     window.enka.getPlayer(uid)
         .then((resp) => {
             if (playerInfo.value.uid == resp.uid) {
@@ -465,13 +466,8 @@ const trimStats = (stats) => {
                 }}</div>
             </div>
             <div v-else style="width: 35vw" />
-            <div class="flex flex-row self-center">
-                <el-input size="large" v-model="uidInput" placeholder="在此输入uid" @keyup.enter.native="requestInfo"
-                    style="width: 15vw;" clearable>
-                    <template #append>
-                        <el-button @click="requestInfo" size="large">查询</el-button>
-                    </template>
-                </el-input>
+            <div class="flex flex-row mt-3">
+                <CustomUIDInput v-model="uidInput" @submit="requestInfo" />
             </div>
             <!-- 右侧 WL AR -->
             <div v-if="playerInfoReady" style="width: 35vw; position: relative;">
