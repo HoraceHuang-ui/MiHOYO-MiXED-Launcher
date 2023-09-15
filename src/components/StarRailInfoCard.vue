@@ -69,7 +69,7 @@ const setRelicIdNameMap = () => {
 
 onMounted(() => {
     setRelicIdNameMap()
-    fetch('../../src/textMaps/character_ranks.json')
+    fetch('https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/index_new/cn/character_ranks.json')
         .then(response => response.json())
         .then(resp => {
             rankMap = resp
