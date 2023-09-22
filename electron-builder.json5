@@ -35,6 +35,7 @@
     "src/assets/kleeLoading.gif",
     "src/assets/gsbanner.png",
     "src/assets/failedEmojis/*",
-    "src/textMaps/*",
+    "src/assets/gsbanner.png",
+    "src/assets/srbanner.jpg",
   ],
 }

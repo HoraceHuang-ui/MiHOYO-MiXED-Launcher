@@ -188,7 +188,7 @@ const refresh = () => {
         <div class="bg-pic rounded-3xl w-full h-full" style="transition-duration: 500ms;"
             :class="hideElements ? 'scale-x-95 translate-y-3' : ''">
             <img class=" top-0 rounded-3xl transition-all" :class="hideElements ? 'blur-md scale-125 brightness-75' : ''"
-                style="transition-duration: 500ms;" :src="launcherInfoReady ? launcherInfo.adv.background : ''"
+                style="transition-duration: 500ms;" :src="launcherInfoReady && launcherInfo.adv ? launcherInfo.adv.background : '../../src/assets/gsbanner.png'"
                 @touchmove.prevent @mousewheel.prevent />
         </div>
         <LauncherBanner class="absolute left-16 top-48 z-50 rounded-xl transition-all" v-if="launcherInfoReady"
