@@ -466,7 +466,7 @@ const trimStats = (stats) => {
                 }}</div>
             </div>
             <div v-else style="width: 35vw" />
-            <div class="flex flex-row mt-3">
+            <div class="relative flex flex-row mt-3 z-10">
                 <CustomUIDInput v-model="uidInput" @submit="requestInfo" />
             </div>
             <!-- 右侧 WL AR -->
