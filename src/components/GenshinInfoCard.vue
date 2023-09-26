@@ -165,6 +165,8 @@ const setArtifactPropsMaps = () => {
     artifactShortNameMap.set("角斗士的终幕礼", "角斗")
     artifactShortNameMap.set("深林的记忆", "草套")
     artifactShortNameMap.set("饰金之梦", "饰金")
+    artifactShortNameMap.set("逐影猎人", "猎人")
+    artifactShortNameMap.set("黄金剧团", "剧团")
 }
 
 const mergeToPlayerinfo = (newArr) => {
@@ -198,6 +200,15 @@ onMounted(() => {
             }
             console.log(playerInfo.value)
         }).catch((err) => {
+            console.error(err)
+        })
+
+    fetch('https://gitlab.com/Dimbreath/AnimeGameData/-/blob/master/ExcelBinOutput/AvatarSkillExcelConfigData.json')
+        .then(response => response.json())
+        .then(resp => {
+            console.log(resp)
+        })
+        .catch(err => {
             console.error(err)
         })
 
