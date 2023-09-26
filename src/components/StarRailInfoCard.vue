@@ -29,7 +29,7 @@ const rankAdditions = computed(() => {
         return {}
     }
     let res = {}
-    playerInfo.value.characters.forEach((character, index) => {
+    playerInfo.value.characters.forEach((character) => {
         const rank = character.rank
         if (rank >= 3 && rank < 5) {
             rankMap[character.id + "03"].level_up_skills.forEach(obj => {

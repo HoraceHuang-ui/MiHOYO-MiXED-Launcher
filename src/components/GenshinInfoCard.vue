@@ -13,6 +13,26 @@ const pages = computed(() =>
         ? Math.floor((playerInfo.value.characters.length - 10) / 6 - 0.1) + 1
         : 0
 )
+const constelsMap = ref({})
+const constelsReady = ref(false)
+const constelsAdditions = computed(() => {
+    if (!playerInfoReady.value || !constelsReady.value) {
+        return {}
+    }
+    let res = {}
+    playerInfo.value.characters.forEach((character) => {
+        if (character.skillsExtraLevel) {
+            Object.keys(character.skillsExtraLevel).forEach((level) => {
+                // check
+                var target = findSkillIdByProud(parseInt(level))
+                if (target != -1) {
+                    res[target] = character.skillsExtraLevel[level]
+                }
+            })
+        }
+    })
+    return res
+})
 const playerInfoReady = ref(false)
 const playerInfoLoading = ref(false)
 const charsScrollbar = ref()
@@ -200,10 +220,14 @@ onMounted(() => {
             console.error(err)
         })
 
-    fetch('https://gitlab.com/Dimbreath/AnimeGameData/-/blob/master/ExcelBinOutput/AvatarSkillExcelConfigData.json')
-        .then(response => response.json())
+
+    window.store.get('genshinConstels')
         .then(resp => {
-            console.log(resp)
+            if (resp) {
+                constelsMap.value = JSON.parse(resp)
+                console.log(constelsMap.value)
+                constelsReady.value = true
+            }
         })
         .catch(err => {
             console.error(err)
@@ -251,17 +275,29 @@ const requestInfo = () => {
             })
             window.store.set('genshinInfo', JSON.stringify(playerInfo.value), true)
             playerInfoLoading.value = false
-            router.push({
-                name: 'tempPage',
-                query: {
-                    from: '/gspage'
-                }
-            })
+
+            fetch('https://gitlab.com/api/v4/projects/41287973/repository/files/ExcelBinOutput%2FAvatarSkillExcelConfigData.json/raw?ref=master')
+                .then(response => response.json())
+                .then(resp => {
+                    resp = resp.filter(a => 'proudSkillGroupId' in a)
+                    resp.sort((a, b) => a.proudSkillGroupId < b.proudSkillGroupId ? -1 : 1)
+                    window.store.set('genshinConstels', JSON.stringify(resp))
+
+                    playerInfoLoading.value = true
+                    router.push({
+                        name: 'tempPage',
+                        query: {
+                            from: '/gspage'
+                        }
+                    })
+                })
+                .catch(err => {
+                    console.error(err)
+                })
         }).catch((err) => {
             console.error(err)
             playerInfoLoading.value = false
         })
-    playerInfoLoading.value = true
     console.log(uid)
 }
 
@@ -391,11 +427,12 @@ const charsPagePrev = () => {
 const showCharDetails = (index) => {
     charDialogId.value = index
     charDialogShow.value = true
+    console.log(constelsAdditions.value)
 }
 
 const trimStats = (stats) => {
-    const trim = ['baseHp', 'hpPercentage', 'maxHp', 'currentHp', 'baseAtk', 'atk', 'atkPercentage', 'def', 'baseDef', 'defPercentage', 'Cost', 'Energy', 'Mastery'];
-    var res = { ...stats };
+    const trim = ['baseHp', 'hpPercentage', 'maxHp', 'currentHp', 'baseAtk', 'atk', 'atkPercentage', 'def', 'baseDef', 'defPercentage', 'Cost', 'Energy', 'Mastery']
+    var res = { ...stats }
     var entries = Object.entries(stats);
 
     for (var [stat, val] of entries) {
@@ -403,16 +440,36 @@ const trimStats = (stats) => {
         for (var t of trim) {
             if (stat.endsWith(t) || val.value === '' || val.value === '0') {
                 flag = true;
-                break;
+                break
             }
         }
         if (flag) {
-            delete res[stat];
+            delete res[stat]
         }
     }
 
-    return res;
-};
+    return res
+}
+
+const findSkillIdByProud = (proudId) => {
+    console.log(proudId)
+    var l = 0
+    var r = constelsMap.value.length
+    var m
+
+    while (l < r) {
+        m = parseInt((r - l) / 2 + l)
+        if (constelsMap.value[m].proudSkillGroupId == proudId) {
+            return constelsMap.value[m].id
+        } else if (constelsMap.value[m].proudSkillGroupId > proudId) {
+            r = m - 1
+        } else {
+            l = m
+        }
+    }
+
+    return -1
+}
 </script>
 
 <template>
@@ -558,11 +615,14 @@ const trimStats = (stats) => {
                                             style="background-color: rgb(0 0 0 / 0.6); width: 72px;">
                                             <img class="h-8 rounded-full"
                                                 :src="'https://enka.network/ui/' + skill.assets.icon + '.png'" />
-                                            <div class="text-center w-full mr-1 h-full align-middle"
+                                            <div class="text-center w-full mr-1 h-full align-middle text-base font-genshin"
                                                 style="margin-top: 3px;">
-                                                <span
-                                                    :class="{ 'text-orange-300': skill.level >= 10 }, { 'text-white': skill.level < 10 }"
-                                                    class="text-base font-genshin">{{ skill.level }}</span>
+                                                <span v-if="skill.id in constelsAdditions"
+                                                    :class="{ 'text-orange-300': skill.level == 10, 'text-cyan-400': skill.level < 10 }">{{
+                                                        skill.level + constelsAdditions[skill.id] }}</span>
+                                                <span v-else
+                                                    :class="{ 'text-orange-300': skill.level == 10, 'text-white': skill.level < 10 }">{{
+                                                        skill.level }}</span>
                                             </div>
                                         </div>
                                     </el-tooltip>
