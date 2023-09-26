@@ -50,124 +50,121 @@ const elementAssets = {
 const ascLevelMap = [20, 40, 50, 60, 70, 80, 90]
 const charDialogShow = ref(false)
 const charDialogId = ref(0)
-const statNameMap = new Map()
-const setStatNameMap = () => {
-    statNameMap.set('critRate', '暴击率')
-    statNameMap.set('critDamage', '暴击伤害')
-    statNameMap.set('energyRecharge', '元素充能效率')
-    statNameMap.set('healingBonus', '治疗加成')
-    statNameMap.set('incomingHealingBonus', '受治疗加成')
-    statNameMap.set('elementalMastery', '元素精通')  // nullable
-    statNameMap.set('physicalRes', '物理抗性')
-    statNameMap.set('physicalDamageBonus', '物理伤害加成')
-    statNameMap.set('pyroDamageBonus', '火元素伤害加成')
-    statNameMap.set('electroDamageBonus', '雷元素伤害加成')
-    statNameMap.set('hydroDamageBonus', '水元素伤害加成')
-    statNameMap.set('dendroDamageBonus', '草元素伤害加成')
-    statNameMap.set('anemoDamageBonus', '风元素伤害加成')
-    statNameMap.set('geoDamageBonus', '岩元素伤害加成')
-    statNameMap.set('cryoDamageBonus', '冰元素伤害加成')
-    statNameMap.set('pyroRes', '火元素抗性')
-    statNameMap.set('electroRes', '雷元素抗性')
-    statNameMap.set('hydroRes', '水元素抗性')
-    statNameMap.set('dendroRes', '草元素抗性')
-    statNameMap.set('anemoRes', '风元素抗性')
-    statNameMap.set('geoRes', '岩元素抗性')
-    statNameMap.set('cryoRes', '冰元素抗性')
-    statNameMap.set('cooldownReduction', '冷却时间减少')
-    statNameMap.set('shieldStrength', '护盾强效')
-}
-const propNameMap = new Map()
-const propShortNameMap = new Map()
-const setPropNameMaps = () => {
-    propNameMap.set("FIGHT_PROP_HP", "生命值")
-    propNameMap.set("FIGHT_PROP_ATTACK", "攻击力")
-    propNameMap.set("FIGHT_PROP_DEFENSE", "防御力")
-    propNameMap.set("FIGHT_PROP_HP_PERCENT", "生命值")
-    propNameMap.set("FIGHT_PROP_ATTACK_PERCENT", "攻击力")
-    propNameMap.set("FIGHT_PROP_DEFENSE_PERCENT", "防御力")
-    propNameMap.set("FIGHT_PROP_CRITICAL", "暴击率")
-    propNameMap.set("FIGHT_PROP_CRITICAL_HURT", "暴击伤害")
-    propNameMap.set("FIGHT_PROP_CHARGE_EFFICIENCY", "元素充能效率")
-    propNameMap.set("FIGHT_PROP_HEAL_ADD", "治疗加成")
-    propNameMap.set("FIGHT_PROP_ELEMENT_MASTERY", "元素精通")
-    propNameMap.set("FIGHT_PROP_PHYSICAL_ADD_HURT", "物伤加成")
-    propNameMap.set("FIGHT_PROP_FIRE_ADD_HURT", "火伤加成")
-    propNameMap.set("FIGHT_PROP_ELEC_ADD_HURT", "雷伤加成")
-    propNameMap.set("FIGHT_PROP_WATER_ADD_HURT", "水伤加成")
-    propNameMap.set("FIGHT_PROP_WIND_ADD_HURT", "风伤加成")
-    propNameMap.set("FIGHT_PROP_ICE_ADD_HURT", "冰伤加成")
-    propNameMap.set("FIGHT_PROP_ROCK_ADD_HURT", "岩伤加成")
-    propNameMap.set("FIGHT_PROP_GRASS_ADD_HURT", "草伤加成")
-
-    propShortNameMap.set("FIGHT_PROP_HP", "生命")
-    propShortNameMap.set("FIGHT_PROP_ATTACK", "攻击")
-    propShortNameMap.set("FIGHT_PROP_DEFENSE", "防御")
-    propShortNameMap.set("FIGHT_PROP_HP_PERCENT", "生命")
-    propShortNameMap.set("FIGHT_PROP_ATTACK_PERCENT", "攻击")
-    propShortNameMap.set("FIGHT_PROP_DEFENSE_PERCENT", "防御")
-    propShortNameMap.set("FIGHT_PROP_CRITICAL", "暴率")
-    propShortNameMap.set("FIGHT_PROP_CRITICAL_HURT", "暴伤")
-    propShortNameMap.set("FIGHT_PROP_CHARGE_EFFICIENCY", "充能")
-    propShortNameMap.set("FIGHT_PROP_ELEMENT_MASTERY", "精通")
-}
-const artifactTypeNameMap = new Map()
-const artifactShortNameMap = new Map()
-const setArtifactPropsMaps = () => {
-    artifactTypeNameMap.set("EQUIP_BRACER", "生之花")
-    artifactTypeNameMap.set("EQUIP_NECKLACE", "死之羽")
-    artifactTypeNameMap.set("EQUIP_SHOES", "时之沙")
-    artifactTypeNameMap.set("EQUIP_RING", "空之杯")
-    artifactTypeNameMap.set("EQUIP_DRESS", "理之冠")
-
-    artifactShortNameMap.set("游医", "游医")
-    artifactShortNameMap.set("冒险家", "冒险家")
-    artifactShortNameMap.set("幸运儿", "幸运儿")
-    artifactShortNameMap.set("学士", "学士")
-    artifactShortNameMap.set("战狂", "战狂")
-    artifactShortNameMap.set("祭水之人", "祭水")
-    artifactShortNameMap.set("武人", "武人")
-    artifactShortNameMap.set("守护之心", "守护")
-    artifactShortNameMap.set("祭雷之人", "祭雷")
-    artifactShortNameMap.set("流放者", "流放者")
-    artifactShortNameMap.set("行者之心", "行者")
-    artifactShortNameMap.set("祭冰之人", "祭冰")
-    artifactShortNameMap.set("奇迹", "奇迹")
-    artifactShortNameMap.set("勇士之心", "勇士")
-    artifactShortNameMap.set("教官", "教官")
-    artifactShortNameMap.set("赌徒", "赌徒")
-    artifactShortNameMap.set("祭火之人", "祭火")
-    artifactShortNameMap.set("如雷的盛怒", "如雷")
-    artifactShortNameMap.set("追忆之注连", "追忆")
-    artifactShortNameMap.set("冰风迷途的勇士", "冰套")
-    artifactShortNameMap.set("染血的骑士道", "骑士道")
-    artifactShortNameMap.set("华馆梦醒形骸记", "华馆")
-    artifactShortNameMap.set("昔日宗室之仪", "宗室")
-    artifactShortNameMap.set("沉沦之心", "水套")
-    artifactShortNameMap.set("沙上楼阁史话", "楼阁")
-    artifactShortNameMap.set("悠古的磐岩", "磐岩")
-    artifactShortNameMap.set("海染砗磲", "海染")
-    artifactShortNameMap.set("翠绿之影", "风套")
-    artifactShortNameMap.set("苍白之火", "苍白")
-    artifactShortNameMap.set("乐园遗落之花", "乐园")
-    artifactShortNameMap.set("流浪大地的乐团", "乐团")
-    artifactShortNameMap.set("逆飞的流星", "流星")
-    artifactShortNameMap.set("辰砂往生录", "辰砂")
-    artifactShortNameMap.set("平息鸣雷的尊者", "平雷")
-    artifactShortNameMap.set("渡过烈火的贤人", "渡火")
-    artifactShortNameMap.set("千岩牢固", "千岩")
-    artifactShortNameMap.set("水仙之梦", "水仙")
-    artifactShortNameMap.set("被怜爱的少女", "少女")
-    artifactShortNameMap.set("来歆余响", "余响")
-    artifactShortNameMap.set("炽烈的炎之魔女", "魔女")
-    artifactShortNameMap.set("绝缘之旗印", "绝缘")
-    artifactShortNameMap.set("花海甘露之光", "甘露")
-    artifactShortNameMap.set("角斗士的终幕礼", "角斗")
-    artifactShortNameMap.set("深林的记忆", "草套")
-    artifactShortNameMap.set("饰金之梦", "饰金")
-    artifactShortNameMap.set("逐影猎人", "猎人")
-    artifactShortNameMap.set("黄金剧团", "剧团")
-}
+const statNameMap = new Map([
+    ['critRate', '暴击率'],
+    ['critDamage', '暴击伤害'],
+    ['energyRecharge', '元素充能效率'],
+    ['healingBonus', '治疗加成'],
+    ['incomingHealingBonus', '受治疗加成'],
+    ['elementalMastery', '元素精通'],
+    ['physicalRes', '物理抗性'],
+    ['physicalDamageBonus', '物理伤害加成'],
+    ['pyroDamageBonus', '火元素伤害加成'],
+    ['electroDamageBonus', '雷元素伤害加成'],
+    ['hydroDamageBonus', '水元素伤害加成'],
+    ['dendroDamageBonus', '草元素伤害加成'],
+    ['anemoDamageBonus', '风元素伤害加成'],
+    ['geoDamageBonus', '岩元素伤害加成'],
+    ['cryoDamageBonus', '冰元素伤害加成'],
+    ['pyroRes', '火元素抗性'],
+    ['electroRes', '雷元素抗性'],
+    ['hydroRes', '水元素抗性'],
+    ['dendroRes', '草元素抗性'],
+    ['anemoRes', '风元素抗性'],
+    ['geoRes', '岩元素抗性'],
+    ['cryoRes', '冰元素抗性'],
+    ['cooldownReduction', '冷却时间减少'],
+    ['shieldStrength', '护盾强效'],
+])
+const propNameMap = new Map([
+    ["FIGHT_PROP_HP", "生命值"],
+    ["FIGHT_PROP_ATTACK", "攻击力"],
+    ["FIGHT_PROP_DEFENSE", "防御力"],
+    ["FIGHT_PROP_HP_PERCENT", "生命值"],
+    ["FIGHT_PROP_ATTACK_PERCENT", "攻击力"],
+    ["FIGHT_PROP_DEFENSE_PERCENT", "防御力"],
+    ["FIGHT_PROP_CRITICAL", "暴击率"],
+    ["FIGHT_PROP_CRITICAL_HURT", "暴击伤害"],
+    ["FIGHT_PROP_CHARGE_EFFICIENCY", "元素充能"],
+    ["FIGHT_PROP_HEAL_ADD", "治疗加成"],
+    ["FIGHT_PROP_ELEMENT_MASTERY", "元素精通"],
+    ["FIGHT_PROP_PHYSICAL_ADD_HURT", "物伤加成"],
+    ["FIGHT_PROP_FIRE_ADD_HURT", "火伤加成"],
+    ["FIGHT_PROP_ELEC_ADD_HURT", "雷伤加成"],
+    ["FIGHT_PROP_WATER_ADD_HURT", "水伤加成"],
+    ["FIGHT_PROP_WIND_ADD_HURT", "风伤加成"],
+    ["FIGHT_PROP_ICE_ADD_HURT", "冰伤加成"],
+    ["FIGHT_PROP_ROCK_ADD_HURT", "岩伤加成"],
+    ["FIGHT_PROP_GRASS_ADD_HURT", "草伤加成"],
+])
+const propShortNameMap = new Map([
+    ["FIGHT_PROP_HP", "生命"],
+    ["FIGHT_PROP_ATTACK", "攻击"],
+    ["FIGHT_PROP_DEFENSE", "防御"],
+    ["FIGHT_PROP_HP_PERCENT", "生命"],
+    ["FIGHT_PROP_ATTACK_PERCENT", "攻击"],
+    ["FIGHT_PROP_DEFENSE_PERCENT", "防御"],
+    ["FIGHT_PROP_CRITICAL", "暴率"],
+    ["FIGHT_PROP_CRITICAL_HURT", "暴伤"],
+    ["FIGHT_PROP_CHARGE_EFFICIENCY", "充能"],
+    ["FIGHT_PROP_ELEMENT_MASTERY", "精通"],
+])
+const artifactTypeNameMap = new Map([
+    ["EQUIP_BRACER", "生之花"],
+    ["EQUIP_NECKLACE", "死之羽"],
+    ["EQUIP_SHOES", "时之沙"],
+    ["EQUIP_RING", "空之杯"],
+    ["EQUIP_DRESS", "理之冠"],
+])
+const artifactShortNameMap = new Map([
+    ["游医", "游医"],
+    ["冒险家", "冒险家"],
+    ["幸运儿", "幸运儿"],
+    ["学士", "学士"],
+    ["战狂", "战狂"],
+    ["祭水之人", "祭水"],
+    ["武人", "武人"],
+    ["守护之心", "守护"],
+    ["祭雷之人", "祭雷"],
+    ["流放者", "流放者"],
+    ["行者之心", "行者"],
+    ["祭冰之人", "祭冰"],
+    ["奇迹", "奇迹"],
+    ["勇士之心", "勇士"],
+    ["教官", "教官"],
+    ["赌徒", "赌徒"],
+    ["祭火之人", "祭火"],
+    ["如雷的盛怒", "如雷"],
+    ["追忆之注连", "追忆"],
+    ["冰风迷途的勇士", "冰套"],
+    ["染血的骑士道", "骑士道"],
+    ["华馆梦醒形骸记", "华馆"],
+    ["昔日宗室之仪", "宗室"],
+    ["沉沦之心", "水套"],
+    ["沙上楼阁史话", "楼阁"],
+    ["悠古的磐岩", "磐岩"],
+    ["海染砗磲", "海染"],
+    ["翠绿之影", "风套"],
+    ["苍白之火", "苍白"],
+    ["乐园遗落之花", "乐园"],
+    ["流浪大地的乐团", "乐团"],
+    ["逆飞的流星", "流星"],
+    ["辰砂往生录", "辰砂"],
+    ["平息鸣雷的尊者", "平雷"],
+    ["渡过烈火的贤人", "渡火"],
+    ["千岩牢固", "千岩"],
+    ["水仙之梦", "水仙"],
+    ["被怜爱的少女", "少女"],
+    ["来歆余响", "余响"],
+    ["炽烈的炎之魔女", "魔女"],
+    ["绝缘之旗印", "绝缘"],
+    ["花海甘露之光", "甘露"],
+    ["角斗士的终幕礼", "角斗"],
+    ["深林的记忆", "草套"],
+    ["饰金之梦", "饰金"],
+    ["逐影猎人", "猎人"],
+    ["黄金剧团", "剧团"],
+])
 
 const mergeToPlayerinfo = (newArr) => {
     for (let i = newArr.length - 1; i >= 0; i--) {
@@ -211,10 +208,6 @@ onMounted(() => {
         .catch(err => {
             console.error(err)
         })
-
-    setPropNameMaps()
-    setArtifactPropsMaps()
-    setStatNameMap()
 })
 
 const router = useRouter()

@@ -49,26 +49,24 @@ const rankAdditions = computed(() => {
 })
 const charDialogShow = ref(false)
 const charDialogId = ref(0)
-const relicSetIdNameMap = new Map()
-const setRelicIdNameMap = () => {
-    relicSetIdNameMap.set("101", "过客")
-    relicSetIdNameMap.set("102", "快枪手")
-    relicSetIdNameMap.set("103", "圣骑士")
-    relicSetIdNameMap.set("104", "冰套")
-    relicSetIdNameMap.set("105", "拳王")
-    relicSetIdNameMap.set("106", "铁卫")
-    relicSetIdNameMap.set("107", "火套")
-    relicSetIdNameMap.set("108", "量子")
-    relicSetIdNameMap.set("109", "雷套")
-    relicSetIdNameMap.set("110", "风套")
-    relicSetIdNameMap.set("111", "怪盗")
-    relicSetIdNameMap.set("112", "虚数")
-    relicSetIdNameMap.set("113", "莳者")
-    relicSetIdNameMap.set("114", "信使")
-}
+const relicSetIdNameMap = new Map([
+    ["101", "过客"],
+    ["102", "快枪手"],
+    ["103", "圣骑士"],
+    ["104", "冰套"],
+    ["105", "拳王"],
+    ["106", "铁卫"],
+    ["107", "火套"],
+    ["108", "量子"],
+    ["109", "雷套"],
+    ["110", "风套"],
+    ["111", "怪盗"],
+    ["112", "虚数"],
+    ["113", "莳者"],
+    ["114", "信使"],
+])
 
 onMounted(() => {
-    setRelicIdNameMap()
     fetch('https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/index_new/cn/character_ranks.json')
         .then(response => response.json())
         .then(resp => {
