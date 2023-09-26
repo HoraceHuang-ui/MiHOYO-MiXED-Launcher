@@ -50,3 +50,15 @@
 
 - **崩坏3rd启动页** Honkai Impact 3rd launcher page
 <img width="500" alt="微信截图_20230818161449" src="https://github.com/HoraceHuang-ui/MiHOYO-MiXED-Launcher/assets/67905897/57506b03-b13e-4d84-8e0f-e6cc7003ecbd">
+
+# 屎山代码的后果
+- `electron-store` 存储条目备忘：
+  - `genshinPath` 原神官方启动器所在目录
+  - `genshinUpd` 原神当前版本已更新
+  - `genshinInfo` 原神账号信息
+  - `genshinConstels` 原神命座加成json
+  - `starRailPath`
+  - `starRailUpd`
+  - `starRailInfo`
+  - `honkai3Path`
+  - `honkai3Upd`
