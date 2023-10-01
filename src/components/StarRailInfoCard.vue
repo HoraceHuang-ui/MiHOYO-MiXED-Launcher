@@ -14,8 +14,8 @@ const uidInput = ref('')
 var uid = ''
 var charsPage = ref(0)
 const pages = computed(() =>
-    playerInfo.value.characters && playerInfo.value.characters.length > 10
-        ? Math.floor((playerInfo.value.characters.length - 10) / 6 - 0.1) + 1
+    playerInfo.value.characters && playerInfo.value.characters.length > 8
+        ? Math.floor((playerInfo.value.characters.length - 8) / 4 - 0.1) + 1
         : 0
 )
 const charsScrollbar = ref()
