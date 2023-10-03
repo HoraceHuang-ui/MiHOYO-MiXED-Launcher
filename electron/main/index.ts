@@ -9,7 +9,7 @@ const store = new Store();
 const child = require('child_process')
 const { dialog } = require('electron');
 const { Wrapper } = require('enkanetwork.js')
-const enka = new Wrapper({
+const { genshin } = new Wrapper({
   language: 'zh-CN'
 })
 
@@ -156,8 +156,9 @@ async function createWindow() {
     }
   });
 
-  ipcMain.handle("enka:getPlayer", async (_event, uid) => {
-    const result = await enka.getPlayer(uid)
+  ipcMain.handle("enka:getGenshinPlayer", async (_event, uid) => {
+    console.log("genshin enka ipcMain" + uid)
+    const result = await genshin.getPlayer(uid)
     return result
   })
 

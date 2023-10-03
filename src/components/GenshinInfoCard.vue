@@ -8,11 +8,12 @@ const playerInfo = ref({})
 const uidInput = ref('')
 var uid = ''
 var charsPage = ref(0)
-const pages = computed(() =>
-    playerInfo.value.characters && playerInfo.value.characters.length > 10
+const pages = computed(() => {
+    console.log("character.length: ")
+    return playerInfo.value.characters && playerInfo.value.characters.length > 10
         ? Math.floor((playerInfo.value.characters.length - 10) / 6 - 0.1) + 1
         : 0
-)
+})
 const constelsMap = ref({})
 const constelsReady = ref(false)
 const constelsAdditions = computed(() => {
@@ -187,6 +188,7 @@ const artifactShortNameMap = new Map([
 ])
 
 const mergeToPlayerinfo = (newArr) => {
+    console.log("Updated characters length: ")
     for (let i = newArr.length - 1; i >= 0; i--) {
         let newChar = newArr[i]
         var exists = false
@@ -203,7 +205,6 @@ const mergeToPlayerinfo = (newArr) => {
             playerInfo.value.characters.push(newChar)
         }
     }
-    console.log(playerInfo.value)
 }
 
 onMounted(() => {
@@ -225,7 +226,6 @@ onMounted(() => {
         .then(resp => {
             if (resp) {
                 constelsMap.value = JSON.parse(resp)
-                console.log(constelsMap.value)
                 constelsReady.value = true
             }
         })
@@ -239,14 +239,12 @@ const requestInfo = () => {
     uid = uidInput.value
     playerInfoReady.value = false
     console.log(uidInput.value)
-    window.enka.getPlayer(uid)
+    window.enka.getGenshinPlayer(uid)
         .then((resp) => {
             if (playerInfo.value.uid == resp.uid) {
-                console.log('uid equal')
                 mergeToPlayerinfo(resp.characters)
                 playerInfo.value.player = resp.player
             } else {
-                console.log('uid not equal')
                 playerInfo.value = resp
             }
             playerInfo.value.characters.sort(function (a, b) {
@@ -275,6 +273,7 @@ const requestInfo = () => {
             })
             window.store.set('genshinInfo', JSON.stringify(playerInfo.value), true)
             playerInfoLoading.value = false
+            console.log(playerInfo.value)
 
             fetch('https://gitlab.com/api/v4/projects/41287973/repository/files/ExcelBinOutput%2FAvatarSkillExcelConfigData.json/raw?ref=master')
                 .then(response => response.json())
@@ -298,7 +297,6 @@ const requestInfo = () => {
             console.error(err)
             playerInfoLoading.value = false
         })
-    console.log(uid)
 }
 
 const getCharElementAssets = (id) => {
@@ -427,7 +425,6 @@ const charsPagePrev = () => {
 const showCharDetails = (index) => {
     charDialogId.value = index
     charDialogShow.value = true
-    console.log(constelsAdditions.value)
 }
 
 const trimStats = (stats) => {
@@ -452,8 +449,8 @@ const trimStats = (stats) => {
 }
 
 const findSkillIdByProud = (proudId) => {
-    console.log(proudId)
     var l = 0
+    console.log("constelsMap length: ")
     var r = constelsMap.value.length
     var m
 
@@ -521,7 +518,7 @@ const findSkillIdByProud = (proudId) => {
             <!-- playerInfo.player.profilePicture.assets.icon -->
             <div v-if="playerInfoReady" class="flex flex-row content-start items-center" style="width: 35vw;">
                 <img class="rounded-full h-12 border-2 bg-slate-200" style="margin-left: 1vw;"
-                    :src="'https://enka.network/ui/' + (playerInfo.player.profilePicture.assets.costumes.length > 0 ? playerInfo.player.profilePicture.assets.costumes[0].icon : playerInfo.player.profilePicture.assets.icon) + '.png'" />
+                    :src="'https://enka.network/ui/' + ('costumes' in playerInfo.player.profilePicture.assets ? playerInfo.player.profilePicture.assets.costumes[0].icon : playerInfo.player.profilePicture.assets.oldIcon) + '.png'" />
                 <div class="font-genshin" style="margin-left: 1vw; font-size: larger;">{{
                     playerInfo.player.username
                 }}</div>

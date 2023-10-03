@@ -21,9 +21,9 @@ contextBridge.exposeInMainWorld("dialog", {
   }
 })
 contextBridge.exposeInMainWorld("enka", {
-  getPlayer: async (uid) => {
+  getGenshinPlayer: async (uid) => {
     console.log('ipcRenderer')
-    const result = await ipcRenderer.invoke("enka:getPlayer", uid)
+    const result = await ipcRenderer.invoke("enka:getGenshinPlayer", uid)
     console.log(result)
     return result
   }
