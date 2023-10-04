@@ -25,7 +25,6 @@
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.4.2",
-    "@vitejs/plugin-vue": "^4.4.0",
     "autoprefixer": "^10.4.16",
     "electron": "^26.2.4",
     "electron-builder": "^24.6.4",
@@ -35,6 +34,7 @@
     "unplugin-auto-import": "^0.16.6",
     "unplugin-vue-components": "^0.25.2",
     "vite": "^4.4.9",
+    "@vitejs/plugin-vue": "^4.4.0",
     "vite-plugin-electron": "^0.14.1",
     "vite-plugin-electron-renderer": "^0.14.5",
     "vue": "^3.3.4",
