@@ -57,6 +57,12 @@ contextBridge.exposeInMainWorld("electron", {
     ipcRenderer.send("elec:openExtLink", url)
   }
 })
+contextBridge.exposeInMainWorld("github", {
+  getLatestRelease: async () => {
+    const result = await ipcRenderer.invoke("github:getLatestRelease")
+    return result
+  }
+})
 
 function domReady(
   condition: DocumentReadyState[] = ["complete", "interactive"]

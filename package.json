@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.4.2",
+    "@vitejs/plugin-vue": "^4.4.0",
     "autoprefixer": "^10.4.16",
     "electron": "^26.2.4",
     "electron-builder": "^24.6.4",
@@ -34,7 +35,6 @@
     "unplugin-auto-import": "^0.16.6",
     "unplugin-vue-components": "^0.25.2",
     "vite": "^4.4.9",
-    "@vitejs/plugin-vue": "^4.4.0",
     "vite-plugin-electron": "^0.14.1",
     "vite-plugin-electron-renderer": "^0.14.5",
     "vue": "^3.3.4",
@@ -43,10 +43,12 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",
+    "@octokit/core": "^5.0.1",
     "axios": "^1.5.1",
     "electron-store": "^8.1.0",
     "element-plus": "^2.3.14",
     "enkanetwork.js": "^2.5.0",
+    "marked": "^9.0.3",
     "path": "^0.12.7",
     "sass": "^1.68.0"
   }

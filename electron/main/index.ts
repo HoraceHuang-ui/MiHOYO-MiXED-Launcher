@@ -176,7 +176,20 @@ async function createWindow() {
   })
 
   ipcMain.on("elec:openExtLink", (_event, url) => {
-    shell.openExternal(url);
+    shell.openExternal(url)
+  })
+
+  const { Octokit } = require("@octokit/core")
+  const octokit = new Octokit({
+    // gh-upd-test 
+    auth: "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"
+  })
+  ipcMain.handle("github:getLatestRelease", async (_event) => {
+    const result = await octokit.request("GET /repos/horacehuang-ui/mihoyo-mixed-launcher/releases/latest", {
+      owner: "HoraceHuang-ui",
+      repo: "MiHOYO-MiXED-Launcher"
+    })
+    return result
   })
 
   // --------- Window configs ------------
