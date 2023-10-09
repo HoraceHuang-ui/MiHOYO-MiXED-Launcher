@@ -279,7 +279,6 @@ const requestInfo = () => {
                 .then(response => response.json())
                 .then(resp => {
                     resp = resp.filter(a => 'proudSkillGroupId' in a)
-                    resp.sort((a, b) => a.proudSkillGroupId < b.proudSkillGroupId ? -1 : 1)
                     window.store.set('genshinConstels', JSON.stringify(resp))
 
                     playerInfoLoading.value = true
@@ -449,19 +448,27 @@ const trimStats = (stats) => {
 }
 
 const findSkillIdByProud = (proudId) => {
-    var l = 0
-    console.log("constelsMap length: ")
-    var r = constelsMap.value.length
-    var m
+    // var l = 0
+    // console.log("constelsMap length: ")
+    // var r = constelsMap.value.length
+    // var m
 
-    while (l < r) {
-        m = parseInt((r - l) / 2 + l)
-        if (constelsMap.value[m].proudSkillGroupId == proudId) {
-            return constelsMap.value[m].id
-        } else if (constelsMap.value[m].proudSkillGroupId > proudId) {
-            r = m - 1
-        } else {
-            l = m
+    // while (l < r) {
+    //     m = parseInt((r - l) / 2 + l)
+    //     if (constelsMap.value[m].proudSkillGroupId == proudId) {
+    //         return constelsMap.value[m].id
+    //     } else if (constelsMap.value[m].proudSkillGroupId > proudId) {
+    //         r = m - 1
+    //     } else {
+    //         l = m
+    //     }
+    // }
+
+    // return -1
+
+    for (var i = 0; i < constelsMap.value.length; i++) {
+        if (constelsMap.value[i].proudSkillGroupId == proudId) {
+            return constelsMap.value[i].id
         }
     }
 
