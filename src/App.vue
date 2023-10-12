@@ -11,9 +11,6 @@ const updDialogContent = computed(() => {
 })
 
 onMounted(() => {
-  // TODO: add update feature via GitHub API
-  // test personal access token
-  // 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
   window.github.getLatestRelease()
     .then((resp) => {
       if (needsUpdate(resp.data.tag_name)) {
