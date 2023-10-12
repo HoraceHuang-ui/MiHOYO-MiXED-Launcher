@@ -136,9 +136,9 @@ function useLoading() {
   //   oDiv.className = "app-loading-wrap";
   //   oDiv.innerHTML = `<div class="${className}"><div></div></div>`;
 
-  const className = "loaders-css__klee-loading";
+  // const className = "loaders-css__klee-loading";
   const styleContent = `
-    .${className} {
+    .klee-loading {
       width: 120px;
       height: 120px;
     }
@@ -173,7 +173,7 @@ function useLoading() {
   oStyle.innerHTML = styleContent;
   oDiv.className = "app-loading-wrap";
   oDiv.innerHTML = `<div class="font-genshin inner-wrapper">
-    <img class=${className} src="../../src/assets/kleeLoading.gif" />
+    <img class="klee-loading" src="../../src/assets/kleeLoading.gif" />
     <div class="below-text">加载中…</div>
   </div>`
 

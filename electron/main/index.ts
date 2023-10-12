@@ -182,12 +182,15 @@ async function createWindow() {
   const { Octokit } = require("@octokit/core")
   const octokit = new Octokit({
     // gh-upd-test 
-    auth: "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"
+    auth: "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"
   })
   ipcMain.handle("github:getLatestRelease", async (_event) => {
     const result = await octokit.request("GET /repos/horacehuang-ui/mihoyo-mixed-launcher/releases/latest", {
       owner: "HoraceHuang-ui",
-      repo: "MiHOYO-MiXED-Launcher"
+      repo: "MiHOYO-MiXED-Launcher",
+      headers: {
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
     })
     return result
   })
