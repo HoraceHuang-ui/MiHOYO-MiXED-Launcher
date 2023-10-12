@@ -53,6 +53,8 @@
 
 # 屎山代码的后果
 - `electron-store` 存储条目备忘：
+  - `targetVersion` 算上忽略更新后的（伪）当前版本
+  - `mainBgPath` 主页背景图片的base64（若用户已设定）
   - `genshinPath` 原神官方启动器所在目录
   - `genshinUpd` 原神当前版本已更新
   - `genshinInfo` 原神账号信息
