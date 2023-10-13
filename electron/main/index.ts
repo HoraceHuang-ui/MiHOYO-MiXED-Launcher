@@ -181,8 +181,7 @@ async function createWindow() {
 
   const { Octokit } = require("@octokit/core")
   const octokit = new Octokit({
-    // gh-upd-test 
-    auth: "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"
+    auth: "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"
   })
   ipcMain.handle("github:getLatestRelease", async (_event) => {
     const result = await octokit.request("GET /repos/horacehuang-ui/mihoyo-mixed-launcher/releases/latest", {
