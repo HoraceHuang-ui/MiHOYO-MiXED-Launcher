@@ -13,6 +13,8 @@
 - [x] **星铁分析玩家游戏数据。** Analyze player info for Honkai Star Rail.
   - [x] 获取数据 / Retrieve data
   - [x] 呈现数据 / Display data
+# Notes
+- 本程序检测自身更新目前用的是`GitHub API`，但一旦把含token的代码同步到这里就会自动销毁，所以构建时请自行申请一个token，放在`electron/main/index.ts`的`Octokit.auth`中。
 # Credits
 - [electron-vite/electron-vite-vue](https://github.com/electron-vite/electron-vite-vue)
 - [Enka.Network](https://enka.network) | [API docs](https://github.com/EnkaNetwork/API-docs)
