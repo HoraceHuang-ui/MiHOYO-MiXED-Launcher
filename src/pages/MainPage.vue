@@ -68,7 +68,7 @@ const resetPic = () => {
         <img class="bg-pic object-cover" id="bgImage" :src="bgPath ? bgPath : '../../src/assets/gsbanner.png'" />
         <div class="sticky bottom-0" style="height: 60vh;"></div>
         <div class="bottom-area sticky">
-            <h1 class="font-sans font-bold text-5xl" style="margin-bottom: 10px;">MiHOYO MiXED Launcher</h1>
+            <h1 class="font-sans font-bold text-5xl" style="margin-bottom: 10px;">{{ $t('mainPageText') }}</h1>
             <button v-if="gsPath" @click="genshin"
                 class="p-3 mx-2 my-2 font-bold text-xl transition-all bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 cursor-default">原神启动</button>
             <button v-if="srPath" @click="starRail"
