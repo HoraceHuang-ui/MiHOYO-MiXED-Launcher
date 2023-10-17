@@ -1,6 +1,8 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { translate } from '../i18n/index'
+const gameName = translate('general_gs')
 
 const gsPath = ref('')
 const displayConfirm = ref(false)
@@ -68,33 +70,33 @@ onMounted(async () => {
         .then((resp) => {
             if (gsPath.value && !resp) {
                 if (timeDelta.value > 40) {
-                    ElMessageBox.confirm('距离原神下一个大版本更新还有 ' + (42 - timeDelta.value) + ' 天，点击“确定”以打开官方启动器进行预下载，且此版本不再接收此消息。',
-                        '更新提示',
+                    ElMessageBox.confirm(translate('general_gameUpdBoxText1', { game: gameName, beDays: translate('general_beDays', 42 - timeDelta.value) }),
+                        translate('general_gameUpdBoxTitle'),
                         {
-                            confirmButtonText: '确定',
-                            cancelButtonText: '取消',
+                            confirmButtonText: translate('general_confirm'),
+                            cancelButtonText: translate('general_cancel'),
                             type: 'info'
                         }).then(() => {
                             window.child.exec(gsPath.value.concat('\\launcher.exe'))
                             window.store.set('genshinUpd', true, false)
                         }).catch(() => { })
                 } else if (timeDelta.value > 0 && timeDelta.value < 3) {
-                    ElMessageBox.confirm('距离原神大版本更新已经过去' + timeDelta.value + ' 天，点击“确定”以打开官方启动器进行下载，且此版本不再接收此消息。',
-                        '更新提示',
+                    ElMessageBox.confirm(translate('general_gameUpdBoxText2', { game: gameName, days: translate('general_days', 42 - timeDelta.value) }),
+                        translate('general_gameUpdBoxTitle'),
                         {
-                            confirmButtonText: '确定',
-                            cancelButtonText: '取消',
+                            confirmButtonText: translate('general_confirm'),
+                            cancelButtonText: translate('general_cancel'),
                             type: 'info'
                         }).then(() => {
                             window.child.exec(gsPath.value.concat('\\launcher.exe'))
                             window.store.set('genshinUpd', true, false)
                         }).catch(() => { })
                 } else if (timeDelta.value == 0) {
-                    ElMessageBox.confirm('原神已在今天进行大版本更新，点击“确定”以打开官方启动器进行下载，且此版本不再接收此消息。',
-                        '更新提示',
+                    ElMessageBox.confirm(translate('general_gameUpdBoxText3', { game: gameName }),
+                        translate('general_gameUpdBoxTitle'),
                         {
-                            confirmButtonText: '确定',
-                            cancelButtonText: '取消',
+                            confirmButtonText: translate('general_confirm'),
+                            cancelButtonText: translate('general_cancel'),
                             type: 'info'
                         }).then(() => {
                             window.child.exec(gsPath.value.concat('\\launcher.exe'))
@@ -111,7 +113,7 @@ onMounted(async () => {
 
 const gsImport = async () => {
     window.dialog.show({
-        title: '选择原神根目录',
+        title: translate('general_gameImportTitle', { game: gameName }),
         properties: ['openDirectory']
     }).then((resp) => {
         if (resp.length > 0) {
@@ -178,7 +180,7 @@ const refresh = () => {
         class="absolute pointer-events-none z-0 align-middle justify-center text-center" style="top: 45%; left: 45%;">
         <img :src="'../../src/assets/kleeLoading.gif'" class=" align-middle self-center object-scale-down" loading="eager"
             height="120" width="120" />
-        <div class="mt-3 font-genshin text-xl">加载中…</div>
+        <div class="mt-3 font-genshin text-xl">{{ $t('general_loading') }}</div>
     </div>
     <LoadFailedBlock v-else-if="launcherInfoFailed" class="absolute z-10 -translate-x-1/2"
         style="margin-left: 50%; margin-top: 25vh;" :gameNo="0" :errMsg="errMsg">
@@ -188,7 +190,8 @@ const refresh = () => {
         <div class="bg-pic rounded-3xl w-full h-full" style="transition-duration: 500ms;"
             :class="hideElements ? 'scale-x-95 translate-y-3' : ''">
             <img class=" top-0 rounded-3xl transition-all" :class="hideElements ? 'blur-md scale-125 brightness-75' : ''"
-                style="transition-duration: 500ms;" :src="launcherInfoReady && launcherInfo.adv ? launcherInfo.adv.background : '../../src/assets/gsbanner.png'"
+                style="transition-duration: 500ms;"
+                :src="launcherInfoReady && launcherInfo.adv ? launcherInfo.adv.background : '../../src/assets/gsbanner.png'"
                 @touchmove.prevent @mousewheel.prevent />
         </div>
         <LauncherBanner class="absolute left-16 top-48 z-50 rounded-xl transition-all" v-if="launcherInfoReady"
@@ -205,19 +208,22 @@ const refresh = () => {
                     <div class="w-1"></div>
                     <div v-if="gsPath" class="transition-all" :class="hideElements ? ' -translate-x-96' : ''"
                         style=" transition-duration: 500ms;">
-                        <div class="mx-2 my-3 flex flex-row rounded-full bg-yellow-400 font-genshin w-48">
+                        <div class="mx-2 my-3 flex flex-row rounded-full bg-yellow-400 font-genshin">
                             <button @click="gsLaunch"
-                                class="pl-4 px-4 text-2xl font-bold rounded-full w-48 h-16 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">
-                                原神启动
+                                class="pl-4 px-4 text-2xl font-bold rounded-full h-16 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">
+                                {{ $t("general_launchGame") }}
                             </button>
                             <el-dropdown class="h-full px-1" trigger="click" @command="handleCommand">
                                 <button
                                     class="text-xl text-gray-900 font-bold px-2 h-16 rounded-full hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">…</button>
                                 <template #dropdown>
                                     <el-dropdown-menu>
-                                        <el-dropdown-item command="openLauncher">打开官方启动器</el-dropdown-item>
-                                        <el-dropdown-item command="clearPath" divided>清除游戏路径</el-dropdown-item>
-                                        <el-dropdown-item command="clearPlayerinfo">清除游戏数据</el-dropdown-item>
+                                        <el-dropdown-item command="openLauncher">{{ $t('general_openOfficialLauncher')
+                                        }}</el-dropdown-item>
+                                        <el-dropdown-item command="clearPath" divided>{{ $t('general_clearGamePath')
+                                        }}</el-dropdown-item>
+                                        <el-dropdown-item command="clearPlayerinfo">{{ $t('general_clearProfileInfo')
+                                        }}</el-dropdown-item>
                                     </el-dropdown-menu>
                                 </template>
                             </el-dropdown>
@@ -229,10 +235,11 @@ const refresh = () => {
                             <div class="flex flex-row">
                                 <button @click="gsImport"
                                     class=" mx-2 my-3 rounded-full h-16 text-2xl bg-yellow-400 font-genshin w-48 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all cursor-default"
-                                    :class="hideElements ? ' -translate-x-96' : ''"
-                                    style="transition-duration: 500ms;">原神导入</button>
+                                    :class="hideElements ? ' -translate-x-96' : ''" style="transition-duration: 500ms;">{{
+                                        $t('general_importGame') }}</button>
                                 <button v-if="displayConfirm" @click="confirmPath"
-                                    class="mx-2 my-3 px-3 rounded-full text-xl bg-white border-3 hover:bg-gray-200 active:bg-gray-500 active:scale-90 transition-all cursor-default">确认</button>
+                                    class="mx-2 my-3 px-3 rounded-full text-xl bg-white border-3 hover:bg-gray-200 active:bg-gray-500 active:scale-90 transition-all cursor-default">{{
+                                        $t('general_confirm') }}</button>
                             </div>
                         </div>
                         <div v-if="displayConfirm" class="font-genshin text-right mr-4">{{ path }}</div>

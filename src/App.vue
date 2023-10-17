@@ -1,7 +1,6 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue'
 import { marked } from 'marked'
-import { switchLang } from './i18n/index'
 
 var appVer = ''
 const updCheck = ref(false)
@@ -65,21 +64,23 @@ const onDialogClose = () => {
 </script>
 
 <template id="app">
-  <el-dialog v-if="updCheck" v-model="updDialogShow" title="检测到miXeD新版本！" width="40%" center
+  <el-dialog v-if="updCheck" v-model="updDialogShow" :title="$t('updDialog_title')" width="40%" center
     :before-close="onDialogClose">
     <div style="padding-left: 20px; padding-right: 20px;">
       <div v-html="updDialogContent"></div>
-      <div style="color: red; margin-top: 10px;">版本：v{{ appVer }} 👉 {{ updInfo.data.tag_name }}</div>
-      <div style="color: red;">大小：{{ (updInfo.data.assets[0].size / 1024 / 1024).toFixed(1) }}MB</div>
-      <div style="color: red;">点击确定以打开浏览器下载新版。</div>
+      <div style="color: red; margin-top: 10px;">{{ $t('updDialog_version') }}v{{ appVer }} 👉 {{ updInfo.data.tag_name }}
+      </div>
+      <div style="color: red;">{{ $t('updDialog_size') }}{{ (updInfo.data.assets[0].size / 1024 / 1024).toFixed(1) }}MB
+      </div>
+      <div style="color: red;">{{ $t('updDialog_footerText') }}</div>
     </div>
     <template #footer>
       <div class="flex-row footer-wrapper">
-        <el-checkbox v-model="skipCurrent">忽略当前版本</el-checkbox>
+        <el-checkbox v-model="skipCurrent">{{ $t("updDialog_skipCurrent") }}</el-checkbox>
         <div class="flex-row">
-          <el-button @click="onDialogClose">取消</el-button>
+          <el-button @click="onDialogClose">{{ $t('general_cancel') }}</el-button>
           <el-button type="primary" @click="extUpd" :disabled="skipCurrent">
-            确定
+            {{ $t('general_confirm') }}
           </el-button>
         </div>
       </div>

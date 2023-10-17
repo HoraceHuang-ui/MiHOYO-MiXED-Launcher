@@ -1,4 +1,37 @@
 {
-    "mainPageText": "米家聚合启动器",
-    "loadingText": "加载中..."
+    "general_loading": "加载中...",
+    "general_cancel": "取消",
+    "general_confirm": "确定",
+    "general_mainpage": "主页",
+    "general_gs": "原神",
+    "general_gsShort": "原神",
+    "general_sr": "崩坏：星穹铁道",
+    "general_srShort": "星铁",
+    "general_hi3": "崩坏3rd",
+    "general_hi3Short": "崩坏3",
+    "general_launch": "启动",
+    "general_launchGame": "启动游戏",
+    "general_importGame": "导入游戏",
+    "general_beDays": "0天 | {n}天 | {n}天",
+    "general_days": "0天 | {n}天 | {n}天",
+    "general_gameUpdBoxTitle": "更新提示",
+    "general_gameUpdBoxText1": "距离{game}下一个大版本更新还有{beDays}，点击“确定”以打开官方启动器进行预下载。",
+    "general_gameUpdBoxText2": "距离{game}大版本更新已过去{days}，点击“确定”以打开官方启动器进行下载。",
+    "general_gameUpdBoxText3": "{game}已在今天进行大版本更新，点击“确定”以打开官方启动器进行下载。",
+    "general_gameImportTitle": "选择{game}根目录",
+    "general_openOfficialLauncher": "打开官方启动器",
+    "general_clearGamePath": "清除游戏路径",
+    "general_clearProfileInfo": "清除账号数据",
+
+    "updDialog_title": "检测到miXeD新版本！",
+    "updDialog_version": "版本：",
+    "updDialog_size": "大小：",
+    "updDialog_footerText": "点击确定以打开浏览器下载新版。",
+    "updDialog_skipCurrent": "忽略当前版本",
+
+    "mainBgDialog_title": "选择背景图片路径",
+    "mainBgDialog_filter": "图片",
+    "mainpage_title": "米哈游聚合启动器",
+    "mainpage_buttonText": "{game}启动"
+
 }

@@ -20,11 +20,11 @@ const i18n = createI18n<[MessageSchema], lang>({
 
 export default i18n
 
-export const translate = (key: string) => {
+export const translate = (key: string, bindings: json) => {
     if (!key) {
         return '';
     }
-    return i18n.global.t(key)
+    return i18n.global.t(key, bindings)
 }
 
 export const switchLang = (language: lang) => {

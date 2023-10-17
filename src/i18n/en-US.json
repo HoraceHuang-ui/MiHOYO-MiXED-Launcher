@@ -1,4 +1,37 @@
 {
-    "mainPageText": "MiHOYO MiXED Launcher",
-    "loadingText": "Loading..."
+    "general_loading": "Loading...",
+    "general_cancel": "Cancel",
+    "general_confirm": "Confirm",
+    "general_mainpage": "Home",
+    "general_gs": "Genshin Impact",
+    "general_gsShort": "Genshin",
+    "general_sr": "Honkai: Star Rail",
+    "general_srShort": "HSR",
+    "general_hi3": "Honkai Impact 3rd",
+    "general_hi3Short": "HI3",
+    "general_launch": "Launch",
+    "general_launchGame": "Launch game",
+    "general_importGame": "Import game",
+    "general_beDays": "are 0 days | is {n} day | are {n} days",
+    "general_days": "0 days | {n} day | {n} days",
+    "general_gameUpdBoxTitle": "Game Update Available",
+    "general_gameUpdBoxText1": "There {beDays} left until the next major update of {game}. Hit Confirm to open official launcher and pre-download.",
+    "general_gameUpdBoxText2": "It's been {days} since the major update of {game}. Hit Confirm to open official launcher and download.",
+    "general_gameUpdBoxText3": "A major update of {game} has been released today. Hit Confirm to open official launcher and pre-download.",
+    "general_gameImportTitle": "Select Root Directory of {game}",
+    "general_openOfficialLauncher": "Open official launcher",
+    "general_clearGamePath": "Clear game path",
+    "general_clearProfileInfo": "Clear profile info",
+
+    "updDialog_title": "A miXeD Update Detected!",
+    "updDialog_version": "Version: ",
+    "updDialog_size": "Size: ",
+    "updDialog_footerText": "Hit Confirm to download via browser.",
+    "updDialog_skipCurrent": "Ignore current version",
+
+    "mainBgDialog_title": "Background Image",
+    "mainBgDialog_filter": "Image",
+    "mainpage_title": "miHoYo miXeD Launcher",
+    "mainpage_buttonText": "Launch {game}"
+
 }

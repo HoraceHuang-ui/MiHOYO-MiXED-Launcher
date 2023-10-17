@@ -1,11 +1,12 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { translate } from '../i18n/index'
 // const props = defineProps({
 //     selection: Number
 // })
 
-const pageNames = ['主页', '原神', '崩坏：星穹铁道', '崩坏3rd']
+const pageNames = [translate('general_mainpage'), translate('general_gs'), translate('general_sr'), translate('general_hi3')]
 const selection = ref(0)
 
 const router = useRouter()
@@ -42,7 +43,7 @@ const winMin = () => {
         </div> -->
         <div class="mt-3 ml-2 text-left flex flex-row" style="width: 35vw;">
             <img src="../../public/favicon.ico" class="h-6 mt-1" />
-            <div class="ml-2" style="margin-top: 2px;">miXeD Launcher · {{ pageNames[selection] }}</div>
+            <div class="ml-2" style="margin-top: 2px;">miXeD · {{ pageNames[selection] }}</div>
         </div>
         <div class="no-drag flex flex-row h-full items-center justify-items-center">
             <img src="../assets/homeicon.png"
