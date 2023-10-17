@@ -3,10 +3,11 @@ import zhCN from './zh-CN.json'
 import enUS from './en-US.json'
 
 type MessageSchema = typeof enUS
+type lang = 'en-US' | 'zh-CN'
 
-const i18n = createI18n<[MessageSchema], 'en-US' | 'zh-CN'>({
+const i18n = createI18n<[MessageSchema], lang>({
   // default locale
-  locale: 'zh-CN',
+  locale: localStorage.getItem('lang') || 'zh-CN',
   fallbackLocale: 'zh-CN',
   legacy: false,
   globalInjection: true,
@@ -24,4 +25,9 @@ export const translate = (key: string) => {
         return '';
     }
     return i18n.global.t(key)
+}
+
+export const switchLang = (language: lang) => {
+    localStorage.setItem('lang', language)
+    i18n.global.locale = language
 }

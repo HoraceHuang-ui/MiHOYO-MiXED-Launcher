@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue'
 import { marked } from 'marked'
+import { switchLang } from './i18n/index'
 
 var appVer = ''
 const updCheck = ref(false)

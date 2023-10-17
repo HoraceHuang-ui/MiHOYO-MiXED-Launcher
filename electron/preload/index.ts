@@ -174,7 +174,7 @@ function useLoading() {
   oDiv.className = "app-loading-wrap";
   oDiv.innerHTML = `<div class="font-genshin inner-wrapper">
     <img class="klee-loading" src="../../src/assets/kleeLoading.gif" />
-    <div class="below-text">加载中…</div>
+    <div class="below-text">Loading...</div>
   </div>`
 
   return {
