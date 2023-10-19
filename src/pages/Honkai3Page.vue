@@ -1,6 +1,8 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { translate } from '../i18n/index'
+const gameName = translate('general_hi3')
 
 const hiPath = ref('')
 const displayConfirm = ref(false)
@@ -21,39 +23,16 @@ const postTypeMap = new Map()
 
 onMounted(async () => {
     // 获取崩3启动器信息
-    window.axios.post('https://bh3-launcher-static.mihoyo.com/bh3_cn/mdk/launcher/api/content?key=SyvuPnqL&filter_adv=false&language=zh-cn&launcher_id=4')
+    window.axios.post(translate('hi3_launcherContentsUrl'))
         .then((value) => {
             launcherInfo.value = value.data
             launcherInfo.value.post.forEach(post => {
-                let tmp
-                switch (post.type) {
-                    case 'POST_TYPE_INFO':
-                        tmp = postTypeMap.get('资讯');
-                        if (tmp) {
-                            tmp.push(post);
-                            postTypeMap.set('资讯', tmp);
-                        } else {
-                            postTypeMap.set('资讯', [post]);
-                        }
-                        break
-                    case 'POST_TYPE_ANNOUNCE':
-                        tmp = postTypeMap.get('公告');
-                        if (tmp) {
-                            tmp.push(post);
-                            postTypeMap.set('公告', tmp);
-                        } else {
-                            postTypeMap.set('公告', [post]);
-                        }
-                        break
-                    case 'POST_TYPE_ACTIVITY':
-                        tmp = postTypeMap.get('活动');
-                        if (tmp) {
-                            tmp.push(post);
-                            postTypeMap.set('活动', tmp);
-                        } else {
-                            postTypeMap.set('活动', [post]);
-                        }
-                        break
+                let tmp = postTypeMap.get(post.type)
+                if (tmp) {
+                    tmp.push(post)
+                    postTypeMap.set(post.type, tmp)
+                } else {
+                    postTypeMap.set(post.type, [post])
                 }
             });
             launcherInfoReady.value = true
@@ -67,33 +46,33 @@ onMounted(async () => {
         .then((resp) => {
             if (hiPath.value && !resp) {
                 if (timeDelta.value > 40) {
-                    ElMessageBox.confirm('距离崩坏3下一个大版本更新还有 ' + (42 - timeDelta.value) + ' 天，点击“确定”以打开官方启动器进行预下载，且此版本不再接收此消息。',
-                        '更新提示',
+                    ElMessageBox.confirm(translate('general_gameUpdBoxText1', { game: gameName, beDays: translate('general_beDays', 42 - timeDelta.value) }),
+                        translate('general_gameUpdBoxTitle'),
                         {
-                            confirmButtonText: '确定',
-                            cancelButtonText: '取消',
+                            confirmButtonText: translate('general_confirm'),
+                            cancelButtonText: translate('general_cancel'),
                             type: 'info'
                         }).then(() => {
                             window.child.exec(hiPath.value.concat('\\launcher.exe'))
                             window.store.set('honkai3Upd', true, false)
                         }).catch(() => { })
                 } else if (timeDelta.value > 0 && timeDelta.value < 3) {
-                    ElMessageBox.confirm('距离崩坏3大版本更新已经过去' + timeDelta.value + ' 天，点击“确定”以打开官方启动器进行下载，且此版本不再接收此消息。',
-                        '更新提示',
+                    ElMessageBox.confirm(translate('general_gameUpdBoxText2', { game: gameName, days: translate('general_days', 42 - timeDelta.value) }),
+                        translate('general_gameUpdBoxTitle'),
                         {
-                            confirmButtonText: '确定',
-                            cancelButtonText: '取消',
+                            confirmButtonText: translate('general_confirm'),
+                            cancelButtonText: translate('general_cancel'),
                             type: 'info'
                         }).then(() => {
                             window.child.exec(hiPath.value.concat('\\launcher.exe'))
                             window.store.set('honkai3Upd', true, false)
                         }).catch(() => { })
                 } else if (timeDelta.value == 0) {
-                    ElMessageBox.confirm('崩坏3已在今天进行大版本更新，点击“确定”以打开官方启动器进行下载，且此版本不再接收此消息。',
-                        '更新提示',
+                    ElMessageBox.confirm(translate('general_gameUpdBoxText3', { game: gameName }),
+                        translate('general_gameUpdBoxTitle'),
                         {
-                            confirmButtonText: '确定',
-                            cancelButtonText: '取消',
+                            confirmButtonText: translate('general_confirm'),
+                            cancelButtonText: translate('general_cancel'),
                             type: 'info'
                         }).then(() => {
                             window.child.exec(hiPath.value.concat('\\launcher.exe'))
@@ -110,7 +89,7 @@ onMounted(async () => {
 
 const hiImport = async () => {
     window.dialog.show({
-        title: '选择崩坏3根目录',
+        title: translate('general_gameImportTitle', { game: gameName }),
         properties: ['openDirectory']
     }).then((resp) => {
         if (resp.length > 0) {
@@ -181,7 +160,7 @@ const refresh = () => {
         class="absolute pointer-events-none z-0 align-middle justify-center text-center" style="top: 45%; left: 45%;">
         <img :src="'../../src/assets/kleeLoading.gif'" class=" align-middle self-center object-scale-down" loading="eager"
             height="120" width="120" />
-        <div class="mt-3 text-xl">加载中…</div>
+        <div class="mt-3 text-xl">{{ $t('general_loading') }}</div>
     </div>
     <LoadFailedBlock v-else-if="launcherInfoFailed" class="absolute z-10 -translate-x-1/2"
         style="margin-left: 50%; margin-top: 25vh;" :gameNo="2" :errMsg="errMsg">
@@ -210,15 +189,19 @@ const refresh = () => {
                         style=" transition-duration: 500ms;">
                         <div class="mx-2 my-3 flex flex-row rounded-full bg-yellow-400 w-48">
                             <button @click="hiLaunch"
-                                class="pl-4 px-4 text-2xl rounded-full w-48 h-16 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all font-bold">崩坏3启动</button>
+                                class="pl-4 px-4 text-2xl rounded-full w-48 h-16 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all font-bold">{{
+                                    $t('general_launchGame') }}</button>
                             <el-dropdown class="h-full px-1" trigger="click" @command="handleCommand">
                                 <button
                                     class="text-xl text-gray-900 font-bold px-2 mt-1 h-14 rounded-full hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all font-sr">…</button>
                                 <template #dropdown>
                                     <el-dropdown-menu>
-                                        <el-dropdown-item command="openLauncher">打开官方启动器</el-dropdown-item>
-                                        <el-dropdown-item command="clearPath" divided>清除游戏路径</el-dropdown-item>
-                                        <el-dropdown-item command="clearPlayerinfo" disabled>清除游戏数据</el-dropdown-item>
+                                        <el-dropdown-item command="openLauncher">{{ $t('general_openOfficialLauncher')
+                                        }}</el-dropdown-item>
+                                        <el-dropdown-item command="clearPath" divided>{{ $t('general_clearGamePath')
+                                        }}</el-dropdown-item>
+                                        <el-dropdown-item command="clearPlayerinfo">{{ $t('general_clearProfileInfo')
+                                        }}</el-dropdown-item>
                                     </el-dropdown-menu>
                                 </template>
                             </el-dropdown>
@@ -230,10 +213,11 @@ const refresh = () => {
                             <div class="flex flex-row">
                                 <button @click="hiImport"
                                     class=" mx-2 my-3 rounded-full h-16 text-2xl bg-yellow-400 font-bold w-48 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all cursor-default"
-                                    :class="hideElements ? ' -translate-x-96' : ''"
-                                    style="transition-duration: 500ms;">崩坏3导入</button>
+                                    :class="hideElements ? ' -translate-x-96' : ''" style="transition-duration: 500ms;">{{
+                                        $t('general_importGame') }}</button>
                                 <button v-if="displayConfirm" @click="confirmPath"
-                                    class="mx-2 my-3 px-3 rounded-full text-xl bg-white border-3 hover:bg-gray-200 active:bg-gray-500 active:scale-90 transition-all">确认</button>
+                                    class="mx-2 my-3 px-3 rounded-full text-xl bg-white border-3 hover:bg-gray-200 active:bg-gray-500 active:scale-90 transition-all">{{
+                                        $t('general_confirm') }}</button>
                             </div>
                         </div>
                         <div v-if="displayConfirm" class="text-right mr-4">{{ path }}</div>

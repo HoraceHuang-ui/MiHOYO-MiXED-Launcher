@@ -10,7 +10,7 @@ const child = require('child_process')
 const { dialog } = require('electron');
 const { Wrapper } = require('enkanetwork.js')
 const { genshin } = new Wrapper({
-  language: 'zh-CN'
+  language: 'en'
 })
 
 // The built directory structure

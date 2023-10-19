@@ -13,10 +13,10 @@ const openLink = (url) => {
 
 <template>
     <el-tabs v-model="tabsModel">
-        <el-tab-pane label="资讯" name="aaa">
+        <el-tab-pane :label="$t('POST_TYPE_INFO')" name="aaa">
             <el-scrollbar class="w-full h-full" max-height="62px">
                 <div class="h-max pr-2 pb-2">
-                    <div v-for="post in postTypeMap.get('资讯')"
+                    <div v-for="post in postTypeMap.get('POST_TYPE_INFO')"
                         class="w-full justify-between flex flex-row p-1 pl-2 hover:bg-white rounded hover:shadow-md transition-all cursor-default"
                         style="height: 28px;" @click="openLink(post.url)">
                         <el-text class=" mr-1" truncated style="max-width: 320px;">{{ post.tittle
@@ -26,10 +26,10 @@ const openLink = (url) => {
                 </div>
             </el-scrollbar>
         </el-tab-pane>
-        <el-tab-pane label="活动" name="bbb">
+        <el-tab-pane :label="$t('POST_TYPE_ACTIVITY')" name="bbb">
             <el-scrollbar class="w-full h-full" max-height="62px">
                 <div class="h-max pr-2 pb-2">
-                    <div v-for="post in postTypeMap.get('活动')"
+                    <div v-for="post in postTypeMap.get('POST_TYPE_ACTIVITY')"
                         class="w-full justify-between flex flex-row p-1 pl-2 hover:bg-white rounded hover:shadow-md transition-all cursor-default"
                         style="height: 28px;" @click="openLink(post.url)">
                         <el-text class=" mr-1" truncated style="max-width: 320px;">{{ post.tittle
@@ -39,10 +39,10 @@ const openLink = (url) => {
                 </div>
             </el-scrollbar>
         </el-tab-pane>
-        <el-tab-pane label="公告" name="ccc">
+        <el-tab-pane :label="$t('POST_TYPE_ANNOUNCE')" name="ccc">
             <el-scrollbar class="w-full h-full" max-height="62px">
                 <div class="h-max pr-2 pb-2">
-                    <div v-for="post in postTypeMap.get('公告')"
+                    <div v-for="post in postTypeMap.get('POST_TYPE_ANNOUNCE')"
                         class="w-full justify-between flex flex-row p-1 pl-2 hover:bg-white rounded hover:shadow-md transition-all cursor-default"
                         style="height: 28px;" @click="openLink(post.url)">
                         <el-text class=" mr-1" truncated style="max-width: 320px;">{{ post.tittle

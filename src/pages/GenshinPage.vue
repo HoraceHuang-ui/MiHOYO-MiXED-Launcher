@@ -23,41 +23,18 @@ const postTypeMap = new Map()
 
 onMounted(async () => {
     // 获取原神启动器信息
-    window.axios.post('https://sdk-static.mihoyo.com/hk4e_cn/mdk/launcher/api/content?filter_adv=false&key=eYd89JmJ&language=zh-cn&launcher_id=18')
+    window.axios.post(translate('genshin_launcherContentsUrl'))
         .then((value) => {
             launcherInfo.value = value.data
             launcherInfo.value.post.forEach(post => {
-                let tmp
-                switch (post.type) {
-                    case 'POST_TYPE_INFO':
-                        tmp = postTypeMap.get('资讯');
-                        if (tmp) {
-                            tmp.push(post);
-                            postTypeMap.set('资讯', tmp);
-                        } else {
-                            postTypeMap.set('资讯', [post]);
-                        }
-                        break
-                    case 'POST_TYPE_ANNOUNCE':
-                        tmp = postTypeMap.get('公告');
-                        if (tmp) {
-                            tmp.push(post);
-                            postTypeMap.set('公告', tmp);
-                        } else {
-                            postTypeMap.set('公告', [post]);
-                        }
-                        break
-                    case 'POST_TYPE_ACTIVITY':
-                        tmp = postTypeMap.get('活动');
-                        if (tmp) {
-                            tmp.push(post);
-                            postTypeMap.set('活动', tmp);
-                        } else {
-                            postTypeMap.set('活动', [post]);
-                        }
-                        break
+                let tmp = postTypeMap.get(post.type)
+                if (tmp) {
+                    tmp.push(post)
+                    postTypeMap.set(post.type, tmp)
+                } else {
+                    postTypeMap.set(post.type, [post])
                 }
-            });
+            })
             console.log(postTypeMap)
             launcherInfoReady.value = true
             console.log(launcherInfo.value)

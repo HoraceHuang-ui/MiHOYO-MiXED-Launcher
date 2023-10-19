@@ -32,6 +32,7 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     StarRailInfoCard: typeof import('./src/components/StarRailInfoCard.vue')['default']
+    StatIcon: typeof import('./src/components/StatIcon.vue')['default']
     TopHeader: typeof import('./src/components/TopHeader.vue')['default']
   }
 }

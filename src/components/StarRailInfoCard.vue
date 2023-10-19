@@ -2,6 +2,7 @@
 import { onMounted, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { ArrowLeftBold, ArrowRightBold } from '@element-plus/icons-vue'
+import { translate } from '../i18n/index'
 import DialogListItem from './DialogListItem.vue'
 // import rankMap from '../textMaps/character_ranks.json' with { type: 'json' }
 
@@ -67,7 +68,7 @@ const relicSetIdNameMap = new Map([
 ])
 
 onMounted(() => {
-    fetch('https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/index_new/cn/character_ranks.json')
+    fetch(translate('sr_charRanksJsonUrl'))
         .then(response => response.json())
         .then(resp => {
             rankMap = resp
@@ -113,7 +114,7 @@ const mergeToPlayerinfo = (newArr) => {
 const router = useRouter()
 const requestInfo = () => {
     uid = uidInput.value
-    window.axios.get('https://api.mihomo.me/sr_info_parsed/' + uid + '?lang=cn')
+    window.axios.get(translate("sr_playerInfoUrl", { uid: uid }))
         .then((resp) => {
             if (playerInfoReady.value && playerInfo.value.player.uid == resp.player.uid) {
                 console.log('uid equal')
@@ -339,7 +340,7 @@ const trimAdditions = (additions) => {
                 <div class="h-full flex flex-row justify-end items-center">
                     <el-tag size="large" round class="mr-2">
                         <div class="flex flex-row">
-                            均衡
+                            {{ $t('sr_eqLv') }}
                             <span class="font-sr-sans" style="margin-left: 1ch; margin-top: 1px;">
                                 {{ playerInfo.player.world_level }}
                             </span>
@@ -347,7 +348,7 @@ const trimAdditions = (additions) => {
                     </el-tag>
                     <el-tag size="large" round class="mr-4">
                         <div class="flex flex-row">
-                            等级
+                            {{ $t('sr_playerLv') }}
                             <span class="font-sr-sans" style="margin-left: 1ch; margin-top: 1px;">
                                 {{ playerInfo.player.level }}
                             </span>
@@ -406,6 +407,18 @@ const trimAdditions = (additions) => {
                         <img class="gacha-mask inline-block object-cover bottom-0 left-0 absolute z-10" loading="lazy"
                             style="height: 100%;" :src="apiUrl + character.portrait" />
                     </div>
+                    <!-- 左上角等级 -->
+                    <div class="absolute top-2 left-2 z-50 rounded-full backdrop-blur-lg bg-opacity-25 bg-black h-14">
+                        <div class="ml-3" style="margin-top: 10px;">
+                            <img class="inline h-8 mb-2" :src="apiUrl + character.path.icon" />
+                            <span class=" text-gray-200 font-sr-sans text-2xl">
+                                Lv. {{ character.level }} /
+                            </span>
+                            <span class=" text-gray-400 text-xl mr-4 font-sr-sans">
+                                {{ ascLevelMap[character.promotion] }}
+                            </span>
+                        </div>
+                    </div>
                     <!-- 左下角星魂 -->
                     <div class="absolute bottom-2 left-2 z-20">
                         <div class="flex flex-col">
@@ -438,56 +451,47 @@ const trimAdditions = (additions) => {
                     </div>
                     <!-- 右侧详情 -->
                     <div class=" w-1/2 h-full absolute top-4 right-6 bottom-4 flex flex-col z-20">
-                        <!-- Lv. 80/80 命途 角色名字-->
+                        <!-- 角色名字 -->
                         <div class="w-full text-right">
-                            <span class=" text-gray-200 font-sr-sans text-2xl">
-                                Lv. {{ character.level }} /
-                            </span>
-                            <span class=" text-gray-400 text-xl mr-4 font-sr-sans">
-                                {{ ascLevelMap[character.promotion] }}
-                            </span>
-                            <img class="inline h-8 mb-2" :src="apiUrl + character.path.icon" />
-                            <span class=" text-gray-200 bottom-0 text-xl font-sr-sans mr-5 ml-2">{{ character.path.name
-                            }}</span>
                             <span class=" text-white font-sr text-5xl">{{ character.name }}</span>
                         </div>
                         <!-- 右侧第一块：属性 -->
                         <div
                             class="mt-2 text-gray-200 text-lg text-left w-full rounded-xl px-2 py-3 pl-4 bg-black bg-opacity-20 backdrop-blur-md grid grid-cols-3 grid-rows-2">
                             <div class="w-full justify-between">
-                                <span class="text-gray-300">生命值</span>
+                                <span class="text-gray-300">{{ $t('sr_statHP') }}</span>
                                 <span class="text-gray-200 text-right font-sr-sans ml-3">{{
                                     Math.floor(character.attributes[0].value) + Math.floor(findField(character.additions,
                                         "hp").value)
                                 }}</span>
                             </div>
                             <div>
-                                <span class="text-gray-300">攻击力</span>
+                                <span class="text-gray-300">{{ $t('sr_statATK') }}</span>
                                 <span class="text-gray-200 text-right font-sr-sans ml-3">{{
                                     Math.floor(character.attributes[1].value) + Math.floor(findField(character.additions,
                                         "atk").value) }}</span>
                             </div>
                             <div>
-                                <span class="text-gray-300">防御力</span>
+                                <span class="text-gray-300">{{ $t('sr_statDEF') }}</span>
                                 <span class="text-gray-200 text-right font-sr-sans ml-3">{{
                                     Math.floor(character.attributes[2].value) + Math.floor(findField(character.additions,
                                         "def").value) }}</span>
                             </div>
                             <div>
-                                <span class="text-gray-300">暴击率</span>
+                                <span class="text-gray-300">{{ $t('sr_statCR') }}</span>
                                 <span class="text-gray-200 text-right font-sr-sans ml-3">{{
                                     ((character.attributes[4].value + findField(character.additions,
                                         "crit_rate").value) * 100).toFixed(1) }}%</span>
                             </div>
                             <div>
-                                <span class="text-gray-300">暴击伤害</span>
+                                <span class="text-gray-300">{{ $t('sr_statCD') }}</span>
                                 <span class="text-gray-200 text-right font-sr-sans ml-3">{{
                                     ((character.attributes[5].value + findField(character.additions,
                                         "crit_dmg").value) * 100).toFixed(1) }}%</span>
                             </div>
                             <div class="mx-2 rounded-full text-sm bg-white bg-opacity-20 text-center hover:bg-opacity-30 active:scale-95 active:bg-opacity-40 cursor-default transition-all"
                                 @click="showCharDetails(index)">
-                                <div class=" font-sr-sans" style="margin-top: 6px;">查看更多</div>
+                                <div class=" font-sr-sans" style="margin-top: 6px;">{{ $t('sr_details') }}</div>
                             </div>
                         </div>
                         <!-- 右侧第二块：光锥 -->
