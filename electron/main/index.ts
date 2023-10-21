@@ -10,7 +10,7 @@ const child = require('child_process')
 const { dialog } = require('electron');
 const { Wrapper } = require('enkanetwork.js')
 const { genshin } = new Wrapper({
-  language: 'en'
+  language: 'zh-CN'
 })
 
 // The built directory structure
@@ -156,8 +156,9 @@ async function createWindow() {
     }
   });
 
-  ipcMain.handle("enka:getGenshinPlayer", async (_event, uid) => {
+  ipcMain.handle("enka:getGenshinPlayer", async (_event, uid, lang) => {
     console.log("genshin enka ipcMain" + uid)
+    genshin.language = lang
     const result = await genshin.getPlayer(uid)
     return result
   })

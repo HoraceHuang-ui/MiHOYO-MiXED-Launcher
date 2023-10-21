@@ -2,6 +2,7 @@
 import { onMounted, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { ArrowLeftBold, ArrowRightBold } from '@element-plus/icons-vue'
+import { translate } from '../i18n/index'
 import StatIcon from './StatIcon.vue'
 
 const playerInfo = ref({})
@@ -72,121 +73,6 @@ const elementAssets = {
 const ascLevelMap = [20, 40, 50, 60, 70, 80, 90]
 const charDialogShow = ref(false)
 const charDialogId = ref(0)
-const statNameMap = new Map([
-    ['critRate', '暴击率'],
-    ['critDamage', '暴击伤害'],
-    ['energyRecharge', '元素充能效率'],
-    ['healingBonus', '治疗加成'],
-    ['incomingHealingBonus', '受治疗加成'],
-    ['elementalMastery', '元素精通'],
-    ['physicalRes', '物理抗性'],
-    ['physicalDamageBonus', '物理伤害加成'],
-    ['pyroDamageBonus', '火元素伤害加成'],
-    ['electroDamageBonus', '雷元素伤害加成'],
-    ['hydroDamageBonus', '水元素伤害加成'],
-    ['dendroDamageBonus', '草元素伤害加成'],
-    ['anemoDamageBonus', '风元素伤害加成'],
-    ['geoDamageBonus', '岩元素伤害加成'],
-    ['cryoDamageBonus', '冰元素伤害加成'],
-    ['pyroRes', '火元素抗性'],
-    ['electroRes', '雷元素抗性'],
-    ['hydroRes', '水元素抗性'],
-    ['dendroRes', '草元素抗性'],
-    ['anemoRes', '风元素抗性'],
-    ['geoRes', '岩元素抗性'],
-    ['cryoRes', '冰元素抗性'],
-    ['cooldownReduction', '冷却时间减少'],
-    ['shieldStrength', '护盾强效'],
-])
-const propNameMap = new Map([
-    ["FIGHT_PROP_HP", "生命值"],
-    ["FIGHT_PROP_ATTACK", "攻击力"],
-    ["FIGHT_PROP_DEFENSE", "防御力"],
-    ["FIGHT_PROP_HP_PERCENT", "生命值"],
-    ["FIGHT_PROP_ATTACK_PERCENT", "攻击力"],
-    ["FIGHT_PROP_DEFENSE_PERCENT", "防御力"],
-    ["FIGHT_PROP_CRITICAL", "暴击率"],
-    ["FIGHT_PROP_CRITICAL_HURT", "暴击伤害"],
-    ["FIGHT_PROP_CHARGE_EFFICIENCY", "元素充能"],
-    ["FIGHT_PROP_HEAL_ADD", "治疗加成"],
-    ["FIGHT_PROP_ELEMENT_MASTERY", "元素精通"],
-    ["FIGHT_PROP_PHYSICAL_ADD_HURT", "物伤加成"],
-    ["FIGHT_PROP_FIRE_ADD_HURT", "火伤加成"],
-    ["FIGHT_PROP_ELEC_ADD_HURT", "雷伤加成"],
-    ["FIGHT_PROP_WATER_ADD_HURT", "水伤加成"],
-    ["FIGHT_PROP_WIND_ADD_HURT", "风伤加成"],
-    ["FIGHT_PROP_ICE_ADD_HURT", "冰伤加成"],
-    ["FIGHT_PROP_ROCK_ADD_HURT", "岩伤加成"],
-    ["FIGHT_PROP_GRASS_ADD_HURT", "草伤加成"],
-])
-const propShortNameMap = new Map([
-    ["FIGHT_PROP_HP", "生命"],
-    ["FIGHT_PROP_ATTACK", "攻击"],
-    ["FIGHT_PROP_DEFENSE", "防御"],
-    ["FIGHT_PROP_HP_PERCENT", "生命"],
-    ["FIGHT_PROP_ATTACK_PERCENT", "攻击"],
-    ["FIGHT_PROP_DEFENSE_PERCENT", "防御"],
-    ["FIGHT_PROP_CRITICAL", "暴率"],
-    ["FIGHT_PROP_CRITICAL_HURT", "暴伤"],
-    ["FIGHT_PROP_CHARGE_EFFICIENCY", "充能"],
-    ["FIGHT_PROP_ELEMENT_MASTERY", "精通"],
-])
-const artifactTypeNameMap = new Map([
-    ["EQUIP_BRACER", "生之花"],
-    ["EQUIP_NECKLACE", "死之羽"],
-    ["EQUIP_SHOES", "时之沙"],
-    ["EQUIP_RING", "空之杯"],
-    ["EQUIP_DRESS", "理之冠"],
-])
-const artifactShortNameMap = new Map([
-    ["游医", "游医"],
-    ["冒险家", "冒险家"],
-    ["幸运儿", "幸运儿"],
-    ["学士", "学士"],
-    ["战狂", "战狂"],
-    ["祭水之人", "祭水"],
-    ["武人", "武人"],
-    ["守护之心", "守护"],
-    ["祭雷之人", "祭雷"],
-    ["流放者", "流放者"],
-    ["行者之心", "行者"],
-    ["祭冰之人", "祭冰"],
-    ["奇迹", "奇迹"],
-    ["勇士之心", "勇士"],
-    ["教官", "教官"],
-    ["赌徒", "赌徒"],
-    ["祭火之人", "祭火"],
-    ["如雷的盛怒", "如雷"],
-    ["追忆之注连", "追忆"],
-    ["冰风迷途的勇士", "冰套"],
-    ["染血的骑士道", "骑士道"],
-    ["华馆梦醒形骸记", "华馆"],
-    ["昔日宗室之仪", "宗室"],
-    ["沉沦之心", "水套"],
-    ["沙上楼阁史话", "楼阁"],
-    ["悠古的磐岩", "磐岩"],
-    ["海染砗磲", "海染"],
-    ["翠绿之影", "风套"],
-    ["苍白之火", "苍白"],
-    ["乐园遗落之花", "乐园"],
-    ["流浪大地的乐团", "乐团"],
-    ["逆飞的流星", "流星"],
-    ["辰砂往生录", "辰砂"],
-    ["平息鸣雷的尊者", "平雷"],
-    ["渡过烈火的贤人", "渡火"],
-    ["千岩牢固", "千岩"],
-    ["水仙之梦", "水仙"],
-    ["被怜爱的少女", "少女"],
-    ["来歆余响", "余响"],
-    ["炽烈的炎之魔女", "魔女"],
-    ["绝缘之旗印", "绝缘"],
-    ["花海甘露之光", "甘露"],
-    ["角斗士的终幕礼", "角斗"],
-    ["深林的记忆", "草套"],
-    ["饰金之梦", "饰金"],
-    ["逐影猎人", "猎人"],
-    ["黄金剧团", "剧团"],
-])
 
 const mergeToPlayerinfo = (newArr) => {
     console.log("Updated characters length: ")
@@ -240,7 +126,7 @@ const requestInfo = () => {
     uid = uidInput.value
     playerInfoReady.value = false
     console.log(uidInput.value)
-    window.enka.getGenshinPlayer(uid)
+    window.enka.getGenshinPlayer(uid, translate('gs_enkaLangCode'))
         .then((resp) => {
             if (playerInfo.value.uid == resp.uid) {
                 mergeToPlayerinfo(resp.characters)
@@ -321,28 +207,8 @@ const getCharElementEnergy = (id) => {
     else if (charStats.dendroEnergyCost.value && charStats.dendroEnergyCost.value > 0) { return charStats.dendroEnergyCost.value }
 }
 
-const getPropName = (prop) => {
-    return propNameMap.get(prop)
-}
-
-const getPropShortName = (prop) => {
-    return propShortNameMap.get(prop)
-}
-
-const getArtifactTypeName = (prop) => {
-    return artifactTypeNameMap.get(prop)
-}
-
-const getArtifactShortName = (prop) => {
-    return artifactShortNameMap.get(prop)
-}
-
 const showPercentage = (prop) => {
     return (prop.endsWith("HURT") || prop.endsWith("CRITICAL") || prop.endsWith("PERCENT") || prop.endsWith("ADD") || prop.endsWith("EFFICIENCY")) ? '%' : ''
-}
-
-const getStatName = (stat) => {
-    return statNameMap.get(stat)
 }
 
 const calcCritScoreTotal = (index) => {
@@ -395,9 +261,11 @@ const getArtifactSetInfo = (index) => {
     if (tokens.length == 2) {
         return tokens[0] + tokens[1]
     } else if (tokens.length == 4) {
-        return getArtifactShortName(tokens[0]) + tokens[1] + " + " + getArtifactShortName(tokens[2]) + tokens[3]
+        // return `${tokens[0]}${tokens[1]}
+        // ${tokens[2]}${tokens[3]}`
+        return tokens[0] + tokens[1] + "\n" + tokens[2] + tokens[3]
     } else {
-        return "暂无圣遗物套装"
+        return translate('gs_noArtifactSets')
     }
 }
 const charsPageNext = () => {
@@ -480,9 +348,10 @@ const findSkillIdByProud = (proudId) => {
 <template>
     <div class="bg-white" style="border-radius: 4.5vh;" :style="playerInfoReady ? 'height: 86.5vh;' : ''">
         <el-dialog v-if="playerInfoReady && playerInfo.characters && playerInfo.characters.length > 0"
-            v-model="charDialogShow" :title="playerInfo.characters[charDialogId].name + ' 角色详情'" width="30%">
+            v-model="charDialogShow" :title="playerInfo.characters[charDialogId].name + ' ' + $t('gs_charDetails')"
+            width="30%">
             <div class="flex flex-col content-center justify-center w-full px-5">
-                <DialogListItem class="font-genshin" name="生命值">
+                <DialogListItem class="font-genshin" :name="$t('gs_FIGHT_PROP_HP')">
                     <div class="font-genshin">
                         <span>{{ parseInt(playerInfo.characters[charDialogId].stats.baseHp.value) }}</span>
                         <span
@@ -491,7 +360,7 @@ const findSkillIdByProud = (proudId) => {
                                 - parseInt(playerInfo.characters[charDialogId].stats.baseHp.value) }}</span>
                     </div>
                 </DialogListItem>
-                <DialogListItem class="font-genshin" name="攻击力">
+                <DialogListItem class="font-genshin" :name="$t('gs_FIGHT_PROP_ATTACK')">
                     <div class="font-genshin">
                         <span>{{ parseInt(playerInfo.characters[charDialogId].stats.baseAtk.value) }}</span>
                         <span
@@ -500,7 +369,7 @@ const findSkillIdByProud = (proudId) => {
                                 parseInt(playerInfo.characters[charDialogId].stats.baseAtk.value) }}</span>
                     </div>
                 </DialogListItem>
-                <DialogListItem class="font-genshin" name="防御力">
+                <DialogListItem class="font-genshin" :name="$t('gs_FIGHT_PROP_DEFENSE')">
                     <div class="font-genshin">
                         <span>{{ parseInt(playerInfo.characters[charDialogId].stats.baseDef.value) }}</span>
                         <span
@@ -509,10 +378,10 @@ const findSkillIdByProud = (proudId) => {
                                 parseInt(playerInfo.characters[charDialogId].stats.baseDef.value) }}</span>
                     </div>
                 </DialogListItem>
-                <DialogListItem class="font-genshin" name="元素精通"
+                <DialogListItem class="font-genshin" :name="$t('gs_FIGHT_PROP_ELEMENT_MASTERY')"
                     :val="playerInfo.characters[charDialogId].stats.elementalMastery.value ? parseInt(playerInfo.characters[charDialogId].stats.elementalMastery.value) : '0'" />
                 <DialogListItem v-for="(stat, key) in trimStats(playerInfo.characters[charDialogId].stats)"
-                    class="font-genshin" :name="getStatName(key)" :val="(stat.value * 100).toFixed(2).toString() + '%'" />
+                    class="font-genshin" :name="$t(`gs_${key}`)" :val="(stat.value * 100).toFixed(2).toString() + '%'" />
             </div>
         </el-dialog>
         <!-- HEADER -->
@@ -521,7 +390,7 @@ const findSkillIdByProud = (proudId) => {
             <img v-if="playerInfoReady" class="absolute top-0 right-0 bottom-0 z-0" style="height: 9vh;"
                 :src="'https://enka.network/ui/' + playerInfo.player.namecard.assets.picPath[0] + '.png'" />
             <div v-if="playerInfoLoading" class="absolute top-0 right-0 bottom-0 z-0"
-                style="margin-left: 1vw; right: 2vw; top: 3vh;">正在加载数据，请稍候……</div>
+                style="margin-left: 1vw; right: 2vw; top: 3vh;">{{ $t('gs_loadingPlayerInfo') }}</div>
             <!-- 左上角头像、昵称 -->
             <!-- playerInfo.player.profilePicture.assets.icon -->
             <div v-if="playerInfoReady" class="flex flex-row content-start items-center" style="width: 35vw;">
@@ -667,10 +536,11 @@ const findSkillIdByProud = (proudId) => {
                             </div>
                         </div>
                         <!-- 右侧详情 -->
-                        <div class=" w-5/12 h-full absolute top-8 right-6 bottom-4 flex flex-col z-20">
+                        <div class=" w-5/12 h-full absolute top-7 right-6 bottom-4 flex flex-col z-20">
                             <!-- 角色名字-->
                             <div class="w-full text-right">
-                                <span class=" text-white font-genshin text-4xl font-bold">{{ character.name }}</span>
+                                <span class=" text-white font-genshin font-bold"
+                                    style="font-size: 2.15rem; line-height: 2.5rem;;">{{ character.name }}</span>
                             </div>
                             <!-- 详情第一块：属性 -->
                             <div
@@ -746,8 +616,8 @@ const findSkillIdByProud = (proudId) => {
                                     :src="'https://enka.network/ui/' + character.equipment.weapon.assets.awakenIcon + '.png'" />
                                 <div class="w-full h-full relative">
                                     <div class="flex flex-row justify-between ml-2 mt-4">
-                                        <el-text truncated class="text-gray-200 font-genshin text-xl mt-1"
-                                            style="max-width: 300px;">
+                                        <el-text truncated class="text-gray-200 font-genshin mt-1"
+                                            style="max-width: 300px; font-size: 1.4rem; line-height: 2rem;">
                                             {{ character.equipment.weapon.name }}</el-text>
                                         <div
                                             class="absolute right-1 bottom-1 text-gray-100 rounded-full bg-opacity-20 bg-white px-2">
@@ -799,7 +669,7 @@ const findSkillIdByProud = (proudId) => {
                                         <!-- 主词条、等级 -->
                                         <div class="text-left mt-7 w-full flex flex-row">
                                             <StatIcon game="gs" :stat="artifact.mainstat.stat" fill="#eee"
-                                                class="w-6 h-6 mr-1" style="margin-top: 6px;" />
+                                                class="w-6 h-6 mr-1" style="margin-top: 3px;" />
                                             <!-- <span class="text-gray-200 text-xl">{{ $t(`gs_${artifact.mainstat.stat}`)
                                             }}</span> -->
                                             <span class="text-gray-200 text-3xl ml-2 font-genshin">{{
@@ -820,7 +690,7 @@ const findSkillIdByProud = (proudId) => {
                                                 <!-- <span class="text-gray-300 text-lg">{{ getPropShortName(substat.stat)
                                                 }}</span> -->
                                                 <StatIcon game="gs" :stat="substat.stat" fill="#d1d5db" class="w-4 h-4 mr-1"
-                                                    style="margin-top: 1px;" />
+                                                    style="margin-top: 2px;" />
                                                 <span class="text-gray-300 font-genshin text-xl ml-2">{{ substat.statValue
                                                 }}{{ showPercentage(substat.stat) }}</span>
                                             </div>
@@ -835,21 +705,22 @@ const findSkillIdByProud = (proudId) => {
                                 {{ $t('gs_noArtifacts') }}</div>
                             <div v-if="character.equipment.artifacts && character.equipment.artifacts.length > 0"
                                 class="flex flex-row justify-between">
-                                <div class="text-gray-200 ml-1 mt-1 font-genshin">
+                                <div class="text-gray-200 ml-1 text-left text-sm">
                                     {{ $t('gs_critScore') }}
-                                    <span class="text-gray-100">{{ calcCritScoreTotal(index).toFixed(1)
+                                    <span class="text-gray-100 font-genshin">{{ calcCritScoreTotal(index).toFixed(1)
                                     }}</span>
                                 </div>
-                                <div class="text-gray-100 mt-1 mr-1 font-genshin">
-                                    {{ getArtifactSetInfo(index) }}
+                                <div class="text-gray-200 mt-1 mr-1 text-right text-sm">
+                                    <pre class="font-genshin text-sm"
+                                        style="line-height: 1rem;">{{ getArtifactSetInfo(index) }}</pre>
                                 </div>
                             </div>
-                            <div v-else class="flex flex-row justify-between">
-                                <div class="text-gray-200 ml-1 mt-1 font-genshin">
+                            <div v-else class="flex flex-row justify-between text-sm">
+                                <div class="text-gray-200 ml-1 mt-1">
                                     {{ $t('gs_critScore') }}
-                                    <span class="text-gray-100">0</span>
+                                    <span class="text-gray-100 font-genshin">0</span>
                                 </div>
-                                <div class="text-gray-100 mt-1 mr-1 font-genshin">
+                                <div class="text-gray-200 mt-1 mr-1 font-genshin">
                                     {{ $t('gs_noArtifactSets') }}
                                 </div>
                             </div>
@@ -858,8 +729,8 @@ const findSkillIdByProud = (proudId) => {
                 </div>
             </div>
         </div>
-        <div v-else-if="!playerInfoReady" class="mt-4 mb-4">此处将显示角色的详细信息</div>
-        <div v-else class="mt-4 mb-4">当前暂无详细信息，请在游戏内打开“展示详细信息”后再试</div>
+        <div v-else-if="!playerInfoReady" class="mt-4 mb-4">{{ $t('gs_emptyPlayerTip') }}</div>
+        <div v-else class="mt-4 mb-4">{{ $t('gs_showcaseTip') }}</div>
     </div>
 </template>
 
