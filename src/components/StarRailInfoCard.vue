@@ -271,6 +271,9 @@ const trimAdditions = (additions) => {
             :title="playerInfo.characters[charDialogId].name + ' ' + $t('sr_charDetails')" width="30%">
             <div class="flex flex-col content-center justify-center w-full px-5">
                 <DialogListItem class="font-sr-sans" :name="$t('sr_hp')">
+                    <template #icon>
+                        <StatIcon game="sr" stat="hp" fill="#666" class="w-4 h-4 mr-1" style="margin-top: 2px;" />
+                    </template>
                     <div class="font-sr-sans">
                         <span>{{ playerInfo.characters[charDialogId].attributes[0].display }}</span>
                         <span v-if="findField(playerInfo.characters[charDialogId].additions, 'hp').display !== ''"
@@ -279,6 +282,9 @@ const trimAdditions = (additions) => {
                     </div>
                 </DialogListItem>
                 <DialogListItem class="font-sr-sans" :name="$t('sr_atk')">
+                    <template #icon>
+                        <StatIcon game="sr" stat="atk" fill="#666" class="w-4 h-4 mr-1" style="margin-top: 2px;" />
+                    </template>
                     <div class="font-sr-sans">
                         <span>{{ playerInfo.characters[charDialogId].attributes[1].display }}</span>
                         <span v-if="findField(playerInfo.characters[charDialogId].additions, 'atk').display !== ''"
@@ -287,6 +293,9 @@ const trimAdditions = (additions) => {
                     </div>
                 </DialogListItem>
                 <DialogListItem class="font-sr-sans" :name="$t('sr_def')">
+                    <template #icon>
+                        <StatIcon game="sr" stat="def" fill="#666" class="w-4 h-4 mr-1" style="margin-top: 2px;" />
+                    </template>
                     <div class="font-sr-sans">
                         <span>{{ playerInfo.characters[charDialogId].attributes[2].display }}</span>
                         <span v-if="findField(playerInfo.characters[charDialogId].additions, 'def').display !== ''"
@@ -295,6 +304,9 @@ const trimAdditions = (additions) => {
                     </div>
                 </DialogListItem>
                 <DialogListItem class="font-sr-sans" :name="$t('sr_spd')">
+                    <template #icon>
+                        <StatIcon game="sr" stat="spd" fill="#666" class="w-4 h-4 mr-1" style="margin-top: 2px;" />
+                    </template>
                     <div class="font-sr-sans">
                         <span>{{ playerInfo.characters[charDialogId].attributes[3].display }}</span>
                         <span v-if="findField(playerInfo.characters[charDialogId].additions, 'spd').display !== ''"
@@ -304,12 +316,23 @@ const trimAdditions = (additions) => {
                 </DialogListItem>
                 <DialogListItem class="font-sr-sans" :name="$t('sr_crit_rate')"
                     :val="((playerInfo.characters[charDialogId].attributes[4].value + findField(playerInfo.characters[charDialogId].additions, 'crit_rate').value) * 100).toFixed(1) + '%'">
+                    <template #icon>
+                        <StatIcon game="sr" stat="crit_rate" fill="#666" class="w-4 h-4 mr-1" style="margin-top: 2px;" />
+                    </template>
                 </DialogListItem>
                 <DialogListItem class="font-sr-sans" :name="$t('sr_crit_dmg')"
                     :val="((playerInfo.characters[charDialogId].attributes[5].value + findField(playerInfo.characters[charDialogId].additions, 'crit_dmg').value) * 100).toFixed(1) + '%'">
+                    <template #icon>
+                        <StatIcon game="sr" stat="crit_dmg" fill="#666" class="w-4 h-4 mr-1" style="margin-top: 2px;" />
+                    </template>
                 </DialogListItem>
                 <DialogListItem v-for="attr in trimAdditions(playerInfo.characters[charDialogId].additions)"
-                    class="font-sr-sans" :name="attr.name" :val="attr.display" />
+                    class="font-sr-sans" :name="attr.name" :val="attr.display">
+                    <template #icon>
+                        <StatIcon game="sr" :stat="attr.field" fill="#666" class="w-4 h-4 mr-1" style="margin-top: 2px;" />
+
+                    </template>
+                </DialogListItem>
             </div>
         </el-dialog>
         <!-- HEADER -->

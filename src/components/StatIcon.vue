@@ -19,6 +19,7 @@ import gs_pyroIcon from '../assets/statIcons/gs/pyroIcon.vue'
 import gs_geoIcon from '../assets/statIcons/gs/geoIcon.vue'
 import gs_physicalIcon from '../assets/statIcons/gs/physicalIcon.vue'
 import gs_healingIcon from '../assets/statIcons/gs/healingIcon.vue'
+import gs_shieldIcon from '../assets/statIcons/gs/shieldIcon.vue'
 
 import sr_hpIcon from '../assets/statIcons/sr/hpIcon.vue'
 import sr_breakEffIcon from '../assets/statIcons/sr/breakEffIcon.vue'
@@ -54,10 +55,12 @@ const props = defineProps({
             <gs_hpPercentIcon v-if="props.stat === 'FIGHT_PROP_HP_PERCENT'" :fill="props.fill" />
             <gs_atkPercentIcon v-if="props.stat === 'FIGHT_PROP_ATTACK_PERCENT'" :fill="props.fill" />
             <gs_defPercentIcon v-if="props.stat === 'FIGHT_PROP_DEFENSE_PERCENT'" :fill="props.fill" />
-            <gs_rechargeIcon v-if="props.stat === 'FIGHT_PROP_CHARGE_EFFICIENCY'" :fill="props.fill" />
+            <gs_rechargeIcon v-if="props.stat === 'energyRecharge' || props.stat === 'FIGHT_PROP_CHARGE_EFFICIENCY'"
+                :fill="props.fill" />
             <gs_masteryIcon v-if="props.stat === 'FIGHT_PROP_ELEMENT_MASTERY'" :fill="props.fill" />
-            <gs_crtrtIcon v-if="props.stat === 'FIGHT_PROP_CRITICAL'" :fill="props.fill" />
-            <gs_crtdmgIcon v-if="props.stat === 'FIGHT_PROP_CRITICAL_HURT'" :fill="props.fill" />
+            <gs_crtrtIcon v-if="props.stat === 'critRate' || props.stat === 'FIGHT_PROP_CRITICAL'" :fill="props.fill" />
+            <gs_crtdmgIcon v-if="props.stat === 'critDamage' || props.stat === 'FIGHT_PROP_CRITICAL_HURT'"
+                :fill="props.fill" />
             <gs_energyIcon v-if="props.stat === 'CUSTOM_ENERGY_REQUIRED'" :fill="props.fill" />
             <gs_anemoIcon v-if="props.stat === 'anemoDamageBonus' || props.stat === 'FIGHT_PROP_WIND_ADD_HURT'"
                 :fill="props.fill" />
@@ -77,6 +80,7 @@ const props = defineProps({
                 :fill="props.fill" />
             <gs_healingIcon v-if="props.stat === 'healingBonus' || props.stat === 'FIGHT_PROP_HEAL_ADD'"
                 :fill="props.fill" />
+            <gs_shieldIcon v-if="props.stat === 'shieldStrength'" :fill="props.fill" />
         </div>
         <div v-if="props.game == 'sr'">
             <sr_hpIcon v-if="props.stat === 'hp'" :fill="props.fill" />

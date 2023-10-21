@@ -1,13 +1,18 @@
-<script setup>
+<script setup lang="ts">
 const props = defineProps({
-    name: String,
-    val: String
+    name: typeof 'aaa',
+    val: typeof 'aaa'
 })
 </script>
 
 <template>
     <div class="flex flex-row justify-between my-1">
-        <div class="font-normal font-sans">{{ props.name }}</div>
+        <div class="flex flex-row">
+            <div class="w-4 mr-1">
+                <slot name="icon"></slot>
+            </div>
+            <div class="font-normal font-sans">{{ props.name }}</div>
+        </div>
         <div>{{ props.val }}</div>
         <slot></slot>
     </div>

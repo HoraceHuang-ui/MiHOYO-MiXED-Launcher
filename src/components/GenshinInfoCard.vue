@@ -352,6 +352,9 @@ const findSkillIdByProud = (proudId) => {
             width="30%">
             <div class="flex flex-col content-center justify-center w-full px-5">
                 <DialogListItem class="font-genshin" :name="$t('gs_FIGHT_PROP_HP')">
+                    <template #icon>
+                        <StatIcon game="gs" stat="FIGHT_PROP_HP" fill="#666" class="w-4 h-4" style="margin-top: 2px;" />
+                    </template>
                     <div class="font-genshin">
                         <span>{{ parseInt(playerInfo.characters[charDialogId].stats.baseHp.value) }}</span>
                         <span
@@ -361,6 +364,9 @@ const findSkillIdByProud = (proudId) => {
                     </div>
                 </DialogListItem>
                 <DialogListItem class="font-genshin" :name="$t('gs_FIGHT_PROP_ATTACK')">
+                    <template #icon>
+                        <StatIcon game="gs" stat="FIGHT_PROP_ATTACK" fill="#666" class="w-4 h-4" style="margin-top: 2px;" />
+                    </template>
                     <div class="font-genshin">
                         <span>{{ parseInt(playerInfo.characters[charDialogId].stats.baseAtk.value) }}</span>
                         <span
@@ -370,6 +376,10 @@ const findSkillIdByProud = (proudId) => {
                     </div>
                 </DialogListItem>
                 <DialogListItem class="font-genshin" :name="$t('gs_FIGHT_PROP_DEFENSE')">
+                    <template #icon>
+                        <StatIcon game="gs" stat="FIGHT_PROP_DEFENSE" fill="#666" class="w-4 h-4"
+                            style="margin-top: 2px;" />
+                    </template>
                     <div class="font-genshin">
                         <span>{{ parseInt(playerInfo.characters[charDialogId].stats.baseDef.value) }}</span>
                         <span
@@ -379,9 +389,18 @@ const findSkillIdByProud = (proudId) => {
                     </div>
                 </DialogListItem>
                 <DialogListItem class="font-genshin" :name="$t('gs_FIGHT_PROP_ELEMENT_MASTERY')"
-                    :val="playerInfo.characters[charDialogId].stats.elementalMastery.value ? parseInt(playerInfo.characters[charDialogId].stats.elementalMastery.value) : '0'" />
+                    :val="playerInfo.characters[charDialogId].stats.elementalMastery.value ? parseInt(playerInfo.characters[charDialogId].stats.elementalMastery.value) : '0'">
+                    <template #icon>
+                        <StatIcon game="gs" stat="FIGHT_PROP_ELEMENT_MASTERY" fill="#666" class="w-4 h-4"
+                            style="margin-top: 2px;" />
+                    </template>
+                </DialogListItem>
                 <DialogListItem v-for="(stat, key) in trimStats(playerInfo.characters[charDialogId].stats)"
-                    class="font-genshin" :name="$t(`gs_${key}`)" :val="(stat.value * 100).toFixed(2).toString() + '%'" />
+                    class="font-genshin" :name="$t(`gs_${key}`)" :val="(stat.value * 100).toFixed(1).toString() + '%'">
+                    <template #icon>
+                        <StatIcon game="gs" :stat="key" fill="#666" class="w-4 h-4" style="margin-top: 2px;" />
+                    </template>
+                </DialogListItem>
             </div>
         </el-dialog>
         <!-- HEADER -->
