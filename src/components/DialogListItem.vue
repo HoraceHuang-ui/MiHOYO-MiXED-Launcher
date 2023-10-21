@@ -1,7 +1,7 @@
-<script setup lang="ts">
+<script setup>
 const props = defineProps({
-    name: typeof 'aaa',
-    val: typeof 'aaa'
+    name: string,
+    val: string
 })
 </script>
 
