@@ -226,14 +226,14 @@ const parseRankDesc = (str) => {
 }
 
 const getOuterSets = (sets) => {
-    if (sets.length == 0) { return '暂无套装' }
+    if (sets.length == 0) { return translate('sr_noRelicSets') }
     else if (sets.length == 1) {
-        return sets[0].id[0] == '3' ? '暂无套装' : (sets[0].name + ' 2')
+        return sets[0].id[0] == '3' ? translate('sr_noRelicSets') : (sets[0].name + ' 2')
     } else {
         if (sets[1].id[0] == '3') {
             return sets[0].name + ' 2'
         } else if (sets[1].num == 2) {
-            return relicSetIdNameMap.get(sets[0].id) + ' 2 + ' + relicSetIdNameMap.get(sets[1].id) + ' 2'
+            return sets[0].name + ' 2\n' + sets[1].name + ' 2'
         } else {
             return sets[0].name + ' 4'
         }
@@ -243,7 +243,7 @@ const getInnerSet = (sets) => {
     if (sets.length > 0 && sets[sets.length - 1].id[0] == '3') {
         return sets[sets.length - 1].name
     } else {
-        return '暂无套装'
+        return translate('sr_noRelicSets')
     }
 }
 
@@ -268,9 +268,9 @@ const trimAdditions = (additions) => {
 <template>
     <div class="bg-white" style="border-radius: 4.5vh;" :style="playerInfoReady ? 'height: 97vh;' : ''">
         <el-dialog v-if="playerInfoReady" v-model="charDialogShow"
-            :title="playerInfo.characters[charDialogId].name + ' 角色详情'" width="30%">
+            :title="playerInfo.characters[charDialogId].name + ' ' + $t('sr_charDetails')" width="30%">
             <div class="flex flex-col content-center justify-center w-full px-5">
-                <DialogListItem class="font-sr-sans" name="生命值">
+                <DialogListItem class="font-sr-sans" :name="$t('sr_hp')">
                     <div class="font-sr-sans">
                         <span>{{ playerInfo.characters[charDialogId].attributes[0].display }}</span>
                         <span v-if="findField(playerInfo.characters[charDialogId].additions, 'hp').display !== ''"
@@ -278,7 +278,7 @@ const trimAdditions = (additions) => {
                                 "hp").display }}</span>
                     </div>
                 </DialogListItem>
-                <DialogListItem class="font-sr-sans" name="攻击力">
+                <DialogListItem class="font-sr-sans" :name="$t('sr_atk')">
                     <div class="font-sr-sans">
                         <span>{{ playerInfo.characters[charDialogId].attributes[1].display }}</span>
                         <span v-if="findField(playerInfo.characters[charDialogId].additions, 'atk').display !== ''"
@@ -286,7 +286,7 @@ const trimAdditions = (additions) => {
                                 "atk").display }}</span>
                     </div>
                 </DialogListItem>
-                <DialogListItem class="font-sr-sans" name="防御力">
+                <DialogListItem class="font-sr-sans" :name="$t('sr_def')">
                     <div class="font-sr-sans">
                         <span>{{ playerInfo.characters[charDialogId].attributes[2].display }}</span>
                         <span v-if="findField(playerInfo.characters[charDialogId].additions, 'def').display !== ''"
@@ -294,7 +294,7 @@ const trimAdditions = (additions) => {
                                 "def").display }}</span>
                     </div>
                 </DialogListItem>
-                <DialogListItem class="font-sr-sans" name="速度">
+                <DialogListItem class="font-sr-sans" :name="$t('sr_spd')">
                     <div class="font-sr-sans">
                         <span>{{ playerInfo.characters[charDialogId].attributes[3].display }}</span>
                         <span v-if="findField(playerInfo.characters[charDialogId].additions, 'spd').display !== ''"
@@ -302,10 +302,10 @@ const trimAdditions = (additions) => {
                                 "spd").display }}</span>
                     </div>
                 </DialogListItem>
-                <DialogListItem class="font-sr-sans" name="暴击率"
+                <DialogListItem class="font-sr-sans" :name="$t('sr_crit_rate')"
                     :val="((playerInfo.characters[charDialogId].attributes[4].value + findField(playerInfo.characters[charDialogId].additions, 'crit_rate').value) * 100).toFixed(1) + '%'">
                 </DialogListItem>
-                <DialogListItem class="font-sr-sans" name="暴击伤害"
+                <DialogListItem class="font-sr-sans" :name="$t('sr_crit_dmg')"
                     :val="((playerInfo.characters[charDialogId].attributes[5].value + findField(playerInfo.characters[charDialogId].additions, 'crit_dmg').value) * 100).toFixed(1) + '%'">
                 </DialogListItem>
                 <DialogListItem v-for="attr in trimAdditions(playerInfo.characters[charDialogId].additions)"
@@ -318,21 +318,12 @@ const trimAdditions = (additions) => {
             <div v-if="playerInfoLoading" class="absolute top-0 right-0 bottom-0 z-0"
                 style="margin-left: 1vw; right: 2vw; top: 3vh;">{{ $t('sr_loadingPlayerInfo') }}</div>
             <!-- 左上角头像、昵称 -->
-            <!-- playerInfo.player.profilePicture.assets.icon -->
             <div v-if="playerInfoReady" class="flex flex-row content-start items-center" style="width: 35vw;">
                 <img class="rounded-full h-12 border-2 bg-slate-200" style="margin-left: 1vw;"
                     :src="apiUrl + playerInfo.player.avatar.icon" />
                 <div class="font-sr" style="margin-left: 1vw; font-size: larger;">{{ playerInfo.player.nickname }}</div>
             </div>
             <div v-else style="width: 35vw" />
-            <!-- <div class="flex flex-row self-center">
-                <el-input size="large" v-model="uidInput" placeholder="在此输入uid" @keyup.enter.native="requestInfo"
-                    style="width: 15vw;" clearable>
-                    <template #append>
-                        <el-button @click="requestInfo" size="large">查询</el-button>
-                    </template>
-                </el-input>
-            </div> -->
             <div class="flex flex-row mt-3">
                 <CustomUIDInput v-model="uidInput" @submit="requestInfo" />
             </div>
@@ -429,8 +420,8 @@ const trimAdditions = (additions) => {
                                         <div class=" max-w-lg" v-if="ranksReady">
                                             <div class="font-sr text-xl">
                                                 {{ rankMap[character.id + "0" + idx.toString()].name }}
-                                                <span v-if="idx > character.rank"
-                                                    class="ml-1 text-base text-gray-200">（未解锁）</span>
+                                                <span v-if="idx > character.rank" class="ml-1 text-base text-gray-200">{{
+                                                    $t('sr_lockedRank') }}</span>
                                             </div>
                                             <div class="font-sr-sans text-sm mt-1 whitespace-pre-wrap">{{
                                                 parseRankDesc(rankMap[character.id + "0" + idx.toString()].desc)
@@ -550,7 +541,7 @@ const trimAdditions = (additions) => {
                         <div v-else
                             class="mt-2 w-full rounded-xl align-middle text-center bg-black bg-opacity-20 backdrop-blur-md"
                             style="height: 90px;">
-                            暂未装配光锥
+                            {{ $t('sr_noLightcone') }}
                         </div>
                         <!-- 右侧第三块：行迹 -->
                         <div
@@ -646,22 +637,24 @@ const trimAdditions = (additions) => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div v-else class="mt-2 text-left text-gray-300 text-lg">暂无副词条</div>
+                                    <div v-else class="mt-2 text-left text-gray-300 text-lg">{{ $t('sr_noSubstats') }}</div>
                                 </div>
                             </el-carousel-item>
                         </el-carousel>
                         <div v-else
                             class="mt-2 w-full h-40 rounded-xl pt-16 text-gray-200 text-center align-middle bg-black bg-opacity-20 backdrop-blur-md">
-                            暂未装配遗器</div>
+                            {{ $t('sr_noRelics') }}</div>
                         <div v-if="character.relics && character.relics.length > 0" class="flex flex-row justify-between">
                             <div class=" text-gray-900 ml-1 mt-1 flex flex-row">
                                 <div class="rounded-full bg-gray-200 font-serif font-bold middle h-6 w-6">{{
                                     $t('sr_outerSets')
                                 }}</div>
-                                <span class="text-gray-100 font-sr ml-2">{{ getOuterSets(character.relic_sets) }}</span>
+                                <pre class="text-gray-100 text-left font-sr ml-2 text-sm"
+                                    style="margin-top: 2px;">{{ getOuterSets(character.relic_sets) }}</pre>
                             </div>
-                            <div class="text-gray-900 mt-1 mr-1 font-sr flex flex-row">
-                                <span class="text-gray-100 mr-2">{{ getInnerSet(character.relic_sets) }}</span>
+                            <div class="text-gray-900 mt-1 mr-1 flex flex-row">
+                                <pre class="text-gray-100 mr-2 text-right font-sr text-sm"
+                                    style="margin-top: 2px;">{{ getInnerSet(character.relic_sets) }}</pre>
                                 <div class="rounded-full bg-gray-200 font-serif font-bold middle h-6 w-6">{{
                                     $t('sr_innerSets')
                                 }}</div>
@@ -671,10 +664,12 @@ const trimAdditions = (additions) => {
                             <div class=" text-gray-900 ml-1 mt-1 flex flex-row">
                                 <div class="rounded-full bg-gray-200 font-serif font-bold middle h-6 w-6">{{
                                     $t('sr_outerSets') }}</div>
-                                <span class="text-gray-100 font-sr ml-2">暂无套装</span>
+                                <div class="text-gray-100 font-sr ml-2 text-sm" style="margin-top: 2px;">{{
+                                    $t('sr_noRelicSets') }}</div>
                             </div>
                             <div class="text-gray-900 mt-1 mr-1 font-sr flex flex-row">
-                                <span class="text-gray-100 mr-2">暂无套装</span>
+                                <div class="text-gray-100 mr-2 text-sm" style="margin-top: 2px;">{{ $t('sr_noRelicSets') }}
+                                </div>
                                 <div class="rounded-full bg-gray-200 font-serif font-bold middle h-6 w-6">{{
                                     $t('sr_innerSets') }}</div>
                             </div>
