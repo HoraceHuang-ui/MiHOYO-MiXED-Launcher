@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { ArrowLeftBold, ArrowRightBold } from '@element-plus/icons-vue'
 import { translate } from '../i18n/index'
 import DialogListItem from './DialogListItem.vue'
+import StatIcon from './StatIcon.vue'
 // import rankMap from '../textMaps/character_ranks.json' with { type: 'json' }
 
 const apiUrl = 'https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/'
@@ -315,7 +316,7 @@ const trimAdditions = (additions) => {
         <div class="flex flex-row w-full p-0 relative justify-between z-50" style="height: 9vh;">
             <!-- 右上角名片 -->
             <div v-if="playerInfoLoading" class="absolute top-0 right-0 bottom-0 z-0"
-                style="margin-left: 1vw; right: 2vw; top: 3vh;">正在加载数据，请稍候……</div>
+                style="margin-left: 1vw; right: 2vw; top: 3vh;">{{ $t('sr_loadingPlayerInfo') }}</div>
             <!-- 左上角头像、昵称 -->
             <!-- playerInfo.player.profilePicture.assets.icon -->
             <div v-if="playerInfoReady" class="flex flex-row content-start items-center" style="width: 35vw;">
@@ -407,14 +408,14 @@ const trimAdditions = (additions) => {
                         <img class="gacha-mask inline-block object-cover bottom-0 left-0 absolute z-10" loading="lazy"
                             style="height: 100%;" :src="apiUrl + character.portrait" />
                     </div>
-                    <!-- 左上角等级 -->
-                    <div class="absolute top-2 left-2 z-50 rounded-full backdrop-blur-lg bg-opacity-25 bg-black h-14">
+                    <!-- 左上角命途、等级 -->
+                    <div class="absolute top-2 left-2 z-50 rounded-full backdrop-blur-lg bg-opacity-25 bg-black h-12">
                         <div class="ml-3" style="margin-top: 10px;">
-                            <img class="inline h-8 mb-2" :src="apiUrl + character.path.icon" />
-                            <span class=" text-gray-200 font-sr-sans text-2xl">
+                            <img class="inline h-6 mb-2" :src="apiUrl + character.path.icon" />
+                            <span class=" text-gray-200 font-sr-sans text-xl">
                                 Lv. {{ character.level }} /
                             </span>
-                            <span class=" text-gray-400 text-xl mr-4 font-sr-sans">
+                            <span class=" text-gray-400 text-lg mr-4 font-sr-sans">
                                 {{ ascLevelMap[character.promotion] }}
                             </span>
                         </div>
@@ -450,41 +451,48 @@ const trimAdditions = (additions) => {
                         </div>
                     </div>
                     <!-- 右侧详情 -->
-                    <div class=" w-1/2 h-full absolute top-4 right-6 bottom-4 flex flex-col z-20">
+                    <div class=" w-1/2 h-full absolute top-6 right-6 bottom-4 flex flex-col z-20">
                         <!-- 角色名字 -->
                         <div class="w-full text-right">
-                            <span class=" text-white font-sr text-5xl">{{ character.name }}</span>
+                            <span class=" text-white" style="font-size: 2.15rem; line-height: 2.5rem;"
+                                :class="$t('sr_displayCompactFont') === 'true' ? 'font-sr-sans' : 'font-sr'">{{
+                                    character.name }}</span>
                         </div>
                         <!-- 右侧第一块：属性 -->
                         <div
-                            class="mt-2 text-gray-200 text-lg text-left w-full rounded-xl px-2 py-3 pl-4 bg-black bg-opacity-20 backdrop-blur-md grid grid-cols-3 grid-rows-2">
-                            <div class="w-full justify-between">
-                                <span class="text-gray-300">{{ $t('sr_statHP') }}</span>
+                            class="mt-2 text-gray-200 text-xl text-left w-full rounded-xl px-2 py-3 pl-4 bg-black bg-opacity-20 backdrop-blur-md grid grid-cols-3 grid-rows-2">
+                            <div class="w-full flex flex-row">
+                                <StatIcon game="sr" :stat="character.attributes[0].field" fill="#d1d5db" class="h-5 w-5"
+                                    style="margin-top: 1px;" />
                                 <span class="text-gray-200 text-right font-sr-sans ml-3">{{
                                     Math.floor(character.attributes[0].value) + Math.floor(findField(character.additions,
                                         "hp").value)
                                 }}</span>
                             </div>
-                            <div>
-                                <span class="text-gray-300">{{ $t('sr_statATK') }}</span>
+                            <div class="w-full flex flex-row">
+                                <StatIcon game="sr" :stat="character.attributes[1].field" fill="#d1d5db" class="h-5 w-5"
+                                    style="margin-top: 1px;" />
                                 <span class="text-gray-200 text-right font-sr-sans ml-3">{{
                                     Math.floor(character.attributes[1].value) + Math.floor(findField(character.additions,
                                         "atk").value) }}</span>
                             </div>
-                            <div>
-                                <span class="text-gray-300">{{ $t('sr_statDEF') }}</span>
+                            <div class="w-full flex flex-row">
+                                <StatIcon game="sr" :stat="character.attributes[2].field" fill="#d1d5db" class="h-5 w-5"
+                                    style="margin-top: 1px;" />
                                 <span class="text-gray-200 text-right font-sr-sans ml-3">{{
                                     Math.floor(character.attributes[2].value) + Math.floor(findField(character.additions,
                                         "def").value) }}</span>
                             </div>
-                            <div>
-                                <span class="text-gray-300">{{ $t('sr_statCR') }}</span>
+                            <div class="w-full flex flex-row">
+                                <StatIcon game="sr" :stat="character.attributes[4].field" fill="#d1d5db" class="h-5 w-5"
+                                    style="margin-top: 1px;" />
                                 <span class="text-gray-200 text-right font-sr-sans ml-3">{{
                                     ((character.attributes[4].value + findField(character.additions,
                                         "crit_rate").value) * 100).toFixed(1) }}%</span>
                             </div>
-                            <div>
-                                <span class="text-gray-300">{{ $t('sr_statCD') }}</span>
+                            <div class="w-full flex flex-row">
+                                <StatIcon game="sr" :stat="character.attributes[5].field" fill="#d1d5db" class="h-5 w-5"
+                                    style="margin-top: 1px;" />
                                 <span class="text-gray-200 text-right font-sr-sans ml-3">{{
                                     ((character.attributes[5].value + findField(character.additions,
                                         "crit_dmg").value) * 100).toFixed(1) }}%</span>
@@ -500,34 +508,39 @@ const trimAdditions = (additions) => {
                             style="height: 90px;">
                             <img class="object-cover w-44 h-full" :src="apiUrl + character.light_cone.preview" />
                             <div class="w-full h-full relative">
-                                <div class="flex flex-row justify-between ml-2 mt-3">
-                                    <div>
-                                        <span class="text-gray-200 font-sr text-2xl">
-                                            {{ character.light_cone.name }}</span>
-                                        <span class="text-gray-200 font-sr text-xl"> Lv. {{
+                                <div class="flex flex-row justify-between ml-2 mt-5">
+                                    <el-text truncated class="text-gray-200 text-2xl text-left" style="width: 340px;"
+                                        :class="$t('sr_displayCompactFont') === 'true' ? 'font-sr-sans' : 'font-sr'">
+                                        {{ character.light_cone.name }}</el-text>
+                                    <div class="text-gray-300 mr-2 text-sm absolute right-0 top-0">
+                                        {{ $t('sr_superimposition') }}
+                                        <span class="text-gray-100 font-sr-sans text-base">{{
+                                            character.light_cone.rank }}</span>
+                                    </div>
+                                    <div
+                                        class="absolute right-1 bottom-1 px-2 rounded-full font-sr-sans bg-opacity-20 bg-white">
+                                        <span class="text-gray-200 text-xl">{{
                                             character.light_cone.level }} /</span>
-                                        <span class="text-gray-300 ml-1 font-serif">{{
+                                        <span class="text-gray-400 ml-1">{{
                                             ascLevelMap[character.light_cone.promotion] }}</span>
                                     </div>
-                                    <div class="text-gray-200 mr-2 text-sm absolute right-0 top-0">叠影
-                                        <span class="text-gray-200 font-sr-sans text-base">{{
-                                            character.light_cone.rank }}</span>
-                                        阶
-                                    </div>
                                 </div>
-                                <div class="text-gray-300 ml-2 text-left grid grid-cols-3 mt-1">
-                                    <div>
-                                        生命值
+                                <div class="text-gray-300 ml-2 text-left grid grid-cols-4 mt-1">
+                                    <div class="flex flex-row">
+                                        <StatIcon game="sr" :stat="character.light_cone.attributes[0].field" fill="#d1d5db"
+                                            class="h-5 w-5 mr-2" style="margin-top: 3px;" />
                                         <span class="text-gray-200 font-sr-sans text-lg">{{
                                             character.light_cone.attributes[0].display }}</span>
                                     </div>
-                                    <div>
-                                        攻击力
+                                    <div class="flex flex-row">
+                                        <StatIcon game="sr" :stat="character.light_cone.attributes[1].field" fill="#d1d5db"
+                                            class="h-5 w-5 mr-2" style="margin-top: 3px;" />
                                         <span class="text-gray-200 font-sr-sans text-lg">{{
                                             character.light_cone.attributes[1].display }}</span>
                                     </div>
-                                    <div>
-                                        防御力
+                                    <div class="flex flex-row">
+                                        <StatIcon game="sr" :stat="character.light_cone.attributes[2].field" fill="#d1d5db"
+                                            class="h-5 w-5 mr-2" style="margin-top: 3px;" />
                                         <span class="text-gray-200 font-sr-sans text-lg">{{
                                             character.light_cone.attributes[2].display }}</span>
                                     </div>
@@ -590,29 +603,47 @@ const trimAdditions = (additions) => {
                                 <img style="height: 100%; margin-left: -20px;" class="artifact-mask w-36 object-cover"
                                     :src="apiUrl + relic.icon" />
                                 <div class=" w-full h-full relative">
-                                    <div class="text-gray-400 font-sr absolute right-0 top-1">
+                                    <div class="text-gray-400 absolute right-0 top-1 flex flex-row">
                                         {{ relic.name }}
-                                    </div>
-                                    <!-- 主词条、等级 -->
-                                    <div class="text-left mt-7 w-full flex flex-row">
-                                        <span class="text-gray-200 text-xl">{{ relic.main_affix.name }}</span>
-                                        <span class="text-gray-200 text-3xl ml-2 font-sr-sans">{{ relic.main_affix.display
-                                        }}</span>
                                         <div :class="{ 'border-orange-400 bg-orange-900 text-orange-300': relic.rarity == 5 },
                                             { 'border-purple-400 bg-purple-900 text-purple-300': relic.rarity == 4 },
                                             { 'border-blue-400 bg-blue-900 text-blue-300': relic.rarity == 3 },
                                             { 'border-green-400 bg-green-900 text-green-300': relic.rarity == 2 }"
-                                            class="h-full justify-end mt-1 ml-2 font-sr-sans rounded-full border px-2">
+                                            class="h-full justify-end ml-2 font-sr-sans rounded-full border px-2">
                                             +{{ relic.level }}
+                                        </div>
+                                    </div>
+                                    <!-- 主词条、等级 -->
+                                    <div class="text-left mt-7 w-full flex flex-row">
+                                        <div class="mt-1 flex flex-row">
+                                            <StatIcon game="sr" :stat="relic.main_affix.field" fill="#d1d5db"
+                                                class="h-5 w-5 mr-2" style="margin-top: 6px;" />
+                                            <el-text class="text-gray-200 text-lg" truncated style="max-width: 220px;">{{
+                                                relic.main_affix.name }}</el-text>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-200 text-3xl ml-2 font-sr-sans">{{
+                                                relic.main_affix.display
+                                            }}</span>
                                         </div>
                                     </div>
                                     <!-- 副词条 -->
                                     <div v-if="relic.sub_affix && relic.sub_affix.length > 0"
-                                        class="grid grid-cols-2 mt-2 grid-rows-2 gap-1 w-full text-left">
-                                        <div v-for="substat in relic.sub_affix">
-                                            <span class="text-gray-300 text-lg">{{ substat.name }}</span>
-                                            <span class="text-gray-200 font-sr-sans text-xl ml-2">{{ substat.display
-                                            }}</span>
+                                        class="grid grid-cols-2 mt-2 pr-2 grid-rows-2 gap-1 w-full text-left">
+                                        <div v-for="substat in relic.sub_affix" class="flex flex-row justify-between">
+                                            <div class="flex flex-row">
+                                                <StatIcon game="sr" :stat="substat.field" fill="#ccc" class="h-5 w-5 mr-2"
+                                                    style="margin-top: 4px;" />
+                                                <span class="text-gray-200 font-sr-sans text-xl ml-2">{{ substat.display
+                                                }}</span>
+                                            </div>
+                                            <div class="flex flex-row mr-5">
+                                                <div v-for="i in substat.count - 1" class="ml-1 mt-0 text-center text-sm">
+                                                    <img src="../assets/statIcons/statEnhance.png"
+                                                        class="h-4 invert opacity-70 mt-1"
+                                                        :style="`transform: translate(calc(${substat.count - i - 1}*5px));`" />
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div v-else class="mt-2 text-left text-gray-300 text-lg">暂无副词条</div>
@@ -623,23 +654,29 @@ const trimAdditions = (additions) => {
                             class="mt-2 w-full h-40 rounded-xl pt-16 text-gray-200 text-center align-middle bg-black bg-opacity-20 backdrop-blur-md">
                             暂未装配遗器</div>
                         <div v-if="character.relics && character.relics.length > 0" class="flex flex-row justify-between">
-                            <div class=" text-gray-900 ml-1 mt-1">
-                                <div class="inline rounded-full bg-gray-200 p-1 px-2 font-sr-sans middle">外</div>
+                            <div class=" text-gray-900 ml-1 mt-1 flex flex-row">
+                                <div class="rounded-full bg-gray-200 font-serif font-bold middle h-6 w-6">{{
+                                    $t('sr_outerSets')
+                                }}</div>
                                 <span class="text-gray-100 font-sr ml-2">{{ getOuterSets(character.relic_sets) }}</span>
                             </div>
-                            <div class="text-gray-900 mt-1 mr-1 font-sr">
+                            <div class="text-gray-900 mt-1 mr-1 font-sr flex flex-row">
                                 <span class="text-gray-100 mr-2">{{ getInnerSet(character.relic_sets) }}</span>
-                                <div class="inline rounded-full bg-gray-200 p-1 px-2 font-sr-sans middle">内</div>
+                                <div class="rounded-full bg-gray-200 font-serif font-bold middle h-6 w-6">{{
+                                    $t('sr_innerSets')
+                                }}</div>
                             </div>
                         </div>
                         <div v-else class="flex flex-row justify-between">
-                            <div class=" text-gray-900 ml-1 mt-1">
-                                <div class="inline rounded-full bg-gray-200 p-1 px-2 font-sr-sans middle">外</div>
+                            <div class=" text-gray-900 ml-1 mt-1 flex flex-row">
+                                <div class="rounded-full bg-gray-200 font-serif font-bold middle h-6 w-6">{{
+                                    $t('sr_outerSets') }}</div>
                                 <span class="text-gray-100 font-sr ml-2">暂无套装</span>
                             </div>
-                            <div class="text-gray-900 mt-1 mr-1 font-sr">
+                            <div class="text-gray-900 mt-1 mr-1 font-sr flex flex-row">
                                 <span class="text-gray-100 mr-2">暂无套装</span>
-                                <div class="inline rounded-full bg-gray-200 p-1 px-2 font-sr-sans middle">内</div>
+                                <div class="rounded-full bg-gray-200 font-serif font-bold middle h-6 w-6">{{
+                                    $t('sr_innerSets') }}</div>
                             </div>
                         </div>
                     </div>

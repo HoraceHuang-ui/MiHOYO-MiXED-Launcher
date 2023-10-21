@@ -541,7 +541,7 @@ const findSkillIdByProud = (proudId) => {
                             <!-- 角色名字-->
                             <div class="w-full text-right">
                                 <span class=" text-white font-genshin font-bold"
-                                    style="font-size: 2.15rem; line-height: 2.5rem;;">{{ character.name }}</span>
+                                    style="font-size: 2.15rem; line-height: 2.5rem;">{{ character.name }}</span>
                             </div>
                             <!-- 详情第一块：属性 -->
                             <div

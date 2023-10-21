@@ -102,14 +102,19 @@
     "sr_launcherContentsUrl": "https://api-launcher-static.mihoyo.com/hkrpg_cn/mdk/launcher/api/content?filter_adv=false&key=6KcVuOkbcqjJomjZ&language=zh-cn&launcher_id=33",
     "sr_playerInfoUrl": "https://api.mihomo.me/sr_info_parsed/{uid}?lang=cn",
     "sr_charRanksJsonUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/index_new/cn/character_ranks.json",
+    "sr_displayCompactFont": "false",
     "sr_playerLv": "等级",
     "sr_eqLv": "均衡",
+    "sr_loadingPlayerInfo": "正在加载数据，请稍候……",
     "sr_statHP": "生命值",
     "sr_statATK": "攻击力",
     "sr_statDEF": "防御力",
     "sr_statCR": "暴击率",
     "sr_statCD": "暴击伤害",
     "sr_details": "查看更多",
+    "sr_superimposition": "叠影",
+    "sr_outerSets": "外",
+    "sr_innerSets": "内",
 
     "hi3_launcherContentsUrl": "https://bh3-launcher-static.mihoyo.com/bh3_cn/mdk/launcher/api/content?key=SyvuPnqL&filter_adv=false&language=zh-cn&launcher_id=4"
 }
