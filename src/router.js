@@ -3,6 +3,7 @@ import MainPage from "./pages/MainPage.vue";
 import StarRailPage from "./pages/StarRailPage.vue";
 import GenshinPage from "./pages/GenshinPage.vue";
 import Honkai3Page from "./pages/Honkai3Page.vue";
+import SettingsPage from "./pages/SettingsPage.vue";
 import tmpPage from "./pages/tmpPage.vue";
 
 const router = VueRouter.createRouter({
@@ -27,6 +28,11 @@ const router = VueRouter.createRouter({
       name: "hipage",
       path: "/hipage",
       component: Honkai3Page,
+    },
+    {
+      name: "settingsPage",
+      path: "/settingsPage",
+      component: SettingsPage,
     },
     {
       name: "tempPage",

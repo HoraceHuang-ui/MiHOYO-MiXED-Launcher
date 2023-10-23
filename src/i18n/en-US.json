@@ -9,6 +9,7 @@
     "general_srShort": "HSR",
     "general_hi3": "Honkai Impact 3rd",
     "general_hi3Short": "HI3",
+    "general_settings": "Settings",
     "general_launch": "Launch",
     "general_launchGame": "Launch",
     "general_importGame": "Import",
@@ -122,5 +123,16 @@
     "sr_noSubstats": "No Substats",
     "sr_noRelics": "No Relics",
 
-    "hi3_launcherContentsUrl": "https://sdk-os-static.mihoyo.com/bh3_global/mdk/launcher/api/content?filter_adv=false&key=tEGNtVhN&language=en-us&launcher_id=9"
+    "hi3_launcherContentsUrl": "https://sdk-os-static.mihoyo.com/bh3_global/mdk/launcher/api/content?filter_adv=false&key=tEGNtVhN&language=en-us&launcher_id=9",
+
+    "settings_general": "General",
+    "settings_selectLang": "Language",
+    "settings_langChangeText": "You are about to switch to English (en-US), the app will reload and ALL saved local game profile info will be erased. Continue?",
+    "settings_langChangeTitle": "Switch Language",
+    "settings_clearAllData": "Clear All Data",
+    "settings_clearAllDataText": "This option will clear ALL data including game paths, app background image and profile info. Continue?",
+    "settings_about": "About",
+    "settings_checkUpdates": "Check Updates",
+    "settings_latestVersion": "Already Latest",
+    "settings_checkUpdFailed": "Check update failed"
 }

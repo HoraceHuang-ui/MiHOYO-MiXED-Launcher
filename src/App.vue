@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue'
 import { marked } from 'marked'
-import { switchLang } from './i18n/index'
+import { useRouter } from 'vue-router'
 
 var appVer = ''
 const updCheck = ref(false)
@@ -12,6 +12,7 @@ const updDialogContent = computed(() => {
 })
 const skipCurrent = ref(false)
 
+const router = useRouter()
 onMounted(() => {
   // window.store.delete("targetVersion")
   window.github.getLatestRelease()
@@ -36,7 +37,7 @@ onMounted(() => {
     .then(response => response.json())
     .then((resp) => { appVer = resp.version })
 
-  switchLang('en-US')
+  router.push('/')
 })
 
 const needsUpdate = (latestStr) => {

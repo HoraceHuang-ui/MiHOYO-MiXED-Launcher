@@ -14,6 +14,7 @@ module.exports = {
     "./src/pages/GenshinPage.vue",
     "./src/pages/StarRailPage.vue",
     "./src/pages/Honkai3Page.vue",
+    "./src/pages/SettingsPage.vue",
   ],
   theme: {
     extend: {},

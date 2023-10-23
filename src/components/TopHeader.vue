@@ -6,7 +6,7 @@ import { translate } from '../i18n/index'
 //     selection: Number
 // })
 
-const pageNames = [translate('general_mainpage'), translate('general_gs'), translate('general_sr'), translate('general_hi3')]
+const pageNames = [translate('general_mainpage'), translate('general_gs'), translate('general_sr'), translate('general_hi3'), translate('general_settings')]
 const selection = ref(0)
 
 const router = useRouter()
@@ -25,6 +25,10 @@ const starRail = () => {
 const honkai3 = () => {
     selection.value = 3
     router.push("/hipage")
+}
+const settings = () => {
+    selection.value = 4
+    router.push("/settingspage")
 }
 
 const winClose = () => {
@@ -55,6 +59,9 @@ const winMin = () => {
                 @click="starRail" :class="{ 'selected hover:scale-100': selection == 2 }" />
             <img src="../assets/hi3icon.png" class="mx-2 rounded-lg h-8 transition-all hover:scale-110 active:scale-90"
                 @click="honkai3" :class="{ 'selected hover:scale-100': selection == 3 }" />
+            <img src="../assets/settingsIcon.png" @click="settings"
+                class="mx-2 rounded-lg opacity-60 h-8 transition-all hover:scale-110 active:scale-90"
+                style="padding: 2px   ;" :class="{ 'selected hover:scale-100': selection == 4 }" />
         </div>
         <div class="example focus drag" style="width: 35vw;">
             <div class="traffic-lights no-drag mt-2">

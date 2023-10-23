@@ -7,7 +7,7 @@ type lang = 'en-US' | 'zh-CN'
 
 const i18n = createI18n<[MessageSchema], lang>({
   // default locale
-  locale: localStorage.getItem('lang') || 'zh-CN',
+  locale: localStorage.lang ? localStorage.lang : 'zh-CN',
   fallbackLocale: 'zh-CN',
   legacy: false,
   globalInjection: true,
@@ -20,14 +20,21 @@ const i18n = createI18n<[MessageSchema], lang>({
 
 export default i18n
 
-export const translate = (key: string, bindings?: any) => {
+export const availableLangCodes = ['en-US', 'zh-CN']
+export const availableLangNames = ['English', '简体中文']
+
+export const currentLocale = () => {
+  return i18n.global.locale
+}
+
+export const translate = (key: string, locale?: string, bindings?: any) => {
     if (!key) {
-        return '';
+        return ''
     }
-    return i18n.global.t(key, bindings)
+    return i18n.global.t(key, locale ? locale : i18n.global.locale, bindings)
 }
 
 export const switchLang = (language: lang) => {
-    localStorage.setItem('lang', language)
+    localStorage.lang = language
     i18n.global.locale = language
 }
