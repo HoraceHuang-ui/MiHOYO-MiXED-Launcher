@@ -211,7 +211,8 @@ const refresh = () => {
                                     :class="hideElements ? ' -translate-x-96' : ''" style="transition-duration: 500ms;">{{
                                         $t('general_importGame') }}</button>
                                 <button v-if="displayConfirm" @click="confirmPath"
-                                    class="mx-2 my-3 px-3 rounded-full text-xl bg-white border-3 hover:bg-gray-200 active:bg-gray-500 active:scale-90 transition-all">确认</button>
+                                    class="mx-2 my-3 px-3 rounded-full text-xl bg-white border-3 hover:bg-gray-200 active:bg-gray-500 active:scale-90 transition-all">{{
+                                        $t('general_confirm') }}</button>
                             </div>
                         </div>
                         <div v-if="displayConfirm" class="font-sr text-right mr-4">{{ path }}</div>
