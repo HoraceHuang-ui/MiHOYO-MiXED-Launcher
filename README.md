@@ -6,7 +6,7 @@
 - [x] **支持原神、星铁、崩坏3。** `Genshin Impact`, `Honkai Star Rail`, `Honkai Impact 3rd` supported.
 - [ ] **待支持撅区零。** `Zenless Zone Zero` to be supported.
 - [ ] **界面、用户体验优化。** UI/UX optimization.
-- [ ] **国际化支持。** I18n.
+- [x] **国际化支持。** I18n.
 - [x] **原神分析玩家游戏数据。** Analyze player info for Genshin Impact.
   - [x] 获取数据 / Retrieve data
   - [x] 呈现数据 / Display data
