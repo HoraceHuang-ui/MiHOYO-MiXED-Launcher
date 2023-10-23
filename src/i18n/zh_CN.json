@@ -26,21 +26,17 @@
     "POST_TYPE_INFO": "资讯",
     "POST_TYPE_ANNOUNCE": "公告",
     "POST_TYPE_ACTIVITY": "活动",
-
     "uidInput_query": "查询",
     "uidInput_placeholder": "在此输入你的UID",
-
     "updDialog_title": "检测到miXeD新版本！",
     "updDialog_version": "版本：",
     "updDialog_size": "大小：",
     "updDialog_footerText": "点击确定以打开浏览器下载新版。",
     "updDialog_skipCurrent": "忽略当前版本",
-
     "mainBgDialog_title": "选择背景图片路径",
     "mainBgDialog_filter": "图片",
     "mainpage_title": "米哈游聚合启动器",
     "mainpage_buttonText": "{game}启动",
-
     "genshin_launcherContentsUrl": "https://sdk-static.mihoyo.com/hk4e_cn/mdk/launcher/api/content?filter_adv=false&key=eYd89JmJ&language=zh-cn&launcher_id=18",
     "gs_enkaLangCode": "zh-CN",
     "gs_emptyPlayerTip": "此处将显示角色的详细信息",
@@ -99,7 +95,6 @@
     "gs_cryoRes": "冰元素抗性",
     "gs_cooldownReduction": "冷却缩减",
     "gs_shieldStrength": "护盾强效",
-
     "sr_launcherContentsUrl": "https://api-launcher-static.mihoyo.com/hkrpg_cn/mdk/launcher/api/content?filter_adv=false&key=6KcVuOkbcqjJomjZ&language=zh-cn&launcher_id=33",
     "sr_playerInfoUrl": "https://api.mihomo.me/sr_info_parsed/{uid}?lang=cn",
     "sr_charRanksJsonUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/index_new/cn/character_ranks.json",
@@ -123,9 +118,7 @@
     "sr_noLightcone": "暂未装配光锥",
     "sr_noSubstats": "暂无副词条",
     "sr_noRelics": "暂未装配遗器",
-
     "hi3_launcherContentsUrl": "https://bh3-launcher-static.mihoyo.com/bh3_cn/mdk/launcher/api/content?key=SyvuPnqL&filter_adv=false&language=zh-cn&launcher_id=4",
-
     "settings_general": "通用",
     "settings_selectLang": "语言",
     "settings_langChangeText": "您即将切换到简体中文（zh_CN），确定后程序将重载并清除已储存的游戏账号信息。确定继续吗？",
