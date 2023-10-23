@@ -1,26 +1,26 @@
 import { createI18n } from 'vue-i18n'
-import zhCN from './zh-CN.json'
-import enUS from './en-US.json'
+import zhCN from './zh_CN.json'
+import enUS from './en_US.json'
 
 type MessageSchema = typeof enUS
-type lang = 'en-US' | 'zh-CN'
+type lang = 'en_US' | 'zh_CN'
 
 const i18n = createI18n<[MessageSchema], lang>({
   // default locale
-  locale: localStorage.lang ? localStorage.lang : 'zh-CN',
-  fallbackLocale: 'zh-CN',
+  locale: localStorage.lang ? localStorage.lang : 'zh_CN',
+  fallbackLocale: 'zh_CN',
   legacy: false,
   globalInjection: true,
   // translations
   messages: {
-    'zh-CN': zhCN,
-    "en-US": enUS,
+    'zh_CN': zhCN,
+    "en_US": enUS,
   },
 })
 
 export default i18n
 
-export const availableLangCodes = ['en-US', 'zh-CN']
+export const availableLangCodes = ['en_US', 'zh_CN']
 export const availableLangNames = ['English', '简体中文']
 
 export const currentLocale = () => {

@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from 'vue'
 import { switchLang, availableLangCodes, availableLangNames } from '../i18n/index'
 import { useRouter } from 'vue-router'
 import { marked } from 'marked'
+import { Loading } from '@element-plus/icons-vue'
 const lang = ref('')
 const langDialogShow = ref(false)
 const clearDialogShow = ref(false)
@@ -13,6 +14,7 @@ const latest = ref(false)
 const updDialogShow = ref(false)
 const updInfo = ref({})
 const checkUpdFailed = ref(false)
+const updChecking = ref(false)
 const updDialogContent = computed(() => {
     return marked(updInfo.value.data.body)
 })
@@ -34,6 +36,8 @@ onMounted(async () => {
 const router = useRouter()
 const langChange = () => {
     switchLang(lang.value)
+    window.store.delete('genshinInfo')
+    window.store.delete('starRailInfo')
     router.go(0)
 }
 const langDialogCancel = () => {
@@ -51,6 +55,7 @@ const openLink = (url) => {
 }
 
 const checkUpdates = () => {
+    updChecking.value = true
     checkUpdFailed.value = false
     window.github.getLatestRelease()
         .then((resp) => {
@@ -60,9 +65,11 @@ const checkUpdates = () => {
             } else {
                 latest.value = true
             }
+            updChecking.value = false
         })
         .catch(() => {
             checkUpdFailed.value = true
+            updChecking.value = false
         })
 }
 
@@ -99,7 +106,7 @@ const extUpd = () => {
                 <div class="form-item">
                     <div class="h-full py-1">{{ $t('settings_selectLang') }}</div>
                     <select name="language" @change="langDialogShow = true" v-model="lang"
-                        class="border-2 rounded-full py-1 px-2 ml-3">
+                        class="border-2 rounded-full py-1 px-2 ml-3 hover:bg-gray-100 transition-all">
                         <option v-for="(langCode, i) in availableLangCodes" :value="langCode">{{ availableLangNames[i] }}
                         </option>
                     </select>
@@ -164,6 +171,9 @@ const extUpd = () => {
                     <button @click="checkUpdates" class="rounded-full cursor-default ml-3 px-3"
                         :class="latest ? 'button-disabled' : 'button-enabled'">{{
                             latest ? $t('settings_latestVersion') : $t('settings_checkUpdates') }}</button>
+                    <el-icon class="is-loading ml-2" :size="20" style="margin-top: 6px;" v-if="updChecking">
+                        <Loading />
+                    </el-icon>
                     <div class="text-red-600 ml-3 mt-1" v-if="checkUpdFailed">{{ $t('settings_checkUpdFailed') }}</div>
                     <el-dialog v-model="updDialogShow" :title="$t('updDialog_title')" width="40%" center>
                         <div style="padding-left: 20px; padding-right: 20px;">

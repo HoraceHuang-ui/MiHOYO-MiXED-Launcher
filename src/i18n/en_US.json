@@ -127,7 +127,7 @@
 
     "settings_general": "General",
     "settings_selectLang": "Language",
-    "settings_langChangeText": "You are about to switch to English (en-US), the app will reload and ALL saved local game profile info will be erased. Continue?",
+    "settings_langChangeText": "You are about to switch to English (en_US), the app will reload and ALL saved local game profile info will be erased. Continue?",
     "settings_langChangeTitle": "Switch Language",
     "settings_clearAllData": "Clear All Data",
     "settings_clearAllDataText": "This option will clear ALL data including game paths, app background image and profile info. Continue?",
