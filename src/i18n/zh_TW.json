@@ -121,7 +121,7 @@
     "hi3_launcherContentsUrl": "https://sdk-os-static.mihoyo.com/bh3_global/mdk/launcher/api/content?filter_adv=false&key=tEGNtVhN&language=zh-tw&launcher_id=9",
     "settings_general": "通用",
     "settings_selectLang": "語言",
-    "settings_langChangeText": "您即將切換到繁體中文（zh_TW），確定後程式將重載並清除已儲存的游戲賬戶信息。確定繼續嗎？",
+    "settings_langChangeText": "您即將切換到正體中文（zh_TW），確定後程式將重載並清除已儲存的游戲賬戶信息。確定繼續嗎？",
     "settings_langChangeTitle": "切換語言",
     "settings_clearAllData": "清除所有數據",
     "settings_clearAllDataText": "此選項將清除游戲路徑、啓動器背景、賬戶信息等全部數據。確定繼續嗎？",
