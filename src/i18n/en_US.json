@@ -108,7 +108,7 @@
     "sr_displayCompactFont": "true",
     "sr_playerLv": "LV",
     "sr_eqLv": "EQ",
-    "sr_loadingPlayerInfo": "正在加载数据，请稍候……",
+    "sr_loadingPlayerInfo": "Loading player info...",
     "sr_hp": "HP",
     "sr_atk": "ATK",
     "sr_def": "DEF",
