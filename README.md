@@ -85,12 +85,15 @@ Click the badge below to help translate miXeD to your language:
 - `electron-store` items backup:
   - `targetVersion` The seemingly "current" version taking `ignore current version` into account
   - `mainBgPath` The main page background image in `base64` format
-  - `genshinPath` The directory of the official Genshin Impact launcher
+  - `gsLauncherPath` The directory of the official Genshin Impact launcher
+  - `gsGamePath` The path of the Genshin Impact game executable
   - `genshinUpd` Whether Genshin Impact is updated in the current version
   - `genshinInfo` Genshin Impact player info
   - `genshinConstels` JSON object containing Constellations bonuses of Genshin Impact
-  - `starRailPath`
+  - `srLauncherPath`
+  - `srGameInfo`
   - `starRailUpd`
   - `starRailInfo`
-  - `honkai3Path`
+  - `hi3LauncherPath`
+  - `hi3GamePath`
   - `honkai3Upd`
