@@ -85,12 +85,14 @@ pnpm build
 - `electron-store` 存储条目备忘：
   - `targetVersion` 算上忽略更新后的（伪）当前版本
   - `mainBgPath` 主页背景图片的`base64`
-  - `genshinPath` 原神官方启动器所在目录
+  - `gsLauncherPath` 原神官方启动器所在目录
+  - `gsGamePath` 原神游戏本体可执行文件的路径
   - `genshinUpd` 原神当前版本已更新
   - `genshinInfo` 原神账号信息
-  - `genshinConstels` 原神命座加成json
-  - `starRailPath`
+  - `srLauncherPath`
+  - `srGameInfo`
   - `starRailUpd`
   - `starRailInfo`
-  - `honkai3Path`
+  - `hi3LauncherPath`
+  - `hi3GamePath`
   - `honkai3Upd`
