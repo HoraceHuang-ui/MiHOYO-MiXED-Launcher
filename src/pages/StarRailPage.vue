@@ -4,9 +4,11 @@ import { useRouter } from 'vue-router'
 import { translate } from '../i18n/index'
 const gameName = translate('general_sr')
 
-const srPath = ref('')
+const srLauncherPath = ref('')
+const srGamePath = ref('')
 const displayConfirm = ref(false)
-const path = ref('')
+const launcherPath = ref('')
+const gamePath = ref('')
 const timeUpd1_2 = Date.parse("2023/07/19 12:00:00 UTC+8")
 const timeNow = Date.now()
 const timeDelta = computed(() =>
@@ -18,6 +20,8 @@ const launcherInfoFailed = ref(false)
 const errMsg = ref('')
 const hideElements = ref(false)
 const scrollbarref = ref()
+const importDialogShow = ref(false)
+const combinePaths = ref(true)
 
 const postTypeMap = new Map()
 
@@ -40,7 +44,8 @@ onMounted(async () => {
             launcherInfoFailed.value = true
             errMsg.value = err.toString()
         })
-    srPath.value = await window.store.get('starRailPath')
+    srLauncherPath.value = await window.store.get('srLauncherPath')
+    srGamePath.value = await window.store.get('srGamePath')
     window.store.get('starRailUpd')
         .then((resp) => {
             if (srPath.value && !resp) {
@@ -52,7 +57,7 @@ onMounted(async () => {
                             cancelButtonText: translate('general_cancel'),
                             type: 'info'
                         }).then(() => {
-                            window.child.exec(srPath.value.concat('\\launcher.exe'))
+                            window.child.exec(srLauncherPath.value)
                             window.store.set('starRailUpd', true, false)
                         }).catch(() => { })
                 } else if (timeDelta.value > 0 && timeDelta.value < 3) {
@@ -63,7 +68,7 @@ onMounted(async () => {
                             cancelButtonText: translate('general_cancel'),
                             type: 'info'
                         }).then(() => {
-                            window.child.exec(srPath.value.concat('\\launcher.exe'))
+                            window.child.exec(srLauncherPath.value)
                             window.store.set('starRailUpd', true, false)
                         }).catch(() => { })
                 } else if (timeDelta.value == 0) {
@@ -74,7 +79,7 @@ onMounted(async () => {
                             cancelButtonText: translate('general_cancel'),
                             type: 'info'
                         }).then(() => {
-                            window.child.exec(srPath.value.concat('\\launcher.exe'))
+                            window.child.exec(srLauncherPath.value)
                             window.store.set('starRailUpd', true, false)
                         }).catch(() => { })
                 }
@@ -86,38 +91,58 @@ onMounted(async () => {
         })
 })
 
-const srImport = async () => {
+const srLauncherImport = async () => {
     window.dialog.show({
-        title: translate('general_gameImportTitle', { game: gameName }),
+        title: translate('general_launcherImportTitle', { game: gameName }),
         properties: ['openDirectory']
     }).then((resp) => {
         if (resp.length > 0) {
-            path.value = resp[0]
-            displayConfirm.value = true
+            launcherPath.value = resp[0]
         }
     }).catch((error) => {
         console.error('Error in showing dialog:', error);
     });
 }
-const confirmPath = async () => {
-    await window.store.set('starRailPath', path.value, false)
-    srPath.value = path.value
-    displayConfirm.value = false
+const srGameImport = async () => {
+    window.dialog.show({
+        title: translate('general_gameImportTitle', { game: gameName }),
+        properties: ['openFile'],
+        filters: [{ name: 'EXE', extensions: ['exe'] }]
+    }).then((resp) => {
+        if (resp.length > 0) {
+            gamePath.value = resp[0]
+        }
+    }).catch((error) => {
+        console.error('Error in showing dialog:', error);
+    });
+}
+const confirmPaths = async () => {
+    if (combinePaths.value) {
+        gamePath.value = launcherPath.value + '\\Game\\StarRail.exe'
+    }
+    launcherPath.value += '\\launcher.exe'
+    await window.store.set('srLauncherPath', launcherPath.value, false)
+    await window.store.set('srGamePath', gamePath.value, false)
+    srLauncherPath.value = launcherPath.value
+    srGamePath.value = gamePath.value
+    importDialogShow.value = false
 }
 const srLaunch = () => {
-    window.child.exec(srPath.value.concat('\\Game\\StarRail.exe'))
+    window.child.exec(srGamePath.value)
     window.win.tray()
 }
 
 const handleCommand = (command) => {
     switch (command) {
         case 'openLauncher':
-            window.child.exec(srPath.value.concat('\\launcher.exe'))
+            window.child.exec(srLauncherPath.value)
             break
         case 'clearPath':
-            window.store.delete('starRailPath')
+            window.store.delete('srLauncherPath')
+            window.store.delete('srGamePath')
             window.store.delete('starRailUpd')
-            srPath.value = ''
+            srLauncherPath.value = ''
+            srGamePath.value = ''
             break
         case 'clearPlayerinfo':
             window.store.delete('starRailInfo')
@@ -147,9 +172,54 @@ const refresh = () => {
         }
     })
 }
+
+const onImportDialogClose = () => {
+    importDialogShow.value = false
+    gamePath.value = ''
+    launcherPath.value = ''
+}
 </script>
 
 <template>
+    <el-dialog v-model="importDialogShow" :title="`${$t('general_sr')} ${$t('general_import')}`" width="50%" center
+        :before-close="onImportDialogClose">
+        <div class="px-1 grid grid-cols-2 gap-4">
+            <button @click="srLauncherImport" class="import-button-enabled py-1 px-2 rounded-full transition-all">{{
+                $t('general_importLauncher') }}</button>
+            <button @click="srGameImport" class="py-1 px-2 rounded-full transition-all"
+                :class="combinePaths ? 'import-button-disabled' : 'import-button-enabled'">
+                {{ $t('general_importGame') }}
+            </button>
+            <div class="ml-3" style="margin-top: 5px; grid-column: 1 / 3;">
+                <span class="font-bold mr-2">{{ $t('general_launcher') }}</span>
+                {{ launcherPath === '' ? '' : launcherPath + '\\launcher.exe' }}
+            </div>
+            <div class="ml-3" style="margin-top: 5px; grid-column: 1 / 3;">
+                <span class="font-bold mr-2">{{ $t('general_game') }}</span>
+                {{ launcherPath === '' ? '' : (combinePaths ? launcherPath + '\\Game\\StarRail.exe' :
+                    gamePath) }}
+            </div>
+        </div>
+        <template #footer>
+            <div class="flex flex-row w-full justify-between">
+                <div class="flex flex-row">
+                    <el-checkbox v-model="combinePaths">{{ $t("general_defaultStructure") }}</el-checkbox>
+                    <el-tooltip placement="right" :content="`<${$t('general_launcherDirectory')}>\\Game\\StarRail.exe`">
+                        <div class="ml-2 rounded-full w-5 h-5 bg-gray-400 text-white font-bold text-sm cursor-help"
+                            style="margin-top: 5px;">?</div>
+                    </el-tooltip>
+                </div>
+                <div class="flex flex-row">
+                    <button class="mr-3 rounded-full py-1 px-2 hover:bg-gray-200 active:bg-gray-400 transition-all"
+                        @click="onImportDialogClose">{{ $t('general_cancel') }}</button>
+                    <button class="rounded-full py-1 px-3 transition-all" @click="confirmPaths"
+                        :class="launcherPath && (gamePath || combinePaths) ? 'confirm-button-enabled' : 'confirm-button-disabled'">
+                        {{ $t('general_confirm') }}
+                    </button>
+                </div>
+            </div>
+        </template>
+    </el-dialog>
     <div v-if="!launcherInfoFailed && !launcherInfoReady"
         class="absolute pointer-events-none z-0 align-middle justify-center text-center" style="top: 45%; left: 45%;">
         <img :src="'../../src/assets/kleeLoading.gif'" class=" align-middle self-center object-scale-down" loading="eager"
@@ -180,7 +250,7 @@ const refresh = () => {
             <div class="items-scroll flex flex-col content-center items-center w-full">
                 <div class="w-full flex flex-row justify-between">
                     <div class="w-1"></div>
-                    <div v-if="srPath" class="transition-all" :class="hideElements ? ' -translate-x-96' : ''"
+                    <div v-if="srGamePath" class="transition-all" :class="hideElements ? ' -translate-x-96' : ''"
                         style=" transition-duration: 500ms;">
                         <div class="mx-2 my-3 flex flex-row rounded-full bg-yellow-400 font-sr w-48">
                             <button @click="srLaunch"
@@ -206,16 +276,12 @@ const refresh = () => {
                         <div class="justify-between flex flex-row">
                             <div class="w-1"></div>
                             <div class="flex flex-row">
-                                <button @click="srImport"
+                                <button @click="importDialogShow = true"
                                     class=" mx-2 my-3 rounded-full h-16 text-2xl bg-yellow-400 font-sr w-48 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all cursor-default"
                                     :class="hideElements ? ' -translate-x-96' : ''" style="transition-duration: 500ms;">{{
                                         $t('general_importGame') }}</button>
-                                <button v-if="displayConfirm" @click="confirmPath"
-                                    class="mx-2 my-3 px-3 rounded-full text-xl bg-white border-3 hover:bg-gray-200 active:bg-gray-500 active:scale-90 transition-all">{{
-                                        $t('general_confirm') }}</button>
                             </div>
                         </div>
-                        <div v-if="displayConfirm" class="font-sr text-right mr-4">{{ path }}</div>
                     </div>
                 </div>
                 <StarRailInfoCard class="my-2 w-full shadow-md" style="height: 97vh;"></StarRailInfoCard>
@@ -256,5 +322,21 @@ const refresh = () => {
 .items-scroll {
     margin-top: 67vh;
     width: 82vw;
+}
+
+.import-button-enabled {
+    @apply border border-gray-400 text-gray-600 hover:border-blue-400 hover:text-blue-500 hover:bg-blue-100 active:bg-blue-300;
+}
+
+.import-button-disabled {
+    @apply bg-gray-100 text-gray-400 pointer-events-none;
+}
+
+.confirm-button-enabled {
+    @apply bg-blue-600 text-white hover:bg-blue-500 active:scale-90;
+}
+
+.confirm-button-disabled {
+    @apply bg-blue-200 text-white pointer-events-none;
 }
 </style>

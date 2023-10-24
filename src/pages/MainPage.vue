@@ -3,9 +3,9 @@ import { ref, onMounted } from 'vue'
 import { Picture, RefreshLeft } from '@element-plus/icons-vue'
 import { translate } from '../i18n/index'
 
-const gsPath = ref('')
-const srPath = ref('')
-const hiPath = ref('')
+const gsGamePath = ref('')
+const srGamePath = ref('')
+const hi3GamePath = ref('')
 const transitionShow = ref(false)
 const bgPath = ref('')
 
@@ -15,9 +15,9 @@ onMounted(async () => {
     // For electron-store test
     // await window.store.clear()
 
-    gsPath.value = await window.store.get('genshinPath')
-    srPath.value = await window.store.get('starRailPath')
-    hiPath.value = await window.store.get('honkai3Path')
+    gsGamePath.value = await window.store.get('gsGamePath')
+    srGamePath.value = await window.store.get('srGamePath')
+    hi3GamePath.value = await window.store.get('hi3GamePath')
     bgPath.value = await window.store.get('mainBgPath')
     const imgElement = document.getElementById('bgImage');
     imgElement.src = bgPath.value ? bgPath.value : DEFAULT_BG;
@@ -25,17 +25,17 @@ onMounted(async () => {
 })
 
 const genshin = async () => {
-    window.child.exec(gsPath.value.concat('\\Genshin Impact Game\\YuanShen.exe'))
+    window.child.exec(gsGamePath.value)
     window.win.tray()
 }
 
 const starRail = async () => {
-    await window.child.exec(srPath.value.concat('\\Game\\StarRail.exe'))
+    await window.child.exec(srGamePath.value)
     window.win.tray()
 }
 
 const honkai3 = async () => {
-    await window.child.exec(hiPath.value.concat('\\Games\\BH3.exe'))
+    await window.child.exec(hiGamePath.value)
     window.win.tray()
 }
 
@@ -69,14 +69,15 @@ const resetPic = () => {
         <img class="bg-pic object-cover" id="bgImage" :src="bgPath ? bgPath : '../../src/assets/gsbanner.png'" />
         <div class="sticky bottom-0" style="height: 60vh;"></div>
         <div class="bottom-area sticky">
-            <h1 class="font-sans font-bold text-5xl" style="margin-bottom: 10px; font-family: 'genshin-font';">{{ $t('mainpage_title') }}</h1>
-            <button v-if="gsPath" @click="genshin"
+            <h1 class="font-sans font-bold text-5xl" style="margin-bottom: 10px; font-family: 'genshin-font';">{{
+                $t('mainpage_title') }}</h1>
+            <button v-if="gsGamePath" @click="genshin"
                 class="p-3 mx-2 my-2 font-bold text-xl transition-all bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 cursor-default">{{
                     $t('mainpage_buttonText', { game: $t('general_gsShort') }) }}</button>
-            <button v-if="srPath" @click="starRail"
+            <button v-if="srGamePath" @click="starRail"
                 class="p-3 mx-2 my-2 font-bold text-xl transition-all bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 cursor-default">{{
                     $t('mainpage_buttonText', { game: $t('general_srShort') }) }}</button>
-            <button v-if="hiPath" @click="honkai3"
+            <button v-if="hi3GamePath" @click="honkai3"
                 class="p-3 mx-2 my-2 font-bold text-xl transition-all bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 cursor-default">{{
                     $t('mainpage_buttonText', { game: $t('general_hi3Short') }) }}</button>
         </div>
