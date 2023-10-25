@@ -46,6 +46,9 @@ By HoraceHyy
 
 </details>
 
+# Notes
+- This app uses GitHub URLs to check its updates and resources for Star Rail player info. If you are from mainland China, a proxy is needed.
+
 # Development
 ## Dependencies
 ```
@@ -60,7 +63,7 @@ pnpm dev
 pnpm build
 ```
 ## Notes
-- This app checks updates via `GitHub API`, which will be automatically expired once it is uploaded publically in GitHub. Therefore, during development, please create a token yourself and place it in `Octokit.auth` inside `electron/main/index.ts`.
+- This app checks updates via GitHub API, which will be automatically expired once it is uploaded publically in GitHub. Therefore, during development, please create a token yourself and place it in `Octokit.auth` inside `electron/main/index.ts`.
 ```ts
   const { Octokit } = require("@octokit/core")
   const octokit = new Octokit({
@@ -91,7 +94,7 @@ Click the badge below to help translate miXeD to your language:
   - `genshinInfo` Genshin Impact player info
   - `genshinConstels` JSON object containing Constellations bonuses of Genshin Impact
   - `srLauncherPath`
-  - `srGameInfo`
+  - `srGamePath`
   - `starRailUpd`
   - `starRailInfo`
   - `hi3LauncherPath`

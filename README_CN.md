@@ -46,6 +46,9 @@ By HoraceHyy
 
 </details>
 
+# 注意事项
+- 本软件使用 GitHub 域名的 URL 来检测自身更新与获取崩坏：星穹铁道角色信息相关资源。如果您是中国大陆用户，请确保代理网络条件通畅。
+
 # 开发
 ## 依赖
 ```
@@ -60,7 +63,7 @@ pnpm dev
 pnpm build
 ```
 ## 提示
-- 本程序检测自身更新目前用的是`GitHub API`，但一旦把含token的代码同步到这里就会自动销毁，所以构建时请自行申请一个token，放在`electron/main/index.ts`的`Octokit.auth`中。
+- 本程序检测自身更新目前用的是 GitHub API，但一旦把含token的代码同步到这里就会自动销毁，所以构建时请自行申请一个token，放在`electron/main/index.ts`的`Octokit.auth`中。
 ```ts
   const { Octokit } = require("@octokit/core")
   const octokit = new Octokit({
@@ -90,7 +93,7 @@ pnpm build
   - `genshinUpd` 原神当前版本已更新
   - `genshinInfo` 原神账号信息
   - `srLauncherPath`
-  - `srGameInfo`
+  - `srGamePath`
   - `starRailUpd`
   - `starRailInfo`
   - `hi3LauncherPath`
