@@ -48,7 +48,7 @@ onMounted(async () => {
     hiGamePath.value = await window.store.get('hi3GamePath')
     window.store.get('honkai3Upd')
         .then((resp) => {
-            if (hiPath.value && !resp) {
+            if (hiLauncherPath.value && !resp) {
                 if (timeDelta.value > 40) {
                     ElMessageBox.confirm(translate('general_gameUpdBoxText1', { game: gameName, beDays: translate('general_beDays', 42 - timeDelta.value) }),
                         translate('general_gameUpdBoxTitle'),
@@ -83,7 +83,7 @@ onMounted(async () => {
                             window.store.set('honkai3Upd', true, false)
                         }).catch(() => { })
                 }
-            } else if (hiPath.value && timeDelta.value > 2 && timeDelta.value < 37) {
+            } else if (hiLauncherPath.value && timeDelta.value > 2 && timeDelta.value < 37) {
                 window.store.set('honkai3Upd', false, false)
             }
         }).catch((err) => {
@@ -241,11 +241,13 @@ const onImportDialogClose = () => {
                 style="transition-duration: 500ms;" :src="launcherInfoReady ? launcherInfo.adv.background : ''"
                 @touchmove.prevent @mousewheel.prevent />
         </div>
-        <LauncherBanner class="absolute left-16 top-48 z-50 rounded-xl transition-all" v-if="launcherInfoReady"
+        <LauncherBanner class="absolute left-16 top-48 z-50 rounded-xl transition-all"
+            v-if="launcherInfoReady && 'banner' in launcherInfo && launcherInfo.banner.length > 0"
             :banners="launcherInfo.banner"
             :class="hideElements ? 'opacity-0 -translate-y-10 pointer-events-none blur-md -translate-x-14 scale-110' : 'opacity-100 pointer-events-auto'"
             style="height: 182px; width: 396px; transition-duration: 500ms;" />
-        <LauncherPosts :postTypeMap="postTypeMap" v-if="launcherInfoReady"
+        <LauncherPosts :postTypeMap="postTypeMap"
+            v-if="launcherInfoReady && 'post' in launcherInfo && launcherInfo.post.length > 0"
             class="absolute left-16 top-96 z-50 rounded-xl transition-all backdrop-blur-md pl-3 pr-1 font-bold"
             :class="hideElements ? 'opacity-0 -translate-y-2 pointer-events-none blur-md -translate-x-14 scale-110' : 'opacity-100 pointer-events-auto'"
             style="height: 125px; width: 396px; background-color: rgb(255 255 255 / 0.7); transition-duration: 500ms;" />

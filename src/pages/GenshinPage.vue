@@ -50,7 +50,7 @@ onMounted(async () => {
     gsGamePath.value = await window.store.get('gsGamePath')
     window.store.get('genshinUpd')
         .then((resp) => {
-            if (gsPath.value && !resp) {
+            if (gsLauncherPath.value && !resp) {
                 if (timeDelta.value > 40) {
                     ElMessageBox.confirm(translate('general_gameUpdBoxText1', { game: gameName, beDays: translate('general_beDays', 42 - timeDelta.value) }),
                         translate('general_gameUpdBoxTitle'),
@@ -85,7 +85,7 @@ onMounted(async () => {
                             window.store.set('genshinUpd', true, false)
                         }).catch(() => { })
                 }
-            } else if (gsPath.value && timeDelta.value > 2 && timeDelta.value < 37) {
+            } else if (gsLauncherPath.value && timeDelta.value > 2 && timeDelta.value < 37) {
                 window.store.set('genshinUpd', false, false)
             }
         }).catch((err) => {
@@ -242,11 +242,12 @@ const onImportDialogClose = () => {
                 :src="launcherInfoReady && launcherInfo.adv ? launcherInfo.adv.background : '../../src/assets/gsbanner.png'"
                 @touchmove.prevent @mousewheel.prevent />
         </div>
-        <LauncherBanner class="absolute left-16 top-48 z-50 rounded-xl transition-all" v-if="launcherInfoReady"
-            :banners="launcherInfo.banner"
+        <LauncherBanner v-if="launcherInfoReady && 'banner' in launcherInfo && launcherInfo.banner.length > 0"
+            class="absolute left-16 top-48 z-50 rounded-xl transition-all" :banners="launcherInfo.banner"
             :class="hideElements ? 'opacity-0 -translate-y-10 pointer-events-none blur-md -translate-x-14 scale-110' : 'opacity-100 pointer-events-auto'"
             style="height: 182px; width: 396px; transition-duration: 500ms;" />
-        <LauncherPosts :postTypeMap="postTypeMap" v-if="launcherInfoReady"
+        <LauncherPosts v-if="launcherInfoReady && 'post' in launcherInfo && launcherInfo.post.length > 0"
+            :postTypeMap="postTypeMap"
             class="absolute left-16 top-96 z-50 rounded-xl transition-all backdrop-blur-md pl-3 pr-1 font-genshin"
             :class="hideElements ? 'opacity-0 -translate-y-2 pointer-events-none blur-md -translate-x-14 scale-110' : 'opacity-100 pointer-events-auto'"
             style="height: 123px; width: 396px; background-color: rgb(255 255 255 / 0.7); transition-duration: 500ms;" />

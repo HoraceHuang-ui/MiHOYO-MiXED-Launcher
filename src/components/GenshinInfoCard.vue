@@ -38,6 +38,7 @@ const constelsAdditions = computed(() => {
 })
 const playerInfoReady = ref(false)
 const playerInfoLoading = ref(false)
+const playerInfoFailed = ref(false)
 const charsScrollbar = ref()
 const showcaseIdx = ref(0)
 const elementAssets = {
@@ -126,6 +127,8 @@ const requestInfo = () => {
     uid = uidInput.value
     playerInfoReady.value = false
     console.log(uidInput.value)
+    playerInfoLoading.value = true
+    playerInfoFailed.value = false
     window.enka.getGenshinPlayer(uid, translate('gs_enkaLangCode'))
         .then((resp) => {
             if (playerInfo.value.uid == resp.uid) {
@@ -168,7 +171,6 @@ const requestInfo = () => {
                     resp = resp.filter(a => 'proudSkillGroupId' in a)
                     window.store.set('genshinConstels', JSON.stringify(resp))
 
-                    playerInfoLoading.value = true
                     router.push({
                         name: 'tempPage',
                         query: {
@@ -182,6 +184,7 @@ const requestInfo = () => {
         }).catch((err) => {
             console.error(err)
             playerInfoLoading.value = false
+            playerInfoFailed.value = true
         })
 }
 
@@ -409,8 +412,12 @@ const findSkillIdByProud = (proudId) => {
             <img v-if="playerInfoReady && playerInfo.player.namecard.assets.picPath[0] !== ''"
                 class="absolute top-0 right-0 bottom-0 z-0" style="height: 9vh;"
                 :src="'https://enka.network/ui/' + playerInfo.player.namecard.assets.picPath[0] + '.png'" />
-            <div v-if="playerInfoLoading" class="absolute top-0 right-0 bottom-0 z-0"
-                style="margin-left: 1vw; right: 2vw; top: 3vh;">{{ $t('gs_loadingPlayerInfo') }}</div>
+            <div v-if="playerInfoLoading" class="absolute bottom-0 z-0" style="margin-left: 1vw; right: 2vw; top: 3vh;">{{
+                $t('gs_loadingPlayerInfo') }}</div>
+            <div v-if="playerInfoFailed" class="absolute bottom-0 z-0 text-red-500"
+                style="margin-left: 1vw; right: 2vw; top: 3vh;">
+                {{ $t('gs_playerInfoFailed') }}
+            </div>
             <!-- 左上角头像、昵称 -->
             <!-- playerInfo.player.profilePicture.assets.icon -->
             <div v-if="playerInfoReady" class="flex flex-row content-start items-center" style="width: 35vw;">

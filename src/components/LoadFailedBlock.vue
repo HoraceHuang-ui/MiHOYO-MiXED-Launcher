@@ -26,9 +26,9 @@ const refresh = () => {
             height="120" width="120" />
         <div class="mt-3 text-xl"
             :class="{ 'font-genshin': props.gameNo == 0 }, { 'font-sr': props.gameNo == 1 }, { 'font-semibold': props.gameNo == 2 }">
-            加载失败</div>
-        <div class=" hover:underline active:text-orange-300 text-blue-500 cursor-pointer w-8 -translate-x-1/2"
-            style="margin-left: 50%;" @click="refresh">刷新</div>
+            {{ $t("general_loadingFailed") }}</div>
+        <div class=" hover:underline active:text-orange-300 text-blue-500 cursor-pointer -translate-x-1/2"
+            style="margin-left: 50%;" @click="refresh">{{ $t('general_refresh') }}</div>
         <div class="text-center max-w-xl mt-5">{{ errMsg }}</div>
     </div>
 </template>

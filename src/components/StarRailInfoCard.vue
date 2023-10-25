@@ -12,6 +12,7 @@ const apiUrl = 'https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/'
 const playerInfo = ref({})
 const playerInfoReady = ref(false)
 const playerInfoLoading = ref(false)
+const playerInfoFailed = ref(false)
 const uidInput = ref('')
 var uid = ''
 var charsPage = ref(0)
@@ -115,6 +116,7 @@ const mergeToPlayerinfo = (newArr) => {
 const router = useRouter()
 const requestInfo = () => {
     uid = uidInput.value
+    playerInfoFailed.value = false
     window.axios.get(translate("sr_playerInfoUrl", { uid: uid }))
         .then((resp) => {
             if (playerInfoReady.value && playerInfo.value.player.uid == resp.player.uid) {
@@ -162,6 +164,7 @@ const requestInfo = () => {
         }).catch((err) => {
             console.error(err)
             playerInfoLoading.value = false
+            playerInfoFailed.value = true
         })
     playerInfoLoading.value = true
     console.log(uid)
@@ -340,6 +343,10 @@ const trimAdditions = (additions) => {
             <!-- 右上角名片 -->
             <div v-if="playerInfoLoading" class="absolute top-0 right-0 bottom-0 z-0"
                 style="margin-left: 1vw; right: 2vw; top: 3vh;">{{ $t('sr_loadingPlayerInfo') }}</div>
+            <div v-if="playerInfoFailed" class="absolute bottom-0 z-0 text-red-500"
+                style="margin-left: 1vw; right: 2vw; top: 3vh;">
+                {{ $t('sr_playerInfoFailed') }}
+            </div>
             <!-- 左上角头像、昵称 -->
             <div v-if="playerInfoReady" class="flex flex-row content-start items-center" style="width: 35vw;">
                 <img class="rounded-full h-12 border-2 bg-slate-200" style="margin-left: 1vw;"
@@ -479,7 +486,8 @@ const trimAdditions = (additions) => {
                                 <StatIcon game="sr" :stat="character.attributes[0].field" fill="#d1d5db" class="h-5 w-5"
                                     style="margin-top: 1px;" />
                                 <span class="text-gray-200 text-right font-sr-sans ml-3">{{
-                                    Math.floor(character.attributes[0].value) + Math.floor(findField(character.additions,
+                                    Math.floor(character.attributes[0].value) +
+                                    Math.floor(findField(character.additions,
                                         "hp").value)
                                 }}</span>
                             </div>
@@ -487,14 +495,16 @@ const trimAdditions = (additions) => {
                                 <StatIcon game="sr" :stat="character.attributes[1].field" fill="#d1d5db" class="h-5 w-5"
                                     style="margin-top: 1px;" />
                                 <span class="text-gray-200 text-right font-sr-sans ml-3">{{
-                                    Math.floor(character.attributes[1].value) + Math.floor(findField(character.additions,
+                                    Math.floor(character.attributes[1].value) +
+                                    Math.floor(findField(character.additions,
                                         "atk").value) }}</span>
                             </div>
                             <div class="w-full flex flex-row">
                                 <StatIcon game="sr" :stat="character.attributes[2].field" fill="#d1d5db" class="h-5 w-5"
                                     style="margin-top: 1px;" />
                                 <span class="text-gray-200 text-right font-sr-sans ml-3">{{
-                                    Math.floor(character.attributes[2].value) + Math.floor(findField(character.additions,
+                                    Math.floor(character.attributes[2].value) +
+                                    Math.floor(findField(character.additions,
                                         "def").value) }}</span>
                             </div>
                             <div class="w-full flex flex-row">
@@ -601,7 +611,8 @@ const trimAdditions = (additions) => {
                                         {{ character.skill_trees[idx - 1].level + rankAdditions[character.skills[idx -
                                             1].id]
                                         }} <span class="text-gray-400">/{{
-    character.skill_trees[idx - 1].max_level + rankAdditions[character.skills[idx -
+    character.skill_trees[idx - 1].max_level +
+    rankAdditions[character.skills[idx -
         1].id]
 }}</span>
                                     </div>
@@ -660,7 +671,8 @@ const trimAdditions = (additions) => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div v-else class="mt-2 text-left text-gray-300 text-lg">{{ $t('sr_noSubstats') }}</div>
+                                    <div v-else class="mt-2 text-left text-gray-300 text-lg">{{ $t('sr_noSubstats') }}
+                                    </div>
                                 </div>
                             </el-carousel-item>
                         </el-carousel>
@@ -691,7 +703,8 @@ const trimAdditions = (additions) => {
                                     $t('sr_noRelicSets') }}</div>
                             </div>
                             <div class="text-gray-900 mt-1 mr-1 font-sr flex flex-row">
-                                <div class="text-gray-100 mr-2 text-sm" style="margin-top: 2px;">{{ $t('sr_noRelicSets') }}
+                                <div class="text-gray-100 mr-2 text-sm" style="margin-top: 2px;">{{ $t('sr_noRelicSets')
+                                }}
                                 </div>
                                 <div class="rounded-full bg-gray-200 font-serif font-bold middle h-6 w-6">{{
                                     $t('sr_innerSets') }}</div>
