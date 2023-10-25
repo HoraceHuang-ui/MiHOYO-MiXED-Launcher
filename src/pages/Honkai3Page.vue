@@ -8,7 +8,7 @@ const hiLauncherPath = ref('')
 const hiGamePath = ref('')
 const launcherPath = ref('')
 const gamePath = ref('')
-const timeUpd6_8 = Date.parse("2023/07/06 12:00:00 UTC+8")
+const timeUpd6_8 = Date.parse("2023/09/12 12:00:00 UTC+8")
 const timeNow = Date.now()
 const timeDelta = computed(() =>
     Math.ceil((timeNow - timeUpd6_8) / 1000 / 3600 / 24 - 0.5) % 42
@@ -61,7 +61,7 @@ onMounted(async () => {
                             window.store.set('honkai3Upd', true, false)
                         }).catch(() => { })
                 } else if (timeDelta.value > 0 && timeDelta.value < 3) {
-                    ElMessageBox.confirm(translate('general_gameUpdBoxText2', { game: gameName, days: translate('general_days', 42 - timeDelta.value) }),
+                    ElMessageBox.confirm(translate('general_gameUpdBoxText2', { game: gameName, days: translate('general_days', timeDelta.value) }),
                         translate('general_gameUpdBoxTitle'),
                         {
                             confirmButtonText: translate('general_confirm'),

@@ -61,7 +61,7 @@ onMounted(async () => {
                             window.store.set('starRailUpd', true, false)
                         }).catch(() => { })
                 } else if (timeDelta.value > 0 && timeDelta.value < 3) {
-                    ElMessageBox.confirm(translate('general_gameUpdBoxText2', { game: gameName, days: translate('general_days', 42 - timeDelta.value) }),
+                    ElMessageBox.confirm(translate('general_gameUpdBoxText2', { game: gameName, days: translate('general_days', timeDelta.value) }),
                         translate('general_gameUpdBoxTitle'),
                         {
                             confirmButtonText: translate('general_confirm'),
