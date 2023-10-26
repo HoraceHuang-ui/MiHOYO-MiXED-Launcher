@@ -1,4 +1,4 @@
-[English Document](https://github.com/HoraceHuang-ui/MiHOYO-MiXED-Launcher/edit/main/README.md)
+[English Document](/README.md)
 # 米家聚合启动器
 By HoraceHyy
 > 聚合启动米哈游游戏并分析游戏内玩家信息。
@@ -69,6 +69,14 @@ pnpm build
   const octokit = new Octokit({
     auth: "<YOUR TOKEN HERE>"
   })
+```
+- 由于一些原因，在开发和生产环境中某些文件的相对路径可能会改变。在`src/pages/SettingsPage.vue`中，`package.json`的相对路径取决于环境。
+```ts
+  // BUILD: '../../app.asar/package.json'
+  // DEV: '../../package.json'
+  fetch('../../app.asar/package.json')
+      .then(response => response.json())
+      .then((resp) => { appVer.value = resp.version })
 ```
 # 鸣谢
 - [electron-vite/electron-vite-vue](https://github.com/electron-vite/electron-vite-vue)
