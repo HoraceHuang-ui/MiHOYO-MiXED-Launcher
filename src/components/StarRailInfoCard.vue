@@ -52,22 +52,6 @@ const rankAdditions = computed(() => {
 })
 const charDialogShow = ref(false)
 const charDialogId = ref(0)
-const relicSetIdNameMap = new Map([
-    ["101", "过客"],
-    ["102", "快枪手"],
-    ["103", "圣骑士"],
-    ["104", "冰套"],
-    ["105", "拳王"],
-    ["106", "铁卫"],
-    ["107", "火套"],
-    ["108", "量子"],
-    ["109", "雷套"],
-    ["110", "风套"],
-    ["111", "怪盗"],
-    ["112", "虚数"],
-    ["113", "莳者"],
-    ["114", "信使"],
-])
 
 onMounted(() => {
     fetch(translate('sr_charRanksJsonUrl'))
@@ -208,21 +192,6 @@ const findField = (range, field) => {
         "percent": false
     }
 }
-
-// const findRankSkillId = (characterIdx, id) => {
-//     let range = rankAdditions.value[characterIdx]
-//     console.log(rankAdditions.value[characterIdx])
-//     for (var i = 0; i < range.length; i++) {
-//         const element = range[i]
-//         if (element.id === id) {
-//             return element
-//         }
-//     }
-//     return {
-//         "id": "",
-//         "num": 0
-//     }
-// }
 
 const parseRankDesc = (str) => {
     return str.replace('\\n', '\n')
