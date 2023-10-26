@@ -254,9 +254,9 @@ const onImportDialogClose = () => {
                     <div class="w-1"></div>
                     <div v-if="srGamePath" class="transition-all" :class="hideElements ? ' -translate-x-96' : ''"
                         style=" transition-duration: 500ms;">
-                        <div class="mx-2 my-3 flex flex-row rounded-full bg-yellow-400 font-sr w-48">
+                        <div class="mx-2 my-3 flex flex-row rounded-full bg-yellow-400 font-sr">
                             <button @click="srLaunch"
-                                class="pl-4 px-4 text-2xl font-bold rounded-full w-48 h-16 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">{{
+                                class="pl-4 px-4 text-2xl font-bold rounded-full h-16 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">{{
                                     $t('general_launchGame') }}</button>
                             <el-dropdown class="h-full px-1" trigger="click" @command="handleCommand">
                                 <button

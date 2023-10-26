@@ -21,6 +21,7 @@ const i18n = createI18n<[MessageSchema], lang>({
     'zh_TW': zhTW,
     'ru_RU': ruRU,
     'ja_JP': jaJP
+
   },
 })
 
