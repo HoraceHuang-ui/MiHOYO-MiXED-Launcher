@@ -1,4 +1,4 @@
-[简体中文文档](https://github.com/HoraceHuang-ui/MiHOYO-MiXED-Launcher/edit/main/README_CN.md)
+[简体中文文档](/README_CN.md)
 # miHoYo miXED Launcher
 By HoraceHyy
 > Launch HoYoVERSE games in one place and analyze in-game player informations.
@@ -70,7 +70,7 @@ pnpm build
     auth: "<YOUR TOKEN HERE>"
   })
 ```
-- For some reasons, relative paths in the `dev` and `build` environments varies for some files. In `onMounted` inside `src/pages/SettingsPage`, the URL of `package.json` is determined by environment.
+- For some reasons, relative paths in the `dev` and `build` environments varies for some files. In `onMounted` inside `src/pages/SettingsPage.vue`, the path of `package.json` is determined by environment.
 ```ts
   // BUILD: '../../app.asar/package.json'
   // DEV: '../../package.json'
