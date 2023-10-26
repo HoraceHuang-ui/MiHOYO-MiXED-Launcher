@@ -8,7 +8,7 @@ const hiLauncherPath = ref('')
 const hiGamePath = ref('')
 const launcherPath = ref('')
 const gamePath = ref('')
-const timeUpd6_8 = Date.parse("2023/09/12 12:00:00 UTC+8")
+const timeUpd6_8 = Date.parse("2023/07/06 12:00:00 UTC+8")
 const timeNow = Date.now()
 const timeDelta = computed(() =>
     Math.ceil((timeNow - timeUpd6_8) / 1000 / 3600 / 24 - 0.5) % 42
@@ -257,9 +257,9 @@ const onImportDialogClose = () => {
                     <div class="w-1"></div>
                     <div v-if="hiGamePath" class="transition-all" :class="hideElements ? ' -translate-x-96' : ''"
                         style=" transition-duration: 500ms;">
-                        <div class="mx-2 my-3 flex flex-row rounded-full bg-yellow-400 w-48">
+                        <div class="mx-2 my-3 flex flex-row rounded-full bg-yellow-400">
                             <button @click="hiLaunch"
-                                class="pl-4 px-4 text-2xl rounded-full w-48 h-16 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all font-bold">{{
+                                class="pl-4 px-4 text-2xl rounded-full h-16 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all font-bold">{{
                                     $t('general_launchGame') }}</button>
                             <el-dropdown class="h-full px-1" trigger="click" @command="handleCommand">
                                 <button

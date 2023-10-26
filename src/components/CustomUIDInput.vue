@@ -9,7 +9,7 @@ defineEmits(['submit', 'update:modelValue'])
             :value="modelValue" @input="$emit('update:modelValue', $event.target.value)"
             @keyup.native.enter="$emit('submit')" />
         <button class="rounded-full bg-gray-100 px-3 hover:bg-gray-300 active:bg-gray-500 active:scale-90 transition-all"
-            style="min-width: 4rem;" @click="$emit('submit')">{{ $t('uidInput_query') }}</button>
+            style="min-width: 5rem;" @click="$emit('submit')">{{ $t('uidInput_query') }}</button>
     </div>
 </template>
 
