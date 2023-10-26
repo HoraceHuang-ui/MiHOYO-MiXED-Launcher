@@ -2,9 +2,11 @@ import { createI18n } from 'vue-i18n'
 import zhCN from './zh_CN.json'
 import enUS from './en_US.json'
 import zhTW from './zh_TW.json'
+import ruRU from './ru_RU.json'
+import jaJP from './ja_JP.json'
 
 type MessageSchema = typeof enUS
-type lang = 'en_US' | 'zh_CN' | 'zh_TW'
+type lang = 'en_US' | 'zh_CN' | 'zh_TW' | 'ru_RU' | 'ja_JP'
 
 const i18n = createI18n<[MessageSchema], lang>({
   // default locale
@@ -17,13 +19,15 @@ const i18n = createI18n<[MessageSchema], lang>({
     "en_US": enUS,
     'zh_CN': zhCN,
     'zh_TW': zhTW,
+    'ru_RU': ruRU,
+    'ja_JP': jaJP
   },
 })
 
 export default i18n
 
-export const availableLangCodes = ['en_US', 'zh_CN', 'zh_TW']
-export const availableLangNames = ['English', '简体中文', '繁體中文']
+export const availableLangCodes = ['en_US', 'zh_CN', 'zh_TW', 'ru_RU', 'ja_JP']
+export const availableLangNames = ['English', '简体中文', '繁體中文', 'Pусский', '日本語']
 
 export const currentLocale = () => {
   return i18n.global.locale
