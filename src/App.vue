@@ -40,16 +40,32 @@ onMounted(() => {
   router.push('/')
 })
 
+const verCompare = (a, b) => {
+  const arr1 = a.split('.')
+  const arr2 = b.split('.')
+
+  if (arr1.length != arr2.length) {
+    return 114
+  }
+
+  for (var i = 0; i < arr1.length; i++) {
+    if (parseInt(arr1[i]) > parseInt(arr2[i])) {
+      return 1
+    } else if (parseInt(arr1[i]) < parseInt(arr2[i])) {
+      return -1
+    }
+  }
+  return 0
+}
+
 const needsUpdate = (latestStr) => {
-  const latest = latestStr.substring(1).split('.')
-  const curr = appVer.split('.')
+  const latest = latestStr.substring(1)
+  const curr = appVer
   console.log(latest)
   console.log(curr)
 
-  for (var i = 0; i < 3; i++) {
-    if (parseInt(latest[i]) > parseInt(curr[i])) {
-      return true
-    }
+  if (verCompare(latest, curr) > 0) {
+    return true
   }
   return false
 }

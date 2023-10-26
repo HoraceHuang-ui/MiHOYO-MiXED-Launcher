@@ -28,6 +28,8 @@ onMounted(async () => {
     imgElement.src = bgPath.value ? bgPath.value : DEFAULT_BG;
     transitionShow.value = true
 
+    // BUILD: '../../app.asar/package.json'
+    // DEV: '../../package.json'
     fetch('../../package.json')
         .then(response => response.json())
         .then((resp) => { appVer.value = resp.version })
@@ -73,16 +75,32 @@ const checkUpdates = () => {
         })
 }
 
+const verCompare = (a, b) => {
+    const arr1 = a.split('.')
+    const arr2 = b.split('.')
+
+    if (arr1.length != arr2.length) {
+        return 114
+    }
+
+    for (var i = 0; i < arr1.length; i++) {
+        if (parseInt(arr1[i]) > parseInt(arr2[i])) {
+            return 1
+        } else if (parseInt(arr1[i]) < parseInt(arr2[i])) {
+            return -1
+        }
+    }
+    return 0
+}
+
 const needsUpdate = (latestStr) => {
-    const latest = latestStr.substring(1).split('.')
-    const curr = appVer.value.split('.')
+    const latest = latestStr.substring(1)
+    const curr = appVer.value
     console.log(latest)
     console.log(curr)
 
-    for (var i = 0; i < 3; i++) {
-        if (parseInt(latest[i]) > parseInt(curr[i])) {
-            return true
-        }
+    if (verCompare(latest, curr) > 0) {
+        return true
     }
     return false
 }
@@ -187,7 +205,8 @@ const extUpd = () => {
                             <div style="color: red;">{{ $t('updDialog_footerText') }}</div>
                         </div>
                         <template #footer>
-                            <div class="flex-row footer-wrapper">
+                            <div class="flex-row footer-wrapper justify-between">
+                                <div class="w-1"></div>
                                 <div class="flex-row">
                                     <el-button
                                         class="mr-3 rounded-full py-1 px-2 hover:bg-gray-200 active:bg-gray-400 transition-all"
