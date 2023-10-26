@@ -87,7 +87,7 @@ pnpm build
 - **English** @HoraceHuang-ui
 - **简体中文** @HoraceHuang-ui
 - **繁體中文** @HoraceHuang-ui *(需要修改)*
-- - **日本語** @JonathanKwok
+- **日本語** @JonathanKwok
 - **Русский** @MCheping8108
   
 点击下方徽章来帮助参与翻译：
