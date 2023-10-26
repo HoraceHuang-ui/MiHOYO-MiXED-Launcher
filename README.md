@@ -70,6 +70,14 @@ pnpm build
     auth: "<YOUR TOKEN HERE>"
   })
 ```
+- For some reasons, relative paths in the `dev` and `build` environments varies for some files. In `onMounted` inside `src/pages/SettingsPage`, the URL of `package.json` is determined by environment.
+```ts
+  // BUILD: '../../app.asar/package.json'
+  // DEV: '../../package.json'
+  fetch('../../app.asar/package.json')
+      .then(response => response.json())
+      .then((resp) => { appVer.value = resp.version })
+```
 # Credits
 - [electron-vite/electron-vite-vue](https://github.com/electron-vite/electron-vite-vue)
 - [enkanetwork.js](https://github.com/Jelosus2/enkanetwork.js)
