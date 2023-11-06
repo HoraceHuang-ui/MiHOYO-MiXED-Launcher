@@ -137,6 +137,7 @@
     "settings_whenClosingWindow": "關閉窗口時",
     "settings_quitOnClose": "退出軟體",
     "settings_trayOnClose": "最小化到托盤",
+    "settings_trayOnLaunch": "啓動游戲后最小化到托盤",
     "settings_clearAllData": "清除所有數據",
     "settings_clearAllDataText": "此選項將清除游戲路徑、啓動器背景、賬戶信息等全部數據。確定繼續嗎？",
     "settings_about": "關於",
