@@ -15,6 +15,7 @@ const updDialogShow = ref(false)
 const updInfo = ref({})
 const checkUpdFailed = ref(false)
 const updChecking = ref(false)
+const quitOnClose = ref(true)
 const updDialogContent = computed(() => {
     return marked(updInfo.value.data.body)
 })
@@ -22,7 +23,12 @@ const updDialogContent = computed(() => {
 const DEFAULT_BG = '../../src/assets/gsbanner.png'
 
 onMounted(async () => {
-    lang.value = localStorage.lang
+    lang.value = localStorage.lang || 'en-US'
+    quitOnClose.value = await window.store.get('quitOnClose')
+    if (quitOnClose.value === undefined) {
+        await window.store.set('quitOnClose', true, false)
+    }
+    console.log(quitOnClose.value)
     bgPath.value = await window.store.get('mainBgPath')
     const imgElement = document.getElementById('bgImage');
     imgElement.src = bgPath.value ? bgPath.value : DEFAULT_BG;
@@ -109,6 +115,11 @@ const extUpd = () => {
     window.electron.openExtLink(updInfo.value.data.assets[0].browser_download_url)
     window.win.close()
 }
+
+const switchQuitAction = async () => {
+    quitOnClose.value = !quitOnClose.value
+    await window.store.set('quitOnClose', quitOnClose.value, false)
+}
 </script>
 
 <template>
@@ -149,6 +160,18 @@ const extUpd = () => {
                             </div>
                         </template>
                     </el-dialog>
+                </div>
+                <div class="form-item cursor-pointer" @click="switchQuitAction">
+                    <div class="h-full py-1">关闭窗口时</div>
+                    <div class="ml-3 rounded-full flex flex-row py-1 w-64 bg-white relative">
+                        <div class="rounded-full bg-blue-500 w-1/2 absolute top-0 bottom-0 z-0 transition-all"
+                            :class="quitOnClose ? 'left-0' : 'left-32'">
+                        </div>
+                        <div class="rounded-full w-32 absolute z-10 left-0 text-center transition-all"
+                            :class="{ 'text-white': quitOnClose }">关闭应用</div>
+                        <div class="rounded-full w-32 absolute z-10 right-0 text-center transition-all"
+                            :class="{ 'text-white': !quitOnClose }">最小化到托盘</div>
+                    </div>
                 </div>
                 <div class="form-item">
                     <div class="hover:underline active:text-orange-300 text-blue-700 cursor-pointer"

@@ -31,8 +31,13 @@ const settings = () => {
     router.push("/settingspage")
 }
 
-const winClose = () => {
-    window.win.close()
+const winClose = async () => {
+    const quitOnClose = await window.store.get('quitOnClose')
+    if (quitOnClose) {
+        window.win.close()
+    } else {
+        window.win.tray()
+    }
 }
 const winMin = () => {
     window.win.min()
