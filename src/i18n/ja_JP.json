@@ -137,6 +137,7 @@
     "settings_whenClosingWindow": "When closing window",
     "settings_quitOnClose": "Quit app",
     "settings_trayOnClose": "Minimize to tray",
+    "settings_trayOnLaunch": "Minimize to tray after launching game",
     "settings_clearAllData": "すべてのデータを消去",
     "settings_clearAllDataText": "このオプションは、ゲームパス、アプリのバックグラウンド画像、プロフィール情報を含むすべてのデータを消去します。続行しますか？",
     "settings_about": "About",
