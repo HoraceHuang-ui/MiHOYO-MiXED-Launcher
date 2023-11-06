@@ -4,6 +4,7 @@ import { switchLang, availableLangCodes, availableLangNames } from '../i18n/inde
 import { useRouter } from 'vue-router'
 import { marked } from 'marked'
 import { Loading } from '@element-plus/icons-vue'
+import CustomSwitch from '../components/CustomSwitch.vue'
 const lang = ref('')
 const langDialogShow = ref(false)
 const clearDialogShow = ref(false)
@@ -16,6 +17,7 @@ const updInfo = ref({})
 const checkUpdFailed = ref(false)
 const updChecking = ref(false)
 const quitOnClose = ref(true)
+const trayOnLaunch = ref(true)
 const updDialogContent = computed(() => {
     return marked(updInfo.value.data.body)
 })
@@ -27,6 +29,12 @@ onMounted(async () => {
     quitOnClose.value = await window.store.get('quitOnClose')
     if (quitOnClose.value === undefined) {
         await window.store.set('quitOnClose', true, false)
+        quitOnClose.value = true
+    }
+    trayOnLaunch.value = await window.store.get('trayOnLaunch')
+    if (trayOnLaunch.value === undefined) {
+        await window.store.set('trayOnLaunch', true, false)
+        trayOnLaunch.value = true
     }
     bgPath.value = await window.store.get('mainBgPath')
     const imgElement = document.getElementById('bgImage');
@@ -119,6 +127,11 @@ const switchQuitAction = async () => {
     quitOnClose.value = !quitOnClose.value
     await window.store.set('quitOnClose', quitOnClose.value, false)
 }
+
+const switchLaunchTray = async () => {
+    console.log(trayOnLaunch.value)
+    await window.store.set('trayOnLaunch', trayOnLaunch.value, false)
+}
 </script>
 
 <template>
@@ -129,7 +142,7 @@ const switchQuitAction = async () => {
                 :src="bgPath ? bgPath : '../../src/assets/gsbanner.png'" />
         </div>
         <el-scrollbar height="91vh" class="scroll-wrapper absolute z-40">
-            <div class="text-left px-10 pt-10 w-full">
+            <div class="text-left px-10 pt-10 w-1/2">
                 <div class="title">{{ $t('settings_general') }}</div>
                 <div class="form-item">
                     <div class="h-full py-1">{{ $t('settings_selectLang') }}</div>
@@ -160,17 +173,22 @@ const switchQuitAction = async () => {
                         </template>
                     </el-dialog>
                 </div>
-                <div class="form-item cursor-pointer" @click="switchQuitAction">
+                <div class="form-item">
                     <div class="h-full py-1">{{ $t('settings_whenClosingWindow') }}</div>
-                    <div class="ml-3 rounded-full flex flex-row py-1 w-64 bg-white relative">
+                    <div class="ml-3 rounded-full flex flex-row py-1 w-64 bg-white relative cursor-pointer"
+                        @click="switchQuitAction">
                         <div class="rounded-full bg-blue-500 w-1/2 absolute top-0 bottom-0 z-0 transition-all"
                             :class="quitOnClose ? 'left-0' : 'left-32'">
                         </div>
-                        <div class="rounded-full w-32 absolute z-10 left-0 text-center transition-all"
+                        <div class="rounded-full w-1/2 absolute z-10 left-0 text-center transition-all"
                             :class="{ 'text-white': quitOnClose }">{{ $t('settings_quitOnClose') }}</div>
-                        <div class="rounded-full w-32 absolute z-10 right-0 text-center transition-all"
+                        <div class="rounded-full w-1/2 absolute z-10 right-0 text-center transition-all"
                             :class="{ 'text-white': !quitOnClose }">{{ $t('settings_trayOnClose') }}</div>
                     </div>
+                </div>
+                <div class="form-item">
+                    <div class="h-full py-1">{{ $t('settings_trayOnLaunch') }}</div>
+                    <CustomSwitch class="ml-3" v-model="trayOnLaunch" @change="switchLaunchTray"></CustomSwitch>
                 </div>
                 <div class="form-item">
                     <div class="hover:underline active:text-orange-300 text-blue-700 cursor-pointer"
@@ -206,15 +224,17 @@ const switchQuitAction = async () => {
                     </div>
                 </div>
                 <div class="form-item">
-                    <img class="img-link cursor-pointer" src="../assets/github-mark.png"
-                        @click="openLink('https://github.com/HoraceHuang-ui/MiHOYO-MiXED-Launcher')" />
-                    <button @click="checkUpdates" class="rounded-full cursor-default ml-3 px-3"
-                        :class="latest ? 'button-disabled' : 'button-enabled'">{{
-                            latest ? $t('settings_latestVersion') : $t('settings_checkUpdates') }}</button>
-                    <el-icon class="is-loading ml-2" :size="20" style="margin-top: 6px;" v-if="updChecking">
-                        <Loading />
-                    </el-icon>
-                    <div class="text-red-600 ml-3 mt-1" v-if="checkUpdFailed">{{ $t('settings_checkUpdFailed') }}</div>
+                    <div class="flex flex-row">
+                        <img class="img-link cursor-pointer" src="../assets/github-mark.png"
+                            @click="openLink('https://github.com/HoraceHuang-ui/MiHOYO-MiXED-Launcher')" />
+                        <button @click="checkUpdates" class="rounded-full cursor-default ml-3 px-3"
+                            :class="latest ? 'button-disabled' : 'button-enabled'">{{
+                                latest ? $t('settings_latestVersion') : $t('settings_checkUpdates') }}</button>
+                        <el-icon class="is-loading ml-2" :size="20" style="margin-top: 6px;" v-if="updChecking">
+                            <Loading />
+                        </el-icon>
+                        <div class="text-red-600 ml-3 mt-1" v-if="checkUpdFailed">{{ $t('settings_checkUpdFailed') }}</div>
+                    </div>
                     <el-dialog v-model="updDialogShow" :title="$t('updDialog_title')" width="40%" center>
                         <div style="padding-left: 20px; padding-right: 20px;">
                             <div v-html="updDialogContent"></div>
@@ -254,11 +274,11 @@ const switchQuitAction = async () => {
 @tailwind utilities;
 
 .title {
-    @apply text-4xl font-bold mt-8;
+    @apply text-4xl font-bold mt-8 cursor-default;
 }
 
 .form-item {
-    @apply flex flex-row mt-4 ml-8;
+    @apply flex flex-row justify-between mt-4 ml-8 cursor-default;
 }
 
 .bg-pic {

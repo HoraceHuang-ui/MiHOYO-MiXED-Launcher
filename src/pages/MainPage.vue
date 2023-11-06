@@ -25,18 +25,27 @@ onMounted(async () => {
 })
 
 const genshin = async () => {
-    window.child.exec(gsGamePath.value)
-    window.win.tray()
+    await window.child.exec(gsGamePath.value)
+    const trayOnLaunch = await window.store.get('trayOnLaunch')
+    if (trayOnLaunch) {
+        window.win.tray()
+    }
 }
 
 const starRail = async () => {
     await window.child.exec(srGamePath.value)
-    window.win.tray()
+    const trayOnLaunch = await window.store.get('trayOnLaunch')
+    if (trayOnLaunch) {
+        window.win.tray()
+    }
 }
 
 const honkai3 = async () => {
     await window.child.exec(hiGamePath.value)
-    window.win.tray()
+    const trayOnLaunch = await window.store.get('trayOnLaunch')
+    if (trayOnLaunch) {
+        window.win.tray()
+    }
 }
 
 const setPic = async () => {

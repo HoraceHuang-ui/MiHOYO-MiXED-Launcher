@@ -127,9 +127,12 @@ const confirmPaths = async () => {
     srGamePath.value = gamePath.value
     importDialogShow.value = false
 }
-const srLaunch = () => {
-    window.child.exec(srGamePath.value)
-    window.win.tray()
+const srLaunch = async () => {
+    await window.child.exec(srGamePath.value)
+    const trayOnLaunch = await window.store.get('trayOnLaunch')
+    if (trayOnLaunch) {
+        window.win.tray()
+    }
 }
 
 const handleCommand = (command) => {

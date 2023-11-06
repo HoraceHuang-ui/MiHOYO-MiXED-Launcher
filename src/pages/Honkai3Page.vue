@@ -127,9 +127,12 @@ const confirmPaths = async () => {
     hiGamePath.value = gamePath.value
     importDialogShow.value = false
 }
-const hiLaunch = () => {
-    window.child.exec(hiGamePath.value)
-    window.win.tray()
+const hiLaunch = async () => {
+    await window.child.exec(hiGamePath.value)
+    const trayOnLaunch = await window.store.get('trayOnLaunch')
+    if (trayOnLaunch) {
+        window.win.tray()
+    }
 }
 
 const handleCommand = (command) => {

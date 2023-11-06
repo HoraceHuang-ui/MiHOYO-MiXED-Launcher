@@ -10,6 +10,7 @@ module.exports = {
     "./src/components/DialogListItem.vue",
     "./src/components/LoadFailedBlock.vue",
     "./src/components/CustomUIDInput.vue",
+    "./src/components/CustomSwitch.vue",
     "./src/pages/MainPage.vue",
     "./src/pages/GenshinPage.vue",
     "./src/pages/StarRailPage.vue",

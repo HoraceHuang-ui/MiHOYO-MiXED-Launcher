@@ -129,9 +129,12 @@ const confirmPaths = async () => {
     gsGamePath.value = gamePath.value
     importDialogShow.value = false
 }
-const gsLaunch = () => {
-    window.child.exec(gsGamePath.value)
-    window.win.tray()
+const gsLaunch = async () => {
+    await window.child.exec(gsGamePath.value)
+    const trayOnLaunch = await window.store.get('trayOnLaunch')
+    if (trayOnLaunch) {
+        window.win.tray()
+    }
 }
 
 const handleCommand = (command) => {

@@ -137,6 +137,7 @@
     "settings_whenClosingWindow": "When closing window",
     "settings_quitOnClose": "Quit app",
     "settings_trayOnClose": "Minimize to tray",
+    "settings_trayOnLaunch": "Minimize to tray after launching game",
     "settings_clearAllData": "Clear All Data",
     "settings_clearAllDataText": "This option will clear ALL data including game paths, app background image and profile info. Continue?",
     "settings_about": "About",
