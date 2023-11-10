@@ -43,7 +43,7 @@ onMounted(async () => {
 
     // BUILD: '../../app.asar/package.json'
     // DEV: '../../package.json'
-    fetch('../../package.json')
+    fetch('../../app.asar/package.json')
         .then(response => response.json())
         .then((resp) => { appVer.value = resp.version })
 })
