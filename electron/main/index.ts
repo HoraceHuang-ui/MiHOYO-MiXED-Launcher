@@ -67,6 +67,7 @@ async function createWindow() {
     width: 1200,
     height: 700,
     resizable: false,
+    maximizable: false,
     // transparent: true,
     frame: false,
     webPreferences: {

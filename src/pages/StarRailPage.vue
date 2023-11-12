@@ -9,10 +9,10 @@ const srGamePath = ref('')
 const displayConfirm = ref(false)
 const launcherPath = ref('')
 const gamePath = ref('')
-const timeUpd1_2 = Date.parse("2023/07/19 12:00:00 UTC+8")
+const timeUpd1_4 = Date.parse("2023/10/04 12:00:00 UTC+8")
 const timeNow = Date.now()
 const timeDelta = computed(() =>
-    Math.ceil((timeNow - timeUpd1_2) / 1000 / 3600 / 24 - 0.5) % 42
+    Math.ceil((timeNow - timeUpd1_4) / 1000 / 3600 / 24 - 0.5) % 42
 )
 const launcherInfo = ref({})
 const launcherInfoReady = ref(false)

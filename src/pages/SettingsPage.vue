@@ -135,10 +135,9 @@ const switchLaunchTray = async () => {
 </script>
 
 <template>
-    <div @touchmove.prevent @mousewheel.prevent :class="transitionShow ? '' : 'opacity-0 blur-lg scale-90'"
-        style="transition-duration: 400ms;">
+    <div :class="transitionShow ? '' : 'opacity-0 blur-lg scale-90'" style="transition-duration: 400ms;">
         <div class="bg-pic">
-            <img class="object-cover blur-xl opacity-25 scale-105" id="bgImage"
+            <img class="object-cover w-full h-full blur-xl opacity-25 scale-105" id="bgImage"
                 :src="bgPath ? bgPath : '../../src/assets/gsbanner.png'" />
         </div>
         <el-scrollbar height="91vh" class="scroll-wrapper absolute z-40">
@@ -237,7 +236,9 @@ const switchLaunchTray = async () => {
                     </div>
                     <el-dialog v-model="updDialogShow" :title="$t('updDialog_title')" width="40%" center>
                         <div style="padding-left: 20px; padding-right: 20px;">
-                            <div v-html="updDialogContent"></div>
+                            <el-scrollbar height="40vh">
+                                <div v-html="updDialogContent"></div>
+                            </el-scrollbar>
                             <div style="color: red; margin-top: 10px;">{{ $t('updDialog_version') }}v{{ appVer }} 👉 {{
                                 updInfo.data.tag_name }}
                             </div>
