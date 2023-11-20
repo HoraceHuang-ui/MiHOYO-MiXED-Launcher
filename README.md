@@ -89,6 +89,7 @@ pnpm build
 - **繁體中文** @HoraceHuang-ui *(Needs revision)*
 - **日本語** @JonathanKwok
 - **Русский** @MCheping8108
+- **Français** @MCheping8108
   
 Click the badge below to help translate miXeD to your language:
 
