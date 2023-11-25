@@ -9,5 +9,8 @@
       ],
       "url": "https://json.schemastore.org/electron-builder"
     }
+  ],
+  "i18n-ally.localesPaths": [
+    "src/i18n"
   ]
 }
