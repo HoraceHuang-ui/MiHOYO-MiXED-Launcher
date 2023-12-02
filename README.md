@@ -63,7 +63,7 @@ pnpm dev
 pnpm build
 ```
 ## Notes
-- This app checks updates via GitHub API, which will be automatically expired once it is uploaded publically in GitHub. Therefore, during development, please create a token yourself and place it in `Octokit.auth` inside `electron/main/index.ts`.
+- This app checks for updates via the GitHub API, which will automatically expire once it is uploaded publicly on GitHub. Therefore, during development, please create a token yourself and place it in `Octokit.auth` inside `electron/main/index.ts`.
 ```ts
   const { Octokit } = require("@octokit/core")
   const octokit = new Octokit({
