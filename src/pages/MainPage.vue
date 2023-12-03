@@ -90,14 +90,14 @@ const resetPic = () => {
                 class="p-3 mx-2 my-2 font-bold text-xl transition-all bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 cursor-default">{{
                     $t('mainpage_buttonText', { game: $t('general_hi3Short') }) }}</button>
         </div>
-        <div class="rounded-full absolute left-8 bottom-4 w-10 h-10 bg-white hover:bg-gray-100 active:bg-gray-400 active:scale-90 transition-all"
+        <div class="rounded-full fixed left-8 bottom-4 w-10 h-10 bg-white hover:bg-gray-100 active:bg-gray-400 active:scale-90 transition-all"
             @click="setPic">
             <el-icon :size="20" class="w-full h-full">
                 <Picture />
             </el-icon>
         </div>
         <div v-if="bgPath && bgPath !== DEFAULT_BG"
-            class="rounded-full absolute left-20 bottom-4 w-10 h-10 bg-white hover:bg-gray-100 active:bg-gray-400 active:scale-90 transition-all"
+            class="rounded-full fixed left-20 bottom-4 w-10 h-10 bg-white hover:bg-gray-100 active:bg-gray-400 active:scale-90 transition-all"
             @click="resetPic">
             <el-icon :size="20" class="w-full h-full">
                 <RefreshLeft />
