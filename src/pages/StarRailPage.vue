@@ -289,7 +289,7 @@ const onImportDialogClose = () => {
                         </div>
                     </div>
                 </div>
-                <StarRailInfoCard class="my-2 w-full shadow-md" style="height: 97vh;"></StarRailInfoCard>
+                <StarRailInfoCard class="my-2 w-full shadow-md"></StarRailInfoCard>
             </div>
         </el-scrollbar>
     </div>

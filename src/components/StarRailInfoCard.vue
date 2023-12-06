@@ -238,7 +238,7 @@ const trimAdditions = (additions) => {
 </script>
 
 <template>
-    <div class="bg-white" style="border-radius: 4.5vh;" :style="playerInfoReady ? 'height: 97vh;' : ''">
+    <div class="bg-white" style="border-radius: 4.5vh; margin-bottom: 1rem;" :style="playerInfoReady ? 'height: 97vh;' : ''">
         <el-dialog v-if="playerInfoReady" v-model="charDialogShow"
             :title="playerInfo.characters[charDialogId].name + ' ' + $t('sr_charDetails')" width="30%">
             <div class="flex flex-col content-center justify-center w-full px-5">
@@ -683,6 +683,8 @@ const trimAdditions = (additions) => {
                 </div>
             </div>
         </div>
+        <div v-if="!playerInfoReady" class="mt-4 mb-4">{{ $t('gs_emptyPlayerTip') }}</div>
+        <div v-else class="mt-4 mb-4">{{ $t('gs_showcaseTip') }}</div>
     </div>
 </template>
 
@@ -704,7 +706,7 @@ const trimAdditions = (additions) => {
 }
 
 .gacha-mask {
-    -webkit-mask: linear-gradient(transparent 5%, white 14%, white 85%, transparent)
+    -webkit-mask: linear-gradient(transparent, white 15%, white 85%, transparent)
 }
 
 .left-gacha {
