@@ -3,6 +3,11 @@
 By HoraceHyy
 > Launch HoYoVERSE games in one place and analyze in-game player informations.
 
+# Oops!
+Just learnt something new from other projects lately, and I'd just realized how shitty my codes are. I'll 
+try to refactor some of the codes of this project in several weeks (or months)? Plz forgive me for
+the following slow updates!
+
 # Features
 - [x] Launch `Genshin Impact`, `Honkai: Star Rail` and `Honkai Impact 3rd` in one place.
 - [ ] `Zenless Zone Zero` to be supported.

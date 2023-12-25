@@ -1,6 +1,6 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
-import { switchLang, availableLangCodes, availableLangNames } from '../i18n/index'
+import { switchLang, availableLangCodes, availableLangNames } from '../i18n'
 import { useRouter } from 'vue-router'
 import { marked } from 'marked'
 import { Loading } from '@element-plus/icons-vue'
@@ -112,10 +112,8 @@ const needsUpdate = (latestStr) => {
     console.log(latest)
     console.log(curr)
 
-    if (verCompare(latest, curr) > 0) {
-        return true
-    }
-    return false
+    return verCompare(latest, curr) > 0;
+
 }
 
 const extUpd = () => {

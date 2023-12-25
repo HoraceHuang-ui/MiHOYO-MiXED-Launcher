@@ -131,23 +131,17 @@ async function createWindow() {
       const result = await dialog.showOpenDialog(win, options)
       if (!result.canceled && result.filePaths.length > 0) {
         try {
-          await fs.access(imageFolder);
+          await fs.access(imageFolder)
         } catch {
-          await fs.mkdir(imageFolder);
+          await fs.mkdir(imageFolder)
         }
 
         const sourcePath = result.filePaths[0];
 
         const dataURL = await fs.readFile(sourcePath, 'base64')
-          .then(data => `data:image/png;base64,${data}`);
+          .then(data => `data:image/png;base64,${data}`)
 
-        return dataURL;
-
-        // const targetPath = path.join(imageFolder, path.basename(sourcePath));
-
-        // await fs.copyFile(sourcePath, targetPath)
-        // console.log(targetPath)
-        // return targetPath
+        return dataURL
       } else {
         return ''
       }

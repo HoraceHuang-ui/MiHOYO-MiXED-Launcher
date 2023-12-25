@@ -1,15 +1,15 @@
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { ArrowLeftBold, ArrowRightBold } from '@element-plus/icons-vue'
-import { translate } from '../i18n/index'
+import { translate } from '../i18n'
 import StatIcon from './StatIcon.vue'
 
-const playerInfo = ref({})
+const playerInfo = ref<any>({})
 
 const uidInput = ref('')
-var uid = ''
-var charsPage = ref(0)
+let uid = '';
+const charsPage = ref(0);
 const pages = computed(() => {
     console.log("character.length: ")
     return playerInfo.value.characters && playerInfo.value.characters.length > 10

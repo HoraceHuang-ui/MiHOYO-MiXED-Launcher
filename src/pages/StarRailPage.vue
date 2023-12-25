@@ -1,7 +1,7 @@
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { translate } from '../i18n/index'
+import { translate } from '../i18n'
 const gameName = translate('general_sr')
 
 const srLauncherPath = ref('')
@@ -19,14 +19,13 @@ const launcherInfoReady = ref(false)
 const launcherInfoFailed = ref(false)
 const errMsg = ref('')
 const hideElements = ref(false)
-const scrollbarref = ref()
+const scrollBarRef = ref()
 const importDialogShow = ref(false)
 const combinePaths = ref(true)
 
 const postTypeMap = new Map()
 
 onMounted(async () => {
-    // 获取星铁启动器信息
     window.axios.post(translate('sr_launcherContentsUrl'))
         .then((value) => {
             launcherInfo.value = value.data
@@ -100,8 +99,8 @@ const srLauncherImport = async () => {
             launcherPath.value = resp[0]
         }
     }).catch((error) => {
-        console.error('Error in showing dialog:', error);
-    });
+        console.error('Error in showing dialog:', error)
+    })
 }
 const srGameImport = async () => {
     window.dialog.show({
@@ -113,8 +112,8 @@ const srGameImport = async () => {
             gamePath.value = resp[0]
         }
     }).catch((error) => {
-        console.error('Error in showing dialog:', error);
-    });
+        console.error('Error in showing dialog:', error)
+    })
 }
 const confirmPaths = async () => {
     if (combinePaths.value) {
@@ -131,7 +130,7 @@ const srLaunch = async () => {
     await window.child.exec(srGamePath.value)
     const trayOnLaunch = await window.store.get('trayOnLaunch')
     if (trayOnLaunch) {
-        window.win.tray()
+        await window.win.tray()
     }
 }
 
@@ -239,7 +238,7 @@ const onImportDialogClose = () => {
             <img class=" top-0 rounded-3xl transition-all" :class="hideElements ? 'blur-md scale-125 brightness-75' : ''"
                 style="transition-duration: 500ms;"
                 :src="launcherInfoReady && launcherInfo.adv ? launcherInfo.adv.background : '../../src/assets/srbanner.jpg'"
-                @touchmove.prevent @mousewheel.prevent />
+                @touchmove.prevent @mousewheel.prevent alt="Launcher background image for Honkai Star Rail"/>
         </div>
         <LauncherBanner class="absolute left-16 top-48 z-50 rounded-xl transition-all"
             v-if="launcherInfoReady && 'banner' in launcherInfo && launcherInfo.banner.length > 0"
@@ -251,7 +250,7 @@ const onImportDialogClose = () => {
             class="absolute left-16 top-96 z-50 rounded-xl transition-all backdrop-blur-md pl-3 pr-1 font-sr-sans"
             :class="hideElements ? 'opacity-0 -translate-y-2 pointer-events-none blur-md -translate-x-14 scale-110' : 'opacity-100 pointer-events-auto'"
             style="height: 125px; width: 396px; background-color: rgb(255 255 255 / 0.7); transition-duration: 500ms;" />
-        <el-scrollbar ref="scrollbarref" height="91vh" class="scroll-wrapper absolute z-40" @scroll="handleScroll">
+        <el-scrollbar ref="scrollBarRef" height="91vh" class="scroll-wrapper absolute z-40" @scroll="handleScroll">
             <div class="items-scroll flex flex-col content-center items-center w-full">
                 <div class="w-full flex flex-row justify-between">
                     <div class="w-1"></div>

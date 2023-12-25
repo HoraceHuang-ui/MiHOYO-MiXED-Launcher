@@ -1,14 +1,15 @@
-const { contextBridge, ipcRenderer } = require("electron");
+import {contextBridge, ipcRenderer} from "electron";
+
 
 contextBridge.exposeInMainWorld("store", {
-  set: (key, value, json) => ipcRenderer.send("store:set", key, value, json),
+  set: (key: String, value: any, json: Boolean) => ipcRenderer.send("store:set", key, value, json),
   // window.storeAPI.set('genshinPath', 'd:\\...')
-  get: (key) => ipcRenderer.invoke("store:get", key),
-  delete: (key) => ipcRenderer.send("store:delete", key),
+  get: (key: String) => ipcRenderer.invoke("store:get", key),
+  delete: (key: String) => ipcRenderer.send("store:delete", key),
   clear: () => ipcRenderer.send("store:clear"),
-});
+})
 contextBridge.exposeInMainWorld("child", {
-  exec: (path) => ipcRenderer.send("child:exec", path)
+  exec: (path: String) => ipcRenderer.send("child:exec", path)
 })
 contextBridge.exposeInMainWorld("dialog", {
   show: async (options) => {
@@ -21,7 +22,7 @@ contextBridge.exposeInMainWorld("dialog", {
   }
 })
 contextBridge.exposeInMainWorld("enka", {
-  getGenshinPlayer: async (uid, lang) => {
+  getGenshinPlayer: async (uid: String, lang: String) => {
     console.log('ipcRenderer')
     const result = await ipcRenderer.invoke("enka:getGenshinPlayer", uid, lang)
     console.log(result)
@@ -40,20 +41,20 @@ contextBridge.exposeInMainWorld("win", {
   }
 })
 contextBridge.exposeInMainWorld("path", {
-  joinDirnameAsset: (arg) => ipcRenderer.invoke("path:joinDirnameAsset", arg)
+  joinDirnameAsset: (arg: String) => ipcRenderer.invoke("path:joinDirnameAsset", arg)
 })
 contextBridge.exposeInMainWorld("axios", {
-  post: async (url) => {
+  post: async (url: String) => {
     const result = await ipcRenderer.invoke("axios:post", url)
     return result
   },
-  get: async (url) => {
+  get: async (url: String) => {
     const result = await ipcRenderer.invoke("axios:get", url)
     return result
   }
 })
 contextBridge.exposeInMainWorld("electron", {
-  openExtLink: (url) => {
+  openExtLink: (url: String) => {
     ipcRenderer.send("elec:openExtLink", url)
   }
 })

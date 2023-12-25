@@ -1,15 +1,15 @@
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { ArrowLeftBold, ArrowRightBold } from '@element-plus/icons-vue'
-import { translate } from '../i18n/index'
+import { translate } from '../i18n'
 import DialogListItem from './DialogListItem.vue'
 import StatIcon from './StatIcon.vue'
 // import rankMap from '../textMaps/character_ranks.json' with { type: 'json' }
 
 const apiUrl = 'https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/'
 
-const playerInfo = ref({})
+const playerInfo = ref<any>({})
 const playerInfoReady = ref(false)
 const playerInfoLoading = ref(false)
 const playerInfoFailed = ref(false)
@@ -226,8 +226,8 @@ const showCharDetails = (index) => {
 
 const trimAdditions = (additions) => {
     const map = ['atk', 'hp', 'def', 'spd', 'crit_rate', 'crit_dmg']
-    var tmp = [...additions]
-    for (var i = 0; i < tmp.length; i++) {
+    const tmp = [...additions]
+    for (let i = 0; i < tmp.length; i++) {
         if (map.indexOf(tmp[i].field) != -1) {
             tmp.splice(i, 1)
             i--

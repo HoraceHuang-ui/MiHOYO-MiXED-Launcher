@@ -1,12 +1,12 @@
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
 import { marked } from 'marked'
 import { useRouter } from 'vue-router'
 
-var appVer = ''
+let appVer = ''
 const updCheck = ref(false)
 const updDialogShow = ref(false)
-const updInfo = ref({})
+const updInfo = ref<any>()
 const updDialogContent = computed(() => {
   return marked(updInfo.value.data.body)
 })
@@ -16,10 +16,10 @@ const router = useRouter()
 onMounted(() => {
   // window.store.delete("targetVersion")
   window.github.getLatestRelease()
-    .then((resp) => {
+    .then((resp: any) => {
       if (needsUpdate(resp.data.tag_name)) {
         window.store.get("targetVersion")
-          .then((target) => {
+          .then((target: any) => {
             console.log(target)
             if (!target || target < resp.data.tag_name) {
               updDialogShow.value = true
@@ -29,7 +29,7 @@ onMounted(() => {
       }
       updCheck.value = true
     })
-    .catch((err) => {
+    .catch((err: Error) => {
       console.error(err)
     })
 
@@ -40,7 +40,7 @@ onMounted(() => {
   router.push('/')
 })
 
-const verCompare = (a, b) => {
+const verCompare = (a: string, b: string) => {
   const arr1 = a.split('.')
   const arr2 = b.split('.')
 
@@ -48,7 +48,7 @@ const verCompare = (a, b) => {
     return 114
   }
 
-  for (var i = 0; i < arr1.length; i++) {
+  for (let i = 0; i < arr1.length; i++) {
     if (parseInt(arr1[i]) > parseInt(arr2[i])) {
       return 1
     } else if (parseInt(arr1[i]) < parseInt(arr2[i])) {
@@ -58,16 +58,13 @@ const verCompare = (a, b) => {
   return 0
 }
 
-const needsUpdate = (latestStr) => {
+const needsUpdate = (latestStr: string) => {
   const latest = latestStr.substring(1)
   const curr = appVer
   console.log(latest)
   console.log(curr)
 
-  if (verCompare(latest, curr) > 0) {
-    return true
-  }
-  return false
+  return verCompare(latest, curr) > 0
 }
 
 const extUpd = () => {
@@ -113,16 +110,6 @@ const onDialogClose = () => {
 </template>
 
 <style>
-.v-enter-active,
-.v-leave-active {
-  transition: opacity 0.2s ease;
-}
-
-.v-enter-from,
-.v-leave-to {
-  opacity: 0;
-}
-
 .flex-row {
   display: flex;
   flex-direction: row;

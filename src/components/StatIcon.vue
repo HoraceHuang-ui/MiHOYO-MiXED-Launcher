@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import gs_hpIcon from '../assets/statIcons/gs/hpIcon.vue'
 import gs_atkIcon from '../assets/statIcons/gs/atkIcon.vue'
 import gs_defIcon from '../assets/statIcons/gs/defIcon.vue'

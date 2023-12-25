@@ -13,7 +13,8 @@
     "skipLibCheck": true,
     "noEmit": true,
     "allowJs": true,
-    "types": ["element-plus/global"]
+    "types": ["element-plus/global"],
+    "typeRoots": ["./node_modules/@types", "./src/types"]
   },
   "include": ["src"],
   "references": [

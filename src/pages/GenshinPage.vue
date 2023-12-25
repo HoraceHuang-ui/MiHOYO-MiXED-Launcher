@@ -1,7 +1,7 @@
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { translate } from '../i18n/index'
+import { translate } from '../i18n'
 const gameName = translate('general_gs')
 
 const gsLauncherPath = ref('')

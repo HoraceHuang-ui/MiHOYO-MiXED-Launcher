@@ -35,7 +35,7 @@ export const currentLocale = () => {
   return i18n.global.locale
 }
 
-export const translate = (key: string, locale?: string, bindings?: any) => {
+export const translate = (key: string, bindings?: any, locale?: string) => {
     if (!key) {
         return ''
     }

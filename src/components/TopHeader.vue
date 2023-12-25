@@ -1,7 +1,7 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { translate } from '../i18n/index'
+import { translate } from '../i18n'
 // const props = defineProps({
 //     selection: Number
 // })
@@ -34,9 +34,9 @@ const settings = () => {
 const winClose = async () => {
     const quitOnClose = await window.store.get('quitOnClose')
     if (quitOnClose) {
-        window.win.close()
+        await window.win.close()
     } else {
-        window.win.tray()
+        await window.win.tray()
     }
 }
 const winMin = () => {

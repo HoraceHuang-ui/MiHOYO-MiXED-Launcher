@@ -26,7 +26,6 @@ declare module 'vue' {
     ElText: typeof import('element-plus/es')['ElText']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
     GenshinInfoCard: typeof import('./src/components/GenshinInfoCard.vue')['default']
-    HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     LauncherBanner: typeof import('./src/components/LauncherBanner.vue')['default']
     LauncherPosts: typeof import('./src/components/LauncherPosts.vue')['default']
     LoadFailedBlock: typeof import('./src/components/LoadFailedBlock.vue')['default']

@@ -1,7 +1,10 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 const props = defineProps({
-    postTypeMap: Map
+    postTypeMap: {
+      type: Map<string, any>,
+      required: true
+    }
 })
 
 const tabsModel = ref('aaa')

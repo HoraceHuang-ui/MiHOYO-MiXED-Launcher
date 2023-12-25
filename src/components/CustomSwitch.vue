@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 const props = defineProps(['modelValue'])
 const emit = defineEmits(['change', 'update:modelValue'])
 
