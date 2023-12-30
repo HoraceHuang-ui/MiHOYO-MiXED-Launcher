@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { translate } from '../i18n'
+import {ref} from 'vue'
+import {useRouter} from 'vue-router'
+import {translate} from '../i18n'
 // const props = defineProps({
 //     selection: Number
 // })
@@ -51,22 +51,22 @@ const winMin = () => {
             <el-button class="no-drag" @click="clearPlayerInfo">清除游戏数据</el-button>
         </div> -->
         <div class="mt-3 ml-2 text-left flex flex-row" style="width: 35vw;">
-            <img src="../../public/favicon.ico" class="h-6 mt-1" />
+            <img src="../../public/favicon.ico" class="h-6 mt-1"/>
             <div class="ml-2" style="margin-top: 2px;">miXeD · {{ pageNames[selection] }}</div>
         </div>
         <div class="no-drag flex flex-row h-full items-center justify-items-center">
             <img src="../assets/homeicon.png"
-                class="mx-2 rounded-lg opacity-60 h-8 transition-all hover:scale-110 active:scale-90" @click="home"
-                :class="{ 'selected hover:scale-100': selection == 0 }" />
+                 class="mx-2 rounded-lg opacity-60 h-8 transition-all hover:scale-110 active:scale-90" @click="home"
+                 :class="{ 'selected hover:scale-100': selection == 0 }"/>
             <img src="../assets/gsicon.webp" class="mx-2 rounded-lg h-8 transition-all hover:scale-110 active:scale-90"
-                @click="genshin" :class="{ 'selected hover:scale-100': selection == 1 }" />
+                 @click="genshin" :class="{ 'selected hover:scale-100': selection == 1 }"/>
             <img src="../assets/sricon.webp" class="mx-2 rounded-lg h-8 transition-all hover:scale-110 active:scale-90"
-                @click="starRail" :class="{ 'selected hover:scale-100': selection == 2 }" />
+                 @click="starRail" :class="{ 'selected hover:scale-100': selection == 2 }"/>
             <img src="../assets/hi3icon.png" class="mx-2 rounded-lg h-8 transition-all hover:scale-110 active:scale-90"
-                @click="honkai3" :class="{ 'selected hover:scale-100': selection == 3 }" />
+                 @click="honkai3" :class="{ 'selected hover:scale-100': selection == 3 }"/>
             <img src="../assets/settingsIcon.png" @click="settings"
-                class="mx-2 rounded-lg opacity-60 h-8 transition-all hover:scale-110 active:scale-90"
-                style="padding: 2px   ;" :class="{ 'selected hover:scale-100': selection == 4 }" />
+                 class="mx-2 rounded-lg opacity-60 h-8 transition-all hover:scale-110 active:scale-90"
+                 style="padding: 2px   ;" :class="{ 'selected hover:scale-100': selection == 4 }"/>
         </div>
         <div class="example focus drag" style="width: 35vw;">
             <div class="traffic-lights no-drag mt-2">

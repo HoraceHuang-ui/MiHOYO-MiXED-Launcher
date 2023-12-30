@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import { lang, switchLang, availableLangCodes, availableLangNames } from '../i18n'
-import { useRouter } from 'vue-router'
-import { marked } from 'marked'
-import { Loading } from '@element-plus/icons-vue'
+import {computed, onMounted, ref} from 'vue'
+import {availableLangCodes, availableLangNames, lang, switchLang} from '../i18n'
+import {useRouter} from 'vue-router'
+import {marked} from 'marked'
+import {Loading} from '@element-plus/icons-vue'
 import CustomSwitch from '../components/CustomSwitch.vue'
 import {UpdInfo} from "../types/github/ghUpdInfo";
+
 const lang = ref<lang>('en_US')
 const langDialogShow = ref(false)
 const clearDialogShow = ref(false)
@@ -15,24 +16,24 @@ const appVer = ref('')
 const latest = ref(false)
 const updDialogShow = ref(false)
 const updInfo = ref<UpdInfo>({
-  assets: [],
-  assets_url: "",
-  body: "",
-  created_at: "",
-  discussion_url: "",
-  draft: false,
-  html_url: "",
-  id: 0,
-  name: "",
-  node_id: "",
-  prerelease: false,
-  published_at: "",
-  tag_name: "",
-  tarball_url: "",
-  target_commitish: "",
-  upload_url: "",
-  url: "",
-  zipball_url: ""
+    assets: [],
+    assets_url: "",
+    body: "",
+    created_at: "",
+    discussion_url: "",
+    draft: false,
+    html_url: "",
+    id: 0,
+    name: "",
+    node_id: "",
+    prerelease: false,
+    published_at: "",
+    tag_name: "",
+    tarball_url: "",
+    target_commitish: "",
+    upload_url: "",
+    url: "",
+    zipball_url: ""
 })
 const checkUpdFailed = ref(false)
 const updChecking = ref(false)
@@ -63,7 +64,9 @@ onMounted(async () => {
     // DEV: '../../package.json'
     fetch('../../app.asar/package.json')
         .then(response => response.json())
-        .then((resp) => { appVer.value = resp.version })
+        .then((resp) => {
+            appVer.value = resp.version
+        })
 })
 
 const router = useRouter()
@@ -130,7 +133,7 @@ const needsUpdate = (latestStr: string) => {
     console.log(latest)
     console.log(curr)
 
-    return verCompare(latest, curr) > 0;
+    return verCompare(latest, curr) > 0
 
 }
 
@@ -154,7 +157,7 @@ const switchLaunchTray = async () => {
     <div :class="transitionShow ? '' : 'opacity-0 blur-lg scale-90'" style="transition-duration: 400ms;">
         <div class="bg-pic">
             <img class="object-cover w-full h-full blur-xl opacity-25 scale-105"
-                :src="bgPath ? bgPath : '../../src/assets/gsbanner.png'" />
+                 :src="bgPath ? bgPath : '../../src/assets/gsbanner.png'"/>
         </div>
         <el-scrollbar height="91vh" class="scroll-wrapper absolute z-40">
             <div class="text-left px-10 pt-10 w-1/2">
@@ -162,12 +165,14 @@ const switchLaunchTray = async () => {
                 <div class="form-item">
                     <div class="h-full py-1">{{ $t('settings_selectLang') }}</div>
                     <select name="language" @change="langDialogShow = true" v-model="lang"
-                        class="border-2 rounded-full py-1 px-2 ml-3 hover:bg-gray-100 transition-all">
-                        <option v-for="(langCode, i) in availableLangCodes" :value="langCode">{{ availableLangNames[i] }}
+                            class="border-2 rounded-full py-1 px-2 ml-3 hover:bg-gray-100 transition-all">
+                        <option v-for="(langCode, i) in availableLangCodes" :value="langCode">{{
+                                availableLangNames[i]
+                            }}
                         </option>
                     </select>
                     <el-dialog v-model="langDialogShow" :title="$t('settings_langChangeTitle')" width="40%" center
-                        :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false">
+                               :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false">
                         <div v-t="{ path: 'settings_langChangeText', locale: lang }"></div>
                         <template #footer>
                             <div class="flex-row justify-between">
@@ -177,7 +182,8 @@ const switchLaunchTray = async () => {
                                         class="mr-3 rounded-full py-1 px-2 hover:bg-gray-200 active:bg-gray-400 transition-all"
                                         @click="langDialogCancel">{{
                                             $t('general_cancel')
-                                        }}</button>
+                                        }}
+                                    </button>
                                     <button
                                         class="rounded-full py-1 px-3 bg-blue-600 text-white hover:bg-blue-500 active:scale-90 transition-all"
                                         @click="langChange">
@@ -191,14 +197,16 @@ const switchLaunchTray = async () => {
                 <div class="form-item">
                     <div class="h-full py-1">{{ $t('settings_whenClosingWindow') }}</div>
                     <div class="ml-3 rounded-full flex flex-row py-1 w-64 bg-white relative cursor-pointer"
-                        @click="switchQuitAction">
+                         @click="switchQuitAction">
                         <div class="rounded-full bg-blue-500 w-1/2 absolute top-0 bottom-0 z-0 transition-all"
-                            :class="quitOnClose ? 'left-0' : 'left-32'">
+                             :class="quitOnClose ? 'left-0' : 'left-32'">
                         </div>
                         <div class="rounded-full w-1/2 absolute z-10 left-0 text-center transition-all"
-                            :class="{ 'text-white': quitOnClose }">{{ $t('settings_quitOnClose') }}</div>
+                             :class="{ 'text-white': quitOnClose }">{{ $t('settings_quitOnClose') }}
+                        </div>
                         <div class="rounded-full w-1/2 absolute z-10 right-0 text-center transition-all"
-                            :class="{ 'text-white': !quitOnClose }">{{ $t('settings_trayOnClose') }}</div>
+                             :class="{ 'text-white': !quitOnClose }">{{ $t('settings_trayOnClose') }}
+                        </div>
                     </div>
                 </div>
                 <div class="form-item">
@@ -207,10 +215,11 @@ const switchLaunchTray = async () => {
                 </div>
                 <div class="form-item">
                     <div class="hover:underline active:text-orange-300 text-blue-700 cursor-pointer"
-                        @click="clearDialogShow = true">
-                        {{ $t('settings_clearAllData') }}</div>
+                         @click="clearDialogShow = true">
+                        {{ $t('settings_clearAllData') }}
+                    </div>
                     <el-dialog v-model="clearDialogShow" :title="$t('settings_clearAllData')" width="40%" center
-                        :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false">
+                               :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false">
                         {{ $t('settings_clearAllDataText') }}
                         <template #footer>
                             <div class="flex-row justify-between">
@@ -220,7 +229,8 @@ const switchLaunchTray = async () => {
                                         class="mr-3 rounded-full py-1 px-2 hover:bg-gray-200 active:bg-gray-400 transition-all"
                                         @click="clearDialogShow = false">{{
                                             $t('general_cancel')
-                                        }}</button>
+                                        }}
+                                    </button>
                                     <button
                                         class="rounded-full py-1 px-3 bg-blue-600 text-white hover:bg-blue-500 active:scale-90 transition-all"
                                         @click="clearAllData">
@@ -233,7 +243,7 @@ const switchLaunchTray = async () => {
                 </div>
                 <div class="title">{{ $t('settings_about') }}</div>
                 <div class="form-item rounded-full bg-white pl-3 border border-red-400 font-mono"
-                    style="width: fit-content;">
+                     style="width: fit-content;">
                     miHoYo miXeD Launcher
                     <div class="rounded-full ml-2 px-2 bg-red-400 text-white font-sans cursor-default">v{{ appVer }}
                     </div>
@@ -241,14 +251,19 @@ const switchLaunchTray = async () => {
                 <div class="form-item">
                     <div class="flex flex-row">
                         <img class="img-link cursor-pointer" src="../assets/github-mark.png"
-                            @click="openLink('https://github.com/HoraceHuang-ui/MiHOYO-MiXED-Launcher')" />
+                             @click="openLink('https://github.com/HoraceHuang-ui/MiHOYO-MiXED-Launcher')"/>
                         <button @click="checkUpdates" class="rounded-full cursor-default ml-3 px-3"
-                            :class="latest ? 'button-disabled' : 'button-enabled'">{{
-                                latest ? $t('settings_latestVersion') : $t('settings_checkUpdates') }}</button>
+                                :class="latest ? 'button-disabled' : 'button-enabled'">{{
+                                latest ? $t('settings_latestVersion') : $t('settings_checkUpdates')
+                            }}
+                        </button>
                         <el-icon class="is-loading ml-2" :size="20" style="margin-top: 6px;" v-if="updChecking">
-                            <Loading />
+                            <Loading/>
                         </el-icon>
-                        <div class="text-red-600 ml-3 mt-1" v-if="checkUpdFailed">{{ $t('settings_checkUpdFailed') }}</div>
+                        <div class="text-red-600 ml-3 mt-1" v-if="checkUpdFailed">{{
+                                $t('settings_checkUpdFailed')
+                            }}
+                        </div>
                     </div>
                     <el-dialog v-model="updDialogShow" :title="$t('updDialog_title')" width="40%" center>
                         <div style="padding-left: 20px; padding-right: 20px;">
@@ -256,10 +271,13 @@ const switchLaunchTray = async () => {
                                 <div v-html="updDialogContent"></div>
                             </el-scrollbar>
                             <div style="color: red; margin-top: 10px;">{{ $t('updDialog_version') }}v{{ appVer }} 👉 {{
-                                updInfo.tag_name }}
+                                    updInfo.tag_name
+                                }}
                             </div>
-                            <div style="color: red;">{{ $t('updDialog_size') }}{{ (updInfo.assets[0].size / 1024 /
-                                1024).toFixed(1) }}MB
+                            <div style="color: red;">{{ $t('updDialog_size') }}{{
+                                    (updInfo.assets[0].size / 1024 /
+                                        1024).toFixed(1)
+                                }}MB
                             </div>
                             <div style="color: red;">{{ $t('updDialog_footerText') }}</div>
                         </div>
@@ -269,7 +287,8 @@ const switchLaunchTray = async () => {
                                 <div class="flex-row">
                                     <el-button
                                         class="mr-3 rounded-full py-1 px-2 hover:bg-gray-200 active:bg-gray-400 transition-all"
-                                        @click="updDialogShow = false">{{ $t('general_cancel') }}</el-button>
+                                        @click="updDialogShow = false">{{ $t('general_cancel') }}
+                                    </el-button>
                                     <el-button
                                         class="rounded-full py-1 px-3 bg-blue-600 text-white hover:bg-blue-500 active:scale-90 transition-all"
                                         @click="extUpd">

@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import {createApp} from 'vue'
 import "./style.css"
 import App from './App.vue'
 // import './samples/node-api'
@@ -13,6 +13,6 @@ const app = createApp(App)
 app.use(router)
 app.use(i18n)
 app.mount('#app')
-  // .$nextTick(() => {
-  //   postMessage({ payload: 'removeLoading' }, '*')
-  // })
+// .$nextTick(() => {
+//   postMessage({ payload: 'removeLoading' }, '*')
+// })

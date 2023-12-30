@@ -1,4 +1,4 @@
-import { createI18n } from 'vue-i18n'
+import {createI18n} from 'vue-i18n'
 import zhCN from './zh_CN.json'
 import enUS from './en_US.json'
 import zhTW from './zh_TW.json'
@@ -10,20 +10,20 @@ type MessageSchema = typeof enUS
 export type lang = 'en_US' | 'zh_CN' | 'zh_TW' | 'ru_RU' | 'ja_JP' | 'fr_FR'
 
 const i18n = createI18n<[MessageSchema], lang>({
-  // default locale
-  locale: localStorage.lang ? localStorage.lang : 'en_US',
-  fallbackLocale: 'en_US',
-  legacy: false,
-  globalInjection: true,
-  // translations
-  messages: {
-    "en_US": enUS,
-    'zh_CN': zhCN,
-    'zh_TW': zhTW,
-    'ru_RU': ruRU,
-    'ja_JP': jaJP,
-    'fr_FR': frFR
-  },
+    // default locale
+    locale: localStorage.lang ? localStorage.lang : 'en_US',
+    fallbackLocale: 'en_US',
+    legacy: false,
+    globalInjection: true,
+    // translations
+    messages: {
+        "en_US": enUS,
+        'zh_CN': zhCN,
+        'zh_TW': zhTW,
+        'ru_RU': ruRU,
+        'ja_JP': jaJP,
+        'fr_FR': frFR
+    },
 })
 
 export default i18n
@@ -32,7 +32,7 @@ export const availableLangCodes = ['en_US', 'zh_CN', 'zh_TW', 'ru_RU', 'ja_JP', 
 export const availableLangNames = ['English', '简体中文', '繁體中文', 'Pусский', '日本語', 'Français']
 
 export const currentLocale = () => {
-  return i18n.global.locale
+    return i18n.global.locale
 }
 
 export const translate = (key: string, locale?: string, bindings?: any) => {

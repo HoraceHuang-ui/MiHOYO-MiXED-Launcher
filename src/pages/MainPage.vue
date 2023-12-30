@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import {ref, onMounted, computed} from 'vue'
-import { Picture, RefreshLeft } from '@element-plus/icons-vue'
-import { translate } from '../i18n'
+import {computed, onMounted, ref} from 'vue'
+import {Picture, RefreshLeft} from '@element-plus/icons-vue'
+import {translate} from '../i18n'
 
 const gsGamePath = ref('')
 const srGamePath = ref('')
@@ -11,7 +11,7 @@ const bgPath = ref('')
 
 const DEFAULT_BG = '../../src/assets/gsbanner.png'
 const bgImage = computed(() => {
-  return bgPath.value ? bgPath.value : DEFAULT_BG
+    return bgPath.value ? bgPath.value : DEFAULT_BG
 })
 
 onMounted(async () => {
@@ -53,7 +53,7 @@ const setPic = async () => {
     window.dialog.showAndCopy({
         title: translate('mainBgDialog_title'),
         properties: ['openFile'],
-        filters: [{ name: translate('mainBgDialog_filter'), extensions: ['jpg', 'png', 'webp'] }]
+        filters: [{name: translate('mainBgDialog_filter'), extensions: ['jpg', 'png', 'webp']}]
     }).then((resp) => {
         if (resp) {
             bgPath.value = resp
@@ -72,37 +72,45 @@ const resetPic = () => {
 
 <template>
     <div @touchmove.prevent @mousewheel.prevent :class="transitionShow ? '' : 'opacity-0 blur-lg scale-90'"
-        style="transition-duration: 400ms;">
-        <img class="bg-pic object-cover" :src="bgPath ? bgPath : '../../src/assets/gsbanner.png'" alt="Background image of Home page"/>
+         style="transition-duration: 400ms;">
+        <img class="bg-pic object-cover" :src="bgPath ? bgPath : '../../src/assets/gsbanner.png'"
+             alt="Background image of Home page"/>
         <div class="sticky bottom-0" style="height: 60vh;"></div>
         <div class="bottom-area sticky">
             <h1 class="font-sans font-bold text-5xl" style="margin-bottom: 10px; font-family: 'genshin-font';">{{
-                translate('mainpage_title')
-              }}</h1>
+                    translate('mainpage_title')
+                }}</h1>
             <button v-if="gsGamePath" @click="genshin"
-                class="p-3 mx-2 my-2 font-bold text-xl transition-all bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 cursor-default">{{
-                translate('mainpage_buttonText', undefined, {game: $t('general_gsShort')})
-              }}</button>
+                    class="p-3 mx-2 my-2 font-bold text-xl transition-all bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 cursor-default">
+                {{
+                    translate('mainpage_buttonText', undefined, {game: $t('general_gsShort')})
+                }}
+            </button>
             <button v-if="srGamePath" @click="starRail"
-                class="p-3 mx-2 my-2 font-bold text-xl transition-all bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 cursor-default">{{
-                translate('mainpage_buttonText', undefined, {game: $t('general_srShort')})
-              }}</button>
+                    class="p-3 mx-2 my-2 font-bold text-xl transition-all bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 cursor-default">
+                {{
+                    translate('mainpage_buttonText', undefined, {game: $t('general_srShort')})
+                }}
+            </button>
             <button v-if="hi3GamePath" @click="honkai3"
-                class="p-3 mx-2 my-2 font-bold text-xl transition-all bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 cursor-default">{{
-                translate('mainpage_buttonText', undefined, {game: $t('general_hi3Short')})
-              }}</button>
+                    class="p-3 mx-2 my-2 font-bold text-xl transition-all bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 cursor-default">
+                {{
+                    translate('mainpage_buttonText', undefined, {game: $t('general_hi3Short')})
+                }}
+            </button>
         </div>
-        <div class="rounded-full fixed left-8 bottom-4 w-10 h-10 bg-white hover:bg-gray-100 active:bg-gray-400 active:scale-90 transition-all"
+        <div
+            class="rounded-full fixed left-8 bottom-4 w-10 h-10 bg-white hover:bg-gray-100 active:bg-gray-400 active:scale-90 transition-all"
             @click="setPic">
             <el-icon :size="20" class="w-full h-full">
-                <Picture />
+                <Picture/>
             </el-icon>
         </div>
         <div v-if="bgPath && bgPath !== DEFAULT_BG"
-            class="rounded-full fixed left-20 bottom-4 w-10 h-10 bg-white hover:bg-gray-100 active:bg-gray-400 active:scale-90 transition-all"
-            @click="resetPic">
+             class="rounded-full fixed left-20 bottom-4 w-10 h-10 bg-white hover:bg-gray-100 active:bg-gray-400 active:scale-90 transition-all"
+             @click="resetPic">
             <el-icon :size="20" class="w-full h-full">
-                <RefreshLeft />
+                <RefreshLeft/>
             </el-icon>
         </div>
     </div>
