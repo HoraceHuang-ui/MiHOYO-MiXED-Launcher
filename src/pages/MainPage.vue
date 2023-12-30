@@ -77,16 +77,20 @@ const resetPic = () => {
         <div class="sticky bottom-0" style="height: 60vh;"></div>
         <div class="bottom-area sticky">
             <h1 class="font-sans font-bold text-5xl" style="margin-bottom: 10px; font-family: 'genshin-font';">{{
-                translate('mainpage_title') }}</h1>
+                translate('mainpage_title')
+              }}</h1>
             <button v-if="gsGamePath" @click="genshin"
                 class="p-3 mx-2 my-2 font-bold text-xl transition-all bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 cursor-default">{{
-                    translate('mainpage_buttonText', { game: $t('general_gsShort') }) }}</button>
+                translate('mainpage_buttonText', undefined, {game: $t('general_gsShort')})
+              }}</button>
             <button v-if="srGamePath" @click="starRail"
                 class="p-3 mx-2 my-2 font-bold text-xl transition-all bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 cursor-default">{{
-                    translate('mainpage_buttonText', { game: $t('general_srShort') }) }}</button>
+                translate('mainpage_buttonText', undefined, {game: $t('general_srShort')})
+              }}</button>
             <button v-if="hi3GamePath" @click="honkai3"
                 class="p-3 mx-2 my-2 font-bold text-xl transition-all bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 cursor-default">{{
-                    translate('mainpage_buttonText', { game: $t('general_hi3Short') }) }}</button>
+                translate('mainpage_buttonText', undefined, {game: $t('general_hi3Short')})
+              }}</button>
         </div>
         <div class="rounded-full fixed left-8 bottom-4 w-10 h-10 bg-white hover:bg-gray-100 active:bg-gray-400 active:scale-90 transition-all"
             @click="setPic">

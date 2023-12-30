@@ -7,7 +7,7 @@ import jaJP from './ja_JP.json'
 import frFR from './fr_FR.json'
 
 type MessageSchema = typeof enUS
-type lang = 'en_US' | 'zh_CN' | 'zh_TW' | 'ru_RU' | 'ja_JP' | 'fr_FR'
+export type lang = 'en_US' | 'zh_CN' | 'zh_TW' | 'ru_RU' | 'ja_JP' | 'fr_FR'
 
 const i18n = createI18n<[MessageSchema], lang>({
   // default locale
@@ -35,7 +35,7 @@ export const currentLocale = () => {
   return i18n.global.locale
 }
 
-export const translate = (key: string, bindings?: any, locale?: string) => {
+export const translate = (key: string, locale?: string, bindings?: any) => {
     if (!key) {
         return ''
     }

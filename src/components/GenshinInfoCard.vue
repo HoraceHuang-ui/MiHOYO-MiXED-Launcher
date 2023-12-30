@@ -4,8 +4,10 @@ import { useRouter } from 'vue-router'
 import { ArrowLeftBold, ArrowRightBold } from '@element-plus/icons-vue'
 import { translate } from '../i18n'
 import StatIcon from './StatIcon.vue'
+import {PlayerData, Stats} from "enkanetwork.js";
+import {parseInt} from "lodash-es";
 
-const playerInfo = ref<any>({})
+const playerInfo = ref<PlayerData>({})
 
 const uidInput = ref('')
 let uid = '';
@@ -16,18 +18,18 @@ const pages = computed(() => {
         ? Math.floor((playerInfo.value.characters.length - 10) / 6 - 0.1) + 1
         : 0
 })
-const constelsMap = ref({})
+const constelsMap = ref<any[]>([])
 const constelsReady = ref(false)
 const constelsAdditions = computed(() => {
     if (!playerInfoReady.value || !constelsReady.value) {
         return {}
     }
-    let res = {}
+    let res: Record<number, number> = {}
     playerInfo.value.characters.forEach((character) => {
         if (character.skillsExtraLevel) {
             Object.keys(character.skillsExtraLevel).forEach((level) => {
                 // check
-                var target = findSkillIdByProud(parseInt(level))
+                let target = findSkillIdByProud(parseInt(level))
                 if (target != -1) {
                     res[target] = character.skillsExtraLevel[level]
                 }
@@ -79,7 +81,7 @@ const mergeToPlayerinfo = (newArr) => {
     console.log("Updated characters length: ")
     for (let i = newArr.length - 1; i >= 0; i--) {
         let newChar = newArr[i]
-        var exists = false
+        let exists = false;
         // for (let j = playerInfo.value.characters.length - 1; j >= 0; j--) {
         for (let j = 0; j < playerInfo.value.characters.length; j++) {
             let oldChar = playerInfo.value.characters[j]
@@ -113,6 +115,7 @@ onMounted(() => {
     window.store.get('genshinConstels')
         .then(resp => {
             if (resp) {
+              console.log(JSON.parse(resp))
                 constelsMap.value = JSON.parse(resp)
                 constelsReady.value = true
             }
@@ -151,8 +154,8 @@ const requestInfo = () => {
                         return -1
                     } else {
                         // 双爆分
-                        const critA = a.stats.critRate.value * 200 + a.stats.critDamage.value * 100
-                        const critB = b.stats.critRate.value * 200 + b.stats.critDamage.value * 100
+                        const critA = a.stats.critRate.toPercentage() * 2 + a.stats.critDamage.toPercentage()
+                        const critB = b.stats.critRate.toPercentage() * 2 + b.stats.critDamage.toPercentage()
                         if (critA < critB) {
                             return 1
                         } else {
@@ -169,7 +172,7 @@ const requestInfo = () => {
                 .then(response => response.json())
                 .then(resp => {
                     resp = resp.filter(a => 'proudSkillGroupId' in a)
-                    window.store.set('genshinConstels', JSON.stringify(resp))
+                    window.store.set('genshinConstels', JSON.stringify(resp), true)
 
                     router.push({
                         name: 'tempPage',
@@ -188,7 +191,7 @@ const requestInfo = () => {
         })
 }
 
-const getCharElementAssets = (id) => {
+const getCharElementAssets = (id: number) => {
     const charStats = playerInfo.value.characters[id].stats
     if (charStats.pyroEnergyCost.value && charStats.pyroEnergyCost.value > 0) { return elementAssets.pyro }
     else if (charStats.cryoEnergyCost.value && charStats.cryoEnergyCost.value > 0) { return elementAssets.cryo }
@@ -199,7 +202,7 @@ const getCharElementAssets = (id) => {
     else if (charStats.dendroEnergyCost.value && charStats.dendroEnergyCost.value > 0) { return elementAssets.dendro }
 }
 
-const getCharElementEnergy = (id) => {
+const getCharElementEnergy = (id: number) => {
     const charStats = playerInfo.value.characters[id].stats
     if (charStats.pyroEnergyCost.value && charStats.pyroEnergyCost.value > 0) { return charStats.pyroEnergyCost.value }
     else if (charStats.cryoEnergyCost.value && charStats.cryoEnergyCost.value > 0) { return charStats.cryoEnergyCost.value }
@@ -210,13 +213,13 @@ const getCharElementEnergy = (id) => {
     else if (charStats.dendroEnergyCost.value && charStats.dendroEnergyCost.value > 0) { return charStats.dendroEnergyCost.value }
 }
 
-const showPercentage = (prop) => {
+const showPercentage = (prop: string) => {
     return (prop.endsWith("HURT") || prop.endsWith("CRITICAL") || prop.endsWith("PERCENT") || prop.endsWith("ADD") || prop.endsWith("EFFICIENCY")) ? '%' : ''
 }
 
-const calcCritScoreTotal = (index) => {
-    var score = 0.0
-    const artifacts = playerInfo.value.characters[index].equipment.artifacts
+const calcCritScoreTotal = (index: number) => {
+  let score = 0.0
+  const artifacts = playerInfo.value.characters[index].equipment.artifacts
     artifacts.forEach(artifact => {
         if (artifact.mainstat.stat == "FIGHT_PROP_CRITICAL_HURT") {
             score += artifact.mainstat.statValue
@@ -235,10 +238,10 @@ const calcCritScoreTotal = (index) => {
     return score
 }
 
-const getArtifactSetInfo = (index) => {
-    var tokens = []
+const getArtifactSetInfo = (index: number) => {
+    const tokens: string[] = []
     const artifacts = playerInfo.value.characters[index].equipment.artifacts
-    const sets = new Map()
+    const sets = new Map<string, number>()
     artifacts.forEach(artifact => {
         const setName = artifact.setName
         if (sets.get(setName)) {
@@ -293,19 +296,19 @@ const charsPagePrev = () => {
     }
 }
 
-const showCharDetails = (index) => {
+const showCharDetails = (index: number) => {
     charDialogId.value = index
     charDialogShow.value = true
 }
 
-const trimStats = (stats) => {
+const trimStats = (stats: Stats) => {
     const trim = ['baseHp', 'hpPercentage', 'maxHp', 'currentHp', 'baseAtk', 'atk', 'atkPercentage', 'def', 'baseDef', 'defPercentage', 'Cost', 'Energy', 'Mastery']
-    var res = { ...stats }
-    var entries = Object.entries(stats);
+    const res = {...stats}
+    const entries = Object.entries(stats)
 
-    for (var [stat, val] of entries) {
-        var flag = false;
-        for (var t of trim) {
+    for (const [stat, val] of entries) {
+        let flag = false;
+        for (const t of trim) {
             if (stat.endsWith(t) || val.value === '' || val.value === '0') {
                 flag = true;
                 break
@@ -319,26 +322,8 @@ const trimStats = (stats) => {
     return res
 }
 
-const findSkillIdByProud = (proudId) => {
-    // var l = 0
-    // console.log("constelsMap length: ")
-    // var r = constelsMap.value.length
-    // var m
-
-    // while (l < r) {
-    //     m = parseInt((r - l) / 2 + l)
-    //     if (constelsMap.value[m].proudSkillGroupId == proudId) {
-    //         return constelsMap.value[m].id
-    //     } else if (constelsMap.value[m].proudSkillGroupId > proudId) {
-    //         r = m - 1
-    //     } else {
-    //         l = m
-    //     }
-    // }
-
-    // return -1
-
-    for (var i = 0; i < constelsMap.value.length; i++) {
+const findSkillIdByProud = (proudId: number): number => {
+    for (let i = 0; i < constelsMap.value.length; i++) {
         if (constelsMap.value[i].proudSkillGroupId == proudId) {
             return constelsMap.value[i].id
         }
@@ -361,7 +346,7 @@ const findSkillIdByProud = (proudId) => {
                     <div class="font-genshin">
                         <span>{{ parseInt(playerInfo.characters[charDialogId].stats.baseHp.value) }}</span>
                         <span
-                            v-if="parseInt(playerInfo.characters[charDialogId].stats.maxHp.value) != parseInt(playerInfo.characters[charDialogId].stats.baseHp.value)"
+                            v-if="playerInfo.characters[charDialogId].stats.maxHp.value != playerInfo.characters[charDialogId].stats.baseHp.value"
                             class="ml-1 text-blue-500">+{{ parseInt(playerInfo.characters[charDialogId].stats.maxHp.value)
                                 - parseInt(playerInfo.characters[charDialogId].stats.baseHp.value) }}</span>
                     </div>
@@ -392,7 +377,7 @@ const findSkillIdByProud = (proudId) => {
                     </div>
                 </DialogListItem>
                 <DialogListItem class="font-genshin" :name="$t('gs_FIGHT_PROP_ELEMENT_MASTERY')"
-                    :val="playerInfo.characters[charDialogId].stats.elementalMastery.value ? parseInt(playerInfo.characters[charDialogId].stats.elementalMastery.value) : '0'">
+                    :val="playerInfo.characters[charDialogId].stats.elementalMastery.value ? parseInt(playerInfo.characters[charDialogId].stats.elementalMastery.value).toString() : '0'">
                     <template #icon>
                         <StatIcon game="gs" stat="FIGHT_PROP_ELEMENT_MASTERY" fill="#666" class="w-4 h-4"
                             style="margin-top: 2px;" />

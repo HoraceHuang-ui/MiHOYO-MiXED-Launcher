@@ -14,9 +14,12 @@
     "noEmit": true,
     "allowJs": true,
     "types": ["element-plus/global"],
-    "typeRoots": ["./node_modules/@types", "./src/types"]
+    "typeRoots": ["./node_modules/@types", "./src/types/starrail/*"]
   },
-  "include": ["src"],
+  "include": [
+    "src",
+    "auto-imports.d.ts"
+  ],
   "references": [
     { "path": "./tsconfig.node.json" }
   ]

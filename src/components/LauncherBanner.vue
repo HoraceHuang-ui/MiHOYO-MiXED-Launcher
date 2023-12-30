@@ -1,9 +1,15 @@
 <script setup lang="ts">
+import { BannerInfo } from "../types/launcher/launcherInfo";
+import {PropType} from "vue";
+
 const props = defineProps({
-    banners: {}
+    banners: {
+      type: Array as PropType<BannerInfo[]>,
+      default: []
+    }
 })
 
-const openLink = (url) => {
+const openLink = (url: string) => {
     window.electron.openExtLink(url)
 }
 </script>

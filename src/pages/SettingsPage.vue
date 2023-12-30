@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
-import { switchLang, availableLangCodes, availableLangNames } from '../i18n'
+import { lang, switchLang, availableLangCodes, availableLangNames } from '../i18n'
 import { useRouter } from 'vue-router'
 import { marked } from 'marked'
 import { Loading } from '@element-plus/icons-vue'
 import CustomSwitch from '../components/CustomSwitch.vue'
-const lang = ref('')
+import {UpdInfo} from "../types/github/ghUpdInfo";
+const lang = ref<lang>('en_US')
 const langDialogShow = ref(false)
 const clearDialogShow = ref(false)
 const transitionShow = ref(false)
@@ -13,13 +14,32 @@ const bgPath = ref('')
 const appVer = ref('')
 const latest = ref(false)
 const updDialogShow = ref(false)
-const updInfo = ref({})
+const updInfo = ref<UpdInfo>({
+  assets: [],
+  assets_url: "",
+  body: "",
+  created_at: "",
+  discussion_url: "",
+  draft: false,
+  html_url: "",
+  id: 0,
+  name: "",
+  node_id: "",
+  prerelease: false,
+  published_at: "",
+  tag_name: "",
+  tarball_url: "",
+  target_commitish: "",
+  upload_url: "",
+  url: "",
+  zipball_url: ""
+})
 const checkUpdFailed = ref(false)
 const updChecking = ref(false)
 const quitOnClose = ref(true)
 const trayOnLaunch = ref(true)
 const updDialogContent = computed(() => {
-    return marked(updInfo.value.data.body)
+    return marked(updInfo.value.body)
 })
 
 const DEFAULT_BG = '../../src/assets/gsbanner.png'
@@ -37,8 +57,6 @@ onMounted(async () => {
         trayOnLaunch.value = true
     }
     bgPath.value = await window.store.get('mainBgPath')
-    const imgElement = document.getElementById('bgImage');
-    imgElement.src = bgPath.value ? bgPath.value : DEFAULT_BG;
     transitionShow.value = true
 
     // BUILD: '../../app.asar/package.json'
@@ -65,7 +83,7 @@ const clearAllData = () => {
     router.go(0)
 }
 
-const openLink = (url) => {
+const openLink = (url: string) => {
     window.electron.openExtLink(url)
 }
 
@@ -76,7 +94,7 @@ const checkUpdates = () => {
         .then((resp) => {
             if (needsUpdate(resp.data.tag_name)) {
                 updDialogShow.value = true
-                updInfo.value = resp
+                updInfo.value = resp.data
             } else {
                 latest.value = true
             }
@@ -88,7 +106,7 @@ const checkUpdates = () => {
         })
 }
 
-const verCompare = (a, b) => {
+const verCompare = (a: string, b: string) => {
     const arr1 = a.split('.')
     const arr2 = b.split('.')
 
@@ -96,7 +114,7 @@ const verCompare = (a, b) => {
         return 114
     }
 
-    for (var i = 0; i < arr1.length; i++) {
+    for (let i = 0; i < arr1.length; i++) {
         if (parseInt(arr1[i]) > parseInt(arr2[i])) {
             return 1
         } else if (parseInt(arr1[i]) < parseInt(arr2[i])) {
@@ -106,7 +124,7 @@ const verCompare = (a, b) => {
     return 0
 }
 
-const needsUpdate = (latestStr) => {
+const needsUpdate = (latestStr: string) => {
     const latest = latestStr.substring(1)
     const curr = appVer.value
     console.log(latest)
@@ -117,7 +135,7 @@ const needsUpdate = (latestStr) => {
 }
 
 const extUpd = () => {
-    window.electron.openExtLink(updInfo.value.data.assets[0].browser_download_url)
+    window.electron.openExtLink(updInfo.value.assets[0].browser_download_url)
     window.win.close()
 }
 
@@ -135,7 +153,7 @@ const switchLaunchTray = async () => {
 <template>
     <div :class="transitionShow ? '' : 'opacity-0 blur-lg scale-90'" style="transition-duration: 400ms;">
         <div class="bg-pic">
-            <img class="object-cover w-full h-full blur-xl opacity-25 scale-105" id="bgImage"
+            <img class="object-cover w-full h-full blur-xl opacity-25 scale-105"
                 :src="bgPath ? bgPath : '../../src/assets/gsbanner.png'" />
         </div>
         <el-scrollbar height="91vh" class="scroll-wrapper absolute z-40">
@@ -238,9 +256,9 @@ const switchLaunchTray = async () => {
                                 <div v-html="updDialogContent"></div>
                             </el-scrollbar>
                             <div style="color: red; margin-top: 10px;">{{ $t('updDialog_version') }}v{{ appVer }} 👉 {{
-                                updInfo.data.tag_name }}
+                                updInfo.tag_name }}
                             </div>
-                            <div style="color: red;">{{ $t('updDialog_size') }}{{ (updInfo.data.assets[0].size / 1024 /
+                            <div style="color: red;">{{ $t('updDialog_size') }}{{ (updInfo.assets[0].size / 1024 /
                                 1024).toFixed(1) }}MB
                             </div>
                             <div style="color: red;">{{ $t('updDialog_footerText') }}</div>

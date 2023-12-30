@@ -1,5 +1,8 @@
 export {}
 
+// export * from './starrail/srPlayerInfo'
+// export * from './starrail/srRankMap'
+
 export interface IStore {
     set: (key: String, value: any, json: Boolean) => Promise<void>,
     get: (key: String) => Promise<any>,

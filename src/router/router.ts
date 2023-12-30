@@ -1,10 +1,10 @@
 import * as VueRouter from "vue-router";
-import MainPage from "./pages/MainPage.vue";
-import StarRailPage from "./pages/StarRailPage.vue";
-import GenshinPage from "./pages/GenshinPage.vue";
-import Honkai3Page from "./pages/Honkai3Page.vue";
-import SettingsPage from "./pages/SettingsPage.vue";
-import tmpPage from "./pages/tmpPage.vue";
+import MainPage from "../pages/MainPage.vue";
+import StarRailPage from "../pages/StarRailPage.vue";
+import GenshinPage from "../pages/GenshinPage.vue";
+import Honkai3Page from "../pages/Honkai3Page.vue";
+import SettingsPage from "../pages/SettingsPage.vue";
+import tmpPage from "../pages/tmpPage.vue";
 
 const router = VueRouter.createRouter({
   history: VueRouter.createWebHashHistory(),

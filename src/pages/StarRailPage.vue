@@ -49,7 +49,10 @@ onMounted(async () => {
         .then((resp) => {
             if (srLauncherPath.value && !resp) {
                 if (timeDelta.value > 40) {
-                    ElMessageBox.confirm(translate('general_gameUpdBoxText1', { game: gameName, beDays: translate('general_beDays', 42 - timeDelta.value) }),
+                    ElMessageBox.confirm(translate('general_gameUpdBoxText1', {
+                          game: gameName,
+                          beDays: translate('general_beDays', undefined, 42 - timeDelta.value)
+                        }, undefined),
                         translate('general_gameUpdBoxTitle'),
                         {
                             confirmButtonText: translate('general_confirm'),
@@ -60,7 +63,10 @@ onMounted(async () => {
                             window.store.set('starRailUpd', true, false)
                         }).catch(() => { })
                 } else if (timeDelta.value > 0 && timeDelta.value < 3) {
-                    ElMessageBox.confirm(translate('general_gameUpdBoxText2', { game: gameName, days: translate('general_days', timeDelta.value) }),
+                    ElMessageBox.confirm(translate('general_gameUpdBoxText2', {
+                          game: gameName,
+                          days: translate('general_days', undefined, timeDelta.value)
+                        }, undefined),
                         translate('general_gameUpdBoxTitle'),
                         {
                             confirmButtonText: translate('general_confirm'),
@@ -71,7 +77,7 @@ onMounted(async () => {
                             window.store.set('starRailUpd', true, false)
                         }).catch(() => { })
                 } else if (timeDelta.value == 0) {
-                    ElMessageBox.confirm(translate('general_gameUpdBoxText3', { game: gameName }),
+                    ElMessageBox.confirm(translate('general_gameUpdBoxText3', {game: gameName}, undefined),
                         translate('general_gameUpdBoxTitle'),
                         {
                             confirmButtonText: translate('general_confirm'),
@@ -92,7 +98,7 @@ onMounted(async () => {
 
 const srLauncherImport = async () => {
     window.dialog.show({
-        title: translate('general_launcherImportTitle', { game: gameName }),
+        title: translate('general_launcherImportTitle', {game: gameName}, undefined),
         properties: ['openDirectory']
     }).then((resp) => {
         if (resp.length > 0) {
@@ -104,7 +110,7 @@ const srLauncherImport = async () => {
 }
 const srGameImport = async () => {
     window.dialog.show({
-        title: translate('general_gameImportTitle', { game: gameName }),
+        title: translate('general_gameImportTitle', {game: gameName}, undefined),
         properties: ['openFile'],
         filters: [{ name: 'EXE', extensions: ['exe'] }]
     }).then((resp) => {

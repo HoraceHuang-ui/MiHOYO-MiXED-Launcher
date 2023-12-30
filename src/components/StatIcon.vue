@@ -40,9 +40,18 @@ import sr_physicalIcon from '../assets/statIcons/sr/physicalIcon.vue'
 import sr_lightningIcon from '../assets/statIcons/sr/lightningIcon.vue'
 
 const props = defineProps({
-    game: "gs" | "sr" | "general",
-    stat: typeof "aaa",
-    fill: typeof "aaa"
+    game: {
+      type: String,
+      required: true
+    },
+    stat: {
+      type: String,
+      required: true
+    },
+    fill: {
+      type: String,
+      required: true
+    }
 })
 </script>
 

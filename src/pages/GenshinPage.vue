@@ -2,6 +2,7 @@
 import { onMounted, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { translate } from '../i18n'
+import {LauncherInfo, PostInfo} from "../types/launcher/launcherInfo";
 const gameName = translate('general_gs')
 
 const gsLauncherPath = ref('')
@@ -14,7 +15,15 @@ const timeNow = Date.now()
 const timeDelta = computed(() =>
     Math.ceil((timeNow - timeUpd3_8) / 1000 / 3600 / 24 - 0.5) % 42
 )
-const launcherInfo = ref({})
+const launcherInfo = ref<LauncherInfo>({
+  adv: undefined,
+  banner: [],
+  icon: [],
+  links: undefined,
+  more: undefined,
+  post: [],
+  qq: []
+})
 const launcherInfoReady = ref(false)
 const launcherInfoFailed = ref(false)
 const errMsg = ref('')
@@ -23,7 +32,7 @@ const scrollbarref = ref()
 const importDialogShow = ref(false)
 const combinePaths = ref(true)
 
-const postTypeMap = new Map()
+const postTypeMap = new Map<string, PostInfo[]>()
 
 onMounted(async () => {
     // 获取原神启动器信息
@@ -52,7 +61,10 @@ onMounted(async () => {
         .then((resp) => {
             if (gsLauncherPath.value && !resp) {
                 if (timeDelta.value > 40) {
-                    ElMessageBox.confirm(translate('general_gameUpdBoxText1', { game: gameName, beDays: translate('general_beDays', 42 - timeDelta.value) }),
+                    ElMessageBox.confirm(translate('general_gameUpdBoxText1', undefined, {
+                          game: gameName,
+                          beDays: translate('general_beDays', undefined, 42 - timeDelta.value)
+                        }),
                         translate('general_gameUpdBoxTitle'),
                         {
                             confirmButtonText: translate('general_confirm'),
@@ -63,7 +75,10 @@ onMounted(async () => {
                             window.store.set('genshinUpd', true, false)
                         }).catch(() => { })
                 } else if (timeDelta.value > 0 && timeDelta.value < 3) {
-                    ElMessageBox.confirm(translate('general_gameUpdBoxText2', { game: gameName, days: translate('general_days', timeDelta.value) }),
+                    ElMessageBox.confirm(translate('general_gameUpdBoxText2', undefined, {
+                          game: gameName,
+                          days: translate('general_days', undefined, timeDelta.value)
+                        }),
                         translate('general_gameUpdBoxTitle'),
                         {
                             confirmButtonText: translate('general_confirm'),
@@ -74,7 +89,7 @@ onMounted(async () => {
                             window.store.set('genshinUpd', true, false)
                         }).catch(() => { })
                 } else if (timeDelta.value == 0) {
-                    ElMessageBox.confirm(translate('general_gameUpdBoxText3', { game: gameName }),
+                    ElMessageBox.confirm(translate('general_gameUpdBoxText3', undefined, {game: gameName}),
                         translate('general_gameUpdBoxTitle'),
                         {
                             confirmButtonText: translate('general_confirm'),
@@ -95,7 +110,7 @@ onMounted(async () => {
 
 const gsLauncherImport = async () => {
     window.dialog.show({
-        title: translate('general_launcherImportTitle', { game: gameName }),
+        title: translate('general_launcherImportTitle', undefined, {game: gameName}),
         properties: ['openDirectory']
     }).then((resp) => {
         if (resp.length > 0) {
@@ -107,7 +122,7 @@ const gsLauncherImport = async () => {
 }
 const gsGameImport = async () => {
     window.dialog.show({
-        title: translate('general_gameImportTitle', { game: gameName }),
+        title: translate('general_gameImportTitle', undefined, {game: gameName}),
         properties: ['openFile'],
         filters: [{ name: 'EXE', extensions: ['exe'] }]
     }).then((resp) => {
@@ -137,7 +152,7 @@ const gsLaunch = async () => {
     }
 }
 
-const handleCommand = (command) => {
+const handleCommand = (command: string) => {
     switch (command) {
         case 'openLauncher':
             window.child.exec(gsLauncherPath.value)
@@ -156,16 +171,8 @@ const handleCommand = (command) => {
     }
 }
 
-const handleScroll = ({ scrollTop }) => {
-    if (scrollTop > 0) {
-        hideElements.value = true
-        if (displayConfirm.value) {
-            displayConfirm.value = false
-            path.value = ''
-        }
-    } else {
-        hideElements.value = false
-    }
+const handleScroll = ({ scrollTop }: Record<string, number>) => {
+    hideElements.value = scrollTop > 0;
 }
 
 const router = useRouter()

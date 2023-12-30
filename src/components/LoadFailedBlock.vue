@@ -2,7 +2,10 @@
 import { useRouter } from 'vue-router'
 
 const props = defineProps({
-    gameNo: Number,
+    gameNo: {
+      type: Number,
+      default: 0
+    },
     errMsg: String
 })
 
@@ -22,10 +25,10 @@ const refresh = () => {
 
 <template>
     <div class="items-center justify-center text-center">
-        <img :src="imgs[props.gameNo]" class="object-scale-down -translate-x-1/2" style="margin-left: 50%;" loading="eager"
+        <img :src="imgs[gameNo]" class="object-scale-down -translate-x-1/2" style="margin-left: 50%;" loading="eager"
             height="120" width="120" />
         <div class="mt-3 text-xl"
-            :class="{ 'font-genshin': props.gameNo == 0 }, { 'font-sr': props.gameNo == 1 }, { 'font-semibold': props.gameNo == 2 }">
+            :class="{ 'font-genshin': gameNo == 0 }, { 'font-sr': gameNo == 1 }, { 'font-semibold': gameNo == 2 }">
             {{ $t("general_loadingFailed") }}</div>
         <div class=" hover:underline active:text-orange-300 text-blue-500 cursor-pointer -translate-x-1/2"
             style="margin-left: 50%;" @click="refresh">{{ $t('general_refresh') }}</div>

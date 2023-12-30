@@ -2,13 +2,34 @@
 import { onMounted, ref, computed } from 'vue'
 import { marked } from 'marked'
 import { useRouter } from 'vue-router'
+import {UpdInfo} from "./types/github/ghUpdInfo";
 
 let appVer = ''
 const updCheck = ref(false)
 const updDialogShow = ref(false)
-const updInfo = ref<any>()
+const updInfo = ref<UpdInfo>({
+  assets: [],
+  assets_url: "",
+  author: undefined,
+  body: "",
+  created_at: "",
+  discussion_url: "",
+  draft: false,
+  html_url: "",
+  id: 0,
+  name: "",
+  node_id: "",
+  prerelease: false,
+  published_at: "",
+  tag_name: "",
+  tarball_url: "",
+  target_commitish: "",
+  upload_url: "",
+  url: "",
+  zipball_url: ""
+})
 const updDialogContent = computed(() => {
-  return marked(updInfo.value.data.body)
+  return marked(updInfo.value.body)
 })
 const skipCurrent = ref(false)
 
@@ -23,7 +44,7 @@ onMounted(() => {
             console.log(target)
             if (!target || target < resp.data.tag_name) {
               updDialogShow.value = true
-              updInfo.value = resp
+              updInfo.value = resp.data
             }
           })
       }
@@ -68,13 +89,13 @@ const needsUpdate = (latestStr: string) => {
 }
 
 const extUpd = () => {
-  window.electron.openExtLink(updInfo.value.data.assets[0].browser_download_url)
+  window.electron.openExtLink(updInfo.value.assets[0].browser_download_url)
   window.win.close()
 }
 
 const onDialogClose = () => {
   if (skipCurrent.value) {
-    window.store.set("targetVersion", updInfo.value.data.tag_name, false)
+    window.store.set("targetVersion", updInfo.value.tag_name, false)
   }
   updDialogShow.value = false
 }
@@ -87,9 +108,9 @@ const onDialogClose = () => {
       <el-scrollbar height="40vh">
         <div v-html="updDialogContent"></div>
       </el-scrollbar>
-      <div style="color: red; margin-top: 10px;">{{ $t('updDialog_version') }}v{{ appVer }} 👉 {{ updInfo.data.tag_name }}
+      <div style="color: red; margin-top: 10px;">{{ $t('updDialog_version') }}v{{ appVer }} 👉 {{ updInfo.tag_name }}
       </div>
-      <div style="color: red;">{{ $t('updDialog_size') }}{{ (updInfo.data.assets[0].size / 1024 / 1024).toFixed(1) }}MB
+      <div style="color: red;">{{ $t('updDialog_size') }}{{ (updInfo.assets[0].size / 1024 / 1024).toFixed(1) }}MB
       </div>
       <div style="color: red;">{{ $t('updDialog_footerText') }}</div>
     </div>

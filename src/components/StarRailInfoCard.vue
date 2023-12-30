@@ -5,17 +5,20 @@ import { ArrowLeftBold, ArrowRightBold } from '@element-plus/icons-vue'
 import { translate } from '../i18n'
 import DialogListItem from './DialogListItem.vue'
 import StatIcon from './StatIcon.vue'
+import {RankInfo, RankLevelUpSkillInfo} from '../types/starrail/srRankMap'
+import {CharacterInfo, FormattedApiInfo, RelicSetInfo, AttributeInfo} from '../types/starrail/srPlayerInfo'
+
 // import rankMap from '../textMaps/character_ranks.json' with { type: 'json' }
 
 const apiUrl = 'https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/'
 
-const playerInfo = ref<any>({})
+const playerInfo = ref<FormattedApiInfo>({characters: [], player: undefined})
 const playerInfoReady = ref(false)
 const playerInfoLoading = ref(false)
 const playerInfoFailed = ref(false)
 const uidInput = ref('')
-var uid = ''
-var charsPage = ref(0)
+let uid = ''
+const charsPage = ref(0);
 const pages = computed(() =>
     playerInfo.value.characters && playerInfo.value.characters.length > 8
         ? Math.floor((playerInfo.value.characters.length - 8) / 4 - 0.1) + 1
@@ -24,30 +27,29 @@ const pages = computed(() =>
 const charsScrollbar = ref()
 const showcaseIdx = ref(0)
 const ascLevelMap = [20, 30, 40, 50, 60, 70, 80]
-let rankMap = {}
+let rankMap: Record<string, RankInfo> = {}
 const ranksReady = ref(false)
 // const rankAdditions = ref([])
 const rankAdditions = computed(() => {
     if (!ranksReady.value || !playerInfoReady.value) {
         return {}
     }
-    let res = {}
-    playerInfo.value.characters.forEach((character) => {
+    let res: Record<string, number> = {}
+    playerInfo.value.characters.forEach((character: CharacterInfo) => {
         const rank = character.rank
         if (rank >= 3 && rank < 5) {
-            rankMap[character.id + "03"].level_up_skills.forEach(obj => {
+            rankMap[character.id + "03"].level_up_skills.forEach((obj: RankLevelUpSkillInfo) => {
                 res[obj.id] = obj.num
             })
         } else if (rank >= 5) {
-            rankMap[character.id + "03"].level_up_skills.forEach(obj => {
+            rankMap[character.id + "03"].level_up_skills.forEach((obj: RankLevelUpSkillInfo) => {
                 res[obj.id] = obj.num
             })
-            rankMap[character.id + "05"].level_up_skills.forEach(obj => {
+            rankMap[character.id + "05"].level_up_skills.forEach((obj: RankLevelUpSkillInfo) => {
                 res[obj.id] = obj.num
             })
         }
     })
-    console.log(res)
     return res
 })
 const charDialogShow = ref(false)
@@ -77,10 +79,10 @@ onMounted(() => {
         })
 })
 
-const mergeToPlayerinfo = (newArr) => {
+const mergeToPlayerinfo = (newArr: CharacterInfo[]) => {
     for (let i = newArr.length - 1; i >= 0; i--) {
         let newChar = newArr[i]
-        var exists = false
+        let exists = false
         // for (let j = playerInfo.value.characters.length - 1; j >= 0; j--) {
         for (let j = 0; j < playerInfo.value.characters.length; j++) {
             let oldChar = playerInfo.value.characters[j]
@@ -101,7 +103,7 @@ const router = useRouter()
 const requestInfo = () => {
     uid = uidInput.value
     playerInfoFailed.value = false
-    window.axios.get(translate("sr_playerInfoUrl", { uid: uid }))
+    window.axios.get(translate("sr_playerInfoUrl", undefined, {uid: uid}))
         .then((resp) => {
             if (playerInfoReady.value && playerInfo.value.player.uid == resp.player.uid) {
                 console.log('uid equal')
@@ -113,7 +115,7 @@ const requestInfo = () => {
             }
             playerInfoReady.value = false
 
-            playerInfo.value.characters.sort(function (a, b) {
+            playerInfo.value.characters.sort(function (a: CharacterInfo, b: CharacterInfo) {
                 // 等级
                 if (a.level < b.level) {
                     return 1
@@ -176,29 +178,30 @@ const charsPagePrev = () => {
     }
 }
 
-const findField = (range, field) => {
-    for (var i = 0; i < range.length; i++) {
+const findField = (range: AttributeInfo[], field: string) => {
+    for (let i = 0; i < range.length; i++) {
         const element = range[i]
         if (element.field === field) {
             return element
         }
     }
     return {
-        "field": "",
-        "name": "",
-        "icon": "",
-        "value": 0,
-        "display": "",
-        "percent": false
+      "field": "",
+      "name": "",
+      "icon": "",
+      "value": 0,
+      "display": "",
+      "percent": false
     }
 }
 
-const parseRankDesc = (str) => {
+const parseRankDesc = (str: string) => {
     return str.replace('\\n', '\n')
 }
 
-const getOuterSets = (sets) => {
-    if (sets.length == 0) { return translate('sr_noRelicSets') }
+const getOuterSets = (sets: RelicSetInfo[]) => {
+    if (sets.length == 0) { return translate('sr_noRelicSets')
+    }
     else if (sets.length == 1) {
         return sets[0].id[0] == '3' ? translate('sr_noRelicSets') : (sets[0].name + ' 2')
     } else {
@@ -211,7 +214,7 @@ const getOuterSets = (sets) => {
         }
     }
 }
-const getInnerSet = (sets) => {
+const getInnerSet = (sets: RelicSetInfo[]) => {
     if (sets.length > 0 && sets[sets.length - 1].id[0] == '3') {
         return sets[sets.length - 1].name
     } else {
@@ -219,12 +222,12 @@ const getInnerSet = (sets) => {
     }
 }
 
-const showCharDetails = (index) => {
+const showCharDetails = (index: number) => {
     charDialogId.value = index
     charDialogShow.value = true
 }
 
-const trimAdditions = (additions) => {
+const trimAdditions = (additions: AttributeInfo[]) => {
     const map = ['atk', 'hp', 'def', 'spd', 'crit_rate', 'crit_dmg']
     const tmp = [...additions]
     for (let i = 0; i < tmp.length; i++) {
@@ -319,7 +322,7 @@ const trimAdditions = (additions) => {
             <!-- 左上角头像、昵称 -->
             <div v-if="playerInfoReady" class="flex flex-row content-start items-center" style="width: 35vw;">
                 <img class="rounded-full h-12 border-2 bg-slate-200" style="margin-left: 1vw;"
-                    :src="apiUrl + playerInfo.player.avatar.icon" />
+                    :src="playerInfo.player.avatar ? apiUrl + playerInfo.player.avatar.icon : ''" />
                 <div class="font-sr" style="margin-left: 1vw; font-size: larger;">{{ playerInfo.player.nickname }}</div>
             </div>
             <div v-else style="width: 35vw" />
@@ -388,7 +391,7 @@ const trimAdditions = (additions) => {
                 style="transition-duration: 300ms;">
                 <!-- absolute： 卡片元素背景、元素图标 -->
                 <img class="relative z-0 w-full" src="../assets/srBg.jpg" style="border-radius: 4.5vh;" />
-                <img class="h-1/4 absolute opacity-50" :src="apiUrl + character.element.icon"
+                <img class="h-1/4 absolute opacity-50" :src="character.element ? apiUrl + character.element.icon : ''"
                     style="top: -7px; right: -18px;" />
                 <!-- 卡片前景 -->
                 <div class="flex flex-row h-full absolute top-0 left-0 right-0 bottom-0 z-10">
@@ -401,7 +404,7 @@ const trimAdditions = (additions) => {
                     <!-- 左上角命途、等级 -->
                     <div class="absolute top-2 left-2 z-50 rounded-full backdrop-blur-lg bg-opacity-25 bg-black h-12">
                         <div class="ml-3" style="margin-top: 10px;">
-                            <img class="inline h-6 mb-2" :src="apiUrl + character.path.icon" />
+                            <img class="inline h-6 mb-2" :src="character.path ? apiUrl + character.path.icon: ''" />
                             <span class=" text-gray-200 font-sr-sans text-xl">
                                 Lv. {{ character.level }} /
                             </span>
@@ -504,18 +507,18 @@ const trimAdditions = (additions) => {
                                 <div class="flex flex-row justify-between ml-2 mt-5">
                                     <el-text truncated class="text-gray-200 text-2xl text-left" style="width: 340px;"
                                         :class="$t('sr_displayCompactFont') === 'true' ? 'font-sr-sans' : 'font-sr'">
-                                        {{ character.light_cone.name }}</el-text>
+                                        {{ character.light_cone ? character.light_cone.name : '' }}</el-text>
                                     <div class="text-gray-300 mr-2 text-sm absolute right-0 top-0">
                                         {{ $t('sr_superimposition') }}
                                         <span class="text-gray-100 font-sr-sans text-base">{{
-                                            character.light_cone.rank }}</span>
+                                            character.light_cone ? character.light_cone.rank : '' }}</span>
                                     </div>
                                     <div
                                         class="absolute right-1 bottom-1 px-2 rounded-full font-sr-sans bg-opacity-20 bg-white">
                                         <span class="text-gray-200 text-xl">{{
-                                            character.light_cone.level }} /</span>
+                                            character.light_cone ? character.light_cone.level : '' }} /</span>
                                         <span class="text-gray-400 ml-1">{{
-                                            ascLevelMap[character.light_cone.promotion] }}</span>
+                                            ascLevelMap[character.light_cone ? character.light_cone.promotion : 0] }}</span>
                                     </div>
                                 </div>
                                 <div class="text-gray-300 ml-2 text-left grid grid-cols-4 mt-1">
@@ -523,19 +526,19 @@ const trimAdditions = (additions) => {
                                         <StatIcon game="sr" :stat="character.light_cone.attributes[0].field" fill="#d1d5db"
                                             class="h-5 w-5 mr-2" style="margin-top: 3px;" />
                                         <span class="text-gray-200 font-sr-sans text-lg">{{
-                                            character.light_cone.attributes[0].display }}</span>
+                                            character.light_cone ? character.light_cone.attributes[0].display : '-' }}</span>
                                     </div>
                                     <div class="flex flex-row">
                                         <StatIcon game="sr" :stat="character.light_cone.attributes[1].field" fill="#d1d5db"
                                             class="h-5 w-5 mr-2" style="margin-top: 3px;" />
                                         <span class="text-gray-200 font-sr-sans text-lg">{{
-                                            character.light_cone.attributes[1].display }}</span>
+                                            character.light_cone ? character.light_cone.attributes[1].display : '-' }}</span>
                                     </div>
                                     <div class="flex flex-row">
                                         <StatIcon game="sr" :stat="character.light_cone.attributes[2].field" fill="#d1d5db"
                                             class="h-5 w-5 mr-2" style="margin-top: 3px;" />
                                         <span class="text-gray-200 font-sr-sans text-lg">{{
-                                            character.light_cone.attributes[2].display }}</span>
+                                            character.light_cone ? character.light_cone.attributes[2].display : '-' }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -563,8 +566,8 @@ const trimAdditions = (additions) => {
                                                 }}</div>
                                         </div>
                                     </template>
-                                    <div class="h-12 w-12 p-1 rounded-full border-2 bg-opacity-50"
-                                        :style="{ borderColor: character.element.color }, { backgroundColor: character.element.color }">
+                                    <div class="h-12 w-12 p-1 rounded-full border-2"
+                                        :style="`border-color: ${character.element ? character.element.color : 'white'}`">
                                         <img :src="apiUrl + character.skills[idx - 1].icon" />
                                     </div>
                                 </el-tooltip>
