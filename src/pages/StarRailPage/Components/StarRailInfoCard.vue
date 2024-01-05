@@ -2,11 +2,12 @@
 import {computed, onMounted, ref} from 'vue'
 import {useRouter} from 'vue-router'
 import {ArrowLeftBold, ArrowRightBold} from '@element-plus/icons-vue'
-import {translate} from '../i18n'
-import DialogListItem from './DialogListItem.vue'
-import StatIcon from './StatIcon.vue'
-import {RankInfo, RankLevelUpSkillInfo} from '../types/starrail/srRankMap'
-import {AttributeInfo, CharacterInfo, FormattedApiInfo, RelicSetInfo} from '../types/starrail/srPlayerInfo'
+import {translate} from '../../../i18n'
+import StatIcon from '../../../components/StatIcon.vue'
+import {RankInfo, RankLevelUpSkillInfo} from '../../../types/starrail/srRankMap'
+import {AttributeInfo, CharacterInfo, FormattedApiInfo, RelicSetInfo} from '../../../types/starrail/srPlayerInfo'
+import {useDialog} from '../../../utils/template-dialog'
+import SRCharDetailsDialog from "./SRCharDetailsDialog.vue";
 
 // import rankMap from '../textMaps/character_ranks.json' with { type: 'json' }
 
@@ -52,8 +53,6 @@ const rankAdditions = computed(() => {
     })
     return res
 })
-const charDialogShow = ref(false)
-const charDialogId = ref(0)
 
 onMounted(() => {
     fetch(translate('sr_charRanksJsonUrl'))
@@ -223,103 +222,17 @@ const getInnerSet = (sets: RelicSetInfo[]) => {
 }
 
 const showCharDetails = (index: number) => {
-    charDialogId.value = index
-    charDialogShow.value = true
-}
-
-const trimAdditions = (additions: AttributeInfo[]) => {
-    const map = ['atk', 'hp', 'def', 'spd', 'crit_rate', 'crit_dmg']
-    const tmp = [...additions]
-    for (let i = 0; i < tmp.length; i++) {
-        if (map.indexOf(tmp[i].field) != -1) {
-            tmp.splice(i, 1)
-            i--
-        }
-    }
-    return tmp
+    useDialog(SRCharDetailsDialog, {
+        title: playerInfo.value.characters[index].name + ' ' + translate('sr_charDetails'),
+        character: playerInfo.value.characters[index],
+        showOk: false
+    })
 }
 </script>
 
 <template>
     <div class="bg-white" style="border-radius: 4.5vh; margin-bottom: 1rem;"
          :style="playerInfoReady ? 'height: 97vh;' : ''">
-        <el-dialog v-if="playerInfoReady" v-model="charDialogShow"
-                   :title="playerInfo.characters[charDialogId].name + ' ' + $t('sr_charDetails')" width="30%">
-            <div class="flex flex-col content-center justify-center w-full px-5">
-                <DialogListItem class="font-sr-sans" :name="$t('sr_hp')">
-                    <template #icon>
-                        <StatIcon game="sr" stat="hp" fill="#666" class="w-4 h-4 mr-1" style="margin-top: 2px;"/>
-                    </template>
-                    <div class="font-sr-sans">
-                        <span>{{ playerInfo.characters[charDialogId].attributes[0].display }}</span>
-                        <span v-if="findField(playerInfo.characters[charDialogId].additions, 'hp').display !== ''"
-                              class="ml-1 text-blue-500">+{{
-                                findField(playerInfo.characters[charDialogId].additions,
-                                    "hp").display
-                            }}</span>
-                    </div>
-                </DialogListItem>
-                <DialogListItem class="font-sr-sans" :name="$t('sr_atk')">
-                    <template #icon>
-                        <StatIcon game="sr" stat="atk" fill="#666" class="w-4 h-4 mr-1" style="margin-top: 2px;"/>
-                    </template>
-                    <div class="font-sr-sans">
-                        <span>{{ playerInfo.characters[charDialogId].attributes[1].display }}</span>
-                        <span v-if="findField(playerInfo.characters[charDialogId].additions, 'atk').display !== ''"
-                              class="ml-1 text-blue-500">+{{
-                                findField(playerInfo.characters[charDialogId].additions,
-                                    "atk").display
-                            }}</span>
-                    </div>
-                </DialogListItem>
-                <DialogListItem class="font-sr-sans" :name="$t('sr_def')">
-                    <template #icon>
-                        <StatIcon game="sr" stat="def" fill="#666" class="w-4 h-4 mr-1" style="margin-top: 2px;"/>
-                    </template>
-                    <div class="font-sr-sans">
-                        <span>{{ playerInfo.characters[charDialogId].attributes[2].display }}</span>
-                        <span v-if="findField(playerInfo.characters[charDialogId].additions, 'def').display !== ''"
-                              class="ml-1 text-blue-500">+{{
-                                findField(playerInfo.characters[charDialogId].additions,
-                                    "def").display
-                            }}</span>
-                    </div>
-                </DialogListItem>
-                <DialogListItem class="font-sr-sans" :name="$t('sr_spd')">
-                    <template #icon>
-                        <StatIcon game="sr" stat="spd" fill="#666" class="w-4 h-4 mr-1" style="margin-top: 2px;"/>
-                    </template>
-                    <div class="font-sr-sans">
-                        <span>{{ playerInfo.characters[charDialogId].attributes[3].display }}</span>
-                        <span v-if="findField(playerInfo.characters[charDialogId].additions, 'spd').display !== ''"
-                              class="ml-1 text-blue-500">+{{
-                                findField(playerInfo.characters[charDialogId].additions,
-                                    "spd").display
-                            }}</span>
-                    </div>
-                </DialogListItem>
-                <DialogListItem class="font-sr-sans" :name="$t('sr_crit_rate')"
-                                :val="((playerInfo.characters[charDialogId].attributes[4].value + findField(playerInfo.characters[charDialogId].additions, 'crit_rate').value) * 100).toFixed(1) + '%'">
-                    <template #icon>
-                        <StatIcon game="sr" stat="crit_rate" fill="#666" class="w-4 h-4 mr-1" style="margin-top: 2px;"/>
-                    </template>
-                </DialogListItem>
-                <DialogListItem class="font-sr-sans" :name="$t('sr_crit_dmg')"
-                                :val="((playerInfo.characters[charDialogId].attributes[5].value + findField(playerInfo.characters[charDialogId].additions, 'crit_dmg').value) * 100).toFixed(1) + '%'">
-                    <template #icon>
-                        <StatIcon game="sr" stat="crit_dmg" fill="#666" class="w-4 h-4 mr-1" style="margin-top: 2px;"/>
-                    </template>
-                </DialogListItem>
-                <DialogListItem v-for="attr in trimAdditions(playerInfo.characters[charDialogId].additions)"
-                                class="font-sr-sans" :name="attr.name" :val="attr.display">
-                    <template #icon>
-                        <StatIcon game="sr" :stat="attr.field" fill="#666" class="w-4 h-4 mr-1"
-                                  style="margin-top: 2px;"/>
-
-                    </template>
-                </DialogListItem>
-            </div>
-        </el-dialog>
         <!-- HEADER -->
         <div class="flex flex-row w-full p-0 relative justify-between z-50" style="height: 9vh;">
             <!-- 右上角名片 -->
@@ -403,7 +316,7 @@ const trimAdditions = (additions: AttributeInfo[]) => {
                 { 'opacity-0 -translate-x-40 pointer-events-none': showcaseIdx > index }"
                  style="transition-duration: 300ms;">
                 <!-- absolute： 卡片元素背景、元素图标 -->
-                <img class="relative z-0 w-full" src="../assets/srBg.jpg" style="border-radius: 4.5vh;"/>
+                <img class="relative z-0 w-full" src="../../../assets/srBg.jpg" style="border-radius: 4.5vh;"/>
                 <img class="h-1/4 absolute opacity-50" :src="character.element ? apiUrl + character.element.icon : ''"
                      style="top: -7px; right: -18px;"/>
                 <!-- 卡片前景 -->
@@ -453,7 +366,7 @@ const trimAdditions = (additions: AttributeInfo[]) => {
                                              :src="apiUrl + character.rank_icons[idx - 1]"/>
                                     </div>
                                     <div v-else>
-                                        <img src="../assets/locked.png"
+                                        <img src="../../../assets/locked.png"
                                              class="w-8 opacity-70 ml-2 bg-black rounded-full"/>
                                     </div>
                                 </el-tooltip>
@@ -587,7 +500,7 @@ const trimAdditions = (additions: AttributeInfo[]) => {
                             <div v-for="idx in 4" class="h-full flex flex-row cursor-default">
                                 <el-tooltip placement="left">
                                     <template #content>
-                                        <div class=" max-w-md">
+                                        <div class="max-w-md">
                                             <div class="font-sr text-xl">
                                                 {{ character.skills[idx - 1].name }}
                                             </div>
@@ -680,7 +593,7 @@ const trimAdditions = (additions: AttributeInfo[]) => {
                                             <div class="flex flex-row mr-5">
                                                 <div v-for="i in substat.count - 1"
                                                      class="ml-1 mt-0 text-center text-sm">
-                                                    <img src="../assets/statIcons/statEnhance.png"
+                                                    <img src="../../../assets/statIcons/statEnhance.png"
                                                          class="h-4 invert opacity-70 mt-1"
                                                          :style="`transform: translate(calc(${substat.count - i - 1}*5px));`"/>
                                                 </div>
@@ -751,28 +664,20 @@ const trimAdditions = (additions: AttributeInfo[]) => {
 @tailwind components;
 @tailwind utilities;
 
-.font-sr {
-    font-family: sr-font;
-}
-
-.font-sr-sans {
-    font-family: sr-sans-font;
-}
-
 .char-side-icon {
     -webkit-mask: radial-gradient(white 80%, transparent)
 }
 
 .gacha-mask {
-    -webkit-mask: linear-gradient(transparent, white 15%, white 85%, transparent)
+    -webkit-mask: -webkit-linear-gradient(transparent, white 15%, white 85%, transparent)
 }
 
 .left-gacha {
-    -webkit-mask: linear-gradient(270deg, transparent, white 20%)
+    -webkit-mask: -webkit-linear-gradient(270deg, transparent, white 20%)
 }
 
 .artifact-mask {
-    -webkit-mask: linear-gradient(270deg, transparent, white 60%)
+    -webkit-mask: -webkit-linear-gradient(270deg, transparent, white 60%)
 }
 
 .disabled {

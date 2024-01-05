@@ -333,10 +333,6 @@ const onImportDialogClose = () => {
 @tailwind components;
 @tailwind utilities;
 
-.font-sr {
-    font-family: sr-font;
-}
-
 .bg-pic {
     width: 98vw;
     /* -webkit-mask: linear-gradient(white 50%, transparent) */

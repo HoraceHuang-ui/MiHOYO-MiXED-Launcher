@@ -2,8 +2,8 @@
 import {computed, onMounted, ref} from 'vue'
 import {useRouter} from 'vue-router'
 import {ArrowLeftBold, ArrowRightBold} from '@element-plus/icons-vue'
-import {translate} from '../i18n'
-import StatIcon from './StatIcon.vue'
+import {translate} from '../../../i18n'
+import StatIcon from '../../../components/StatIcon.vue'
 import {PlayerData, Stats} from "enkanetwork.js"
 import {parseInt} from "lodash-es"
 
@@ -356,11 +356,11 @@ const findSkillIdByProud = (proudId: number): number => {
                    :title="playerInfo.characters[charDialogId].name + ' ' + $t('gs_charDetails')"
                    width="30%">
             <div class="flex flex-col content-center justify-center w-full px-5">
-                <DialogListItem class="font-genshin" :name="$t('gs_FIGHT_PROP_HP')">
+                <DialogListItem class="font-gs" :name="$t('gs_FIGHT_PROP_HP')">
                     <template #icon>
                         <StatIcon game="gs" stat="FIGHT_PROP_HP" fill="#666" class="w-4 h-4" style="margin-top: 2px;"/>
                     </template>
-                    <div class="font-genshin">
+                    <div class="font-gs">
                         <span>{{ parseInt(playerInfo.characters[charDialogId].stats.baseHp.value) }}</span>
                         <span
                             v-if="playerInfo.characters[charDialogId].stats.maxHp.value != playerInfo.characters[charDialogId].stats.baseHp.value"
@@ -370,12 +370,12 @@ const findSkillIdByProud = (proudId: number): number => {
                             }}</span>
                     </div>
                 </DialogListItem>
-                <DialogListItem class="font-genshin" :name="$t('gs_FIGHT_PROP_ATTACK')">
+                <DialogListItem class="font-gs" :name="$t('gs_FIGHT_PROP_ATTACK')">
                     <template #icon>
                         <StatIcon game="gs" stat="FIGHT_PROP_ATTACK" fill="#666" class="w-4 h-4"
                                   style="margin-top: 2px;"/>
                     </template>
-                    <div class="font-genshin">
+                    <div class="font-gs">
                         <span>{{ parseInt(playerInfo.characters[charDialogId].stats.baseAtk.value) }}</span>
                         <span
                             v-if="parseInt(playerInfo.characters[charDialogId].stats.atk.value) != parseInt(playerInfo.characters[charDialogId].stats.baseAtk.value)"
@@ -385,12 +385,12 @@ const findSkillIdByProud = (proudId: number): number => {
                             }}</span>
                     </div>
                 </DialogListItem>
-                <DialogListItem class="font-genshin" :name="$t('gs_FIGHT_PROP_DEFENSE')">
+                <DialogListItem class="font-gs" :name="$t('gs_FIGHT_PROP_DEFENSE')">
                     <template #icon>
                         <StatIcon game="gs" stat="FIGHT_PROP_DEFENSE" fill="#666" class="w-4 h-4"
                                   style="margin-top: 2px;"/>
                     </template>
-                    <div class="font-genshin">
+                    <div class="font-gs">
                         <span>{{ parseInt(playerInfo.characters[charDialogId].stats.baseDef.value) }}</span>
                         <span
                             v-if="parseInt(playerInfo.characters[charDialogId].stats.def.value) != parseInt(playerInfo.characters[charDialogId].stats.baseDef.value)"
@@ -400,7 +400,7 @@ const findSkillIdByProud = (proudId: number): number => {
                             }}</span>
                     </div>
                 </DialogListItem>
-                <DialogListItem class="font-genshin" :name="$t('gs_FIGHT_PROP_ELEMENT_MASTERY')"
+                <DialogListItem class="font-gs" :name="$t('gs_FIGHT_PROP_ELEMENT_MASTERY')"
                                 :val="playerInfo.characters[charDialogId].stats.elementalMastery.value ? parseInt(playerInfo.characters[charDialogId].stats.elementalMastery.value).toString() : '0'">
                     <template #icon>
                         <StatIcon game="gs" stat="FIGHT_PROP_ELEMENT_MASTERY" fill="#666" class="w-4 h-4"
@@ -408,7 +408,7 @@ const findSkillIdByProud = (proudId: number): number => {
                     </template>
                 </DialogListItem>
                 <DialogListItem v-for="(stat, key) in trimStats(playerInfo.characters[charDialogId].stats)"
-                                class="font-genshin" :name="$t(`gs_${key}`)"
+                                class="font-gs" :name="$t(`gs_${key}`)"
                                 :val="(stat.value * 100).toFixed(1).toString() + '%'">
                     <template #icon>
                         <StatIcon game="gs" :stat="key" fill="#666" class="w-4 h-4" style="margin-top: 2px;"/>
@@ -436,7 +436,7 @@ const findSkillIdByProud = (proudId: number): number => {
             <div v-if="playerInfoReady" class="flex flex-row content-start items-center" style="width: 35vw;">
                 <img class="rounded-full h-12 border-2 bg-slate-200" style="margin-left: 1vw;"
                      :src="'https://enka.network/ui/' + ('costumes' in playerInfo.player.profilePicture.assets && playerInfo.player.profilePicture.assets.costumes.length > 0 ? playerInfo.player.profilePicture.assets.costumes[0].icon : ('oldIcon' in playerInfo.player.profilePicture.assets ? playerInfo.player.profilePicture.assets.oldIcon : playerInfo.player.profilePicture.assets.icon)) + '.png'"/>
-                <div class="font-genshin" style="margin-left: 1vw; font-size: larger;">{{
+                <div class="font-gs" style="margin-left: 1vw; font-size: larger;">{{
                         playerInfo.player.username
                     }}
                 </div>
@@ -451,7 +451,7 @@ const findSkillIdByProud = (proudId: number): number => {
                     <el-tag size="large" round class="mr-2">
                         <div class="flex flex-row">
                             {{ $t('gs_worldLv') }}
-                            <span class="font-genshin" style="margin-left: 1ch; margin-top: 1px;">
+                            <span class="font-gs" style="margin-left: 1ch; margin-top: 1px;">
                                 {{ playerInfo.player.levels.world }}
                             </span>
                         </div>
@@ -459,7 +459,7 @@ const findSkillIdByProud = (proudId: number): number => {
                     <el-tag size="large" round class="mr-4">
                         <div class="flex flex-row">
                             {{ $t('gs_playerLv') }}
-                            <span class="font-genshin" style="margin-left: 1ch; margin-top: 1px;">
+                            <span class="font-gs" style="margin-left: 1ch; margin-top: 1px;">
                                 {{ playerInfo.player.levels.rank }}
                             </span>
                         </div>
@@ -526,10 +526,10 @@ const findSkillIdByProud = (proudId: number): number => {
                         <div
                             class="z-50 absolute left-3 top-3 rounded-full backdrop-blur-lg bg-opacity-25 bg-black h-10">
                             <div class="mt-2 ml-3">
-                                <span class=" text-gray-100 font-genshin bottom-0 text-xl align-bottom">
+                                <span class=" text-gray-100 font-gs bottom-0 text-xl align-bottom">
                                     Lv. {{ character.properties.level.val }} /
                                 </span>
-                                <span class=" text-gray-300 bottom-0 text-xl align-bottom mr-3 font-genshin">
+                                <span class=" text-gray-300 bottom-0 text-xl align-bottom mr-3 font-gs">
                                     {{
                                         ascLevelMap[character.properties.ascension.val ? parseInt(character.properties.ascension.val) : 0]
                                     }}
@@ -542,14 +542,14 @@ const findSkillIdByProud = (proudId: number): number => {
                                 <div class="flex flex-row relative">
                                     <el-tooltip v-for="skill in character.skills" placement="top">
                                         <template #content>
-                                            <span class="font-genshin text-base"> {{ skill.name }} </span>
+                                            <span class="font-gs text-base"> {{ skill.name }} </span>
                                         </template>
                                         <div class="rounded-full ml-2 h-8 mb-2 flex flex-row cursor-default"
                                              style="background-color: rgb(0 0 0 / 0.6); width: 72px;">
                                             <img class="h-8 rounded-full"
                                                  :src="'https://enka.network/ui/' + skill.assets.icon + '.png'"/>
                                             <div
-                                                class="text-center w-full mr-1 h-full align-middle text-base font-genshin"
+                                                class="text-center w-full mr-1 h-full align-middle text-base font-gs"
                                                 style="margin-top: 3px;">
                                                 <span v-if="skill.id in constelsAdditions"
                                                       :class="{ 'text-orange-300': skill.level == 10, 'text-cyan-400': skill.level < 10 }">{{
@@ -566,7 +566,7 @@ const findSkillIdByProud = (proudId: number): number => {
                                 <div class="flex flex-row relative">
                                     <el-tooltip v-for="idx in 6" placement="top">
                                         <template #content>
-                                            <span class="font-genshin text-base point"> {{
+                                            <span class="font-gs text-base point"> {{
                                                     idx <=
                                                     character.constellationsList.length ? character.constellationsList[idx -
                                                     1].name : $t("gs_lockedConstel")
@@ -580,7 +580,7 @@ const findSkillIdByProud = (proudId: number): number => {
                                                  :src="'https://enka.network/ui/' + character.constellationsList[idx - 1].assets.icon + '.png'"/>
                                         </div>
                                         <div v-else>
-                                            <img src="../assets/locked.png"
+                                            <img src="../../../assets/locked.png"
                                                  class="w-8 opacity-70 ml-2 bg-black rounded-full"/>
                                         </div>
                                     </el-tooltip>
@@ -591,7 +591,7 @@ const findSkillIdByProud = (proudId: number): number => {
                         <div class=" w-5/12 h-full absolute top-7 right-6 bottom-4 flex flex-col z-20">
                             <!-- 角色名字-->
                             <div class="w-full text-right">
-                                <span class=" text-white font-genshin font-bold"
+                                <span class=" text-white font-gs font-bold"
                                       style="font-size: 2.15rem; line-height: 2.5rem;">{{ character.name }}</span>
                             </div>
                             <!-- 详情第一块：属性 -->
@@ -601,21 +601,21 @@ const findSkillIdByProud = (proudId: number): number => {
                                     <!-- <span class="text-gray-300">生命</span> -->
                                     <StatIcon game="gs" stat="FIGHT_PROP_HP" fill="#d1d5db" class="w-5 h-5"
                                               style="margin-top: 1px;"/>
-                                    <span class="text-gray-200 text-right font-genshin ml-3">{{
+                                    <span class="text-gray-200 text-right font-gs ml-3">{{
                                             parseInt(character.stats.maxHp.value)
                                         }}</span>
                                 </div>
                                 <div class="w-full flex flex-row" style="grid-column: 2; grid-row: 1;">
                                     <StatIcon game="gs" stat="FIGHT_PROP_ATTACK" fill="#d1d5db" class="w-5 h-5"
                                               style="margin-top: 1px;"/>
-                                    <span class="text-gray-200 text-right font-genshin ml-3">{{
+                                    <span class="text-gray-200 text-right font-gs ml-3">{{
                                             parseInt(character.stats.atk.value)
                                         }}</span>
                                 </div>
                                 <div class="w-full flex flex-row" style="grid-column: 3; grid-row: 1;">
                                     <StatIcon game="gs" stat="FIGHT_PROP_DEFENSE" fill="#d1d5db" class="w-5 h-5"
                                               style="margin-top: 1px;"/>
-                                    <span class="text-gray-200 text-right font-genshin ml-3">{{
+                                    <span class="text-gray-200 text-right font-gs ml-3">{{
                                             parseInt(character.stats.def.value)
                                         }}</span>
                                 </div>
@@ -623,14 +623,14 @@ const findSkillIdByProud = (proudId: number): number => {
                                     <StatIcon game="gs" stat="FIGHT_PROP_CHARGE_EFFICIENCY" fill="#d1d5db"
                                               class="w-5 h-5"
                                               style="margin-top: 1px;"/>
-                                    <span class="text-gray-200 text-right font-genshin ml-3">{{
+                                    <span class="text-gray-200 text-right font-gs ml-3">{{
                                             (character.stats.energyRecharge.value * 100).toFixed(1)
                                         }}%</span>
                                 </div>
                                 <div class="w-full flex flex-row" style="grid-column: 2; grid-row: 2;">
                                     <StatIcon game="gs" stat="FIGHT_PROP_ELEMENT_MASTERY" fill="#d1d5db" class="w-5 h-5"
                                               style="margin-top: 1px;"/>
-                                    <span class="text-gray-200 text-right font-genshin ml-3">{{
+                                    <span class="text-gray-200 text-right font-gs ml-3">{{
                                             parseInt(!character.stats.elementalMastery.value ? 0 :
                                                 character.stats.elementalMastery.value)
                                         }}</span>
@@ -639,28 +639,28 @@ const findSkillIdByProud = (proudId: number): number => {
                                     <!-- <span class="text-gray-300">能量</span> -->
                                     <StatIcon game="gs" stat="CUSTOM_ENERGY_REQUIRED" fill="#d1d5db" class="w-5 h-5"
                                               style="margin-top: 1px;"/>
-                                    <span class="text-gray-200 text-right font-genshin ml-3">{{
+                                    <span class="text-gray-200 text-right font-gs ml-3">{{
                                             getCharElementEnergy(index)
                                         }}</span>
                                 </div>
                                 <div class="w-full flex flex-row" style="grid-column: 1; grid-row: 3;">
                                     <StatIcon game="gs" stat="FIGHT_PROP_CRITICAL" fill="#d1d5db" class="w-5 h-5"
                                               style="margin-top: 1px;"/>
-                                    <span class="text-gray-200 text-right font-genshin ml-3">{{
+                                    <span class="text-gray-200 text-right font-gs ml-3">{{
                                             (character.stats.critRate.value * 100).toFixed(1)
                                         }}%</span>
                                 </div>
                                 <div class="w-full flex flex-row" style="grid-column: 2; grid-row: 3;">
                                     <StatIcon game="gs" stat="FIGHT_PROP_CRITICAL_HURT" fill="#d1d5db" class="w-5 h-5"
                                               style="margin-top: 1px;"/>
-                                    <span class="text-gray-200 text-right font-genshin ml-3">{{
+                                    <span class="text-gray-200 text-right font-gs ml-3">{{
                                             (character.stats.critDamage.value * 100).toFixed(1)
                                         }}%</span>
                                 </div>
                                 <div
                                     class="mx-2 rounded-full text-sm bg-white bg-opacity-20 text-center hover:bg-opacity-30 active:scale-95 active:bg-opacity-40 cursor-default transition-all px-1"
                                     @click="showCharDetails(index)" style="grid-column: 3; grid-row: 3;">
-                                    <div class="font-genshin" style="margin-top: 5px;">{{ $t("gs_details") }}</div>
+                                    <div class="font-gs" style="margin-top: 5px;">{{ $t("gs_details") }}</div>
                                 </div>
                             </div>
                             <!-- 详情第二块：武器 -->
@@ -670,13 +670,13 @@ const findSkillIdByProud = (proudId: number): number => {
                                      :src="'https://enka.network/ui/' + character.equipment.weapon.assets.awakenIcon + '.png'"/>
                                 <div class="w-full h-full relative">
                                     <div class="flex flex-row justify-between ml-2 mt-4">
-                                        <el-text truncated class="text-gray-200 font-genshin mt-1"
+                                        <el-text truncated class="text-gray-200 font-gs mt-1"
                                                  style="max-width: 300px; font-size: 1.4rem; line-height: 2rem;">
                                             {{ character.equipment.weapon.name }}
                                         </el-text>
                                         <div
                                             class="absolute right-1 bottom-1 text-gray-100 rounded-full bg-opacity-20 bg-white px-2">
-                                            <span class="font-genshin">{{ character.equipment.weapon.level }} / </span>
+                                            <span class="font-gs">{{ character.equipment.weapon.level }} / </span>
                                             <span class="text-gray-300 font-serif">{{
                                                     ascLevelMap[character.equipment.weapon.ascensionLevel ?
                                                         character.equipment.weapon.ascensionLevel : 0]
@@ -685,7 +685,7 @@ const findSkillIdByProud = (proudId: number): number => {
                                         <div class="text-gray-400 mr-2 text-sm absolute right-0 top-0">{{
                                                 $t('gs_refinement')
                                             }}
-                                            <span class="text-gray-200 font-genshin text-base">{{
+                                            <span class="text-gray-200 font-gs text-base">{{
                                                     character.equipment.weapon.refinement.level + 1
                                                 }}</span>
                                         </div>
@@ -696,7 +696,7 @@ const findSkillIdByProud = (proudId: number): number => {
                                             <StatIcon game="gs" stat="FIGHT_PROP_ATTACK" fill="#d1d5db"
                                                       class="w-5 h-5 mr-2"
                                                       style="margin-top: 1px;"/>
-                                            <span class="text-gray-200 font-genshin text-lg">{{
+                                            <span class="text-gray-200 font-gs text-lg">{{
                                                     character.equipment.weapon.weaponStats[0].statValue
                                                 }}</span>
                                         </div>
@@ -705,7 +705,7 @@ const findSkillIdByProud = (proudId: number): number => {
                                             <!-- {{ $t(`gs_${character.equipment.weapon.weaponStats[1].stat}`) }} -->
                                             <StatIcon game="gs" :stat="character.equipment.weapon.weaponStats[1].stat"
                                                       fill="#d1d5db" class="w-5 h-5 mr-2" style="margin-top: 1px;"/>
-                                            <span class="text-gray-200 font-genshin text-lg">{{
+                                            <span class="text-gray-200 font-gs text-lg">{{
                                                     character.equipment.weapon.weaponStats[1].statValue
                                                 }}{{
                                                     showPercentage(character.equipment.weapon.weaponStats[1].stat)
@@ -736,7 +736,7 @@ const findSkillIdByProud = (proudId: number): number => {
                                                       class="w-6 h-6 mr-1" style="margin-top: 3px;"/>
                                             <!-- <span class="text-gray-200 text-xl">{{ $t(`gs_${artifact.mainstat.stat}`)
                                             }}</span> -->
-                                            <span class="text-gray-200 text-3xl ml-2 font-genshin">{{
+                                            <span class="text-gray-200 text-3xl ml-2 font-gs">{{
                                                     artifact.mainstat.statValue
                                                 }}{{
                                                     showPercentage(artifact.mainstat.stat)
@@ -745,7 +745,7 @@ const findSkillIdByProud = (proudId: number): number => {
                                               'border-purple-400 bg-purple-900 text-purple-300': artifact.stars == 4,
                                               'border-blue-400 bg-blue-900 text-blue-300': artifact.stars == 3,
                                               'border-green-400 bg-green-900 text-green-300': artifact.stars == 2}"
-                                                 class="h-full justify-end mt-1 ml-2 font-genshin rounded-full border px-2">
+                                                 class="h-full justify-end mt-1 ml-2 font-gs rounded-full border px-2">
                                                 +{{ artifact.level - 1 }}
                                             </div>
                                         </div>
@@ -758,7 +758,7 @@ const findSkillIdByProud = (proudId: number): number => {
                                                 <StatIcon game="gs" :stat="substat.stat" fill="#d1d5db"
                                                           class="w-4 h-4 mr-1"
                                                           style="margin-top: 2px;"/>
-                                                <span class="text-gray-300 font-genshin text-xl ml-2">{{
+                                                <span class="text-gray-300 font-gs text-xl ml-2">{{
                                                         substat.statValue
                                                     }}{{ showPercentage(substat.stat) }}</span>
                                             </div>
@@ -778,21 +778,21 @@ const findSkillIdByProud = (proudId: number): number => {
                                  class="flex flex-row justify-between">
                                 <div class="text-gray-200 ml-1 text-left text-sm">
                                     {{ $t('gs_critScore') }}
-                                    <span class="text-gray-100 font-genshin">{{
+                                    <span class="text-gray-100 font-gs">{{
                                             calcCritScoreTotal(index).toFixed(1)
                                         }}</span>
                                 </div>
                                 <div class="text-gray-200 mt-1 mr-1 text-right text-sm">
-                                    <pre class="font-genshin text-sm"
+                                    <pre class="font-gs text-sm"
                                          style="line-height: 1rem;">{{ getArtifactSetInfo(index) }}</pre>
                                 </div>
                             </div>
                             <div v-else class="flex flex-row justify-between text-sm">
                                 <div class="text-gray-200 ml-1 mt-1">
                                     {{ $t('gs_critScore') }}
-                                    <span class="text-gray-100 font-genshin">0</span>
+                                    <span class="text-gray-100 font-gs">0</span>
                                 </div>
-                                <div class="text-gray-200 mt-1 mr-1 font-genshin">
+                                <div class="text-gray-200 mt-1 mr-1 font-gs">
                                     {{ $t('gs_noArtifactSets') }}
                                 </div>
                             </div>
@@ -810,10 +810,6 @@ const findSkillIdByProud = (proudId: number): number => {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-.font-genshin {
-    font-family: genshin-font;
-}
 
 .char-side-icon {
     -webkit-mask: radial-gradient(white 80%, transparent)

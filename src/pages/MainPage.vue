@@ -15,9 +15,6 @@ const bgImage = computed(() => {
 })
 
 onMounted(async () => {
-    // For electron-store test
-    // await window.store.clear()
-
     gsGamePath.value = await window.store.get('gsGamePath')
     srGamePath.value = await window.store.get('srGamePath')
     hi3GamePath.value = await window.store.get('hi3GamePath')
@@ -42,7 +39,7 @@ const starRail = async () => {
 }
 
 const honkai3 = async () => {
-    await window.child.exec(hiGamePath.value)
+    await window.child.exec(hi3GamePath.value)
     const trayOnLaunch = await window.store.get('trayOnLaunch')
     if (trayOnLaunch) {
         await window.win.tray()
@@ -71,13 +68,12 @@ const resetPic = () => {
 </script>
 
 <template>
-    <div @touchmove.prevent @mousewheel.prevent :class="transitionShow ? '' : 'opacity-0 blur-lg scale-90'"
+    <div :class="transitionShow ? '' : 'opacity-0 blur-lg scale-90'"
          style="transition-duration: 400ms;">
         <img class="bg-pic object-cover" :src="bgPath ? bgPath : '../../src/assets/gsbanner.png'"
              alt="Background image of Home page"/>
-        <div class="sticky bottom-0" style="height: 60vh;"></div>
-        <div class="bottom-area sticky">
-            <h1 class="font-sans font-bold text-5xl" style="margin-bottom: 10px; font-family: 'genshin-font';">{{
+        <div class="bottom-area absolute justify-center w-full">
+            <h1 class="text-5xl font-gs" style="margin-bottom: 10px;">{{
                     translate('mainpage_title')
                 }}</h1>
             <button v-if="gsGamePath" @click="genshin"
@@ -125,11 +121,11 @@ const resetPic = () => {
     width: 98vw;
     height: 92vh;
     border-radius: 24px 24px 0 0;
-    -webkit-mask: linear-gradient(white 30%, rgb(255 255 255 / 0.1))
+    -webkit-mask: -webkit-linear-gradient(white 30%, rgb(255 255 255 / 0.1));
 }
 
 .bottom-area {
-    bottom: 10px;
+    @apply bottom-0;
     height: 20vh;
 }
 </style>

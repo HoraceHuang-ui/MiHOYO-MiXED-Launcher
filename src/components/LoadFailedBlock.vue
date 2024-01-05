@@ -28,7 +28,7 @@ const refresh = () => {
         <img :src="imgs[gameNo]" class="object-scale-down -translate-x-1/2" style="margin-left: 50%;" loading="eager"
              height="120" width="120"/>
         <div class="mt-3 text-xl"
-             :class="{ 'font-genshin': gameNo == 0, 'font-sr': gameNo == 1, 'font-semibold': gameNo == 2 }">
+             :class="{ 'font-gs': gameNo == 0, 'font-sr': gameNo == 1, 'font-semibold': gameNo == 2 }">
             {{ $t("general_loadingFailed") }}
         </div>
         <div class=" hover:underline active:text-orange-300 text-blue-500 cursor-pointer -translate-x-1/2"
@@ -42,12 +42,4 @@ const refresh = () => {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-.font-sr {
-    font-family: sr-font;
-}
-
-.font-genshin {
-    font-family: genshin-font;
-}
 </style>

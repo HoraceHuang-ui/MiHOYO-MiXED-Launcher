@@ -25,14 +25,13 @@ declare module 'vue' {
     ElTag: typeof import('element-plus/es')['ElTag']
     ElText: typeof import('element-plus/es')['ElText']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
-    GenshinInfoCard: typeof import('./src/components/GenshinInfoCard.vue')['default']
     LauncherBanner: typeof import('./src/components/LauncherBanner.vue')['default']
     LauncherPosts: typeof import('./src/components/LauncherPosts.vue')['default']
     LoadFailedBlock: typeof import('./src/components/LoadFailedBlock.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    StarRailInfoCard: typeof import('./src/components/StarRailInfoCard.vue')['default']
     StatIcon: typeof import('./src/components/StatIcon.vue')['default']
+    TemplateDialog: typeof import('./src/components/TemplateDialog.vue')['default']
     TopHeader: typeof import('./src/components/TopHeader.vue')['default']
   }
 }
