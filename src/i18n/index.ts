@@ -35,11 +35,11 @@ export const currentLocale = () => {
     return i18n.global.locale
 }
 
-export const translate = (key: string, locale?: string, bindings?: any) => {
+export const translate = (key: string, bindings?: any) => {
     if (!key) {
         return ''
     }
-    return i18n.global.t(key, locale ? locale : i18n.global.locale, bindings)
+    return i18n.global.t(key, bindings)
 }
 
 export const switchLang = (language: lang) => {

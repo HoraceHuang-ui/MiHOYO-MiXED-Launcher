@@ -103,7 +103,7 @@ const router = useRouter()
 const requestInfo = () => {
     uid = uidInput.value
     playerInfoFailed.value = false
-    window.axios.get(translate("sr_playerInfoUrl", undefined, {uid: uid}))
+    window.axios.get(translate("sr_playerInfoUrl", {uid: uid}))
         .then((resp) => {
             if (playerInfoReady.value && playerInfo.value.player.uid == resp.player.uid) {
                 console.log('uid equal')

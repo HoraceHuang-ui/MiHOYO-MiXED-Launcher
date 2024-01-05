@@ -83,19 +83,19 @@ const resetPic = () => {
             <button v-if="gsGamePath" @click="genshin"
                     class="p-3 mx-2 my-2 font-bold text-xl transition-all bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 cursor-default">
                 {{
-                    translate('mainpage_buttonText', undefined, {game: $t('general_gsShort')})
+                    translate('mainpage_buttonText', {game: $t('general_gsShort')})
                 }}
             </button>
             <button v-if="srGamePath" @click="starRail"
                     class="p-3 mx-2 my-2 font-bold text-xl transition-all bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 cursor-default">
                 {{
-                    translate('mainpage_buttonText', undefined, {game: $t('general_srShort')})
+                    translate('mainpage_buttonText', {game: $t('general_srShort')})
                 }}
             </button>
             <button v-if="hi3GamePath" @click="honkai3"
                     class="p-3 mx-2 my-2 font-bold text-xl transition-all bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 cursor-default">
                 {{
-                    translate('mainpage_buttonText', undefined, {game: $t('general_hi3Short')})
+                    translate('mainpage_buttonText', {game: $t('general_hi3Short')})
                 }}
             </button>
         </div>
