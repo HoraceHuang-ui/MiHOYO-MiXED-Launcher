@@ -6,6 +6,7 @@ import {translate} from '../../../i18n'
 import StatIcon from '../../../components/StatIcon.vue'
 import {Artifact, Stats} from "enkanetwork.js"
 import {parseInt} from "lodash-es"
+import CustomUIDInput from "../../../components/CustomUIDInput.vue";
 
 const playerInfo = ref<any>()
 
@@ -115,7 +116,6 @@ onMounted(() => {
     window.store.get('genshinConstels')
         .then(resp => {
             if (resp) {
-                console.log(JSON.parse(resp))
                 constelsMap.value = JSON.parse(resp)
                 constelsReady.value = true
             }
@@ -134,7 +134,7 @@ const requestInfo = () => {
     playerInfoFailed.value = false
     window.enka.getGenshinPlayer(uid, translate('gs_enkaLangCode'))
         .then((resp) => {
-            if (playerInfo.value.uid == resp.uid) {
+            if (playerInfo.value && playerInfo.value.uid === resp.uid) {
                 mergeToPlayerinfo(resp.characters)
                 playerInfo.value.player = resp.player
             } else {
@@ -154,8 +154,8 @@ const requestInfo = () => {
                         return -1
                     } else {
                         // 双爆分
-                        const critA = a.stats.critRate.toPercentage() * 2 + a.stats.critDamage.toPercentage()
-                        const critB = b.stats.critRate.toPercentage() * 2 + b.stats.critDamage.toPercentage()
+                        const critA = a.stats.critRate.value as number * 2 + a.stats.critDamage.value as number
+                        const critB = b.stats.critRate.value as number * 2 + b.stats.critDamage.value as number
                         if (critA < critB) {
                             return 1
                         } else {
@@ -168,11 +168,12 @@ const requestInfo = () => {
             playerInfoLoading.value = false
             console.log(playerInfo.value)
 
-            fetch('https://gitlab.com/api/v4/projects/41287973/repository/files/ExcelBinOutput%2FAvatarSkillExcelConfigData.json/raw?ref=master')
+            fetch('https://gitlab.com/api/v4/projects/53216109/repository/files/ExcelBinOutput%2FAvatarSkillExcelConfigData.json/raw')
                 .then(response => response.json())
-                .then(resp => {
-                    resp = resp.filter((a: any) => 'proudSkillGroupId' in a)
-                    window.store.set('genshinConstels', JSON.stringify(resp), true)
+                .then(resp2 => {
+                    if (!resp2) return
+                    resp2 = resp2.filter((a: any) => 'proudSkillGroupId' in a)
+                    window.store.set('genshinConstels', JSON.stringify(resp2), false)
 
                     router.push({
                         name: 'tempPage',
@@ -816,15 +817,15 @@ const findSkillIdByProud = (proudId: number): number => {
 }
 
 .gacha-mask {
-    -webkit-mask: -webkit-linear-gradient(transparent, white 15%, white 85%, transparent)
+    -webkit-mask: linear-gradient(transparent, white 15%, white 85%, transparent)
 }
 
 .left-gacha {
-    -webkit-mask: -webkit-linear-gradient(270deg, transparent, white 20%)
+    -webkit-mask: linear-gradient(270deg, transparent, white 20%)
 }
 
 .artifact-mask {
-    -webkit-mask: -webkit-linear-gradient(270deg, transparent, white 60%)
+    -webkit-mask: linear-gradient(270deg, transparent, white 60%)
 }
 
 .disabled {

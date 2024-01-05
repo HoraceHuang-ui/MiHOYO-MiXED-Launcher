@@ -121,7 +121,7 @@ const resetPic = () => {
     width: 98vw;
     height: 92vh;
     border-radius: 24px 24px 0 0;
-    -webkit-mask: -webkit-linear-gradient(white 30%, rgb(255 255 255 / 0.1));
+    -webkit-mask: linear-gradient(white 30%, rgb(255 255 255 / 0.1));
 }
 
 .bottom-area {

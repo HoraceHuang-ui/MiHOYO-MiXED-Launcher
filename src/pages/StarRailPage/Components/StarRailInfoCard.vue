@@ -679,15 +679,15 @@ const showCharDetails = (index: number) => {
 }
 
 .gacha-mask {
-    -webkit-mask: -webkit-linear-gradient(transparent, white 15%, white 85%, transparent)
+    -webkit-mask: linear-gradient(transparent 5%, white 15%, white 85%, transparent)
 }
 
 .left-gacha {
-    -webkit-mask: -webkit-linear-gradient(270deg, transparent, white 20%)
+    -webkit-mask: linear-gradient(270deg, transparent, white 20%)
 }
 
 .artifact-mask {
-    -webkit-mask: -webkit-linear-gradient(270deg, transparent, white 60%)
+    -webkit-mask: linear-gradient(270deg, transparent, white 60%)
 }
 
 .disabled {

@@ -252,12 +252,12 @@ const onImportDialogClose = () => {
 
 .bg-pic {
     width: 98vw;
-    -webkit-mask: -webkit-linear-gradient(white 50%, transparent)
+    -webkit-mask: linear-gradient(white 50%, transparent)
     /* -webkit-mask: linear-gradient(white, white); */
 }
 
 .bg-mask {
-    -webkit-mask: -webkit-linear-gradient(white 50%, transparent);
+    -webkit-mask: linear-gradient(white 50%, transparent);
 }
 
 .scroll-wrapper {
