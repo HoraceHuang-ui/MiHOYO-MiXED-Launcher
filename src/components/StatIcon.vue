@@ -38,6 +38,7 @@ import sr_fireIcon from '../assets/statIcons/sr/fireIcon.vue'
 import sr_quantumIcon from '../assets/statIcons/sr/quantumIcon.vue'
 import sr_physicalIcon from '../assets/statIcons/sr/physicalIcon.vue'
 import sr_lightningIcon from '../assets/statIcons/sr/lightningIcon.vue'
+import sr_outHealingIcon from '../assets/statIcons/sr/outHealingIcon.vue'
 
 const props = defineProps({
     game: {
@@ -110,6 +111,7 @@ const props = defineProps({
             <sr_quantumIcon v-if="props.stat === 'quantum_dmg'" :fill="props.fill"/>
             <sr_physicalIcon v-if="props.stat === 'physical_dmg'" :fill="props.fill"/>
             <sr_lightningIcon v-if="props.stat === 'lightning_dmg'" :fill="props.fill"/>
+            <sr_outHealingIcon v-if="props.stat === 'heal_rate'" :fill="props.fill"/>
         </div>
     </div>
 </template>
