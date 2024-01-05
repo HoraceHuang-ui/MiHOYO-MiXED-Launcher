@@ -3,6 +3,9 @@ import {computed, onMounted, ref} from 'vue'
 import {useRouter} from 'vue-router'
 import {translate} from '../../i18n'
 import StarRailInfoCard from "./Components/StarRailInfoCard.vue";
+import {useDialog} from "../../utils/template-dialog";
+import StarRailDialog from "./Components/StarRailDialog.vue";
+import SRImportDialog from "./Components/SRImportDialog.vue";
 
 const gameName = translate('general_sr')
 
@@ -22,8 +25,6 @@ const launcherInfoFailed = ref(false)
 const errMsg = ref('')
 const hideElements = ref(false)
 const scrollBarRef = ref()
-const importDialogShow = ref(false)
-const combinePaths = ref(true)
 
 const postTypeMap = new Map()
 
@@ -50,47 +51,47 @@ onMounted(async () => {
     window.store.get('starRailUpd')
         .then((resp) => {
             if (srLauncherPath.value && !resp) {
+                console.log(timeDelta.value)
                 if (timeDelta.value > 40) {
-                    ElMessageBox.confirm(translate('general_gameUpdBoxText1', {
+                    useDialog(StarRailDialog, {
+                        title: translate('general_gameUpdBoxTitle'),
+                        msg: translate('general_gameUpdBoxText1', {
                             game: gameName,
-                            beDays: translate('general_beDays', undefined, 42 - timeDelta.value)
-                        }, undefined),
-                        translate('general_gameUpdBoxTitle'),
-                        {
-                            confirmButtonText: translate('general_confirm'),
-                            cancelButtonText: translate('general_cancel'),
-                            type: 'info'
-                        }).then(() => {
-                        window.child.exec(srLauncherPath.value)
-                        window.store.set('starRailUpd', true, false)
-                    }).catch(() => {
+                            beDays: translate('general_beDays', 42 - timeDelta.value)
+                        }),
+                        msgCenter: false,
+                        showCancel: true,
+                        onOk: () => {
+                            window.child.exec(srLauncherPath.value)
+                            window.store.set('starRailUpd', true, false)
+                        }
                     })
                 } else if (timeDelta.value > 0 && timeDelta.value < 3) {
-                    ElMessageBox.confirm(translate('general_gameUpdBoxText2', {
+                    useDialog(StarRailDialog, {
+                        title: translate('general_gameUpdBoxTitle'),
+                        msg: translate('general_gameUpdBoxText2', {
                             game: gameName,
-                            days: translate('general_days', undefined, timeDelta.value)
-                        }, undefined),
-                        translate('general_gameUpdBoxTitle'),
-                        {
-                            confirmButtonText: translate('general_confirm'),
-                            cancelButtonText: translate('general_cancel'),
-                            type: 'info'
-                        }).then(() => {
-                        window.child.exec(srLauncherPath.value)
-                        window.store.set('starRailUpd', true, false)
-                    }).catch(() => {
+                            days: translate('general_days', timeDelta.value)
+                        }),
+                        msgCenter: false,
+                        showCancel: true,
+                        onOk: () => {
+                            window.child.exec(srLauncherPath.value)
+                            window.store.set('starRailUpd', true, false)
+                        }
                     })
                 } else if (timeDelta.value == 0) {
-                    ElMessageBox.confirm(translate('general_gameUpdBoxText3', {game: gameName}, undefined),
-                        translate('general_gameUpdBoxTitle'),
-                        {
-                            confirmButtonText: translate('general_confirm'),
-                            cancelButtonText: translate('general_cancel'),
-                            type: 'info'
-                        }).then(() => {
-                        window.child.exec(srLauncherPath.value)
-                        window.store.set('starRailUpd', true, false)
-                    }).catch(() => {
+                    useDialog(StarRailDialog, {
+                        title: translate('general_gameUpdBoxTitle'),
+                        msg: translate('general_gameUpdBoxText3', {
+                            game: gameName
+                        }),
+                        msgCenter: false,
+                        showCancel: true,
+                        onOk: () => {
+                            window.child.exec(srLauncherPath.value)
+                            window.store.set('starRailUpd', true, false)
+                        }
                     })
                 }
             } else if (srLauncherPath.value && timeDelta.value > 2 && timeDelta.value < 37) {
@@ -101,41 +102,11 @@ onMounted(async () => {
     })
 })
 
-const srLauncherImport = async () => {
-    window.dialog.show({
-        title: translate('general_launcherImportTitle', {game: gameName}, undefined),
-        properties: ['openDirectory']
-    }).then((resp) => {
-        if (resp.length > 0) {
-            launcherPath.value = resp[0]
-        }
-    }).catch((error) => {
-        console.error('Error in showing dialog:', error)
+const importButtonClick = () => {
+    useDialog(SRImportDialog, {
+        onOk: refresh,
+        onCancel: onImportDialogClose
     })
-}
-const srGameImport = async () => {
-    window.dialog.show({
-        title: translate('general_gameImportTitle', {game: gameName}, undefined),
-        properties: ['openFile'],
-        filters: [{name: 'EXE', extensions: ['exe']}]
-    }).then((resp) => {
-        if (resp.length > 0) {
-            gamePath.value = resp[0]
-        }
-    }).catch((error) => {
-        console.error('Error in showing dialog:', error)
-    })
-}
-const confirmPaths = async () => {
-    if (combinePaths.value) {
-        gamePath.value = launcherPath.value + '\\Game\\StarRail.exe'
-    }
-    launcherPath.value += '\\launcher.exe'
-    await window.store.set('srLauncherPath', launcherPath.value, false)
-    await window.store.set('srGamePath', gamePath.value, false)
-    srLauncherPath.value = launcherPath.value
-    srGamePath.value = gamePath.value
-    importDialogShow.value = false
 }
 const srLaunch = async () => {
     await window.child.exec(srGamePath.value)
@@ -187,58 +158,12 @@ const refresh = () => {
 }
 
 const onImportDialogClose = () => {
-    importDialogShow.value = false
     gamePath.value = ''
     launcherPath.value = ''
 }
 </script>
 
 <template>
-    <el-dialog v-model="importDialogShow" :title="`${$t('general_sr')} ${$t('general_import')}`" width="50%" center
-               :before-close="onImportDialogClose">
-        <div class="px-1 grid grid-cols-2 gap-4">
-            <button @click="srLauncherImport" class="import-button-enabled py-1 px-2 rounded-full transition-all">{{
-                    $t('general_importLauncher')
-                }}
-            </button>
-            <button @click="srGameImport" class="py-1 px-2 rounded-full transition-all"
-                    :class="combinePaths ? 'import-button-disabled' : 'import-button-enabled'">
-                {{ $t('general_importGame') }}
-            </button>
-            <div class="ml-3" style="margin-top: 5px; grid-column: 1 / 3;">
-                <span class="font-bold mr-2">{{ $t('general_launcher') }}</span>
-                {{ launcherPath === '' ? '' : launcherPath + '\\launcher.exe' }}
-            </div>
-            <div class="ml-3" style="margin-top: 5px; grid-column: 1 / 3;">
-                <span class="font-bold mr-2">{{ $t('general_game') }}</span>
-                {{
-                    launcherPath === '' ? '' : (combinePaths ? launcherPath + '\\Game\\StarRail.exe' :
-                        gamePath)
-                }}
-            </div>
-        </div>
-        <template #footer>
-            <div class="flex flex-row w-full justify-between">
-                <div class="flex flex-row">
-                    <el-checkbox v-model="combinePaths">{{ $t("general_defaultStructure") }}</el-checkbox>
-                    <el-tooltip placement="right" :content="`<${$t('general_launcherDirectory')}>\\Game\\StarRail.exe`">
-                        <div class="ml-2 rounded-full w-5 h-5 bg-gray-400 text-white font-bold text-sm cursor-help"
-                             style="margin-top: 5px;">?
-                        </div>
-                    </el-tooltip>
-                </div>
-                <div class="flex flex-row">
-                    <button class="mr-3 rounded-full py-1 px-2 hover:bg-gray-200 active:bg-gray-400 transition-all"
-                            @click="onImportDialogClose">{{ $t('general_cancel') }}
-                    </button>
-                    <button class="rounded-full py-1 px-3 transition-all" @click="confirmPaths"
-                            :class="launcherPath && (gamePath || combinePaths) ? 'confirm-button-enabled' : 'confirm-button-disabled'">
-                        {{ $t('general_confirm') }}
-                    </button>
-                </div>
-            </div>
-        </template>
-    </el-dialog>
     <div v-if="!launcherInfoFailed && !launcherInfoReady"
          class="absolute pointer-events-none z-0 align-middle justify-center text-center" style="top: 45%; left: 45%;">
         <img :src="'../../src/assets/kleeLoading.gif'" class=" align-middle self-center object-scale-down"
@@ -310,7 +235,7 @@ const onImportDialogClose = () => {
                         <div class="justify-between flex flex-row">
                             <div class="w-1"></div>
                             <div class="flex flex-row">
-                                <button @click="importDialogShow = true"
+                                <button @click="importButtonClick"
                                         class=" mx-2 my-3 rounded-full h-16 text-2xl bg-yellow-400 font-sr w-48 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all cursor-default"
                                         :class="hideElements ? ' -translate-x-96' : ''"
                                         style="transition-duration: 500ms;">{{

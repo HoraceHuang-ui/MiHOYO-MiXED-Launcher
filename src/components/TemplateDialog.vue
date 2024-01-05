@@ -5,9 +5,18 @@ defineProps({
     width: {
         type: String,
         default: '50%'
+    },
+    onClose: {
+        type: Function
+    },
+    onCancel: {
+        type: Function
+    },
+    onOk: {
+        type: Function
     }
 })
-const emit = defineEmits(['onClose'])
+const dialogRef = ref<HTMLElement>()
 
 const show = inject('app/showDialog', false)
 const unmount: () => void = inject('app/unmountDialog', () => undefined)
@@ -16,7 +25,19 @@ const cShow = ref(show)
 const closeDialog = (timeout: number) => {
     cShow.value = false
     setTimeout(unmount, timeout)
-    emit('onClose')
+    props.onClose()
+}
+
+const cancelClick = () => {
+    emit('onCancel')
+    closeDialog(500)
+    props.onCancel()
+}
+
+const okClick = () => {
+    emit('onOk')
+    closeDialog(500)
+    props.onOk()
 }
 
 defineExpose({

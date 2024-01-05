@@ -2,7 +2,7 @@
 import {inject, ref} from 'vue'
 import StarRailButton from "./StarRailButton.vue";
 
-defineProps({
+const props = defineProps({
     width: {
         type: String,
         default: '50%'
@@ -26,12 +26,20 @@ defineProps({
     msgCenter: {
         type: Boolean,
         default: true
+    },
+    onCancel: {
+        type: Function
+    },
+    onOk: {
+        type: Function
+    },
+    closeOnOk: {
+        type: Boolean,
+        default: true
     }
 })
 
 const dialogRef = ref<HTMLElement>()
-
-const emit = defineEmits(['onClose', 'onCancel', 'onOk'])
 
 const show = inject('app/showDialog', false)
 const unmount: () => void = inject('app/unmountDialog', () => undefined)
@@ -40,17 +48,22 @@ const cShow = ref(show)
 const closeDialog = (timeout: number) => {
     cShow.value = false
     setTimeout(unmount, timeout)
-    emit('onClose')
 }
 
 const cancelClick = () => {
-    emit('onCancel')
     closeDialog(500)
+    if (props.onCancel) {
+        props.onCancel()
+    }
 }
 
 const okClick = () => {
-    emit('onOk')
-    closeDialog(500)
+    if (props.closeOnOk) {
+        closeDialog(500)
+    }
+    if (props.onOk) {
+        props.onOk()
+    }
 }
 
 defineExpose({
@@ -63,7 +76,7 @@ defineExpose({
         <div v-if="cShow">
             <div
                 class="outer absolute top-0 bottom-0 left-0 right-0 z-50 backdrop-blur-2xl"
-                @click="closeDialog(500)"
+                @click="cancelClick"
             />
             <div class="outer bg-black bg-opacity-20 outer absolute top-0 bottom-0 left-0 right-0 z-40"/>
             <div
@@ -72,8 +85,9 @@ defineExpose({
                 :style="`width: ${width}`"
             >
                 <div
+                    v-if="!showCancel && !showOk"
                     class="z-50 w-6 h-6 p-1 absolute right-4 top-3 rounded-full hover:opacity-70 hover:scale-125 active:opacity-50 active:scale-90 transition-all cursor-pointer"
-                    @click="closeDialog(500)">
+                    @click="cancelClick">
                     <img src="../../../assets/srCloseButton.png"/>
                 </div>
                 <div
