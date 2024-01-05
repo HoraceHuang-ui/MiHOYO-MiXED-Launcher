@@ -9,12 +9,17 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "esModuleInterop": true,
-    "lib": ["ESNext", "DOM"],
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
     "skipLibCheck": true,
     "noEmit": true,
     "allowJs": true,
-    "types": ["element-plus/global"],
-    "typeRoots": ["./node_modules/@types", "./src/types/starrail/*"]
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/types/starrail/*"
+    ]
   },
   "include": [
     "src",
@@ -22,6 +27,8 @@
     "node_modules/.pnpm/unplugin-auto-import@0.17.2/node_modules/unplugin-auto-import/auto-imports.d.ts"
   ],
   "references": [
-    { "path": "./tsconfig.node.json" }
+    {
+      "path": "./tsconfig.node.json"
+    }
   ]
 }
