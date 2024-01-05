@@ -66,6 +66,13 @@ export interface PropertyInfo {
 }
 
 export interface SubAffixInfo {
+    type: string
+    field: string
+    name: string
+    icon: string
+    value: number
+    display: string
+    percent: boolean
     count: number
     step: number
 }
@@ -78,7 +85,7 @@ export interface RelicInfo {
     rarity: number
     level: number
     icon: string
-    main_affix: PropertyInfo[]
+    main_affix: PropertyInfo
     sub_affix: SubAffixInfo[]
 }
 

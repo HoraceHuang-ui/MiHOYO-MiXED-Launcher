@@ -4,10 +4,10 @@ import {useRouter} from 'vue-router'
 import {ArrowLeftBold, ArrowRightBold} from '@element-plus/icons-vue'
 import {translate} from '../../../i18n'
 import StatIcon from '../../../components/StatIcon.vue'
-import {PlayerData, Stats} from "enkanetwork.js"
+import {Artifact, Stats} from "enkanetwork.js"
 import {parseInt} from "lodash-es"
 
-const playerInfo = ref<PlayerData>({})
+const playerInfo = ref<any>()
 
 const uidInput = ref('')
 let uid = '';
@@ -25,7 +25,7 @@ const constelsAdditions = computed(() => {
         return {}
     }
     let res: Record<number, number> = {}
-    playerInfo.value.characters.forEach((character) => {
+    playerInfo.value.characters.forEach((character: any) => {
         if (character.skillsExtraLevel) {
             Object.keys(character.skillsExtraLevel).forEach((level) => {
                 // check
@@ -77,7 +77,7 @@ const ascLevelMap = [20, 40, 50, 60, 70, 80, 90]
 const charDialogShow = ref(false)
 const charDialogId = ref(0)
 
-const mergeToPlayerinfo = (newArr) => {
+const mergeToPlayerinfo = (newArr: any[]) => {
     console.log("Updated characters length: ")
     for (let i = newArr.length - 1; i >= 0; i--) {
         let newChar = newArr[i]
@@ -140,7 +140,7 @@ const requestInfo = () => {
             } else {
                 playerInfo.value = resp
             }
-            playerInfo.value.characters.sort(function (a, b) {
+            playerInfo.value.characters.sort(function (a: any, b: any) {
                 // 等级
                 if (a.properties.level.val < b.properties.level.val) {
                     return 1
@@ -171,7 +171,7 @@ const requestInfo = () => {
             fetch('https://gitlab.com/api/v4/projects/41287973/repository/files/ExcelBinOutput%2FAvatarSkillExcelConfigData.json/raw?ref=master')
                 .then(response => response.json())
                 .then(resp => {
-                    resp = resp.filter(a => 'proudSkillGroupId' in a)
+                    resp = resp.filter((a: any) => 'proudSkillGroupId' in a)
                     window.store.set('genshinConstels', JSON.stringify(resp), true)
 
                     router.push({
@@ -193,38 +193,38 @@ const requestInfo = () => {
 
 const getCharElementAssets = (id: number) => {
     const charStats = playerInfo.value.characters[id].stats
-    if (charStats.pyroEnergyCost.value && charStats.pyroEnergyCost.value > 0) {
+    if (charStats.pyroEnergyCost.value && charStats.pyroEnergyCost.value as number > 0) {
         return elementAssets.pyro
-    } else if (charStats.cryoEnergyCost.value && charStats.cryoEnergyCost.value > 0) {
+    } else if (charStats.cryoEnergyCost.value && charStats.cryoEnergyCost.value as number > 0) {
         return elementAssets.cryo
-    } else if (charStats.hydroEnergyCost.value && charStats.hydroEnergyCost.value > 0) {
+    } else if (charStats.hydroEnergyCost.value && charStats.hydroEnergyCost.value as number > 0) {
         return elementAssets.hydro
-    } else if (charStats.electroEnergyCost.value && charStats.electroEnergyCost.value > 0) {
+    } else if (charStats.electroEnergyCost.value && charStats.electroEnergyCost.value as number > 0) {
         return elementAssets.electro
-    } else if (charStats.geoEnergyCost.value && charStats.geoEnergyCost.value > 0) {
+    } else if (charStats.geoEnergyCost.value && charStats.geoEnergyCost.value as number > 0) {
         return elementAssets.geo
-    } else if (charStats.anemoEnergyCost.value && charStats.anemoEnergyCost.value > 0) {
+    } else if (charStats.anemoEnergyCost.value && charStats.anemoEnergyCost.value as number > 0) {
         return elementAssets.anemo
-    } else if (charStats.dendroEnergyCost.value && charStats.dendroEnergyCost.value > 0) {
+    } else if (charStats.dendroEnergyCost.value && charStats.dendroEnergyCost.value as number > 0) {
         return elementAssets.dendro
     }
 }
 
 const getCharElementEnergy = (id: number) => {
     const charStats = playerInfo.value.characters[id].stats
-    if (charStats.pyroEnergyCost.value && charStats.pyroEnergyCost.value > 0) {
+    if (charStats.pyroEnergyCost.value && charStats.pyroEnergyCost.value as number > 0) {
         return charStats.pyroEnergyCost.value
-    } else if (charStats.cryoEnergyCost.value && charStats.cryoEnergyCost.value > 0) {
+    } else if (charStats.cryoEnergyCost.value && charStats.cryoEnergyCost.value as number > 0) {
         return charStats.cryoEnergyCost.value
-    } else if (charStats.hydroEnergyCost.value && charStats.hydroEnergyCost.value > 0) {
+    } else if (charStats.hydroEnergyCost.value && charStats.hydroEnergyCost.value as number > 0) {
         return charStats.hydroEnergyCost.value
-    } else if (charStats.electroEnergyCost.value && charStats.electroEnergyCost.value > 0) {
+    } else if (charStats.electroEnergyCost.value && charStats.electroEnergyCost.value as number > 0) {
         return charStats.electroEnergyCost.value
-    } else if (charStats.geoEnergyCost.value && charStats.geoEnergyCost.value > 0) {
+    } else if (charStats.geoEnergyCost.value && charStats.geoEnergyCost.value as number > 0) {
         return charStats.geoEnergyCost.value
-    } else if (charStats.anemoEnergyCost.value && charStats.anemoEnergyCost.value > 0) {
+    } else if (charStats.anemoEnergyCost.value && charStats.anemoEnergyCost.value as number > 0) {
         return charStats.anemoEnergyCost.value
-    } else if (charStats.dendroEnergyCost.value && charStats.dendroEnergyCost.value > 0) {
+    } else if (charStats.dendroEnergyCost.value && charStats.dendroEnergyCost.value as number > 0) {
         return charStats.dendroEnergyCost.value
     }
 }
@@ -236,14 +236,14 @@ const showPercentage = (prop: string) => {
 const calcCritScoreTotal = (index: number) => {
     let score = 0.0
     const artifacts = playerInfo.value.characters[index].equipment.artifacts
-    artifacts.forEach(artifact => {
+    artifacts.forEach((artifact: any) => {
         if (artifact.mainstat.stat == "FIGHT_PROP_CRITICAL_HURT") {
             score += artifact.mainstat.statValue
         } else if (artifact.mainstat.stat == "FIGHT_PROP_CRITICAL") {
             score += artifact.mainstat.statValue * 2
         }
         const substats = artifact.substats
-        substats.forEach(substat => {
+        substats.forEach((substat: any) => {
             if (substat.stat == "FIGHT_PROP_CRITICAL_HURT") {
                 score += substat.statValue
             } else if (substat.stat == "FIGHT_PROP_CRITICAL") {
@@ -258,10 +258,10 @@ const getArtifactSetInfo = (index: number) => {
     const tokens: string[] = []
     const artifacts = playerInfo.value.characters[index].equipment.artifacts
     const sets = new Map<string, number>()
-    artifacts.forEach(artifact => {
+    artifacts.forEach((artifact: Artifact) => {
         const setName = artifact.setName
         if (sets.get(setName)) {
-            sets.set(setName, sets.get(setName) + 1)
+            sets.set(setName, sets.get(setName)!! + 1)
         } else {
             sets.set(setName, 1)
         }
@@ -331,7 +331,7 @@ const trimStats = (stats: Stats) => {
             }
         }
         if (flag) {
-            delete res[stat]
+            delete (res as any)[stat]
         }
     }
 
@@ -361,12 +361,12 @@ const findSkillIdByProud = (proudId: number): number => {
                         <StatIcon game="gs" stat="FIGHT_PROP_HP" fill="#666" class="w-4 h-4" style="margin-top: 2px;"/>
                     </template>
                     <div class="font-gs">
-                        <span>{{ parseInt(playerInfo.characters[charDialogId].stats.baseHp.value) }}</span>
+                        <span>{{ parseInt(playerInfo.characters[charDialogId].stats.baseHp.value as string) }}</span>
                         <span
                             v-if="playerInfo.characters[charDialogId].stats.maxHp.value != playerInfo.characters[charDialogId].stats.baseHp.value"
                             class="ml-1 text-blue-500">+{{
-                                parseInt(playerInfo.characters[charDialogId].stats.maxHp.value)
-                                - parseInt(playerInfo.characters[charDialogId].stats.baseHp.value)
+                                parseInt(playerInfo.characters[charDialogId].stats.maxHp.value as string)
+                                - parseInt(playerInfo.characters[charDialogId].stats.baseHp.value as string)
                             }}</span>
                     </div>
                 </DialogListItem>
@@ -376,12 +376,12 @@ const findSkillIdByProud = (proudId: number): number => {
                                   style="margin-top: 2px;"/>
                     </template>
                     <div class="font-gs">
-                        <span>{{ parseInt(playerInfo.characters[charDialogId].stats.baseAtk.value) }}</span>
+                        <span>{{ parseInt(playerInfo.characters[charDialogId].stats.baseAtk.value as string) }}</span>
                         <span
-                            v-if="parseInt(playerInfo.characters[charDialogId].stats.atk.value) != parseInt(playerInfo.characters[charDialogId].stats.baseAtk.value)"
+                            v-if="parseInt(playerInfo.characters[charDialogId].stats.atk.value as string) != parseInt(playerInfo.characters[charDialogId].stats.baseAtk.value as string)"
                             class="ml-1 text-blue-500">+{{
-                                parseInt(playerInfo.characters[charDialogId].stats.atk.value) -
-                                parseInt(playerInfo.characters[charDialogId].stats.baseAtk.value)
+                                parseInt(playerInfo.characters[charDialogId].stats.atk.value as string) -
+                                parseInt(playerInfo.characters[charDialogId].stats.baseAtk.value as string)
                             }}</span>
                     </div>
                 </DialogListItem>
@@ -391,17 +391,17 @@ const findSkillIdByProud = (proudId: number): number => {
                                   style="margin-top: 2px;"/>
                     </template>
                     <div class="font-gs">
-                        <span>{{ parseInt(playerInfo.characters[charDialogId].stats.baseDef.value) }}</span>
+                        <span>{{ parseInt(playerInfo.characters[charDialogId].stats.baseDef.value as string) }}</span>
                         <span
-                            v-if="parseInt(playerInfo.characters[charDialogId].stats.def.value) != parseInt(playerInfo.characters[charDialogId].stats.baseDef.value)"
+                            v-if="parseInt(playerInfo.characters[charDialogId].stats.def.value as string) != parseInt(playerInfo.characters[charDialogId].stats.baseDef.value as string)"
                             class="ml-1 text-blue-500">+{{
-                                parseInt(playerInfo.characters[charDialogId].stats.def.value) -
-                                parseInt(playerInfo.characters[charDialogId].stats.baseDef.value)
+                                parseInt(playerInfo.characters[charDialogId].stats.def.value as string) -
+                                parseInt(playerInfo.characters[charDialogId].stats.baseDef.value as string)
                             }}</span>
                     </div>
                 </DialogListItem>
                 <DialogListItem class="font-gs" :name="$t('gs_FIGHT_PROP_ELEMENT_MASTERY')"
-                                :val="playerInfo.characters[charDialogId].stats.elementalMastery.value ? parseInt(playerInfo.characters[charDialogId].stats.elementalMastery.value).toString() : '0'">
+                                :val="playerInfo.characters[charDialogId].stats.elementalMastery.value ? parseInt(playerInfo.characters[charDialogId].stats.elementalMastery.value as string).toString() : '0'">
                     <template #icon>
                         <StatIcon game="gs" stat="FIGHT_PROP_ELEMENT_MASTERY" fill="#666" class="w-4 h-4"
                                   style="margin-top: 2px;"/>
@@ -409,7 +409,7 @@ const findSkillIdByProud = (proudId: number): number => {
                 </DialogListItem>
                 <DialogListItem v-for="(stat, key) in trimStats(playerInfo.characters[charDialogId].stats)"
                                 class="font-gs" :name="$t(`gs_${key}`)"
-                                :val="(stat.value * 100).toFixed(1).toString() + '%'">
+                                :val="(stat.value as number * 100).toFixed(1).toString() + '%'">
                     <template #icon>
                         <StatIcon game="gs" :stat="key" fill="#666" class="w-4 h-4" style="margin-top: 2px;"/>
                     </template>
@@ -508,9 +508,9 @@ const findSkillIdByProud = (proudId: number): number => {
                       'opacity-0 -translate-x-40 pointer-events-none': showcaseIdx > index }"
                      style="transition-duration: 300ms;">
                     <!-- absolute： 卡片元素背景、元素图标 -->
-                    <img class="relative z-0" :src="getCharElementAssets(index).bg"
+                    <img class="relative z-0" :src="getCharElementAssets(index)!!.bg"
                          style="border-radius: 4.5vh; height: 40vw;"/>
-                    <img class="h-1/4 absolute opacity-50" :src="getCharElementAssets(index).ico"
+                    <img class="h-1/4 absolute opacity-50" :src="getCharElementAssets(index)!!.ico"
                          style="top: -7px; right: -18px;"/>
                     <!-- 卡片前景 -->
                     <div class="flex flex-row h-full absolute top-0 left-0 right-0 bottom-0 z-10">
@@ -602,21 +602,21 @@ const findSkillIdByProud = (proudId: number): number => {
                                     <StatIcon game="gs" stat="FIGHT_PROP_HP" fill="#d1d5db" class="w-5 h-5"
                                               style="margin-top: 1px;"/>
                                     <span class="text-gray-200 text-right font-gs ml-3">{{
-                                            parseInt(character.stats.maxHp.value)
+                                            parseInt(character.stats.maxHp.value as string)
                                         }}</span>
                                 </div>
                                 <div class="w-full flex flex-row" style="grid-column: 2; grid-row: 1;">
                                     <StatIcon game="gs" stat="FIGHT_PROP_ATTACK" fill="#d1d5db" class="w-5 h-5"
                                               style="margin-top: 1px;"/>
                                     <span class="text-gray-200 text-right font-gs ml-3">{{
-                                            parseInt(character.stats.atk.value)
+                                            parseInt(character.stats.atk.value as string)
                                         }}</span>
                                 </div>
                                 <div class="w-full flex flex-row" style="grid-column: 3; grid-row: 1;">
                                     <StatIcon game="gs" stat="FIGHT_PROP_DEFENSE" fill="#d1d5db" class="w-5 h-5"
                                               style="margin-top: 1px;"/>
                                     <span class="text-gray-200 text-right font-gs ml-3">{{
-                                            parseInt(character.stats.def.value)
+                                            parseInt(character.stats.def.value as string)
                                         }}</span>
                                 </div>
                                 <div class="w-full flex flex-row" style="grid-column: 1; grid-row: 2;">
@@ -624,15 +624,15 @@ const findSkillIdByProud = (proudId: number): number => {
                                               class="w-5 h-5"
                                               style="margin-top: 1px;"/>
                                     <span class="text-gray-200 text-right font-gs ml-3">{{
-                                            (character.stats.energyRecharge.value * 100).toFixed(1)
+                                            (character.stats.energyRecharge.value as number * 100).toFixed(1)
                                         }}%</span>
                                 </div>
                                 <div class="w-full flex flex-row" style="grid-column: 2; grid-row: 2;">
                                     <StatIcon game="gs" stat="FIGHT_PROP_ELEMENT_MASTERY" fill="#d1d5db" class="w-5 h-5"
                                               style="margin-top: 1px;"/>
                                     <span class="text-gray-200 text-right font-gs ml-3">{{
-                                            parseInt(!character.stats.elementalMastery.value ? 0 :
-                                                character.stats.elementalMastery.value)
+                                            parseInt(!character.stats.elementalMastery.value ? '0' :
+                                                character.stats.elementalMastery.value as string)
                                         }}</span>
                                 </div>
                                 <div class="w-full flex flex-row" style="grid-column: 3; grid-row: 2;">
@@ -647,14 +647,14 @@ const findSkillIdByProud = (proudId: number): number => {
                                     <StatIcon game="gs" stat="FIGHT_PROP_CRITICAL" fill="#d1d5db" class="w-5 h-5"
                                               style="margin-top: 1px;"/>
                                     <span class="text-gray-200 text-right font-gs ml-3">{{
-                                            (character.stats.critRate.value * 100).toFixed(1)
+                                            (character.stats.critRate.value as number * 100).toFixed(1)
                                         }}%</span>
                                 </div>
                                 <div class="w-full flex flex-row" style="grid-column: 2; grid-row: 3;">
                                     <StatIcon game="gs" stat="FIGHT_PROP_CRITICAL_HURT" fill="#d1d5db" class="w-5 h-5"
                                               style="margin-top: 1px;"/>
                                     <span class="text-gray-200 text-right font-gs ml-3">{{
-                                            (character.stats.critDamage.value * 100).toFixed(1)
+                                            (character.stats.critDamage.value as number * 100).toFixed(1)
                                         }}%</span>
                                 </div>
                                 <div
@@ -679,14 +679,14 @@ const findSkillIdByProud = (proudId: number): number => {
                                             <span class="font-gs">{{ character.equipment.weapon.level }} / </span>
                                             <span class="text-gray-300 font-serif">{{
                                                     ascLevelMap[character.equipment.weapon.ascensionLevel ?
-                                                        character.equipment.weapon.ascensionLevel : 0]
+                                                        character.equipment.weapon.ascensionLevel as number : 0]
                                                 }}</span>
                                         </div>
                                         <div class="text-gray-400 mr-2 text-sm absolute right-0 top-0">{{
                                                 $t('gs_refinement')
                                             }}
                                             <span class="text-gray-200 font-gs text-base">{{
-                                                    character.equipment.weapon.refinement.level + 1
+                                                    character.equipment.weapon.refinement.level as number + 1
                                                 }}</span>
                                         </div>
                                     </div>
@@ -816,15 +816,15 @@ const findSkillIdByProud = (proudId: number): number => {
 }
 
 .gacha-mask {
-    -webkit-mask: linear-gradient(transparent, white 15%, white 85%, transparent)
+    -webkit-mask: -webkit-linear-gradient(transparent, white 15%, white 85%, transparent)
 }
 
 .left-gacha {
-    -webkit-mask: linear-gradient(270deg, transparent, white 20%)
+    -webkit-mask: -webkit-linear-gradient(270deg, transparent, white 20%)
 }
 
 .artifact-mask {
-    -webkit-mask: linear-gradient(270deg, transparent, white 60%)
+    -webkit-mask: -webkit-linear-gradient(270deg, transparent, white 60%)
 }
 
 .disabled {

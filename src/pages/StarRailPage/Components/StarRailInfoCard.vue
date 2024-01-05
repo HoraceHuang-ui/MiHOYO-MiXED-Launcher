@@ -13,7 +13,17 @@ import SRCharDetailsDialog from "./SRCharDetailsDialog.vue";
 
 const apiUrl = 'https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/'
 
-const playerInfo = ref<FormattedApiInfo>({characters: [], player: undefined})
+const playerInfo = ref<FormattedApiInfo>({
+    characters: [], player: {
+        uid: '',
+        nickname: '',
+        level: 0,
+        world_level: 0,
+        friend_count: 0,
+        signature: '',
+        is_display: false
+    }
+})
 const playerInfoReady = ref(false)
 const playerInfoLoading = ref(false)
 const playerInfoFailed = ref(false)
@@ -311,9 +321,9 @@ const showCharDetails = (index: number) => {
         </div>
         <!-- 角色详情卡片 -->
         <div v-for="(character, index) in playerInfo.characters" class="z-0 relative w-full">
-            <div class="mt-4 w-full absolute top-0 left-0 right-0 transition-all" :class="{ 'opacity-0 translate-x-40 pointer-events-none': showcaseIdx < index },
-                { 'opacity-100 pointer-events-auto': showcaseIdx == index },
-                { 'opacity-0 -translate-x-40 pointer-events-none': showcaseIdx > index }"
+            <div class="mt-4 w-full absolute top-0 left-0 right-0 transition-all" :class="{ 'opacity-0 translate-x-40 pointer-events-none': showcaseIdx < index,
+                'opacity-100 pointer-events-auto': showcaseIdx == index,
+                'opacity-0 -translate-x-40 pointer-events-none': showcaseIdx > index }"
                  style="transition-duration: 300ms;">
                 <!-- absolute： 卡片元素背景、元素图标 -->
                 <img class="relative z-0 w-full" src="../../../assets/srBg.jpg" style="border-radius: 4.5vh;"/>
@@ -553,10 +563,10 @@ const showCharDetails = (index: number) => {
                                 <div class=" w-full h-full relative">
                                     <div class="text-gray-400 absolute right-0 top-1 flex flex-row">
                                         {{ relic.name }}
-                                        <div :class="{ 'border-orange-400 bg-orange-900 text-orange-300': relic.rarity == 5 },
-                                            { 'border-purple-400 bg-purple-900 text-purple-300': relic.rarity == 4 },
-                                            { 'border-blue-400 bg-blue-900 text-blue-300': relic.rarity == 3 },
-                                            { 'border-green-400 bg-green-900 text-green-300': relic.rarity == 2 }"
+                                        <div :class="{ 'border-orange-400 bg-orange-900 text-orange-300': relic.rarity == 5,
+                                                'border-purple-400 bg-purple-900 text-purple-300': relic.rarity == 4,
+                                                'border-blue-400 bg-blue-900 text-blue-300': relic.rarity == 3 ,
+                                                'border-green-400 bg-green-900 text-green-300': relic.rarity == 2 }"
                                              class="h-full justify-end ml-2 font-sr-sans rounded-full border px-2">
                                             +{{ relic.level }}
                                         </div>
@@ -568,13 +578,13 @@ const showCharDetails = (index: number) => {
                                                       class="h-5 w-5 mr-2" style="margin-top: 6px;"/>
                                             <el-text class="text-gray-200 text-lg" truncated style="max-width: 220px;">
                                                 {{
-                                                    relic.main_affix['name']
+                                                    relic.main_affix.name
                                                 }}
                                             </el-text>
                                         </div>
                                         <div>
                                             <span class="text-gray-200 text-3xl ml-2 font-sr-sans">{{
-                                                    relic.main_affix['display']
+                                                    relic.main_affix.display
                                                 }}</span>
                                         </div>
                                     </div>
@@ -587,7 +597,7 @@ const showCharDetails = (index: number) => {
                                                           class="h-5 w-5 mr-2"
                                                           style="margin-top: 4px;"/>
                                                 <span class="text-gray-200 font-sr-sans text-xl ml-2">{{
-                                                        substat['display']
+                                                        substat.display
                                                     }}</span>
                                             </div>
                                             <div class="flex flex-row mr-5">

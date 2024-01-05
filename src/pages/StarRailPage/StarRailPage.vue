@@ -6,6 +6,7 @@ import StarRailInfoCard from "./Components/StarRailInfoCard.vue";
 import {useDialog} from "../../utils/template-dialog";
 import StarRailDialog from "./Components/StarRailDialog.vue";
 import SRImportDialog from "./Components/SRImportDialog.vue";
+import {LauncherInfo, PostInfo} from "../../types/launcher/launcherInfo";
 
 const gameName = translate('general_sr')
 
@@ -19,7 +20,7 @@ const timeNow = Date.now()
 const timeDelta = computed(() =>
     Math.ceil((timeNow - timeUpd1_4) / 1000 / 3600 / 24 - 0.5) % 42
 )
-const launcherInfo = ref({})
+const launcherInfo = ref<LauncherInfo>({banner: [], icon: [], post: [], qq: []})
 const launcherInfoReady = ref(false)
 const launcherInfoFailed = ref(false)
 const errMsg = ref('')
@@ -32,7 +33,7 @@ onMounted(async () => {
     window.axios.post(translate('sr_launcherContentsUrl'))
         .then((value) => {
             launcherInfo.value = value.data
-            launcherInfo.value.post.forEach(post => {
+            launcherInfo.value.post.forEach((post: PostInfo) => {
                 let tmp = postTypeMap.get(post.type)
                 if (tmp) {
                     tmp.push(post)
@@ -116,7 +117,7 @@ const srLaunch = async () => {
     }
 }
 
-const handleCommand = (command) => {
+const handleCommand = (command: string) => {
     switch (command) {
         case 'openLauncher':
             window.child.exec(srLauncherPath.value)
@@ -135,16 +136,8 @@ const handleCommand = (command) => {
     }
 }
 
-const handleScroll = ({scrollTop}) => {
-    if (scrollTop > 0) {
-        hideElements.value = true
-        if (displayConfirm.value) {
-            displayConfirm.value = false
-            path.value = ''
-        }
-    } else {
-        hideElements.value = false
-    }
+const handleScroll = ({scrollTop}: Record<string, number>) => {
+    hideElements.value = scrollTop > 0;
 }
 
 const router = useRouter()

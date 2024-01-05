@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {inject, ref} from 'vue'
 
-defineProps({
+const props = defineProps({
     width: {
         type: String,
         default: '50%'
@@ -25,19 +25,20 @@ const cShow = ref(show)
 const closeDialog = (timeout: number) => {
     cShow.value = false
     setTimeout(unmount, timeout)
-    props.onClose()
 }
 
 const cancelClick = () => {
-    emit('onCancel')
     closeDialog(500)
-    props.onCancel()
+    if (props.onCancel) {
+        props.onCancel()
+    }
 }
 
 const okClick = () => {
-    emit('onOk')
     closeDialog(500)
-    props.onOk()
+    if (props.onOk) {
+        props.onOk()
+    }
 }
 
 defineExpose({
@@ -50,7 +51,7 @@ defineExpose({
         <div v-if="cShow">
             <div
                 class="outer absolute top-0 bottom-0 left-0 right-0 z-50 backdrop-blur-2xl"
-                @click="closeDialog(500)"
+                @click="cancelClick"
             />
             <div class="bg-black bg-opacity-20 outer absolute top-0 bottom-0 left-0 right-0 z-40"/>
             <div

@@ -2,6 +2,7 @@
 import {computed, onMounted, ref} from 'vue'
 import {useRouter} from 'vue-router'
 import {translate} from '../i18n'
+import {LauncherInfo, PostInfo} from "../types/launcher/launcherInfo";
 
 const gameName = translate('general_hi3')
 
@@ -14,7 +15,7 @@ const timeNow = Date.now()
 const timeDelta = computed(() =>
     Math.ceil((timeNow - timeUpd6_8) / 1000 / 3600 / 24 - 0.5) % 42
 )
-const launcherInfo = ref({})
+const launcherInfo = ref<LauncherInfo>({banner: [], icon: [], post: [], qq: []})
 const launcherInfoReady = ref(false)
 const launcherInfoFailed = ref(false)
 const errMsg = ref('')
@@ -30,7 +31,7 @@ onMounted(async () => {
     window.axios.post(translate('hi3_launcherContentsUrl'))
         .then((value) => {
             launcherInfo.value = value.data
-            launcherInfo.value.post.forEach(post => {
+            launcherInfo.value.post.forEach((post: PostInfo) => {
                 let tmp = postTypeMap.get(post.type)
                 if (tmp) {
                     tmp.push(post)
@@ -53,7 +54,7 @@ onMounted(async () => {
                 if (timeDelta.value > 40) {
                     ElMessageBox.confirm(translate('general_gameUpdBoxText1', {
                             game: gameName,
-                            beDays: translate('general_beDays', undefined, 42 - timeDelta.value)
+                            beDays: translate('general_beDays', 42 - timeDelta.value)
                         }),
                         translate('general_gameUpdBoxTitle'),
                         {
@@ -68,7 +69,7 @@ onMounted(async () => {
                 } else if (timeDelta.value > 0 && timeDelta.value < 3) {
                     ElMessageBox.confirm(translate('general_gameUpdBoxText2', {
                             game: gameName,
-                            days: translate('general_days', undefined, timeDelta.value)
+                            days: translate('general_days', timeDelta.value)
                         }),
                         translate('general_gameUpdBoxTitle'),
                         {
@@ -145,7 +146,7 @@ const hiLaunch = async () => {
     }
 }
 
-const handleCommand = (command) => {
+const handleCommand = (command: string) => {
     switch (command) {
         case 'openLauncher':
             window.child.exec(hiLauncherPath.value)
@@ -169,16 +170,8 @@ const handleCommand = (command) => {
     }
 }
 
-const handleScroll = ({scrollTop}) => {
-    if (scrollTop > 0) {
-        hideElements.value = true
-        if (displayConfirm.value) {
-            displayConfirm.value = false
-            path.value = ''
-        }
-    } else {
-        hideElements.value = false
-    }
+const handleScroll = ({scrollTop}: Record<string, number>) => {
+    hideElements.value = scrollTop > 0;
 }
 
 const router = useRouter()
@@ -257,7 +250,8 @@ const onImportDialogClose = () => {
              :class="{ 'scale-95': hideElements }">
             <img class=" top-0 rounded-3xl transition-all"
                  :class="hideElements ? 'blur-md scale-125 brightness-75' : ''"
-                 style="transition-duration: 500ms;" :src="launcherInfoReady ? launcherInfo.adv.background : ''"
+                 style="transition-duration: 500ms;"
+                 :src="launcherInfo.adv && launcherInfoReady ? launcherInfo.adv.background : ''"
                  @touchmove.prevent @mousewheel.prevent/>
         </div>
         <LauncherBanner class="absolute left-16 top-48 z-50 rounded-xl transition-all"

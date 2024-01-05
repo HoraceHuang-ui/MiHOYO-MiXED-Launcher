@@ -5,7 +5,7 @@ import {useRoute, useRouter} from 'vue-router'
 const router = useRouter()
 const route = useRoute()
 onMounted(() => {
-    router.push(route.query.from)
+    router.push(route.query.from as string)
 })
 </script>
 

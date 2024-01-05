@@ -65,7 +65,7 @@ onMounted(async () => {
                 if (timeDelta.value > 40) {
                     ElMessageBox.confirm(translate('general_gameUpdBoxText1', {
                             game: gameName,
-                            beDays: translate('general_beDays', undefined, 42 - timeDelta.value)
+                            beDays: translate('general_beDays', 42 - timeDelta.value)
                         }),
                         translate('general_gameUpdBoxTitle'),
                         {
@@ -80,7 +80,7 @@ onMounted(async () => {
                 } else if (timeDelta.value > 0 && timeDelta.value < 3) {
                     ElMessageBox.confirm(translate('general_gameUpdBoxText2', {
                             game: gameName,
-                            days: translate('general_days', undefined, timeDelta.value)
+                            days: translate('general_days', timeDelta.value)
                         }),
                         translate('general_gameUpdBoxTitle'),
                         {
