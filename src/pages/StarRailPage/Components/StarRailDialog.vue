@@ -125,7 +125,7 @@ defineExpose({
                         </div>
                     </div>
                     <div class="px-6 py-6">
-                        <div class="font-sr-sans" :class="msgCenter ? 'text-center' : 'text-left'">{{ msg }}</div>
+                        <div class="font-sr-sans px-5" :class="msgCenter ? 'text-center' : 'text-left'">{{ msg }}</div>
                         <slot/>
                     </div>
                     <div v-if="showCancel || showOk" class="w-full justify-center flex flex-row py-2"
