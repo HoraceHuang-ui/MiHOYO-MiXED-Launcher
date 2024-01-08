@@ -17,7 +17,7 @@ defineProps({
     }
 })
 
-const dialogRef = ref<HTMLElement>()
+const dialogRef = ref<any>(null)
 
 const trimStats = (stats: Stats) => {
     const trim = ['baseHp', 'hpPercentage', 'maxHp', 'currentHp', 'baseAtk', 'atk', 'atkPercentage', 'def', 'baseDef', 'defPercentage', 'Cost', 'Energy', 'Mastery']
@@ -39,6 +39,10 @@ const trimStats = (stats: Stats) => {
 
     return res
 }
+
+const closeDialog = () => {
+    dialogRef.value?.closeDialog?.(500)
+}
 </script>
 
 <template>
@@ -49,7 +53,7 @@ const trimStats = (stats: Stats) => {
         </div>
         <div
             class="z-50 w-6 h-6 p-1 absolute right-1 top-1 rounded-full hover:opacity-70 hover:scale-125 active:opacity-50 active:scale-90 transition-all cursor-pointer"
-            @click="dialogRef.closeDialog(500)">
+            @click="closeDialog">
             <img src="../../../assets/gsDialog/gsDialogClose.png"/>
         </div>
         <div class="w-full flex flex-row justify-center mt-1">
