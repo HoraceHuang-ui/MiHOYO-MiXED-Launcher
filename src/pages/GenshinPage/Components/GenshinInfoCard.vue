@@ -4,9 +4,11 @@ import {useRouter} from 'vue-router'
 import {ArrowLeftBold, ArrowRightBold} from '@element-plus/icons-vue'
 import {translate} from '../../../i18n'
 import StatIcon from '../../../components/StatIcon.vue'
-import {Artifact, Stats} from "enkanetwork.js"
+import {Artifact} from "enkanetwork.js"
 import {parseInt} from "lodash-es"
 import CustomUIDInput from "../../../components/CustomUIDInput.vue";
+import {useDialog} from "../../../utils/template-dialog";
+import GSCharDetailsOverlay from "./GSCharDetailsOverlay.vue";
 
 const playerInfo = ref<any>()
 
@@ -75,8 +77,6 @@ const elementAssets = {
     },
 }
 const ascLevelMap = [20, 40, 50, 60, 70, 80, 90]
-const charDialogShow = ref(false)
-const charDialogId = ref(0)
 
 const mergeToPlayerinfo = (newArr: any[]) => {
     console.log("Updated characters length: ")
@@ -314,29 +314,11 @@ const charsPagePrev = () => {
 }
 
 const showCharDetails = (index: number) => {
-    charDialogId.value = index
-    charDialogShow.value = true
-}
-
-const trimStats = (stats: Stats) => {
-    const trim = ['baseHp', 'hpPercentage', 'maxHp', 'currentHp', 'baseAtk', 'atk', 'atkPercentage', 'def', 'baseDef', 'defPercentage', 'Cost', 'Energy', 'Mastery']
-    const res = {...stats}
-    const entries = Object.entries(stats)
-
-    for (const [stat, val] of entries) {
-        let flag = false;
-        for (const t of trim) {
-            if (stat.endsWith(t) || val.value === '' || val.value === '0') {
-                flag = true;
-                break
-            }
-        }
-        if (flag) {
-            delete (res as any)[stat]
-        }
-    }
-
-    return res
+    useDialog(GSCharDetailsOverlay, {
+        title: playerInfo.value.characters[index].name + ' ' + translate('gs_charDetails'),
+        character: playerInfo.value.characters[index],
+        showOk: false
+    })
 }
 
 const findSkillIdByProud = (proudId: number): number => {

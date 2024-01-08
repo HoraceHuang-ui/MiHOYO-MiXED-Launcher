@@ -7,7 +7,7 @@ const props = defineProps({
 <template>
     <div>
         <svg viewBox="0 0 14 14">
-            <path fill="currentColor"
+            <path :fill="props.fill"
                   d="M3.562 7.002a4.03 4.03 0 0 1 4.045-4.049L7.606.608C4.09.61 1.216 3.487 1.216 7.003Z"
                   style="fill-opacity:.5;stroke-width:.913084;-inkscape-stroke:none;paint-order:stroke markers fill"></path>
             <path :fill="props.fill"

@@ -84,9 +84,9 @@ defineExpose({
             >
                 <div
                     v-if="!showCancel && !showOk"
-                    class="z-50 w-6 h-6 p-1 absolute right-4 top-3 rounded-full hover:opacity-70 hover:scale-125 active:opacity-50 active:scale-90 transition-all cursor-pointer"
+                    class="z-50 w-6 h-6 p-1 absolute right-6 top-5 rounded-full hover:opacity-70 hover:scale-125 active:opacity-50 active:scale-90 transition-all cursor-pointer"
                     @click="cancelClick">
-                    <img src="../../../assets/srCloseButton.png"/>
+                    <img class="invert opacity-60" src="../../../assets/gsDialog/gsDialogClose.png"/>
                 </div>
 
                 <div class="z-50 w-6 h-6 absolute top-0 left-0">
