@@ -109,10 +109,11 @@ const onDialogOk = () => {
 @tailwind utilities;
 
 .import-button-enabled {
-    @apply text-sm text-gray-600 shadow-md border-2 hover:border-yellow-500 active:bg-white;
+    @apply text-sm border hover:border-yellow-500 active:bg-white hover:shadow;
+    color: #cea652;
     font-family: genshin-font, sans-serif;
     background: #ECE5D8;
-    border-color: #ECE5D8;
+    border-color: #cea652;
 }
 
 .import-button-disabled {
