@@ -55,44 +55,50 @@ onMounted(async () => {
                 console.log(timeDelta.value)
                 if (timeDelta.value > 40) {
                     useDialog(StarRailDialog, {
+                        onOk(dispose: Function) {
+                            window.child.exec(srLauncherPath.value)
+                            window.store.set('starRailUpd', true, false)
+                            dispose()
+                        }
+                    }, {
                         title: translate('general_gameUpdBoxTitle'),
                         msg: translate('general_gameUpdBoxText1', {
                             game: gameName,
                             beDays: translate('general_beDays', 42 - timeDelta.value)
                         }),
                         msgCenter: false,
-                        showCancel: true,
-                        onOk: () => {
-                            window.child.exec(srLauncherPath.value)
-                            window.store.set('starRailUpd', true, false)
-                        }
+                        showCancel: true
                     })
                 } else if (timeDelta.value > 0 && timeDelta.value < 3) {
                     useDialog(StarRailDialog, {
+                        onOk(dispose: Function) {
+                            window.child.exec(srLauncherPath.value)
+                            window.store.set('starRailUpd', true, false)
+                            dispose()
+                        }
+                    }, {
                         title: translate('general_gameUpdBoxTitle'),
                         msg: translate('general_gameUpdBoxText2', {
                             game: gameName,
                             days: translate('general_days', timeDelta.value)
                         }),
                         msgCenter: false,
-                        showCancel: true,
-                        onOk: () => {
-                            window.child.exec(srLauncherPath.value)
-                            window.store.set('starRailUpd', true, false)
-                        }
+                        showCancel: true
                     })
                 } else if (timeDelta.value == 0) {
                     useDialog(StarRailDialog, {
+                        onOk(dispose: Function) {
+                            window.child.exec(srLauncherPath.value)
+                            window.store.set('starRailUpd', true, false)
+                            dispose()
+                        }
+                    }, {
                         title: translate('general_gameUpdBoxTitle'),
                         msg: translate('general_gameUpdBoxText3', {
                             game: gameName
                         }),
                         msgCenter: false,
-                        showCancel: true,
-                        onOk: () => {
-                            window.child.exec(srLauncherPath.value)
-                            window.store.set('starRailUpd', true, false)
-                        }
+                        showCancel: true
                     })
                 }
             } else if (srLauncherPath.value && timeDelta.value > 2 && timeDelta.value < 37) {
@@ -105,8 +111,15 @@ onMounted(async () => {
 
 const importButtonClick = () => {
     useDialog(SRImportDialog, {
-        onOk: refresh,
-        onCancel: onImportDialogClose
+        onOk(dispose: Function) {
+            refresh()
+            dispose()
+        },
+        onCancel(dispose: Function) {
+            gamePath.value = ''
+            launcherPath.value = ''
+            dispose()
+        }
     })
 }
 const srLaunch = async () => {
@@ -148,11 +161,6 @@ const refresh = () => {
             from: '/srpage'
         }
     })
-}
-
-const onImportDialogClose = () => {
-    gamePath.value = ''
-    launcherPath.value = ''
 }
 </script>
 

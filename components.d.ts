@@ -25,6 +25,7 @@ declare module 'vue' {
     ElTag: typeof import('element-plus/es')['ElTag']
     ElText: typeof import('element-plus/es')['ElText']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
+    GeneralDialog: typeof import('./src/components/GeneralDialog.vue')['default']
     LauncherBanner: typeof import('./src/components/LauncherBanner.vue')['default']
     LauncherPosts: typeof import('./src/components/LauncherPosts.vue')['default']
     LoadFailedBlock: typeof import('./src/components/LoadFailedBlock.vue')['default']

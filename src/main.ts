@@ -11,7 +11,7 @@ import 'element-plus/theme-chalk/dark/css-vars.css'
 const app = createApp(App)
 
 app.use(router)
-app.use(i18n)
+app.use(i18n, {globalInstall: true})
 app.mount('#app')
 // .$nextTick(() => {
 //   postMessage({ payload: 'removeLoading' }, '*')

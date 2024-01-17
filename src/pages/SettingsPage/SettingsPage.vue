@@ -1,13 +1,21 @@
 <script setup lang="ts">
 import {computed, onMounted, ref} from 'vue'
-import {availableLangCodes, availableLangNames, lang, switchLang} from '../i18n'
+import {availableLangCodes, availableLangNames, lang, switchLang, translate, translateWithLocale} from '../../i18n'
 import {useRouter} from 'vue-router'
 import {marked} from 'marked'
 import {Loading} from '@element-plus/icons-vue'
-import CustomSwitch from '../components/CustomSwitch.vue'
-import {UpdInfo} from "../types/github/ghUpdInfo";
+import CustomSwitch from '../../components/CustomSwitch.vue'
+import {UpdInfo} from "../../types/github/ghUpdInfo";
+import {
+    availableDialogStyleDescs,
+    availableDialogStyles,
+    dialogComponent,
+    dialogStyle
+} from "../../types/dialog/dialog";
+import {useDialog} from "../../utils/template-dialog";
 
 const lang = ref<lang>('en_US')
+const dialogStyle = ref<dialogStyle>('gs')
 const langDialogShow = ref(false)
 const clearDialogShow = ref(false)
 const transitionShow = ref(false)
@@ -42,7 +50,6 @@ const trayOnLaunch = ref(true)
 const updDialogContent = computed(() => {
     return marked(updInfo.value.body)
 })
-
 const DEFAULT_BG = '../../src/assets/gsbanner.png'
 
 onMounted(async () => {
@@ -58,6 +65,7 @@ onMounted(async () => {
         trayOnLaunch.value = true
     }
     bgPath.value = await window.store.get('mainBgPath')
+    dialogStyle.value = await window.store.get('dialogStyle')
     transitionShow.value = true
 
     // BUILD: '../../app.asar/package.json'
@@ -70,16 +78,6 @@ onMounted(async () => {
 })
 
 const router = useRouter()
-const langChange = () => {
-    switchLang(lang.value)
-    window.store.delete('genshinInfo')
-    window.store.delete('starRailInfo')
-    router.go(0)
-}
-const langDialogCancel = () => {
-    lang.value = localStorage.lang
-    langDialogShow.value = false
-}
 
 const clearAllData = () => {
     window.store.clear()
@@ -151,6 +149,47 @@ const switchLaunchTray = async () => {
     console.log(trayOnLaunch.value)
     await window.store.set('trayOnLaunch', trayOnLaunch.value, false)
 }
+
+const showLangDialog = () => {
+    useDialog(dialogComponent(dialogStyle.value), {
+            onCancel(dispose: Function) {
+                lang.value = localStorage.lang
+                dispose()
+            },
+            onOk(dispose: Function) {
+                switchLang(lang.value)
+                window.store.delete('genshinInfo')
+                window.store.delete('starRailInfo')
+                router.go(0)
+                dispose()
+            }
+        },
+        {
+            title: translate('settings_langChangeTitle'),
+            showCancel: true,
+            msg: translateWithLocale('settings_langChangeText', lang.value),
+            // vnode: h(LangChangeDialogContent, {
+            //     lang: lang.value
+            // })
+        })
+}
+
+const showDialogStyleChange = () => {
+    useDialog(dialogComponent(dialogStyle.value), {
+        async onCancel(dispose: Function) {
+            dialogStyle.value = await window.store.get('dialogStyle')
+            dispose()
+        },
+        onOk(dispose: Function) {
+            window.store.set('dialogStyle', dialogStyle.value, false)
+            dispose()
+        }
+    }, {
+        title: `${translate('general_' + dialogStyle.value + 'Short')}弹窗样式预览`,
+        showCancel: true,
+        msg: `您即将切换到${translate('general_' + dialogStyle.value)}样式弹窗。是否确定切换？`
+    })
+}
 </script>
 
 <template>
@@ -161,38 +200,18 @@ const switchLaunchTray = async () => {
         </div>
         <el-scrollbar height="91vh" class="scroll-wrapper absolute z-40">
             <div class="text-left px-10 pt-10 w-1/2">
+
+                <!-- GENERAL -->
                 <div class="title">{{ $t('settings_general') }}</div>
                 <div class="form-item">
                     <div class="h-full py-1">{{ $t('settings_selectLang') }}</div>
-                    <select name="language" @change="langDialogShow = true" v-model="lang"
+                    <select name="language" @change="showLangDialog" v-model="lang"
                             class="border-2 rounded-full py-1 px-2 ml-3 hover:bg-gray-100 transition-all">
                         <option v-for="(langCode, i) in availableLangCodes" :value="langCode">{{
                                 availableLangNames[i]
                             }}
                         </option>
                     </select>
-                    <el-dialog v-model="langDialogShow" :title="$t('settings_langChangeTitle')" width="40%" center
-                               :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false">
-                        <div v-t="{ path: 'settings_langChangeText', locale: lang }"></div>
-                        <template #footer>
-                            <div class="flex-row justify-between">
-                                <div class="w-1"></div>
-                                <div class="flex-row">
-                                    <button
-                                        class="mr-3 rounded-full py-1 px-2 hover:bg-gray-200 active:bg-gray-400 transition-all"
-                                        @click="langDialogCancel">{{
-                                            $t('general_cancel')
-                                        }}
-                                    </button>
-                                    <button
-                                        class="rounded-full py-1 px-3 bg-blue-600 text-white hover:bg-blue-500 active:scale-90 transition-all"
-                                        @click="langChange">
-                                        {{ $t('general_confirm') }}
-                                    </button>
-                                </div>
-                            </div>
-                        </template>
-                    </el-dialog>
                 </div>
                 <div class="form-item">
                     <div class="h-full py-1">{{ $t('settings_whenClosingWindow') }}</div>
@@ -241,6 +260,21 @@ const switchLaunchTray = async () => {
                         </template>
                     </el-dialog>
                 </div>
+
+                <!-- APPEARANCE -->
+                <div class="title">外观</div>
+                <div class="form-item">
+                    <div class="h-full py-1">弹窗样式</div>
+                    <select name="dialogStyle" @change="showDialogStyleChange" v-model="dialogStyle"
+                            class="border-2 rounded-full py-1 px-2 ml-3 hover:bg-gray-100 transition-all">
+                        <option v-for="(styleCode, i) in availableDialogStyles" :value="styleCode">{{
+                                availableDialogStyleDescs[i]
+                            }}
+                        </option>
+                    </select>
+                </div>
+
+                <!-- ABOUT -->
                 <div class="title">{{ $t('settings_about') }}</div>
                 <div class="form-item rounded-full bg-white pl-3 border border-red-400 font-mono"
                      style="width: fit-content;">
@@ -250,7 +284,7 @@ const switchLaunchTray = async () => {
                 </div>
                 <div class="form-item">
                     <div class="flex flex-row">
-                        <img class="img-link cursor-pointer" src="../assets/github-mark.png"
+                        <img class="img-link cursor-pointer" src="../../assets/github-mark.png"
                              @click="openLink('https://github.com/HoraceHuang-ui/MiHOYO-MiXED-Launcher')"/>
                         <button @click="checkUpdates" class="rounded-full cursor-default ml-3 px-3"
                                 :class="latest ? 'button-disabled' : 'button-enabled'">{{

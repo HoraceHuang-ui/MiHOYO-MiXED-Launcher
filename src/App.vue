@@ -3,8 +3,10 @@ import {computed, onMounted, ref} from 'vue'
 import {marked} from 'marked'
 import {useRouter} from 'vue-router'
 import {UpdInfo} from "./types/github/ghUpdInfo";
+import {dialogStyle} from "./types/dialog/dialog";
 
 let appVer = ''
+const dialogStyle = ref<dialogStyle>('gs')
 const updCheck = ref(false)
 const updDialogShow = ref(false)
 const updInfo = ref<UpdInfo>({
@@ -39,7 +41,7 @@ onMounted(() => {
     window.github.getLatestRelease()
         .then((resp: any) => {
             if (needsUpdate(resp.data.tag_name)) {
-                window.store.get("targetVersion")
+                window.store.get('targetVersion')
                     .then((target: any) => {
                         console.log(target)
                         if (!target || target < resp.data.tag_name) {
@@ -53,6 +55,12 @@ onMounted(() => {
         .catch((err: Error) => {
             console.error(err)
         })
+
+    window.store.get('dialogStyle').then((style: dialogStyle) => {
+        if (!style) {
+            window.store.set('dialogStyle', 'gs', false)
+        }
+    })
 
     fetch('../package.json')
         .then(response => response.json())

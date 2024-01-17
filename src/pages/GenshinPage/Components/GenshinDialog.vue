@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {inject, ref} from 'vue'
+import {onMounted, ref} from 'vue'
 import GenshinButton from "./GenshinButton.vue";
 
 const props = defineProps({
@@ -36,22 +36,22 @@ const props = defineProps({
     closeOnOk: {
         type: Boolean,
         default: true
+    },
+    vnode: {
+        default: undefined
     }
 })
 
-const dialogRef = ref<HTMLElement>()
+// const vnode = props.vnode ? render(props.vnode as VNode, mainArea.value!!) : undefined
 
-const show = inject('app/showDialog', false)
-const unmount: () => void = inject('app/unmountDialog', () => undefined)
-const cShow = ref(show)
+const cShow = ref(false)
 
-const closeDialog = (timeout: number) => {
+const closeDialog = () => {
     cShow.value = false
-    setTimeout(unmount, timeout)
 }
 
 const cancelClick = () => {
-    closeDialog(500)
+    closeDialog()
     if (props.onCancel) {
         props.onCancel()
     }
@@ -59,12 +59,16 @@ const cancelClick = () => {
 
 const okClick = () => {
     if (props.closeOnOk) {
-        closeDialog(500)
+        closeDialog()
     }
     if (props.onOk) {
         props.onOk()
     }
 }
+
+onMounted(() => {
+    cShow.value = true
+})
 
 defineExpose({
     closeDialog
@@ -126,9 +130,11 @@ defineExpose({
                             class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full object-contain"
                             style="height: 200px"
                             src="../../../assets/gsDialog/gsDialogBg.png"/>
-                        <div class="px-6 py-6"
+                        <div ref="mainArea"
+                             class="px-6 py-6"
                              style="z-index: 60">
                             <div class="font-gs px-5" :class="msgCenter ? 'text-center' : 'text-left'">{{ msg }}</div>
+                            <component :is="vnode"/>
                             <slot/>
                         </div>
                     </div>

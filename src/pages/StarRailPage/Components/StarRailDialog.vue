@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {inject, ref} from 'vue'
+import {onMounted, ref} from 'vue'
 import StarRailButton from "./StarRailButton.vue";
 
 const props = defineProps({
@@ -36,22 +36,20 @@ const props = defineProps({
     closeOnOk: {
         type: Boolean,
         default: true
+    },
+    vnode: {
+        default: undefined
     }
 })
 
-const dialogRef = ref<HTMLElement>()
+const cShow = ref(false)
 
-const show = inject('app/showDialog', false)
-const unmount: () => void = inject('app/unmountDialog', () => undefined)
-const cShow = ref(show)
-
-const closeDialog = (timeout: number) => {
+const closeDialog = () => {
     cShow.value = false
-    setTimeout(unmount, timeout)
 }
 
 const cancelClick = () => {
-    closeDialog(500)
+    closeDialog()
     if (props.onCancel) {
         props.onCancel()
     }
@@ -59,12 +57,16 @@ const cancelClick = () => {
 
 const okClick = () => {
     if (props.closeOnOk) {
-        closeDialog(500)
+        closeDialog()
     }
     if (props.onOk) {
         props.onOk()
     }
 }
+
+onMounted(() => {
+    cShow.value = true
+})
 
 defineExpose({
     closeDialog

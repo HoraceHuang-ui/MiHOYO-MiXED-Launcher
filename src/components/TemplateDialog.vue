@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {inject, ref} from 'vue'
+import {onMounted, ref} from 'vue'
 
 const props = defineProps({
     width: {
@@ -18,31 +18,25 @@ const props = defineProps({
 })
 const dialogRef = ref<HTMLElement>()
 
-const show = inject('app/showDialog', false)
-const unmount: () => void = inject('app/unmountDialog', () => undefined)
-const cShow = ref(show)
+const cShow = ref(false)
 
-const closeDialog = (timeout: number) => {
+const closeDialog = () => {
     cShow.value = false
-    setTimeout(unmount, timeout)
 }
 
 const cancelClick = () => {
-    closeDialog(500)
+    closeDialog()
     if (props.onCancel) {
         props.onCancel()
     }
 }
 
-const okClick = () => {
-    closeDialog(500)
-    if (props.onOk) {
-        props.onOk()
-    }
-}
+onMounted(() => {
+    cShow.value = true
+})
 
 defineExpose({
-    closeDialog
+    cancelClick
 })
 </script>
 

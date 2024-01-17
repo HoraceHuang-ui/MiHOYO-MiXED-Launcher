@@ -34,8 +34,6 @@ const launcherInfoFailed = ref(false)
 const errMsg = ref('')
 const hideElements = ref(false)
 const scrollbarref = ref()
-const importDialogShow = ref(false)
-const combinePaths = ref(true)
 
 const postTypeMap = new Map<string, PostInfo[]>()
 
@@ -67,44 +65,59 @@ onMounted(async () => {
             if (gsLauncherPath.value && !resp) {
                 if (timeDelta.value > 40) {
                     useDialog(GenshinDialog, {
+                        onCancel(dispose: Function) {
+                            dispose()
+                        },
+                        onOk(dispose: Function) {
+                            window.child.exec(gsLauncherPath.value)
+                            window.store.set('genshinUpd', true, false)
+                            dispose()
+                        }
+                    }, {
                         title: translate('general_gameUpdBoxTitle'),
                         msg: translate('general_gameUpdBoxText1', {
                             game: gameName,
                             beDays: translate('general_beDays', 42 - timeDelta.value)
                         }),
                         msgCenter: false,
-                        showCancel: true,
-                        onOk: () => {
-                            window.child.exec(gsLauncherPath.value)
-                            window.store.set('genshinUpd', true, false)
-                        }
+                        showCancel: true
                     })
                 } else if (timeDelta.value > 0 && timeDelta.value < 3) {
                     useDialog(GenshinDialog, {
+                        onCancel(dispose: Function) {
+                            dispose()
+                        },
+                        onOk(dispose: Function) {
+                            window.child.exec(gsLauncherPath.value)
+                            window.store.set('genshinUpd', true, false)
+                            dispose()
+                        }
+                    }, {
                         title: translate('general_gameUpdBoxTitle'),
                         msg: translate('general_gameUpdBoxText2', {
                             game: gameName,
                             days: translate('general_days', timeDelta.value)
                         }),
                         msgCenter: false,
-                        showCancel: true,
-                        onOk: () => {
-                            window.child.exec(gsLauncherPath.value)
-                            window.store.set('genshinUpd', true, false)
-                        }
+                        showCancel: true
                     })
                 } else if (timeDelta.value == 0) {
                     useDialog(GenshinDialog, {
+                        onCancel(dispose: Function) {
+                            dispose()
+                        },
+                        onOk(dispose: Function) {
+                            window.child.exec(gsLauncherPath.value)
+                            window.store.set('genshinUpd', true, false)
+                            dispose()
+                        }
+                    }, {
                         title: translate('general_gameUpdBoxTitle'),
                         msg: translate('general_gameUpdBoxText3', {
                             game: gameName
                         }),
                         msgCenter: false,
-                        showCancel: true,
-                        onOk: () => {
-                            window.child.exec(gsLauncherPath.value)
-                            window.store.set('genshinUpd', true, false)
-                        }
+                        showCancel: true
                     })
                 }
             } else if (gsLauncherPath.value && timeDelta.value > 2 && timeDelta.value < 37) {
@@ -117,8 +130,15 @@ onMounted(async () => {
 
 const importButtonClick = () => {
     useDialog(GSImportDialog, {
-        onOk: refresh,
-        onCancel: onImportDialogClose
+        onOk(dispose: Function) {
+            dispose()
+            refresh()
+        },
+        onCancel(dispose: Function) {
+            gamePath.value = ''
+            launcherPath.value = ''
+            dispose()
+        }
     })
 }
 
@@ -162,11 +182,6 @@ const refresh = () => {
             from: '/gspage'
         }
     })
-}
-
-const onImportDialogClose = () => {
-    gamePath.value = ''
-    launcherPath.value = ''
 }
 </script>
 

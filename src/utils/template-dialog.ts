@@ -1,30 +1,32 @@
-import type {Component} from 'vue'
-import {createApp, nextTick, ref} from 'vue'
+import {Component, h, render} from 'vue'
 
-export function useDialog(component: Component, props: Record<string, any> = {}) {
-    const app = createApp(component, props)
-    const dom = document.createElement('div')
+interface essentialProps {
+    onOk?: Function,
+    onCancel?: Function
+}
 
-    function unmount() {
-        app.unmount()
-        document.body.removeChild(dom)
-    }
+export function useDialog(component: Component, essentials: essentialProps, props: Record<string, any> = {}) {
+    const container = document.createElement('div')
+    const dialogVNode = h(
+        component,
+        {
+            ...props,
+            onOk: () => {
+                essentials && essentials.onOk ? essentials.onOk(dispose) : dispose()
+            },
+            onCancel: () => {
+                essentials && essentials.onCancel ? essentials.onCancel(dispose) : dispose()
+            }
+        }
+    )
 
-    const show = ref(false)
-    app.provide('app/showDialog', show)
-    app.provide('app/unmountDialog', unmount)
-    app.mount(dom)
-    document.body.appendChild(dom)
-    nextTick(() => {
-        show.value = true
-    })
+    render(dialogVNode, container)
+    document.body.appendChild(container)
 
-    function hide() {
-        show.value = false
-        setTimeout(unmount, 350)
-    }
-
-    return {
-        hide
+    const dispose = () => {
+        setTimeout(() => {
+            render(null, container)
+            document.body.removeChild(container)
+        }, 500)
     }
 }

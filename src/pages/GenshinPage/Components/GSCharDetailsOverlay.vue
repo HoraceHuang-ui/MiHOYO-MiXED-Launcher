@@ -41,7 +41,7 @@ const trimStats = (stats: Stats) => {
 }
 
 const closeDialog = () => {
-    dialogRef.value?.closeDialog?.(500)
+    dialogRef.value?.cancelClick?.()
 }
 </script>
 

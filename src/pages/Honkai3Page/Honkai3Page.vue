@@ -54,44 +54,51 @@ onMounted(async () => {
             if (hiLauncherPath.value && !resp) {
                 if (timeDelta.value > 40) {
                     useDialog(Honkai3Dialog, {
-                        title: translate('general_gameUpdBoxTitle'),
-                        msg: translate('general_gameUpdBoxText1', {
-                            game: gameName,
-                            beDays: translate('general_beDays', 42 - timeDelta.value)
-                        }),
-                        msgCenter: false,
-                        showCancel: true,
-                        onOk: () => {
-                            window.child.exec(hiLauncherPath.value)
-                            window.store.set('honkai3Upd', true, false)
-                        }
-                    })
+                            onOk(dispose: Function) {
+                                window.child.exec(hiLauncherPath.value)
+                                window.store.set('honkai3Upd', true, false)
+                                dispose()
+                            }
+                        },
+                        {
+                            title: translate('general_gameUpdBoxTitle'),
+                            msg: translate('general_gameUpdBoxText1', {
+                                game: gameName,
+                                beDays: translate('general_beDays', 42 - timeDelta.value)
+                            }),
+                            msgCenter: false,
+                            showCancel: true
+                        })
                 } else if (timeDelta.value > 0 && timeDelta.value < 3) {
                     useDialog(Honkai3Dialog, {
+                        onOk(dispose: Function) {
+                            window.child.exec(hiLauncherPath.value)
+                            window.store.set('honkai3Upd', true, false)
+                            dispose()
+                        }
+                    }, {
                         title: translate('general_gameUpdBoxTitle'),
                         msg: translate('general_gameUpdBoxText2', {
                             game: gameName,
                             days: translate('general_days', timeDelta.value)
                         }),
                         msgCenter: false,
-                        showCancel: true,
-                        onOk: () => {
-                            window.child.exec(hiLauncherPath.value)
-                            window.store.set('honkai3Upd', true, false)
-                        }
+                        showCancel: true
                     })
                 } else if (timeDelta.value == 0) {
                     useDialog(Honkai3Dialog, {
+                        onOk(dispose: Function) {
+                            window.child.exec(hiLauncherPath.value)
+                            window.store.set('honkai3Upd', true, false)
+                            dispose()
+                        }
+                    }, {
                         title: translate('general_gameUpdBoxTitle'),
                         msg: translate('general_gameUpdBoxText3', {
                             game: gameName
                         }),
                         msgCenter: false,
-                        showCancel: true,
-                        onOk: () => {
-                            window.child.exec(hiLauncherPath.value)
-                            window.store.set('honkai3Upd', true, false)
-                        }
+                        showCancel: true
                     })
                 }
             } else if (hiLauncherPath.value && timeDelta.value > 2 && timeDelta.value < 37) {
@@ -104,8 +111,15 @@ onMounted(async () => {
 
 const importButtonClick = () => {
     useDialog(HI3ImportDialog, {
-        onOk: refresh,
-        onCancel: onImportDialogClose
+        onOk(dispose: Function) {
+            refresh()
+            dispose()
+        },
+        onCancel(dispose: Function) {
+            gamePath.value = ''
+            launcherPath.value = ''
+            dispose()
+        }
     })
 }
 const hiLaunch = async () => {
@@ -152,11 +166,6 @@ const refresh = () => {
             from: '/hipage'
         }
     })
-}
-
-const onImportDialogClose = () => {
-    gamePath.value = ''
-    launcherPath.value = ''
 }
 </script>
 

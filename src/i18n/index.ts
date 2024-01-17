@@ -13,7 +13,7 @@ const i18n = createI18n<[MessageSchema], lang>({
     // default locale
     locale: localStorage.lang ? localStorage.lang : 'en_US',
     fallbackLocale: 'en_US',
-    legacy: false,
+    legacy: true,
     globalInjection: true,
     // translations
     messages: {
@@ -40,6 +40,13 @@ export const translate = (key: string, bindings?: any) => {
         return ''
     }
     return i18n.global.t(key, bindings)
+}
+
+export const translateWithLocale = (key: string, locale: lang, bindings?: any) => {
+    if (!key) {
+        return ''
+    }
+    return i18n.global.t(key, locale, bindings)
 }
 
 export const switchLang = (language: lang) => {
