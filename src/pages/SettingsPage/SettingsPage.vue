@@ -185,9 +185,9 @@ const showDialogStyleChange = () => {
             dispose()
         }
     }, {
-        title: `${translate('general_' + dialogStyle.value + 'Short')}弹窗样式预览`,
+        title: translate('settings_dialogStyleTitle', {game: translate('general_' + dialogStyle.value + 'Short')}),
         showCancel: true,
-        msg: `您即将切换到${translate('general_' + dialogStyle.value)}样式弹窗。是否确定切换？`
+        msg: translate('settings_dialogStyleText', {game: translate('general_' + dialogStyle.value)}),
     })
 }
 
@@ -254,9 +254,9 @@ const showClearDialog = () => {
                 </div>
 
                 <!-- APPEARANCE -->
-                <div class="title">外观</div>
+                <div class="title">{{ $t('settings_appearance') }}</div>
                 <div class="form-item">
-                    <div class="h-full py-1">弹窗样式</div>
+                    <div class="h-full py-1">{{ $t('settings_dialogStyle') }}</div>
                     <select name="dialogStyle" @change="showDialogStyleChange" v-model="dialogStyle"
                             class="border-2 rounded-full py-1 px-2 ml-3 hover:bg-gray-100 transition-all">
                         <option v-for="(styleCode, i) in availableDialogStyles" :value="styleCode">{{
