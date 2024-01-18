@@ -10,11 +10,9 @@ declare module 'vue' {
     CustomSwitch: typeof import('./src/components/CustomSwitch.vue')['default']
     CustomUIDInput: typeof import('./src/components/CustomUIDInput.vue')['default']
     DialogListItem: typeof import('./src/components/DialogListItem.vue')['default']
-    ElButton: typeof import('element-plus/es')['ElButton']
     ElCarousel: typeof import('element-plus/es')['ElCarousel']
     ElCarouselItem: typeof import('element-plus/es')['ElCarouselItem']
     ElCheckbox: typeof import('element-plus/es')['ElCheckbox']
-    ElDialog: typeof import('element-plus/es')['ElDialog']
     ElDropdown: typeof import('element-plus/es')['ElDropdown']
     ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
     ElDropdownMenu: typeof import('element-plus/es')['ElDropdownMenu']
@@ -25,7 +23,6 @@ declare module 'vue' {
     ElTag: typeof import('element-plus/es')['ElTag']
     ElText: typeof import('element-plus/es')['ElText']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
-    GeneralDialog: typeof import('./src/components/GeneralDialog.vue')['default']
     LauncherBanner: typeof import('./src/components/LauncherBanner.vue')['default']
     LauncherPosts: typeof import('./src/components/LauncherPosts.vue')['default']
     LoadFailedBlock: typeof import('./src/components/LoadFailedBlock.vue')['default']
@@ -34,5 +31,6 @@ declare module 'vue' {
     StatIcon: typeof import('./src/components/StatIcon.vue')['default']
     TemplateDialog: typeof import('./src/components/TemplateDialog.vue')['default']
     TopHeader: typeof import('./src/components/TopHeader.vue')['default']
+    UpdateDialogContent: typeof import('./src/components/UpdateDialogContent.vue')['default']
   }
 }

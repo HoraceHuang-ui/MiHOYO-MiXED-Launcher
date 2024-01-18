@@ -110,12 +110,13 @@ defineExpose({
                     <div class="bg-blue-300 h-full bg-opacity-10 mt-1 flex flex-col justify-between backdrop-blur-sm"
                          style="z-index: 60; border-radius: 0 0 12px 12px">
                         <div class="w-full h-full flex flex-col justify-center">
-                            <div class="px-6 py-6">
-                                <div class="px-5 text-blue-100 text-lg"
+                            <div class="px-6 py-6 text-blue-100">
+                                <div class="px-5 text-lg"
                                      :class="msgCenter ? 'text-center' : 'text-left'">{{
                                         msg
                                     }}
                                 </div>
+                                <component :is="vnode"/>
                                 <slot/>
                             </div>
                         </div>

@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import {computed, onMounted, ref} from 'vue'
+import {h, onMounted, ref} from 'vue'
 import {availableLangCodes, availableLangNames, lang, switchLang, translate, translateWithLocale} from '../../i18n'
 import {useRouter} from 'vue-router'
-import {marked} from 'marked'
 import {Loading} from '@element-plus/icons-vue'
 import CustomSwitch from '../../components/CustomSwitch.vue'
 import {UpdInfo} from "../../types/github/ghUpdInfo";
@@ -13,16 +12,14 @@ import {
     dialogStyle
 } from "../../types/dialog/dialog";
 import {useDialog} from "../../utils/template-dialog";
+import UpdateDialogContent from "../../components/UpdateDialogContent.vue";
 
 const lang = ref<lang>('en_US')
 const dialogStyle = ref<dialogStyle>('gs')
-const langDialogShow = ref(false)
-const clearDialogShow = ref(false)
 const transitionShow = ref(false)
 const bgPath = ref('')
 const appVer = ref('')
 const latest = ref(false)
-const updDialogShow = ref(false)
 const updInfo = ref<UpdInfo>({
     assets: [],
     assets_url: "",
@@ -47,9 +44,6 @@ const checkUpdFailed = ref(false)
 const updChecking = ref(false)
 const quitOnClose = ref(true)
 const trayOnLaunch = ref(true)
-const updDialogContent = computed(() => {
-    return marked(updInfo.value.body)
-})
 const DEFAULT_BG = '../../src/assets/gsbanner.png'
 
 onMounted(async () => {
@@ -79,11 +73,6 @@ onMounted(async () => {
 
 const router = useRouter()
 
-const clearAllData = () => {
-    window.store.clear()
-    router.go(0)
-}
-
 const openLink = (url: string) => {
     window.electron.openExtLink(url)
 }
@@ -94,16 +83,33 @@ const checkUpdates = () => {
     window.github.getLatestRelease()
         .then((resp) => {
             if (needsUpdate(resp.data.tag_name)) {
-                updDialogShow.value = true
                 updInfo.value = resp.data
+                useDialog(dialogComponent(dialogStyle.value), {
+                    onCancel(dispose: Function) {
+                        dispose()
+                    },
+                    onOk(dispose: Function) {
+                        window.electron.openExtLink(updInfo.value.assets[0].browser_download_url)
+                        window.win.close()
+                        dispose()
+                    }
+                }, {
+                    title: translate('updDialog_title'),
+                    showCancel: true,
+                    vnode: h(UpdateDialogContent, {
+                        appVer: appVer.value,
+                        updInfo: updInfo.value
+                    })
+                })
             } else {
                 latest.value = true
             }
             updChecking.value = false
         })
-        .catch(() => {
+        .catch((err: Error) => {
             checkUpdFailed.value = true
             updChecking.value = false
+            console.error(err)
         })
 }
 
@@ -132,12 +138,6 @@ const needsUpdate = (latestStr: string) => {
     console.log(curr)
 
     return verCompare(latest, curr) > 0
-
-}
-
-const extUpd = () => {
-    window.electron.openExtLink(updInfo.value.assets[0].browser_download_url)
-    window.win.close()
 }
 
 const switchQuitAction = async () => {
@@ -190,6 +190,20 @@ const showDialogStyleChange = () => {
         msg: `您即将切换到${translate('general_' + dialogStyle.value)}样式弹窗。是否确定切换？`
     })
 }
+
+const showClearDialog = () => {
+    useDialog(dialogComponent(dialogStyle.value), {
+        onOk(dispose: Function) {
+            window.store.clear()
+            router.go(0)
+            dispose()
+        }
+    }, {
+        title: translate('settings_clearAllData'),
+        msg: translate('settings_clearAllDataText'),
+        showCancel: true
+    })
+}
 </script>
 
 <template>
@@ -234,31 +248,9 @@ const showDialogStyleChange = () => {
                 </div>
                 <div class="form-item">
                     <div class="hover:underline active:text-orange-300 text-blue-700 cursor-pointer"
-                         @click="clearDialogShow = true">
+                         @click="showClearDialog">
                         {{ $t('settings_clearAllData') }}
                     </div>
-                    <el-dialog v-model="clearDialogShow" :title="$t('settings_clearAllData')" width="40%" center
-                               :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false">
-                        {{ $t('settings_clearAllDataText') }}
-                        <template #footer>
-                            <div class="flex-row justify-between">
-                                <div class="w-1"></div>
-                                <div class="flex-row">
-                                    <button
-                                        class="mr-3 rounded-full py-1 px-2 hover:bg-gray-200 active:bg-gray-400 transition-all"
-                                        @click="clearDialogShow = false">{{
-                                            $t('general_cancel')
-                                        }}
-                                    </button>
-                                    <button
-                                        class="rounded-full py-1 px-3 bg-blue-600 text-white hover:bg-blue-500 active:scale-90 transition-all"
-                                        @click="clearAllData">
-                                        {{ $t('general_confirm') }}
-                                    </button>
-                                </div>
-                            </div>
-                        </template>
-                    </el-dialog>
                 </div>
 
                 <!-- APPEARANCE -->
@@ -299,39 +291,6 @@ const showDialogStyleChange = () => {
                             }}
                         </div>
                     </div>
-                    <el-dialog v-model="updDialogShow" :title="$t('updDialog_title')" width="40%" center>
-                        <div style="padding-left: 20px; padding-right: 20px;">
-                            <el-scrollbar height="40vh">
-                                <div v-html="updDialogContent"></div>
-                            </el-scrollbar>
-                            <div style="color: red; margin-top: 10px;">{{ $t('updDialog_version') }}v{{ appVer }} 👉 {{
-                                    updInfo.tag_name
-                                }}
-                            </div>
-                            <div style="color: red;">{{ $t('updDialog_size') }}{{
-                                    (updInfo.assets[0].size / 1024 /
-                                        1024).toFixed(1)
-                                }}MB
-                            </div>
-                            <div style="color: red;">{{ $t('updDialog_footerText') }}</div>
-                        </div>
-                        <template #footer>
-                            <div class="flex-row footer-wrapper justify-between">
-                                <div class="w-1"></div>
-                                <div class="flex-row">
-                                    <el-button
-                                        class="mr-3 rounded-full py-1 px-2 hover:bg-gray-200 active:bg-gray-400 transition-all"
-                                        @click="updDialogShow = false">{{ $t('general_cancel') }}
-                                    </el-button>
-                                    <el-button
-                                        class="rounded-full py-1 px-3 bg-blue-600 text-white hover:bg-blue-500 active:scale-90 transition-all"
-                                        @click="extUpd">
-                                        {{ $t('general_confirm') }}
-                                    </el-button>
-                                </div>
-                            </div>
-                        </template>
-                    </el-dialog>
                 </div>
             </div>
         </el-scrollbar>

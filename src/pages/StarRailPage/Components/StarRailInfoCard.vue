@@ -232,7 +232,7 @@ const getInnerSet = (sets: RelicSetInfo[]) => {
 }
 
 const showCharDetails = (index: number) => {
-    useDialog(SRCharDetailsDialog, undefined, {
+    useDialog(SRCharDetailsDialog, {}, {
         title: playerInfo.value.characters[index].name + ' ' + translate('sr_charDetails'),
         character: playerInfo.value.characters[index],
         showOk: false

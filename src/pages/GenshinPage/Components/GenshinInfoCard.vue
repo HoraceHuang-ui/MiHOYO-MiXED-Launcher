@@ -314,7 +314,7 @@ const charsPagePrev = () => {
 }
 
 const showCharDetails = (index: number) => {
-    useDialog(GSCharDetailsOverlay, undefined, {
+    useDialog(GSCharDetailsOverlay, {}, {
         title: playerInfo.value.characters[index].name + ' ' + translate('gs_charDetails'),
         character: playerInfo.value.characters[index]
     })

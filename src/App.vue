@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import {computed, onMounted, ref} from 'vue'
+import {computed, h, onMounted, ref} from 'vue'
 import {marked} from 'marked'
 import {useRouter} from 'vue-router'
 import {UpdInfo} from "./types/github/ghUpdInfo";
-import {dialogStyle} from "./types/dialog/dialog";
+import {dialogComponent, dialogStyle} from "./types/dialog/dialog";
+import {useDialog} from "./utils/template-dialog";
+import {translate} from "./i18n";
+import UpdateDialogContent from "./components/UpdateDialogContent.vue";
 
 let appVer = ''
 const dialogStyle = ref<dialogStyle>('gs')
@@ -45,8 +48,24 @@ onMounted(() => {
                     .then((target: any) => {
                         console.log(target)
                         if (!target || target < resp.data.tag_name) {
-                            updDialogShow.value = true
                             updInfo.value = resp.data
+                            useDialog(dialogComponent(dialogStyle.value), {
+                                onCancel(dispose: Function) {
+                                    dispose()
+                                },
+                                onOk(dispose: Function) {
+                                    window.electron.openExtLink(updInfo.value.assets[0].browser_download_url)
+                                    window.win.close()
+                                    dispose()
+                                }
+                            }, {
+                                title: translate('updDialog_title'),
+                                showCancel: true,
+                                vnode: h(UpdateDialogContent, {
+                                    appVer: appVer,
+                                    updInfo: updInfo.value
+                                })
+                            })
                         }
                     })
             }
@@ -60,6 +79,7 @@ onMounted(() => {
         if (!style) {
             window.store.set('dialogStyle', 'gs', false)
         }
+        dialogStyle.value = style
     })
 
     fetch('../package.json')
@@ -112,32 +132,6 @@ const onDialogClose = () => {
 </script>
 
 <template id="app">
-    <el-dialog v-if="updCheck" v-model="updDialogShow" :title="$t('updDialog_title')" width="40%" center
-               :before-close="onDialogClose">
-        <div style="padding-left: 20px; padding-right: 20px;">
-            <el-scrollbar height="40vh">
-                <div v-html="updDialogContent"></div>
-            </el-scrollbar>
-            <div style="color: red; margin-top: 10px;">{{ $t('updDialog_version') }}v{{ appVer }} 👉 {{
-                    updInfo.tag_name
-                }}
-            </div>
-            <div style="color: red;">{{ $t('updDialog_size') }}{{ (updInfo.assets[0].size / 1024 / 1024).toFixed(1) }}MB
-            </div>
-            <div style="color: red;">{{ $t('updDialog_footerText') }}</div>
-        </div>
-        <template #footer>
-            <div class="flex-row footer-wrapper">
-                <el-checkbox v-model="skipCurrent">{{ $t("updDialog_skipCurrent") }}</el-checkbox>
-                <div class="flex-row">
-                    <el-button @click="onDialogClose">{{ $t('general_cancel') }}</el-button>
-                    <el-button type="primary" @click="extUpd" :disabled="skipCurrent">
-                        {{ $t('general_confirm') }}
-                    </el-button>
-                </div>
-            </div>
-        </template>
-    </el-dialog>
     <TopHeader/>
     <router-view></router-view>
 </template>
