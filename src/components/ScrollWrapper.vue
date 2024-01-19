@@ -28,6 +28,8 @@ const props = defineProps({
     }
 })
 
+const emit = defineEmits(['scroll'])
+
 const outerRef = ref()
 const innerRef = ref()
 
@@ -56,9 +58,15 @@ const barWidth = computed(() => {
     return widthPre.value * trackWidth.value
 })
 
-const onMouseWheel = (e) => {
-    translateX.value = e.target.scrollLeft * widthPre.value
-    translateY.value = e.target.scrollTop * heightPre.value
+const onScroll = (e: Event) => {
+    const target: HTMLDivElement = e.target
+    translateX.value = target.scrollLeft * widthPre.value
+    translateY.value = target.scrollTop * heightPre.value
+
+    emit('scroll', {
+        left: target.scrollLeft,
+        top: target.scrollTop
+    })
 }
 
 // 鼠标开始移动
@@ -147,8 +155,6 @@ onMounted(() => {
     trackWidth.value = outerRef.value.clientWidth
     trackHeight.value = outerRef.value.clientHeight
 
-    console.log('trackWidth ' + trackWidth.value)
-    console.log('wrapWidth ' + wrapContentWidth.value)
     if (!props.noResize) {
         innerResizeObserver.observe(innerRef.value)
         outerResizeObserver.observe(outerRef.value)
@@ -175,7 +181,7 @@ defineExpose({
 <template>
     <div class="overflow-hidden" :style="{ height: height, width: width }">
         <div class="h-full w-full relative overflow-hidden">
-            <div ref="outerRef" class="h-full w-full overflow-scroll" @scroll="onMouseWheel">
+            <div ref="outerRef" class="h-full w-full overflow-scroll" @scroll="onScroll">
                 <div ref="innerRef">
                     <slot/>
                 </div>
@@ -213,4 +219,13 @@ defineExpose({
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+::-webkit-scrollbar {
+    width: 0 !important;
+}
+
+::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0;
+}
 </style>
