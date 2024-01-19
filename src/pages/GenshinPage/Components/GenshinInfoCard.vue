@@ -9,6 +9,7 @@ import CustomUIDInput from "../../../components/CustomUIDInput.vue";
 import {useDialog} from "../../../utils/template-dialog";
 import GSCharDetailsOverlay from "./GSCharDetailsOverlay.vue";
 import MyTag from "../../../components/MyTag.vue";
+import ScrollWrapper from "../../../components/ScrollWrapper.vue";
 
 const playerInfo = ref<any>()
 
@@ -395,9 +396,10 @@ const findSkillIdByProud = (proudId: number): number => {
                         <i class="bi bi-chevron-left text-lg text-center"/>
                     </div>
                 </div>
-                <el-scrollbar ref="charsScrollbar" class="flex flex-row w-1/2 justify-center" noresize>
-                    <div class="flex flex-row z-50 relative flex-nowrap w-max">
-                        <div v-for="(character, index) in playerInfo.characters" class="relative w-12 h-12"
+                <ScrollWrapper ref="charsScrollbar" class="flex flex-row justify-center" width="50%" :no-resize="true"
+                               :show-bar="false">
+                    <div class="flex flex-row flex-nowrap w-max">
+                        <div v-for="(character, index) in playerInfo.characters" class="relative w-12 h-12 z-50"
                              @click="showcaseIdx = index">
                             <div class="absolute bottom-0 w-9 h-9 border-2 rounded-full bg-white transition-all"
                                  :class="{ 'border-blue-600 border-3': showcaseIdx == index }"
@@ -407,7 +409,7 @@ const findSkillIdByProud = (proudId: number): number => {
                                 :src="'https://enka.network/ui/' + (character.costumeId != '' ? character.assets.costumes[0].sideIconName : character.assets.sideIcon) + '.png'"/>
                         </div>
                     </div>
-                </el-scrollbar>
+                </ScrollWrapper>
                 <div class="relative z-50 w-1/4">
                     <div
                         class="absolute left-2 top-3 rounded-full w-9 h-9 pt-1 bg-white hover:bg-gray-200 active:translate-x-1 transition-all bg-opacity-80"

@@ -2,7 +2,7 @@
 defineProps({
     colour: {
         type: String,
-        default: '#dddddd'
+        default: '#222222'
     }
 })
 </script>
@@ -17,4 +17,17 @@ defineProps({
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.icon-loading {
+    animation: 1s linear 0s infinite running rotate;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
 </style>

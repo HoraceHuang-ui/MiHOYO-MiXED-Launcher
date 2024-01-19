@@ -27,6 +27,7 @@ declare module 'vue' {
     MyTag: typeof import('./src/components/MyTag.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    ScrollWrapper: typeof import('./src/components/ScrollWrapper.vue')['default']
     StatIcon: typeof import('./src/components/StatIcon.vue')['default']
     TemplateDialog: typeof import('./src/components/TemplateDialog.vue')['default']
     TopHeader: typeof import('./src/components/TopHeader.vue')['default']

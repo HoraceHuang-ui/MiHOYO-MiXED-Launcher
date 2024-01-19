@@ -88,18 +88,18 @@ pnpm build
   inside `electron/main/index.ts`.
 
 ```ts
-  const {Octokit} = require("@octokit/core")
+const {Octokit} = require("@octokit/core")
 const octokit = new Octokit({
     auth: "<YOUR TOKEN HERE>"
 })
 ```
 
-- For some reasons, relative paths in the `dev` and `build` environments varies for some files. In `onMounted`
+- For some reason, relative paths in the `dev` and `build` environments varies for some files. In `onMounted`
   inside `src/pages/SettingsPage.vue`, the path of `package.json` is determined by environment.
 
 ```ts
-  // BUILD: '../../app.asar/package.json'
-  // DEV: '../../package.json'
+// BUILD: '../../app.asar/package.json'
+// DEV: '../../package.json'
 fetch('../../app.asar/package.json')
     .then(response => response.json())
     .then((resp) => {

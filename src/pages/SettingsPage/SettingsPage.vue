@@ -334,17 +334,4 @@ const showClearDialog = () => {
 .button-disabled {
     @apply opacity-70 bg-gray-100 border border-gray-300 text-gray-400 pointer-events-none cursor-not-allowed;
 }
-
-.icon-loading {
-    animation: 1s linear 0s infinite running rotate;
-}
-
-@keyframes rotate {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
 </style>
