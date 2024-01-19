@@ -7,6 +7,7 @@ import {RankInfo, RankLevelUpSkillInfo} from '../../../types/starrail/srRankMap'
 import {AttributeInfo, CharacterInfo, FormattedApiInfo, RelicSetInfo} from '../../../types/starrail/srPlayerInfo'
 import {useDialog} from '../../../utils/template-dialog'
 import SRCharDetailsDialog from "./SRCharDetailsDialog.vue";
+import MyTag from "../../../components/MyTag.vue";
 
 // import rankMap from '../textMaps/character_ranks.json' with { type: 'json' }
 
@@ -265,22 +266,22 @@ const showCharDetails = (index: number) => {
             <!-- 右侧 WL AR -->
             <div v-if="playerInfoReady && !playerInfoLoading" style="width: 35vw; position: relative;">
                 <div class="h-full flex flex-row justify-end items-center">
-                    <el-tag size="large" round class="mr-2">
+                    <MyTag class="mx-2">
                         <div class="flex flex-row">
                             {{ $t('sr_eqLv') }}
                             <span class="font-sr-sans" style="margin-left: 1ch; margin-top: 1px;">
                                 {{ playerInfo.player.world_level }}
                             </span>
                         </div>
-                    </el-tag>
-                    <el-tag size="large" round class="mr-4">
+                    </MyTag>
+                    <MyTag class="mr-4">
                         <div class="flex flex-row">
                             {{ $t('sr_playerLv') }}
                             <span class="font-sr-sans" style="margin-left: 1ch; margin-top: 1px;">
                                 {{ playerInfo.player.level }}
                             </span>
                         </div>
-                    </el-tag>
+                    </MyTag>
                 </div>
             </div>
             <div v-else style="width: 35vw"/>

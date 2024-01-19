@@ -42,7 +42,6 @@
     "vue-tsc": "^1.8.26"
   },
   "dependencies": {
-    "@element-plus/icons-vue": "^2.3.1",
     "@octokit/core": "^5.0.2",
     "axios": "^1.6.2",
     "bootstrap-icons": "^1.11.3",
