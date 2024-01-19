@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import {marked} from "marked";
-import {ref} from 'vue'
 import {translate} from "../i18n";
+import MyCheckbox from "./MyCheckbox.vue";
+import {computed, ref} from 'vue'
 
 const props = defineProps({
     appVer: {
@@ -11,11 +12,46 @@ const props = defineProps({
     updInfo: {
         type: Object,
         required: true
+    },
+    showSkipCurrent: {
+        type: Boolean,
+        default: true
+    },
+    skipCurrent: {
+        type: Boolean,
+        default: false
+    },
+    gameStyle: {
+        type: String,
+        default: 'gs'
     }
 })
+defineEmits(['update:skipCurrent'])
 
-const skipCurrent = ref(false)
+const skip = ref(props.skipCurrent)
+
 const updDialogContent = marked(props.updInfo.body)
+
+const onColor = computed(() => {
+    switch (props.gameStyle) {
+        case 'gs':
+            return '#b78c22'
+        case 'sr':
+            return '#CEA652'
+        case 'hi3':
+            return '#4CC5FE'
+    }
+})
+const offColor = computed(() => {
+    switch (props.gameStyle) {
+        case 'gs':
+            return '#606266'
+        case 'sr':
+            return '#606266'
+        case 'hi3':
+            return '#dddddd'
+    }
+})
 </script>
 
 <template>
@@ -23,16 +59,21 @@ const updDialogContent = marked(props.updInfo.body)
         <el-scrollbar height="40vh">
             <div v-html="updDialogContent"></div>
         </el-scrollbar>
-        <div class="text-red-400" style="margin-top: 10px;">{{ translate('updDialog_version') }}v{{ appVer }} 👉 {{
+        <div :class="gameStyle === 'hi3' ? 'text-red-400' : 'text-red-600'" style="margin-top: 10px;">
+            {{ translate('updDialog_version') }}v{{ appVer }} 👉 {{
                 updInfo.tag_name
             }}
         </div>
-        <div class="text-red-400">{{ translate('updDialog_size') }}{{
+        <div :class="gameStyle === 'hi3' ? 'text-red-400' : 'text-red-600'">{{ translate('updDialog_size') }}{{
                 (updInfo.assets[0].size / 1024 / 1024).toFixed(1)
             }}MB
         </div>
-        <div class="text-red-400">{{ translate('updDialog_footerText') }}</div>
-        <el-checkbox v-model="skipCurrent">{{ translate("updDialog_skipCurrent") }}</el-checkbox>
+        <div :class="gameStyle === 'hi3' ? 'text-red-400' : 'text-red-600'">{{
+                translate('updDialog_footerText')
+            }}
+        </div>
+        <MyCheckbox v-if="showSkipCurrent" v-model="skip"
+                    :text="translate('updDialog_skipCurrent')" :on-color="onColor" :off-color="offColor"/>
     </div>
 </template>
 

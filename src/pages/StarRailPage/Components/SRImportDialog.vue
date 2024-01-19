@@ -2,6 +2,7 @@
 import StarRailDialog from "./StarRailDialog.vue"
 import {translate} from "../../../i18n"
 import {ref} from 'vue'
+import MyCheckbox from "../../../components/MyCheckbox.vue";
 
 const props = defineProps({
     onOk: {
@@ -89,7 +90,7 @@ const onDialogOk = () => {
                 }}
             </div>
             <div class="flex flex-row">
-                <el-checkbox v-model="combinePaths">{{ translate("general_defaultStructure") }}</el-checkbox>
+                <MyCheckbox v-model="combinePaths" :text="translate('general_defaultStructure')" on-color="#CEA652"/>
                 <el-tooltip placement="right"
                             :content="`<${translate('general_launcherDirectory')}>\\Game\\StarRail.exe`">
                     <div

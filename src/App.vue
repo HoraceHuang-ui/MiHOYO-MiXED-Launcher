@@ -51,6 +51,9 @@ onMounted(() => {
                             updInfo.value = resp.data
                             useDialog(dialogComponent(dialogStyle.value), {
                                 onCancel(dispose: Function) {
+                                    if (skipCurrent.value) {
+                                        window.store.set("targetVersion", updInfo.value.tag_name, false)
+                                    }
                                     dispose()
                                 },
                                 onOk(dispose: Function) {
@@ -63,7 +66,11 @@ onMounted(() => {
                                 showCancel: true,
                                 vnode: h(UpdateDialogContent, {
                                     appVer: appVer,
-                                    updInfo: updInfo.value
+                                    updInfo: updInfo.value,
+                                    skipCurrent: skipCurrent.value,
+                                    'onUpdate:skipCurrent': (value: boolean) => {
+                                        skipCurrent.value = value
+                                    }
                                 })
                             })
                         }
@@ -116,18 +123,6 @@ const needsUpdate = (latestStr: string) => {
     console.log(curr)
 
     return verCompare(latest, curr) > 0
-}
-
-const extUpd = () => {
-    window.electron.openExtLink(updInfo.value.assets[0].browser_download_url)
-    window.win.close()
-}
-
-const onDialogClose = () => {
-    if (skipCurrent.value) {
-        window.store.set("targetVersion", updInfo.value.tag_name, false)
-    }
-    updDialogShow.value = false
 }
 </script>
 

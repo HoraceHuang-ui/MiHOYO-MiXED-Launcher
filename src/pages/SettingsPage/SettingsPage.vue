@@ -98,7 +98,8 @@ const checkUpdates = () => {
                     showCancel: true,
                     vnode: h(UpdateDialogContent, {
                         appVer: appVer.value,
-                        updInfo: updInfo.value
+                        updInfo: updInfo.value,
+                        showSkipCurrent: false
                     })
                 })
             } else {
