@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import {computed, onMounted, ref} from 'vue'
-import {Picture, RefreshLeft} from '@element-plus/icons-vue'
 import {translate} from '../i18n'
 
 const gsGamePath = ref('')
@@ -96,18 +95,14 @@ const resetPic = () => {
             </button>
         </div>
         <div
-            class="rounded-full fixed left-8 bottom-4 w-10 h-10 bg-white hover:bg-gray-100 active:bg-gray-400 active:scale-90 transition-all"
+            class="rounded-full fixed left-8 bottom-4 w-10 h-10 bg-white pt-2 hover:bg-gray-100 active:bg-gray-400 active:scale-90 transition-all"
             @click="setPic">
-            <el-icon :size="20" class="w-full h-full">
-                <Picture/>
-            </el-icon>
+            <i class="bi bi-image h-full w-full"/>
         </div>
         <div v-if="bgPath && bgPath !== DEFAULT_BG"
-             class="rounded-full fixed left-20 bottom-4 w-10 h-10 bg-white hover:bg-gray-100 active:bg-gray-400 active:scale-90 transition-all"
+             class="rounded-full fixed left-20 bottom-4 w-10 h-10 bg-white pt-1.5 hover:bg-gray-100 active:bg-gray-400 active:scale-90 transition-all"
              @click="resetPic">
-            <el-icon :size="20" class="w-full h-full">
-                <RefreshLeft/>
-            </el-icon>
+            <i class="text-lg bi bi-arrow-clockwise h-full w-full"/>
         </div>
     </div>
 </template>

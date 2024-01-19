@@ -2,7 +2,6 @@
 import {h, onMounted, ref} from 'vue'
 import {availableLangCodes, availableLangNames, lang, switchLang, translate, translateWithLocale} from '../../i18n'
 import {useRouter} from 'vue-router'
-import {Loading} from '@element-plus/icons-vue'
 import CustomSwitch from '../../components/CustomSwitch.vue'
 import {UpdInfo} from "../../types/github/ghUpdInfo";
 import {
@@ -13,6 +12,7 @@ import {
 } from "../../types/dialog/dialog";
 import {useDialog} from "../../utils/template-dialog";
 import UpdateDialogContent from "../../components/UpdateDialogContent.vue";
+import LoadingIcon from "../../components/LoadingIcon.vue";
 
 const lang = ref<lang>('en_US')
 const dialogStyle = ref<dialogStyle>('gs')
@@ -284,10 +284,8 @@ const showClearDialog = () => {
                                 latest ? $t('settings_latestVersion') : $t('settings_checkUpdates')
                             }}
                         </button>
-                        <el-icon class="is-loading ml-2" :size="20" style="margin-top: 6px;" v-if="updChecking">
-                            <Loading/>
-                        </el-icon>
-                        <div class="text-red-600 ml-3 mt-1" v-if="checkUpdFailed">{{
+                        <LoadingIcon v-if="updChecking"/>
+                        <div class="text-red-600 ml-3 mt-1.5" v-if="checkUpdFailed">{{
                                 $t('settings_checkUpdFailed')
                             }}
                         </div>
@@ -326,7 +324,7 @@ const showClearDialog = () => {
 }
 
 .img-link {
-    @apply w-8 h-8 hover:opacity-70 active:scale-90 transition-all;
+    @apply w-9 h-9 hover:opacity-70 active:scale-90 transition-all;
 }
 
 .button-enabled {
@@ -335,5 +333,18 @@ const showClearDialog = () => {
 
 .button-disabled {
     @apply opacity-70 bg-gray-100 border border-gray-300 text-gray-400 pointer-events-none cursor-not-allowed;
+}
+
+.icon-loading {
+    animation: 1s linear 0s infinite running rotate;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 </style>

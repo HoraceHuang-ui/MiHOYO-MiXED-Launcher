@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {computed, onMounted, ref} from 'vue'
 import {useRouter} from 'vue-router'
-import {ArrowLeftBold, ArrowRightBold} from '@element-plus/icons-vue'
 import {translate} from '../../../i18n'
 import StatIcon from '../../../components/StatIcon.vue'
 import {Artifact} from "enkanetwork.js"
@@ -389,11 +388,11 @@ const findSkillIdByProud = (proudId: number): number => {
             <!-- 角色头像列表 10人一页 -->
             <div class="flex flex-row w-full justify-between">
                 <div class="relative z-50 w-1/4">
-                    <el-icon
-                        class="absolute right-2 top-3 rounded-full w-9 h-9 bg-white hover:bg-gray-200 active:-translate-x-1 transition-all opacity-80"
-                        @click="charsPagePrev" :class="charsPage === 0 ? 'disabled' : ''">
-                        <ArrowLeftBold/>
-                    </el-icon>
+                    <div
+                        class="absolute right-2 top-3 rounded-full w-9 h-9 pt-1 bg-white hover:bg-gray-200 active:-translate-x-1 transition-all bg-opacity-80"
+                        @click="charsPagePrev" :class="charsPage == 0 ? 'disabled' : ''">
+                        <i class="bi bi-chevron-left text-lg text-center"/>
+                    </div>
                 </div>
                 <el-scrollbar ref="charsScrollbar" class="flex flex-row w-1/2 justify-center" noresize>
                     <div class="flex flex-row z-50 relative flex-nowrap w-max">
@@ -409,11 +408,11 @@ const findSkillIdByProud = (proudId: number): number => {
                     </div>
                 </el-scrollbar>
                 <div class="relative z-50 w-1/4">
-                    <el-icon
-                        class="absolute left-2 top-3 rounded-full w-9 h-9 ml-2 bg-white hover:bg-gray-200 active:translate-x-1 transition-all opacity-80"
-                        @click="charsPageNext" :class="charsPage === pages ? 'disabled' : ''">
-                        <ArrowRightBold/>
-                    </el-icon>
+                    <div
+                        class="absolute left-2 top-3 rounded-full w-9 h-9 pt-1 bg-white hover:bg-gray-200 active:translate-x-1 transition-all bg-opacity-80"
+                        @click="charsPageNext" :class="charsPage == pages ? 'disabled' : ''">
+                        <i class="bi bi-chevron-right text-lg text-center"/>
+                    </div>
                 </div>
             </div>
             <!-- 角色详情卡片 -->
