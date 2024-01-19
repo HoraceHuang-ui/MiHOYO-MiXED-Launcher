@@ -450,10 +450,11 @@ const showCharDetails = (index: number) => {
                             <img class="object-cover w-44 h-full" :src="apiUrl + character.light_cone.preview"/>
                             <div class="w-full h-full relative">
                                 <div class="flex flex-row justify-between ml-2 mt-5">
-                                    <el-text truncated class="text-gray-200 text-2xl text-left" style="width: 340px;"
-                                             :class="$t('sr_displayCompactFont') === 'true' ? 'font-sr-sans' : 'font-sr'">
+                                    <div class="truncated text-gray-200 text-2xl text-left font-sr-sans"
+                                         :class="$t('sr_displayCompactFont') === 'true' ? 'font-sr-sans' : 'font-sr'"
+                                         style="width: 340px;">
                                         {{ character.light_cone ? character.light_cone.name : '' }}
-                                    </el-text>
+                                    </div>
                                     <div class="text-gray-300 mr-2 text-sm absolute right-0 top-0">
                                         {{ $t('sr_superimposition') }}
                                         <span class="text-gray-100 font-sr-sans text-base">{{
@@ -575,11 +576,9 @@ const showCharDetails = (index: number) => {
                                         <div class="mt-1 flex flex-row">
                                             <StatIcon game="sr" :stat="relic.main_affix.field" fill="#d1d5db"
                                                       class="h-5 w-5 mr-2" style="margin-top: 6px;"/>
-                                            <el-text class="text-gray-200 text-lg" truncated style="max-width: 220px;">
-                                                {{
-                                                    relic.main_affix.name
-                                                }}
-                                            </el-text>
+                                            <div class="text-gray-200 text-lg truncated" style="max-width: 220px">
+                                                {{ relic.main_affix.name }}
+                                            </div>
                                         </div>
                                         <div>
                                             <span class="text-gray-200 text-3xl ml-2 font-sr-sans">{{
@@ -691,5 +690,9 @@ const showCharDetails = (index: number) => {
 
 .disabled {
     @apply bg-gray-200 opacity-30 pointer-events-none
+}
+
+.truncated {
+    @apply inline-block max-w-full overflow-ellipsis whitespace-nowrap overflow-hidden;
 }
 </style>

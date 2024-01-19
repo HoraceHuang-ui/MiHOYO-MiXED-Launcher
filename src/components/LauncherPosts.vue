@@ -24,11 +24,10 @@ const openLink = (url: string) => {
                     <div v-for="post in postTypeMap.get('POST_TYPE_INFO')"
                          class="w-full justify-between flex flex-row p-1 pl-2 hover:bg-white rounded hover:shadow-md transition-all cursor-default"
                          style="height: 28px;" @click="openLink(post.url)">
-                        <el-text class=" mr-1" truncated style="max-width: 320px;">{{
-                                post['tittle']
-                            }}
-                        </el-text>
-                        <el-text size="small" class=" font-sans font-normal">{{ post['show_time'] }}</el-text>
+                        <div class="mr-1 truncated text-sm mt-0.5" style="max-width: 320px;">
+                            {{ post['tittle'] }}
+                        </div>
+                        <div class="text-sm font-sans font-normal"> {{ post['show_time'] }}</div>
                     </div>
                 </div>
             </el-scrollbar>
@@ -39,11 +38,10 @@ const openLink = (url: string) => {
                     <div v-for="post in postTypeMap.get('POST_TYPE_ACTIVITY')"
                          class="w-full justify-between flex flex-row p-1 pl-2 hover:bg-white rounded hover:shadow-md transition-all cursor-default"
                          style="height: 28px;" @click="openLink(post.url)">
-                        <el-text class=" mr-1" truncated style="max-width: 320px;">{{
-                                post['tittle']
-                            }}
-                        </el-text>
-                        <el-text size="small" class=" font-sans font-normal">{{ post['show_time'] }}</el-text>
+                        <div class="mr-1 truncated text-sm mt-0.5" style="max-width: 320px;">
+                            {{ post['tittle'] }}
+                        </div>
+                        <div class="text-sm font-sans font-normal"> {{ post['show_time'] }}</div>
                     </div>
                 </div>
             </el-scrollbar>
@@ -54,11 +52,10 @@ const openLink = (url: string) => {
                     <div v-for="post in postTypeMap.get('POST_TYPE_ANNOUNCE')"
                          class="w-full justify-between flex flex-row p-1 pl-2 hover:bg-white rounded hover:shadow-md transition-all cursor-default"
                          style="height: 28px;" @click="openLink(post.url)">
-                        <el-text class=" mr-1" truncated style="max-width: 320px;">{{
-                                post['tittle']
-                            }}
-                        </el-text>
-                        <el-text size="small" class=" font-sans font-normal">{{ post['show_time'] }}</el-text>
+                        <div class="mr-1 truncated text-sm mt-0.5" style="max-width: 320px;">
+                            {{ post['tittle'] }}
+                        </div>
+                        <div class="text-sm font-sans font-normal"> {{ post['show_time'] }}</div>
                     </div>
                 </div>
             </el-scrollbar>
@@ -70,4 +67,8 @@ const openLink = (url: string) => {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.truncated {
+    @apply inline-block max-w-full overflow-ellipsis whitespace-nowrap overflow-hidden;
+}
 </style>

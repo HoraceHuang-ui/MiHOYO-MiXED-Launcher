@@ -585,10 +585,10 @@ const findSkillIdByProud = (proudId: number): number => {
                                      :src="'https://enka.network/ui/' + character.equipment.weapon.assets.awakenIcon + '.png'"/>
                                 <div class="w-full h-full relative">
                                     <div class="flex flex-row justify-between ml-2 mt-4">
-                                        <el-text truncated class="text-gray-200 font-gs mt-1"
-                                                 style="max-width: 300px; font-size: 1.4rem; line-height: 2rem;">
+                                        <div class="text-gray-200 font-gs mt-1 truncated"
+                                             style="max-width: 300px; font-size: 1.4rem; line-height: 2rem;">
                                             {{ character.equipment.weapon.name }}
-                                        </el-text>
+                                        </div>
                                         <div
                                             class="absolute right-1 bottom-1 text-gray-100 rounded-full bg-opacity-20 bg-white px-2">
                                             <span class="font-gs">{{ character.equipment.weapon.level }} / </span>
@@ -744,5 +744,9 @@ const findSkillIdByProud = (proudId: number): number => {
 
 .disabled {
     @apply bg-gray-200 opacity-30 pointer-events-none
+}
+
+.truncated {
+    @apply inline-block max-w-full overflow-ellipsis whitespace-nowrap overflow-hidden;
 }
 </style>
