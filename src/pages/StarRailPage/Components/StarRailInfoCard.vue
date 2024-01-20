@@ -8,6 +8,7 @@ import {AttributeInfo, CharacterInfo, FormattedApiInfo, RelicSetInfo} from '../.
 import {useDialog} from '../../../utils/template-dialog'
 import SRCharDetailsDialog from "./SRCharDetailsDialog.vue";
 import MyTag from "../../../components/MyTag.vue";
+import ScrollWrapper from "../../../components/ScrollWrapper.vue";
 
 // import rankMap from '../textMaps/character_ranks.json' with { type: 'json' }
 
@@ -297,19 +298,23 @@ const showCharDetails = (index: number) => {
                         <i class="bi bi-chevron-left text-lg text-center"/>
                     </div>
                 </div>
-                <el-scrollbar ref="charsScrollbar" class="flex flex-row justify-center" noresize style="width: 39%;">
-                    <div class="flex flex-row z-50 relative flex-nowrap w-max">
-                        <div v-for="(character, index) in playerInfo.characters" class="relative w-12 h-12"
-                             @click="showcaseIdx = index">
-                            <div class="absolute bottom-0 w-9 h-9 border-2 rounded-full bg-white transition-all"
-                                 :class="{ 'border-blue-600 border-3': showcaseIdx == index }"
-                                 style="left: 10px;"></div>
-                            <img
-                                class="absolute bottom-0 char-side-icon rounded-full ml-2 w-9 h-9 hover:transform hover:scale-110 hover:-translate-y-1 active:scale-100 active:translate-y-0 transition-all object-cover"
-                                :src="apiUrl + character.icon"/>
+
+                <ScrollWrapper ref="charsScrollbar" class="flex flex-row justify-center" width="39%" :no-resize="true"
+                               show-bar="never">
+                    <div class="flex flex-row justify-center">
+                        <div class="flex flex-row flex-nowrap w-max">
+                            <div v-for="(character, index) in playerInfo.characters" class="relative w-12 h-12 z-50"
+                                 @click="showcaseIdx = index">
+                                <div class="absolute bottom-0 w-9 h-9 border-2 rounded-full bg-white transition-all"
+                                     :class="{ 'border-blue-600 border-3': showcaseIdx == index }"
+                                     style="left: 10px;"></div>
+                                <img
+                                    class="absolute bottom-0 char-side-icon rounded-full ml-2 w-9 h-9 hover:transform hover:scale-110 hover:-translate-y-1 active:scale-100 active:translate-y-0 transition-all object-cover"
+                                    :src="apiUrl + character.icon"/>
+                            </div>
                         </div>
                     </div>
-                </el-scrollbar>
+                </ScrollWrapper>
                 <div class="relative z-50" style="width: 30.5%;">
                     <div
                         class="absolute left-2 top-3 rounded-full w-9 h-9 pt-1 bg-white hover:bg-gray-200 active:translate-x-1 transition-all bg-opacity-80"

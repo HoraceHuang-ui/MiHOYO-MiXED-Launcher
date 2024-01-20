@@ -11,8 +11,8 @@ const props = defineProps({
         default: '100%'
     },
     showBar: {
-        type: Boolean,
-        default: true
+        type: String,
+        default: 'hover'
     },
     scrollPadding: {
         type: Number,
@@ -32,6 +32,7 @@ const emit = defineEmits(['scroll'])
 
 const outerRef = ref()
 const innerRef = ref()
+const hoverShowBar = ref(false)
 
 const trackHeight = ref(0)
 const wrapContentHeight = ref(0)
@@ -59,13 +60,12 @@ const barWidth = computed(() => {
 })
 
 const onScroll = (e: Event) => {
-    const target: HTMLDivElement = e.target
-    translateX.value = target.scrollLeft * widthPre.value
-    translateY.value = target.scrollTop * heightPre.value
+    translateX.value = (e.target as HTMLDivElement).scrollLeft * widthPre.value
+    translateY.value = (e.target as HTMLDivElement).scrollTop * heightPre.value
 
     emit('scroll', {
-        left: target.scrollLeft,
-        top: target.scrollTop
+        left: (e.target as HTMLDivElement).scrollLeft,
+        top: (e.target as HTMLDivElement).scrollTop
     })
 }
 
@@ -149,6 +149,17 @@ const outerResizeObserver = new ResizeObserver(() => {
     }
 })
 
+const onMouseEnter = () => {
+    if (props.showBar === 'hover') {
+        hoverShowBar.value = true
+    }
+}
+const onMouseLeave = () => {
+    if (props.showBar === 'hover') {
+        hoverShowBar.value = false
+    }
+}
+
 onMounted(() => {
     wrapContentWidth.value = innerRef.value.scrollWidth
     wrapContentHeight.value = innerRef.value.scrollHeight
@@ -180,7 +191,7 @@ defineExpose({
 
 <template>
     <div class="overflow-hidden" :style="{ height: height, width: width }">
-        <div class="h-full w-full relative overflow-hidden">
+        <div class="h-full w-full relative overflow-hidden" @mouseenter="onMouseEnter" @mouseleave="onMouseLeave">
             <div ref="outerRef" class="h-full w-full overflow-scroll" @scroll="onScroll">
                 <div ref="innerRef">
                     <slot/>
@@ -188,26 +199,28 @@ defineExpose({
             </div>
             <div class="absolute top-0 bottom-0 right-0.5 w-1.5 rounded-full z-50">
                 <div
-                    v-show="heightPre < 1 && showBar"
+                    v-if="heightPre < 1 && (showBar === 'always' || hoverShowBar || vMovingState)"
                     :style="{
                         height: barHeight + 'px',
                         transform:
                           `translate(0, ${scrollPadding + translateY - (translateY / (trackHeight - barHeight)) * 2 * scrollPadding}px)`
                       }"
                     style="transition-property: height, width; transition-duration: 0.2s"
-                    class="w-1 rounded-full bg-gray-600 opacity-40 hover:w-1.5 hover:opacity-100"
+                    class="w-1 rounded-full bg-gray-600 opacity-30 hover:w-1.5 hover:opacity-80"
+                    :class="vMovingState ? 'opacity-80 w-1.5' : ''"
                     @mousedown.stop.prevent="vMoveStart"
                 />
             </div>
             <div class="absolute bottom-0 left-0 right-0 h-1.5 rounded-full z-50">
-                <div v-show="widthPre < 1 && showBar"
+                <div v-if="widthPre < 1 && (showBar === 'always' || hoverShowBar || hMovingState)"
                      :style="{
                         width: barWidth + 'px',
                         transform:
                             `translate(${scrollPadding + translateX - (translateX / (trackWidth - barWidth)) * 2 * scrollPadding}px, 0)`
                      }"
                      style="transition-property: height, width; transition-duration: 0.2s"
-                     class="h-1 rounded-full bg-gray-600 opacity-40 hover:h-1.5 hover:opacity-100"
+                     class="h-1 rounded-full bg-gray-600 opacity-30 hover:h-1.5 hover:opacity-80"
+                     :class="hMovingState ? 'opacity-80 w-1.5' : ''"
                      @mousedown.stop.prevent="hMoveStart"
                 />
             </div>

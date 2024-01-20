@@ -397,7 +397,7 @@ const findSkillIdByProud = (proudId: number): number => {
                     </div>
                 </div>
                 <ScrollWrapper ref="charsScrollbar" class="flex flex-row justify-center" width="50%" :no-resize="true"
-                               :show-bar="false">
+                               show-bar="never">
                     <div class="flex flex-row flex-nowrap w-max">
                         <div v-for="(character, index) in playerInfo.characters" class="relative w-12 h-12 z-50"
                              @click="showcaseIdx = index">

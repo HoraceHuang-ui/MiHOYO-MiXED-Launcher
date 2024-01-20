@@ -3,6 +3,7 @@ import {marked} from "marked";
 import {translate} from "../i18n";
 import MyCheckbox from "./MyCheckbox.vue";
 import {computed, ref} from 'vue'
+import ScrollWrapper from "./ScrollWrapper.vue";
 
 const props = defineProps({
     appVer: {
@@ -56,9 +57,9 @@ const offColor = computed(() => {
 
 <template>
     <div style="padding-left: 20px; padding-right: 20px;">
-        <el-scrollbar height="40vh">
+        <ScrollWrapper height="40vh" show-bar="always">
             <div v-html="updDialogContent"></div>
-        </el-scrollbar>
+        </ScrollWrapper>
         <div :class="gameStyle === 'hi3' ? 'text-red-400' : 'text-red-600'" style="margin-top: 10px;">
             {{ translate('updDialog_version') }}v{{ appVer }} 👉 {{
                 updInfo.tag_name

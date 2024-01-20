@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {ref} from 'vue'
 import {PostInfo} from "../types/launcher/launcherInfo";
+import ScrollWrapper from "./ScrollWrapper.vue";
 
 const props = defineProps({
     postTypeMap: {
@@ -19,7 +20,7 @@ const openLink = (url: string) => {
 <template>
     <el-tabs v-model="tabsModel">
         <el-tab-pane :label="$t('POST_TYPE_INFO')" name="aaa">
-            <el-scrollbar class="w-full h-full" max-height="62px">
+            <ScrollWrapper height="62px" :scroll-padding="0">
                 <div class="h-max pr-2 pb-2">
                     <div v-for="post in postTypeMap.get('POST_TYPE_INFO')"
                          class="w-full justify-between flex flex-row p-1 pl-2 hover:bg-white rounded hover:shadow-md transition-all cursor-default"
@@ -30,10 +31,10 @@ const openLink = (url: string) => {
                         <div class="text-sm font-sans font-normal"> {{ post['show_time'] }}</div>
                     </div>
                 </div>
-            </el-scrollbar>
+            </ScrollWrapper>
         </el-tab-pane>
         <el-tab-pane :label="$t('POST_TYPE_ACTIVITY')" name="bbb">
-            <el-scrollbar class="w-full h-full" max-height="62px">
+            <ScrollWrapper height="62px" :scroll-padding="0">
                 <div class="h-max pr-2 pb-2">
                     <div v-for="post in postTypeMap.get('POST_TYPE_ACTIVITY')"
                          class="w-full justify-between flex flex-row p-1 pl-2 hover:bg-white rounded hover:shadow-md transition-all cursor-default"
@@ -44,10 +45,10 @@ const openLink = (url: string) => {
                         <div class="text-sm font-sans font-normal"> {{ post['show_time'] }}</div>
                     </div>
                 </div>
-            </el-scrollbar>
+            </ScrollWrapper>
         </el-tab-pane>
         <el-tab-pane :label="$t('POST_TYPE_ANNOUNCE')" name="ccc">
-            <el-scrollbar class="w-full h-full" max-height="62px">
+            <ScrollWrapper height="62px" :scroll-padding="0">
                 <div class="h-max pr-2 pb-2">
                     <div v-for="post in postTypeMap.get('POST_TYPE_ANNOUNCE')"
                          class="w-full justify-between flex flex-row p-1 pl-2 hover:bg-white rounded hover:shadow-md transition-all cursor-default"
@@ -58,7 +59,7 @@ const openLink = (url: string) => {
                         <div class="text-sm font-sans font-normal"> {{ post['show_time'] }}</div>
                     </div>
                 </div>
-            </el-scrollbar>
+            </ScrollWrapper>
         </el-tab-pane>
     </el-tabs>
 </template>

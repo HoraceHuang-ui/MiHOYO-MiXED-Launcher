@@ -13,6 +13,7 @@ import {
 import {useDialog} from "../../utils/template-dialog";
 import UpdateDialogContent from "../../components/UpdateDialogContent.vue";
 import LoadingIcon from "../../components/LoadingIcon.vue";
+import ScrollWrapper from "../../components/ScrollWrapper.vue";
 
 const lang = ref<lang>('en_US')
 const dialogStyle = ref<dialogStyle>('gs')
@@ -213,7 +214,7 @@ const showClearDialog = () => {
             <img class="object-cover w-full h-full blur-xl opacity-25 scale-105"
                  :src="bgPath ? bgPath : '../../src/assets/gsbanner.png'"/>
         </div>
-        <el-scrollbar height="91vh" class="scroll-wrapper absolute z-40">
+        <ScrollWrapper height="91vh" class="scroll-wrapper absolute z-40">
             <div class="text-left px-10 pt-10 w-1/2">
 
                 <!-- GENERAL -->
@@ -292,7 +293,7 @@ const showClearDialog = () => {
                     </div>
                 </div>
             </div>
-        </el-scrollbar>
+        </ScrollWrapper>
     </div>
 </template>
 

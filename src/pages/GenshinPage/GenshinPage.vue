@@ -7,6 +7,7 @@ import GenshinInfoCard from "./Components/GenshinInfoCard.vue";
 import {useDialog} from "../../utils/template-dialog";
 import GenshinDialog from "./Components/GenshinDialog.vue";
 import GSImportDialog from "./Components/GSImportDialog.vue";
+import ScrollWrapper from "../../components/ScrollWrapper.vue";
 
 const gameName = translate('general_gs')
 
@@ -33,7 +34,7 @@ const launcherInfoReady = ref(false)
 const launcherInfoFailed = ref(false)
 const errMsg = ref('')
 const hideElements = ref(false)
-const scrollbarref = ref()
+const scrollBarRef = ref()
 
 const postTypeMap = new Map<string, PostInfo[]>()
 
@@ -169,8 +170,8 @@ const handleCommand = (command: string) => {
     }
 }
 
-const handleScroll = ({scrollTop}: Record<string, number>) => {
-    hideElements.value = scrollTop > 0;
+const handleScroll = ({top}: Record<string, number>) => {
+    hideElements.value = top > 0;
 }
 
 const router = useRouter()
@@ -215,7 +216,8 @@ const refresh = () => {
                        class="absolute left-16 top-96 z-50 rounded-xl transition-all backdrop-blur-md pl-3 pr-1 font-gs"
                        :class="hideElements ? 'opacity-0 -translate-y-2 pointer-events-none blur-md -translate-x-14 scale-110' : 'opacity-100 pointer-events-auto'"
                        style="height: 123px; width: 396px; background-color: rgb(255 255 255 / 0.7); transition-duration: 500ms;"/>
-        <el-scrollbar ref="scrollbarref" height="91vh" class="scroll-wrapper absolute z-40" @scroll="handleScroll">
+        <ScrollWrapper ref="scrollBarRef" height="91vh" class="scroll-wrapper absolute z-40" @scroll="handleScroll"
+                       show-bar="never">
             <div class="items-scroll flex flex-col content-center items-center w-full">
                 <div class="w-full flex flex-row justify-between">
                     <div class="w-1"></div>
@@ -267,7 +269,7 @@ const refresh = () => {
                 </div>
                 <GenshinInfoCard class="my-2 w-full mb-4 shadow-md"></GenshinInfoCard>
             </div>
-        </el-scrollbar>
+        </ScrollWrapper>
     </div>
 </template>
 
