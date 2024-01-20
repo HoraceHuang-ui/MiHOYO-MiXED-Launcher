@@ -18,7 +18,6 @@ const uidInput = ref('')
 let uid = '';
 const charsPage = ref(0);
 const pages = computed(() => {
-    console.log("character.length: ")
     return playerInfo.value.characters && playerInfo.value.characters.length > 10
         ? Math.floor((playerInfo.value.characters.length - 10) / 6 - 0.1) + 1
         : 0
@@ -81,7 +80,6 @@ const elementAssets = {
 const ascLevelMap = [20, 40, 50, 60, 70, 80, 90]
 
 const mergeToPlayerinfo = (newArr: any[]) => {
-    console.log("Updated characters length: ")
     for (let i = newArr.length - 1; i >= 0; i--) {
         let newChar = newArr[i]
         let exists = false;

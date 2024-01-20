@@ -43,7 +43,7 @@ const wrapperStyles: Record<string, any> = {
 const transformInfo = ref<Record<string, string>>({})
 
 const showTooltip = ref(false)
-let timer: number | undefined = undefined
+let timer: NodeJS.Timeout | number | undefined = undefined
 
 const hideTooltip = () => {
     showTooltip.value = false
