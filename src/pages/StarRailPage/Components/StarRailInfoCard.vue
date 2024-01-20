@@ -9,6 +9,7 @@ import {useDialog} from '../../../utils/template-dialog'
 import SRCharDetailsDialog from "./SRCharDetailsDialog.vue";
 import MyTag from "../../../components/MyTag.vue";
 import ScrollWrapper from "../../../components/ScrollWrapper.vue";
+import MyTooltip from "../../../components/MyTooltip.vue";
 
 // import rankMap from '../textMaps/character_ranks.json' with { type: 'json' }
 
@@ -355,10 +356,10 @@ const showCharDetails = (index: number) => {
                         </div>
                     </div>
                     <!-- 左下角星魂 -->
-                    <div class="absolute bottom-2 left-2 z-20">
+                    <div class="absolute bottom-2 left-2 z-50">
                         <div class="flex flex-col">
                             <div class="flex flex-row relative">
-                                <el-tooltip v-for="idx in 6" placement="top">
+                                <MyTooltip v-for="idx in 6" placement="top">
                                     <template #content>
                                         <div class=" max-w-lg" v-if="ranksReady">
                                             <div class="font-sr text-xl">
@@ -384,7 +385,7 @@ const showCharDetails = (index: number) => {
                                         <img src="../../../assets/locked.png"
                                              class="w-8 opacity-70 ml-2 bg-black rounded-full"/>
                                     </div>
-                                </el-tooltip>
+                                </MyTooltip>
                             </div>
                         </div>
                     </div>
@@ -512,9 +513,9 @@ const showCharDetails = (index: number) => {
                         </div>
                         <!-- 右侧第三块：行迹 -->
                         <div
-                            class="mt-2 px-2 py-3 w-full rounded-xl bg-black bg-opacity-20 backdrop-blur-md grid grid-cols-4 grid-rows-1">
+                            class="mt-2 px-2 py-3 w-full rounded-xl bg-black bg-opacity-20 backdrop-blur-md grid grid-cols-4 grid-rows-1 relative z-50">
                             <div v-for="idx in 4" class="h-full flex flex-row cursor-default">
-                                <el-tooltip placement="left">
+                                <MyTooltip placement="left" max-width="500px">
                                     <template #content>
                                         <div class="max-w-md">
                                             <div class="font-sr text-xl">
@@ -533,7 +534,7 @@ const showCharDetails = (index: number) => {
                                          :style="`border-color: ${character.element ? character.element.color : 'white'}`">
                                         <img :src="apiUrl + character.skills[idx - 1].icon"/>
                                     </div>
-                                </el-tooltip>
+                                </MyTooltip>
                                 <div
                                     v-if="character.skill_trees[idx - 1].level >= character.skill_trees[idx - 1].max_level"
                                     class="ml-2 mt-2 text-orange-300 text-xl align-middle h-full font-sr-sans">MAX
@@ -559,7 +560,7 @@ const showCharDetails = (index: number) => {
                         </div>
                         <!-- 右侧第四块：遗器 -->
                         <el-carousel v-if="character.relics && character.relics.length > 0"
-                                     class="mt-2 w-full h-40 rounded-xl bg-black bg-opacity-20 backdrop-blur-md"
+                                     class="mt-2 w-full h-40 rounded-xl bg-black bg-opacity-20 backdrop-blur-md relative z-20"
                                      arrow="never"
                                      :autoplay="false">
                             <el-carousel-item v-for="relic in character.relics"

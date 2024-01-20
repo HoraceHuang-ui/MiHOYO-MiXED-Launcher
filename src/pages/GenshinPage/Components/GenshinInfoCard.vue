@@ -10,6 +10,7 @@ import {useDialog} from "../../../utils/template-dialog";
 import GSCharDetailsOverlay from "./GSCharDetailsOverlay.vue";
 import MyTag from "../../../components/MyTag.vue";
 import ScrollWrapper from "../../../components/ScrollWrapper.vue";
+import MyTooltip from "../../../components/MyTooltip.vue";
 
 const playerInfo = ref<any>()
 
@@ -455,10 +456,10 @@ const findSkillIdByProud = (proudId: number): number => {
                             </div>
                         </div>
                         <!-- 左下角天赋、命之座 -->
-                        <div class="absolute bottom-2 left-2 z-20">
+                        <div class="absolute bottom-2 left-2 z-50">
                             <div class="flex flex-col">
                                 <div class="flex flex-row relative">
-                                    <el-tooltip v-for="skill in character.skills" placement="top">
+                                    <MyTooltip v-for="skill in character.skills" placement="top">
                                         <template #content>
                                             <span class="font-gs text-base"> {{ skill.name }} </span>
                                         </template>
@@ -479,10 +480,10 @@ const findSkillIdByProud = (proudId: number): number => {
                                                     }}</span>
                                             </div>
                                         </div>
-                                    </el-tooltip>
+                                    </MyTooltip>
                                 </div>
                                 <div class="flex flex-row relative">
-                                    <el-tooltip v-for="idx in 6" placement="top">
+                                    <MyTooltip v-for="idx in 6" placement="top">
                                         <template #content>
                                             <span class="font-gs text-base point"> {{
                                                     idx <=
@@ -501,7 +502,7 @@ const findSkillIdByProud = (proudId: number): number => {
                                             <img src="../../../assets/locked.png"
                                                  class="w-8 opacity-70 ml-2 bg-black rounded-full"/>
                                         </div>
-                                    </el-tooltip>
+                                    </MyTooltip>
                                 </div>
                             </div>
                         </div>

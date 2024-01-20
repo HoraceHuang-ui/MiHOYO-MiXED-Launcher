@@ -3,6 +3,7 @@ import {translate} from "../../../i18n"
 import {ref} from 'vue'
 import Honkai3Dialog from "./Honkai3Dialog.vue";
 import MyCheckbox from "../../../components/MyCheckbox.vue";
+import MyTooltip from "../../../components/MyTooltip.vue";
 
 const props = defineProps({
     onOk: {
@@ -93,13 +94,13 @@ const onDialogOk = () => {
             <div class="flex flex-row">
                 <MyCheckbox v-model="combinePaths" :text="translate('general_defaultStructure')" on-color="#4CC5FE"
                             off-color="#dddddd"/>
-                <el-tooltip placement="right"
-                            :content="`<${translate('general_launcherDirectory')}>\\Games\\BH3.exe`">
+                <MyTooltip placement="right" max-width="500px"
+                           :content="`<${translate('general_launcherDirectory')}>\\Games\\BH3.exe`">
                     <div
                         class="ml-2 rounded-full w-5 h-5 bg-gray-400 text-white text-center font-bold text-sm cursor-help"
                         style="margin-top: 5px;">?
                     </div>
-                </el-tooltip>
+                </MyTooltip>
             </div>
         </div>
     </Honkai3Dialog>
