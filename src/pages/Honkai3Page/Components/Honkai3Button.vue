@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import {translate} from "../../../i18n";
+import {PropType} from "vue";
 
 const props = defineProps({
     // 'ok' | 'cancel'
     type: {
-        type: String,
+        type: String as PropType<'ok' | 'cancel'>,
         default: 'ok'
     },
     text: {

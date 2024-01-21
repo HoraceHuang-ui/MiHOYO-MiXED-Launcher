@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onMounted, ref} from 'vue'
+import {onMounted, PropType, ref, VNode} from 'vue'
 import GenshinButton from "./GenshinButton.vue";
 
 const props = defineProps({
@@ -38,6 +38,7 @@ const props = defineProps({
         default: true
     },
     vnode: {
+        type: Object as PropType<VNode>,
         default: undefined
     }
 })

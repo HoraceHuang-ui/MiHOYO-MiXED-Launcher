@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import {PropType, ref} from "vue";
 
 const props = defineProps({
     content: {
@@ -7,7 +7,7 @@ const props = defineProps({
         required: false
     },
     placement: {
-        type: String,
+        type: String as PropType<'top' | 'bottom' | 'left' | 'right'>,
         default: 'top'
     },
     maxWidth: {

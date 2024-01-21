@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, onMounted, ref} from 'vue'
+import {computed, onMounted, PropType, ref} from 'vue'
 
 const props = defineProps({
     height: {
@@ -11,7 +11,7 @@ const props = defineProps({
         default: '100%'
     },
     showBar: {
-        type: String,
+        type: String as PropType<'always' | 'hover' | 'never'>,
         default: 'hover'
     },
     scrollPadding: {

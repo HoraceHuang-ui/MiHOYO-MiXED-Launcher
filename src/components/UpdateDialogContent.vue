@@ -2,7 +2,7 @@
 import {marked} from "marked";
 import {translate} from "../i18n";
 import MyCheckbox from "./MyCheckbox.vue";
-import {computed, ref} from 'vue'
+import {computed, PropType, ref} from 'vue'
 import ScrollWrapper from "./ScrollWrapper.vue";
 
 const props = defineProps({
@@ -23,7 +23,7 @@ const props = defineProps({
         default: false
     },
     gameStyle: {
-        type: String,
+        type: String as PropType<'gs' | 'sr' | 'hi3'>,
         default: 'gs'
     }
 })

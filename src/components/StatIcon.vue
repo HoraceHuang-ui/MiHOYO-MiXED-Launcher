@@ -39,10 +39,11 @@ import sr_quantumIcon from '../assets/statIcons/sr/quantumIcon.vue'
 import sr_physicalIcon from '../assets/statIcons/sr/physicalIcon.vue'
 import sr_lightningIcon from '../assets/statIcons/sr/lightningIcon.vue'
 import sr_outHealingIcon from '../assets/statIcons/sr/outHealingIcon.vue'
+import {PropType} from "vue";
 
 const props = defineProps({
     game: {
-        type: String,
+        type: String as PropType<'gs' | 'sr'>,
         required: true
     },
     stat: {
