@@ -36,10 +36,24 @@ export const currentLocale = () => {
 }
 
 export const translate = (key: string, bindings?: any) => {
-    if (!key) {
+    if (!key || key === '') {
         return ''
     }
     return i18n.global.t(key, bindings)
+}
+
+export const translateMultiple = (keys: string[]) => {
+    if (!keys || keys.length == 0) {
+        return undefined
+    }
+
+    let res: string[] = []
+
+    for (let i = 0; i < keys.length; i++) {
+        res.push(translate(keys[i]))
+    }
+
+    return res
 }
 
 export const translateWithLocale = (key: string, locale: lang, bindings?: any) => {

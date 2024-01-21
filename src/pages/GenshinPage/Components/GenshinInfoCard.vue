@@ -434,7 +434,6 @@ const findSkillIdByProud = (proudId: number): number => {
                         <!-- 立绘 -->
                         <div class="left-gacha w-2/3 inline-block object-cover absolute left-0 bottom-0 z-10"
                              style="height: 115%;">
-                            <!-- :src="'https://enka.network/ui/' + (character.costumeId != '' ? character.assets.costumes[0].art : character.assets.gachaIcon) + '.png'" -->
                             <img
                                 class="gacha-mask inline-block object-cover bottom-0 left-0 absolute z-10 h-full pointer-events-none"
                                 loading="lazy" :src="'https://enka.network/ui/' + character.assets.gachaIcon + '.png'"/>
