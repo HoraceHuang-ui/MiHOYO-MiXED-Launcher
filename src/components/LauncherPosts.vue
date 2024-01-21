@@ -10,7 +10,8 @@ const props = defineProps({
     }
 })
 
-const tabsModel = ref('aaa')
+const tabsModel = ref('POST_TYPE_INFO')
+const keys = ['POST_TYPE_INFO', 'POST_TYPE_ACTIVITY', 'POST_TYPE_ANNOUNCE']
 
 const openLink = (url: string) => {
     window.electron.openExtLink(url)
@@ -19,38 +20,10 @@ const openLink = (url: string) => {
 
 <template>
     <el-tabs v-model="tabsModel">
-        <el-tab-pane :label="$t('POST_TYPE_INFO')" name="aaa">
+        <el-tab-pane v-for="key in keys" :key="key" :label="$t(key)" :name="key">
             <ScrollWrapper height="62px" :scroll-padding="0">
                 <div class="h-max pr-2 pb-2">
-                    <div v-for="post in postTypeMap.get('POST_TYPE_INFO')"
-                         class="w-full justify-between flex flex-row p-1 pl-2 hover:bg-white rounded hover:shadow-md transition-all cursor-default"
-                         style="height: 28px;" @click="openLink(post.url)">
-                        <div class="mr-1 truncated text-sm mt-0.5" style="max-width: 320px;">
-                            {{ post['tittle'] }}
-                        </div>
-                        <div class="text-sm font-sans font-normal"> {{ post['show_time'] }}</div>
-                    </div>
-                </div>
-            </ScrollWrapper>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('POST_TYPE_ACTIVITY')" name="bbb">
-            <ScrollWrapper height="62px" :scroll-padding="0">
-                <div class="h-max pr-2 pb-2">
-                    <div v-for="post in postTypeMap.get('POST_TYPE_ACTIVITY')"
-                         class="w-full justify-between flex flex-row p-1 pl-2 hover:bg-white rounded hover:shadow-md transition-all cursor-default"
-                         style="height: 28px;" @click="openLink(post.url)">
-                        <div class="mr-1 truncated text-sm mt-0.5" style="max-width: 320px;">
-                            {{ post['tittle'] }}
-                        </div>
-                        <div class="text-sm font-sans font-normal"> {{ post['show_time'] }}</div>
-                    </div>
-                </div>
-            </ScrollWrapper>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('POST_TYPE_ANNOUNCE')" name="ccc">
-            <ScrollWrapper height="62px" :scroll-padding="0">
-                <div class="h-max pr-2 pb-2">
-                    <div v-for="post in postTypeMap.get('POST_TYPE_ANNOUNCE')"
+                    <div v-for="post in postTypeMap.get(key)"
                          class="w-full justify-between flex flex-row p-1 pl-2 hover:bg-white rounded hover:shadow-md transition-all cursor-default"
                          style="height: 28px;" @click="openLink(post.url)">
                         <div class="mr-1 truncated text-sm mt-0.5" style="max-width: 320px;">
