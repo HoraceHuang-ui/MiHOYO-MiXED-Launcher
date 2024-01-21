@@ -14,8 +14,8 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:modelValue'])
 
-const panesWrapper = ref<HTMLDivElement>(null)
-let panes: HTMLCollection = undefined
+const panesWrapper = ref<HTMLDivElement>()
+let panes: HTMLCollection
 
 const selectTab = (idx: number) => {
     if (idx == props.modelValue) {
@@ -24,26 +24,29 @@ const selectTab = (idx: number) => {
     emit('update:modelValue', idx)
 }
 
-const refreshState = (showId: number) => {
+const refreshState = () => {
     if (panes) {
         for (let i = 0; i < panes.length; i++) {
             if (i == props.modelValue) {
                 continue
             }
-            panes[i].style.display = 'none'
+            (panes.item(i) as HTMLElement)!!.style.display = 'none'
         }
     }
 }
 
 watch(() => props.modelValue, (newId: number, oldId: number) => {
+    const newItem = panes.item(newId) as HTMLElement
+    const oldItem = panes.item(oldId) as HTMLElement
+
     if (panes) {
-        panes.item(oldId).style.display = 'none'
-        panes.item(newId).style.display = 'block'
+        oldItem!!.style.display = 'none'
+        newItem!!.style.display = 'block'
     }
 })
 
 onMounted(() => {
-    panes = panesWrapper.value.children
+    panes = panesWrapper.value!!.children
     refreshState()
 })
 </script>
