@@ -6,7 +6,6 @@ import router from "./router/router"
 import i18n from './i18n'
 import './assets/styles/fonts.css'
 import './assets/styles/traffic.scss'
-import 'element-plus/theme-chalk/dark/css-vars.css'
 
 const app = createApp(App)
 

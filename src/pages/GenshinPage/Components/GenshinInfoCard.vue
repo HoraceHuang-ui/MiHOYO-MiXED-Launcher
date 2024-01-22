@@ -4,7 +4,6 @@ import {useRouter} from 'vue-router'
 import {translate} from '../../../i18n'
 import StatIcon from '../../../components/StatIcon.vue'
 import {Artifact} from "enkanetwork.js"
-import {parseInt} from "lodash-es"
 import CustomUIDInput from "../../../components/CustomUIDInput.vue";
 import {useDialog} from "../../../utils/template-dialog";
 import GSCharDetailsOverlay from "./GSCharDetailsOverlay.vue";
