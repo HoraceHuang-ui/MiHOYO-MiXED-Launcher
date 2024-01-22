@@ -559,12 +559,12 @@ const showCharDetails = (index: number) => {
                             </div>
                         </div>
                         <!-- 右侧第四块：遗器 -->
-                        <el-carousel v-if="character.relics && character.relics.length > 0"
-                                     class="mt-2 w-full h-40 rounded-xl bg-black bg-opacity-20 backdrop-blur-md relative z-20"
-                                     arrow="never"
-                                     :autoplay="false">
-                            <el-carousel-item v-for="relic in character.relics"
-                                              class="pb-2 pr-2 pl-4 flex flex-row h-40 text-gray-200">
+                        <MyCarousel v-if="character.relics && character.relics.length > 0"
+                                    class="mt-2 w-full h-40 rounded-xl bg-black bg-opacity-20 backdrop-blur-md relative z-20"
+                                    show-arrow="never" show-indicator="always"
+                                    :autoplay="false">
+                            <div v-for="relic in character.relics"
+                                 class="pb-2 pr-2 pl-4 w-full flex flex-row h-40 text-gray-200">
                                 <img style="height: 100%; margin-left: -20px;" class="artifact-mask w-36 object-cover"
                                      :src="apiUrl + relic.icon"/>
                                 <div class=" w-full h-full relative">
@@ -618,8 +618,8 @@ const showCharDetails = (index: number) => {
                                     <div v-else class="mt-2 text-left text-gray-300 text-lg">{{ $t('sr_noSubstats') }}
                                     </div>
                                 </div>
-                            </el-carousel-item>
-                        </el-carousel>
+                            </div>
+                        </MyCarousel>
                         <div v-else
                              class="mt-2 w-full h-40 rounded-xl pt-16 text-gray-200 text-center align-middle bg-black bg-opacity-20 backdrop-blur-md">
                             {{ $t('sr_noRelics') }}

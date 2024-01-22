@@ -11,6 +11,7 @@ import GSCharDetailsOverlay from "./GSCharDetailsOverlay.vue";
 import MyTag from "../../../components/MyTag.vue";
 import ScrollWrapper from "../../../components/ScrollWrapper.vue";
 import MyTooltip from "../../../components/MyTooltip.vue";
+import MyCarousel from "../../../components/MyCarousel.vue";
 
 const playerInfo = ref<any>()
 
@@ -632,13 +633,13 @@ const findSkillIdByProud = (proudId: number): number => {
                                 </div>
                             </div>
                             <!-- 详情第三块：圣遗物 -->
-                            <el-carousel
+                            <MyCarousel
                                 v-if="character.equipment.artifacts && character.equipment.artifacts.length > 0"
-                                class="mt-2 w-full h-40 rounded-xl bg-opacity-20 bg-black backdrop-blur-lg"
-                                arrow="never"
+                                class="relative mt-2 w-full h-40 rounded-xl bg-opacity-20 bg-black backdrop-blur-lg"
+                                show-arrow="never" show-indicator="always"
                                 :autoplay="false">
-                                <el-carousel-item v-for="artifact in character.equipment.artifacts"
-                                                  class="pb-2 pr-2 pl-4 flex flex-row h-40 text-gray-200">
+                                <div v-for="artifact in character.equipment.artifacts"
+                                     class="pb-2 pr-2 pl-4 flex flex-row h-40 text-gray-200 w-full">
                                     <img style="height: 140%; margin-left: -15px; margin-top: -45px;"
                                          class="artifact-mask w-28 object-cover"
                                          :src="'https://enka.network/ui/' + artifact.icon + '.png'"/>
@@ -684,8 +685,8 @@ const findSkillIdByProud = (proudId: number): number => {
                                             }}
                                         </div>
                                     </div>
-                                </el-carousel-item>
-                            </el-carousel>
+                                </div>
+                            </MyCarousel>
                             <div v-else
                                  class="mt-2 w-full h-40 rounded-xl pt-16 text-gray-200 text-center align-middle bg-opacity-20 bg-black backdrop-blur-lg">
                                 {{ $t('gs_noArtifacts') }}
