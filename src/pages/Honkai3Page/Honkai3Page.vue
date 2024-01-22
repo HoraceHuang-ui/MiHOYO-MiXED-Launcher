@@ -218,9 +218,7 @@ const refresh = () => {
                                 }}
                             </button>
                             <MyDropdown class="h-full px-1" @command="handleCommand"
-                                        item-class="text-sm"
-                                        placement="top"
-                                        :width-digit="200" width-unit="px"
+                                        item-class="text-sm" placement="top" width="200px"
                                         :items="[$t('general_openOfficialLauncher'), $t('general_clearGamePath')]">
                                 <button
                                     class="text-xl font-sr text-gray-900 px-2 mt-1 h-14 rounded-full hover:bg-yellow-500 transition-all">

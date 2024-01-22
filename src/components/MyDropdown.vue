@@ -13,13 +13,9 @@ const props = defineProps({
         type: String as PropType<'top' | 'bottom' | 'left' | 'right'>,
         default: 'bottom'
     },
-    widthDigit: {
-        type: Number,
-        default: 100,
-    },
-    widthUnit: {
+    width: {
         type: String,
-        default: '%'
+        default: '100%'
     }
 })
 
@@ -55,10 +51,13 @@ let timer: NodeJS.Timeout | number | undefined = undefined
 const transformX = computed(() => {
     if (props.placement === 'top' || props.placement === 'bottom') {
         return {
-            transform: `translateX(-${props.widthDigit / 2}${props.widthUnit})`
+            transform: 'translateX(-50%)'
+        }
+    } else {
+        return {
+            transform: 'translateY(-50%)'
         }
     }
-    return undefined
 })
 
 const hideMenu = () => {
@@ -89,7 +88,7 @@ const onMouseLeave = () => {
 
         <Transition name="fade">
             <div class="absolute min-w-full min-h-full overflow-visible flex flex-row z-50"
-                 :style="{...wrapperStyles[placement], width: widthDigit + widthUnit}" v-if="showMenu">
+                 :style="{...wrapperStyles[placement], width: width}" v-if="showMenu">
                 <div class="p-1 bg-white rounded-xl w-fit h-fit min-w-full text-center shadow-md"
                      :style="transformX"
                      @mouseenter="onMouseEnter" @mouseleave="onMouseLeave">

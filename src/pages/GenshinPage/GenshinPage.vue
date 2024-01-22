@@ -232,7 +232,7 @@ const refresh = () => {
                                 {{ $t("general_launchGame") }}
                             </button>
                             <MyDropdown class="h-full px-1 text-sm" @command="handleCommand" placement="top"
-                                        :width-digit="200" width-unit="px"
+                                        width="200px"
                                         :items="[$t('general_openOfficialLauncher'), $t('general_clearGamePath'), $t('general_clearProfileInfo')]">
                                 <button
                                     class="text-xl text-gray-900 px-2 h-16 rounded-full hover:bg-yellow-500 transition-all">
