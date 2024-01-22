@@ -78,6 +78,6 @@ onMounted(() => {
 }
 
 .tab-unselected {
-    @apply cursor-pointer hover:bg-blue-100;
+    @apply cursor-pointer hover:bg-blue-100 hover:text-blue-600;
 }
 </style>

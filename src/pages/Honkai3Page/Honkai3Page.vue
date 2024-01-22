@@ -142,8 +142,8 @@ const handleCommand = (idx: number) => {
             window.store.delete('hi3LauncherPath')
             window.store.delete('hi3GamePath')
             window.store.delete('honkai3Upd')
-            gsLauncherPath.value = ''
-            gsGamePath.value = ''
+            hiLauncherPath.value = ''
+            hiGamePath.value = ''
             break
         // case 'clearPlayerinfo':
         //     window.store.delete('honkai3Info')

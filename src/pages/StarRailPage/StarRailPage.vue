@@ -137,14 +137,14 @@ const handleCommand = (idx: number) => {
 
     switch (commands[idx]) {
         case 'openLauncher':
-            window.child.exec(gsLauncherPath.value)
+            window.child.exec(srLauncherPath.value)
             break
         case 'clearPath':
             window.store.delete('srLauncherPath')
             window.store.delete('srGamePath')
             window.store.delete('starRailUpd')
-            gsLauncherPath.value = ''
-            gsGamePath.value = ''
+            srLauncherPath.value = ''
+            srGamePath.value = ''
             break
         case 'clearPlayerinfo':
             window.store.delete('starRailInfo')
