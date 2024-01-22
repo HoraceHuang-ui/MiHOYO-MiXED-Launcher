@@ -8,6 +8,7 @@ import StarRailDialog from "./Components/StarRailDialog.vue";
 import SRImportDialog from "./Components/SRImportDialog.vue";
 import {LauncherInfo, PostInfo} from "../../types/launcher/launcherInfo";
 import ScrollWrapper from "../../components/ScrollWrapper.vue";
+import MyDropdown from "../../components/MyDropdown.vue";
 
 const gameName = translate('general_sr')
 
@@ -131,17 +132,19 @@ const srLaunch = async () => {
     }
 }
 
-const handleCommand = (command: string) => {
-    switch (command) {
+const handleCommand = (idx: number) => {
+    const commands = ['openLauncher', 'clearPath', 'clearPlayerinfo']
+
+    switch (commands[idx]) {
         case 'openLauncher':
-            window.child.exec(srLauncherPath.value)
+            window.child.exec(gsLauncherPath.value)
             break
         case 'clearPath':
             window.store.delete('srLauncherPath')
             window.store.delete('srGamePath')
             window.store.delete('starRailUpd')
-            srLauncherPath.value = ''
-            srGamePath.value = ''
+            gsLauncherPath.value = ''
+            gsGamePath.value = ''
             break
         case 'clearPlayerinfo':
             window.store.delete('starRailInfo')
@@ -210,28 +213,16 @@ const refresh = () => {
                                     $t('general_launchGame')
                                 }}
                             </button>
-                            <el-dropdown class="h-full px-1" trigger="click" @command="handleCommand">
+                            <MyDropdown class="h-full px-1" @command="handleCommand"
+                                        item-class="font-sr-sans text-sm"
+                                        placement="top"
+                                        :width-digit="200" width-unit="px"
+                                        :items="[$t('general_openOfficialLauncher'), $t('general_clearGamePath'), $t('general_clearProfileInfo')]">
                                 <button
-                                    class="text-xl text-gray-900 font-bold px-2 mt-1 h-14 rounded-full hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all">
+                                    class="text-xl text-gray-900 px-2 mt-1 h-14 rounded-full hover:bg-yellow-500 transition-all">
                                     …
                                 </button>
-                                <template #dropdown>
-                                    <el-dropdown-menu>
-                                        <el-dropdown-item command="openLauncher">{{
-                                                $t('general_openOfficialLauncher')
-                                            }}
-                                        </el-dropdown-item>
-                                        <el-dropdown-item command="clearPath" divided>{{
-                                                $t('general_clearGamePath')
-                                            }}
-                                        </el-dropdown-item>
-                                        <el-dropdown-item command="clearPlayerinfo">{{
-                                                $t('general_clearProfileInfo')
-                                            }}
-                                        </el-dropdown-item>
-                                    </el-dropdown-menu>
-                                </template>
-                            </el-dropdown>
+                            </MyDropdown>
                         </div>
                     </div>
                     <div v-else>

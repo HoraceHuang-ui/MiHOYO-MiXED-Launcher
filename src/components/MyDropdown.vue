@@ -1,20 +1,29 @@
 <script setup lang="ts">
-import {PropType, ref} from "vue";
+import {computed, PropType, ref} from "vue";
 
 const props = defineProps({
-    content: {
-        type: String,
-        required: false
+    items: {
+        type: Array as PropType<String[]>,
+        required: true
+    },
+    itemClass: {
+        type: String
     },
     placement: {
         type: String as PropType<'top' | 'bottom' | 'left' | 'right'>,
-        default: 'top'
+        default: 'bottom'
     },
-    maxWidth: {
+    widthDigit: {
+        type: Number,
+        default: 100,
+    },
+    widthUnit: {
         type: String,
-        default: '300px'
+        default: '%'
     }
 })
+
+defineEmits(['command'])
 
 const wrapperStyles: Record<string, any> = {
     top: {
@@ -40,18 +49,27 @@ const wrapperStyles: Record<string, any> = {
     }
 }
 
-const showTooltip = ref(false)
+const showMenu = ref(false)
 let timer: NodeJS.Timeout | number | undefined = undefined
 
-const hideTooltip = () => {
-    showTooltip.value = false
+const transformX = computed(() => {
+    if (props.placement === 'top' || props.placement === 'bottom') {
+        return {
+            transform: `translateX(-${props.widthDigit / 2}${props.widthUnit})`
+        }
+    }
+    return undefined
+})
+
+const hideMenu = () => {
+    showMenu.value = false
     clearTimeout(timer)
     timer = undefined
 }
 
 const onMouseEnter = () => {
-    if (!showTooltip.value) {
-        showTooltip.value = true
+    if (!showMenu.value) {
+        showMenu.value = true
     } else {
         clearTimeout(timer)
         timer = undefined
@@ -59,7 +77,7 @@ const onMouseEnter = () => {
 }
 
 const onMouseLeave = () => {
-    timer = setTimeout(hideTooltip, 500)
+    timer = setTimeout(hideMenu, 500)
 }
 </script>
 
@@ -71,11 +89,16 @@ const onMouseLeave = () => {
 
         <Transition name="fade">
             <div class="absolute min-w-full min-h-full overflow-visible flex flex-row z-50"
-                 :style="{...wrapperStyles[placement], width: maxWidth}" v-if="showTooltip">
-                <div class="p-2 bg-opacity-80 bg-black rounded-lg text-gray-100 w-fit h-fit text-left"
+                 :style="{...wrapperStyles[placement], width: widthDigit + widthUnit}" v-if="showMenu">
+                <div class="p-1 bg-white rounded-xl w-fit h-fit min-w-full text-center shadow-md"
+                     :style="transformX"
                      @mouseenter="onMouseEnter" @mouseleave="onMouseLeave">
-                    <div v-if="content">{{ content }}</div>
-                    <slot name="content"/>
+                    <div v-for="(item, idx) in items"
+                         class="py-1.5 rounded-lg cursor-default hover:bg-yellow-100 hover:text-yellow-600 active:bg-yellow-400 active:text-yellow-800 transition-all"
+                         :class="itemClass"
+                         @click="$emit('command', idx)">
+                        {{ item }}
+                    </div>
                 </div>
             </div>
         </Transition>
@@ -92,6 +115,6 @@ const onMouseLeave = () => {
 }
 
 .fade-enter-active, .fade-leave-active {
-    transition: opacity 0.5s;
+    transition: opacity 0.3s;
 }
 </style>
