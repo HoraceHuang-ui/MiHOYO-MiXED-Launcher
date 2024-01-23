@@ -83,8 +83,8 @@ defineExpose({
             />
             <div class="outer bg-black bg-opacity-20 outer absolute top-0 bottom-0 left-0 right-0 z-40"/>
             <div
-                class="inner absolute z-50 top-1/2 left-1/2 border"
-                style="border-radius: 5px 20px 0 0; transform: translate(calc(-50% - 5px), calc(-50% + 5px))"
+                class="inner absolute z-50 top-1/2 left-1/2 border -translate-x-1/2 -translate-y-1/2"
+                style="border-radius: 5px 20px 0 0"
                 :style="`width: ${width}`"
             >
                 <div
