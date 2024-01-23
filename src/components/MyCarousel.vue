@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {computed, onMounted, PropType, ref, watch} from "vue";
+import {useTimeout} from "../utils/timeout";
 
 const props = defineProps({
     autoplay: {
@@ -24,7 +25,6 @@ const curIdx = ref(0)
 const hoverShowArrow = ref(false)
 const hoverShowIndicator = ref(false)
 
-let timer: NodeJS.Timer | number | undefined = undefined
 let autoplayTimer: NodeJS.Timer | number | undefined = undefined
 
 const panesWrapper = ref<HTMLDivElement>()
@@ -97,10 +97,6 @@ watch(curIdx, (newId: number, oldId: number) => {
     const oldItem = panes.value!!.item(oldId) as HTMLElement
 
     if (panes.value) {
-        if (timer) {
-            return
-        }
-
         newItem.style.transition = 'none';
         newItem.style.display = 'flex';
 
@@ -121,11 +117,10 @@ watch(curIdx, (newId: number, oldId: number) => {
             newItem.style.transform = 'translateX(0)';
         }, 10);
 
-        timer = setTimeout(() => {
+        useTimeout(() => {
             oldItem!!.style.display = 'none';
-            clearTimeout(timer as number)
-            timer = undefined
-        }, 410)
+            console.log('timeout')
+        }, 410).start()
     }
 })
 
