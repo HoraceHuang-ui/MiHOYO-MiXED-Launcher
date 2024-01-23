@@ -194,17 +194,19 @@ const refresh = () => {
                  :src="launcherInfo.adv && launcherInfoReady ? launcherInfo.adv.background : ''"
                  @touchmove.prevent @mousewheel.prevent/>
         </div>
-        <LauncherBanner class="absolute left-16 top-48 z-50 rounded-xl transition-all"
-                        v-if="launcherInfoReady && 'banner' in launcherInfo && launcherInfo.banner.length > 0"
-                        :banners="launcherInfo.banner"
-                        :class="hideElements ? 'opacity-0 -translate-y-10 pointer-events-none blur-md -translate-x-14 scale-110' : 'opacity-100 pointer-events-auto'"
-                        style="height: 182px; width: 396px; transition-duration: 500ms;"/>
-        <LauncherPosts :postTypeMap="postTypeMap"
-                       v-if="launcherInfoReady && 'post' in launcherInfo && launcherInfo.post.length > 0"
-                       class="absolute left-16 top-96 z-50 rounded-xl transition-all backdrop-blur-md pl-3 pr-1 font-bold"
-                       :class="hideElements ? 'opacity-0 -translate-y-2 pointer-events-none blur-md -translate-x-14 scale-110' : 'opacity-100 pointer-events-auto'"
-                       style="height: 112px; width: 396px; background-color: rgb(255 255 255 / 0.7); transition-duration: 500ms;"/>
-        <ScrollWrapper ref="scrollBarRef" height="91vh" width="80vw" class="scroll-wrapper absolute z-40"
+        <Transition name="banner">
+            <LauncherBanner class="absolute left-16 top-48 z-50 rounded-xl transition-all"
+                            v-if="launcherInfoReady && 'banner' in launcherInfo && launcherInfo.banner.length > 0 && !hideElements"
+                            :banners="launcherInfo.banner"
+                            style="height: 182px; width: 396px; transition-duration: 500ms;"/>
+        </Transition>
+        <Transition name="posts">
+            <LauncherPosts :postTypeMap="postTypeMap"
+                           v-if="launcherInfoReady && 'post' in launcherInfo && launcherInfo.post.length > 0 && !hideElements"
+                           class="absolute left-16 top-96 z-50 rounded-xl transition-all backdrop-blur-md pl-3 pr-1 font-bold"
+                           style="height: 112px; width: 396px; background-color: rgb(255 255 255 / 0.7); transition-duration: 500ms;"/>
+        </Transition>
+        <ScrollWrapper ref="scrollBarRef" height="91vh" width="82vw" class="scroll-wrapper absolute z-40"
                        @scroll="handleScroll"
                        show-bar="never">
             <div class="items-scroll flex flex-col content-center items-center w-full">
@@ -292,5 +294,20 @@ const refresh = () => {
 
 .font-sr {
     font-family: sr-font, sans-serif;
+}
+
+.banner-enter-from, .banner-leave-to {
+    @apply opacity-0 -translate-y-10 pointer-events-none blur-md -translate-x-14 scale-110;
+}
+
+.posts-enter-from, .posts-leave-to {
+    @apply opacity-0 -translate-y-2 pointer-events-none blur-md -translate-x-14 scale-110;
+}
+
+.banner-enter-active,
+.banner-leave-active,
+.posts-enter-active,
+.posts-leave-active {
+    transition: all 0.5s ease;
 }
 </style>
