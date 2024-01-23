@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import {onMounted, PropType, ref, watch} from 'vue'
+import {PropType, ref} from 'vue'
 import ScrollWrapper from "./ScrollWrapper.vue";
+import MyCarousel from "./MyCarousel.vue";
 
 const props = defineProps({
     modelValue: {
@@ -14,41 +15,15 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:modelValue'])
 
-const panesWrapper = ref<HTMLDivElement>()
-let panes: HTMLCollection
+const panesWrapper = ref()
 
 const selectTab = (idx: number) => {
     if (idx == props.modelValue) {
         return
     }
+    panesWrapper.value?.setPane?.(idx)
     emit('update:modelValue', idx)
 }
-
-const refreshState = () => {
-    if (panes) {
-        for (let i = 0; i < panes.length; i++) {
-            if (i == props.modelValue) {
-                continue
-            }
-            (panes.item(i) as HTMLElement)!!.style.display = 'none'
-        }
-    }
-}
-
-watch(() => props.modelValue, (newId: number, oldId: number) => {
-    const newItem = panes.item(newId) as HTMLElement
-    const oldItem = panes.item(oldId) as HTMLElement
-
-    if (panes) {
-        oldItem!!.style.display = 'none'
-        newItem!!.style.display = 'block'
-    }
-})
-
-onMounted(() => {
-    panes = panesWrapper.value!!.children
-    refreshState()
-})
 </script>
 
 <template>
@@ -62,9 +37,10 @@ onMounted(() => {
                 </div>
             </div>
         </ScrollWrapper>
-        <div ref="panesWrapper" class="px-2">
+        <MyCarousel class="relative w-full h-full" ref="panesWrapper" animation="fade-swipe" show-arrow="never"
+                    :autoplay="false">
             <slot/>
-        </div>
+        </MyCarousel>
     </div>
 </template>
 
