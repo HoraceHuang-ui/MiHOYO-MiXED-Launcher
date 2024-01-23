@@ -13,6 +13,7 @@ import MyTooltip from "../../../components/MyTooltip.vue";
 import MyCarousel from "../../../components/MyCarousel.vue";
 
 const playerInfo = ref<any>()
+const cardsCarouselRef = ref()
 
 const uidInput = ref('')
 let uid = '';
@@ -190,6 +191,11 @@ const requestInfo = () => {
         playerInfoLoading.value = false
         playerInfoFailed.value = true
     })
+}
+
+const setShowcase = (index: number) => {
+    cardsCarouselRef.value?.setPane?.(index)
+    showcaseIdx.value = index
 }
 
 const getCharElementAssets = (id: number) => {
@@ -387,7 +393,7 @@ const findSkillIdByProud = (proudId: number): number => {
         <!-- BODY -->
         <div v-if="playerInfoReady && playerInfo.characters && playerInfo.characters.length > 0" class="relative">
             <!-- 角色头像列表 10人一页 -->
-            <div class="flex flex-row w-full justify-between">
+            <div class="flex flex-row w-full justify-between absolute top-0">
                 <div class="relative z-50 w-1/4">
                     <div
                         class="absolute right-2 top-3 rounded-full w-9 h-9 pt-1 bg-white hover:bg-gray-200 active:-translate-x-1 transition-all bg-opacity-80"
@@ -399,7 +405,7 @@ const findSkillIdByProud = (proudId: number): number => {
                                show-bar="never">
                     <div class="flex flex-row flex-nowrap w-max">
                         <div v-for="(character, index) in playerInfo.characters" class="relative w-12 h-12 z-50"
-                             @click="showcaseIdx = index">
+                             @click="setShowcase(index)">
                             <div class="absolute bottom-0 w-9 h-9 border-2 rounded-full bg-white transition-all"
                                  :class="{ 'border-blue-600 border-3': showcaseIdx == index }"
                                  style="left: 10px;"></div>
@@ -418,304 +424,309 @@ const findSkillIdByProud = (proudId: number): number => {
                 </div>
             </div>
             <!-- 角色详情卡片 -->
-            <div v-for="(character, index) in playerInfo.characters" class="z-0 relative w-full">
-                <div class="mt-4 w-full absolute top-0 left-0 right-0 transition-all"
-                     :class="{ 'opacity-0 translate-x-40 pointer-events-none': showcaseIdx < index,
-                      'opacity-100 pointer-events-auto': showcaseIdx == index,
-                      'opacity-0 -translate-x-40 pointer-events-none': showcaseIdx > index }"
-                     style="transition-duration: 300ms;">
-                    <!-- absolute： 卡片元素背景、元素图标 -->
-                    <img class="relative z-0" :src="getCharElementAssets(index)!!.bg"
-                         style="border-radius: 4.5vh; height: 40vw;"/>
-                    <img class="h-1/4 absolute opacity-50" :src="getCharElementAssets(index)!!.ico"
-                         style="top: -7px; right: -18px;"/>
-                    <!-- 卡片前景 -->
-                    <div class="flex flex-row h-full absolute top-0 left-0 right-0 bottom-0 z-10">
-                        <!-- 立绘 -->
-                        <div class="left-gacha w-2/3 inline-block object-cover absolute left-0 bottom-0 z-10"
-                             style="height: 115%;">
-                            <img
-                                class="gacha-mask inline-block object-cover bottom-0 left-0 absolute z-10 h-full pointer-events-none"
-                                loading="lazy" :src="'https://enka.network/ui/' + character.assets.gachaIcon + '.png'"/>
-                        </div>
-                        <!-- 左上角等级 -->
-                        <div
-                            class="z-50 absolute left-3 top-3 rounded-full backdrop-blur-lg bg-opacity-25 bg-black h-10">
-                            <div class="mt-2 ml-3">
+            <MyCarousel ref="cardsCarouselRef" class="gacha-mask relative z-0" :autoplay="false" show-arrow="never"
+                        animation="fade-swipe"
+                        style="width: 960px; height: 545px">
+                <div v-for="(character, index) in playerInfo.characters" class="z-0 relative w-full mt-12">
+                    <div class="mt-4 w-full absolute top-0 left-0 right-0 transition-all"
+                         style="transition-duration: 300ms;">
+                        <!-- absolute： 卡片元素背景、元素图标 -->
+                        <img class="relative z-0" :src="getCharElementAssets(index)!!.bg"
+                             style="border-radius: 4.5vh; height: 40vw;"/>
+                        <img class="h-1/4 absolute opacity-50" :src="getCharElementAssets(index)!!.ico"
+                             style="top: -7px; right: -18px;"/>
+                        <!-- 卡片前景 -->
+                        <div class="flex flex-row h-full absolute top-0 left-0 right-0 bottom-0 z-10">
+                            <!-- 立绘 -->
+                            <div class="left-gacha w-2/3 inline-block object-cover absolute left-0 bottom-0 z-10"
+                                 style="height: 115%;">
+                                <img
+                                    class="inline-block object-cover bottom-0 left-0 absolute z-10 h-full pointer-events-none"
+                                    :src="'https://enka.network/ui/' + character.assets.gachaIcon + '.png'"/>
+                            </div>
+                            <!-- 左上角等级 -->
+                            <div
+                                class="z-50 absolute left-3 top-3 rounded-full backdrop-blur-lg bg-opacity-25 bg-black h-10">
+                                <div class="mt-2 ml-3">
                                 <span class=" text-gray-100 font-gs bottom-0 text-xl align-bottom">
                                     Lv. {{ character.properties.level.val }} /
                                 </span>
-                                <span class=" text-gray-300 bottom-0 text-xl align-bottom mr-3 font-gs">
+                                    <span class=" text-gray-300 bottom-0 text-xl align-bottom mr-3 font-gs">
                                     {{
-                                        ascLevelMap[character.properties.ascension.val ? parseInt(character.properties.ascension.val) : 0]
-                                    }}
+                                            ascLevelMap[character.properties.ascension.val ? parseInt(character.properties.ascension.val) : 0]
+                                        }}
                                 </span>
+                                </div>
                             </div>
-                        </div>
-                        <!-- 左下角天赋、命之座 -->
-                        <div class="absolute bottom-2 left-2 z-50">
-                            <div class="flex flex-col">
-                                <div class="flex flex-row relative">
-                                    <MyTooltip v-for="skill in character.skills" placement="top">
-                                        <template #content>
-                                            <span class="font-gs text-base"> {{ skill.name }} </span>
-                                        </template>
-                                        <div class="rounded-full ml-2 h-8 mb-2 flex flex-row cursor-default"
-                                             style="background-color: rgb(0 0 0 / 0.6); width: 72px;">
-                                            <img class="h-8 rounded-full"
-                                                 :src="'https://enka.network/ui/' + skill.assets.icon + '.png'"/>
-                                            <div
-                                                class="text-center w-full mr-1 h-full align-middle text-base font-gs"
-                                                style="margin-top: 3px;">
+                            <!-- 左下角天赋、命之座 -->
+                            <div class="absolute bottom-2 left-2 z-50">
+                                <div class="flex flex-col">
+                                    <div class="flex flex-row relative">
+                                        <MyTooltip v-for="skill in character.skills" placement="top">
+                                            <template #content>
+                                                <span class="font-gs text-base"> {{ skill.name }} </span>
+                                            </template>
+                                            <div class="rounded-full ml-2 h-8 mb-2 flex flex-row cursor-default"
+                                                 style="background-color: rgb(0 0 0 / 0.6); width: 72px;">
+                                                <img class="h-8 rounded-full"
+                                                     :src="'https://enka.network/ui/' + skill.assets.icon + '.png'"/>
+                                                <div
+                                                    class="text-center w-full mr-1 h-full align-middle text-base font-gs"
+                                                    style="margin-top: 3px;">
                                                 <span v-if="skill.id in constelsAdditions"
                                                       :class="{ 'text-orange-300': skill.level == 10, 'text-cyan-400': skill.level < 10 }">{{
                                                         skill.level + constelsAdditions[skill.id]
                                                     }}</span>
-                                                <span v-else
-                                                      :class="{ 'text-orange-300': skill.level == 10, 'text-white': skill.level < 10 }">{{
-                                                        skill.level
-                                                    }}</span>
+                                                    <span v-else
+                                                          :class="{ 'text-orange-300': skill.level == 10, 'text-white': skill.level < 10 }">{{
+                                                            skill.level
+                                                        }}</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </MyTooltip>
-                                </div>
-                                <div class="flex flex-row relative">
-                                    <MyTooltip v-for="idx in 6" placement="top">
-                                        <template #content>
+                                        </MyTooltip>
+                                    </div>
+                                    <div class="flex flex-row relative">
+                                        <MyTooltip v-for="idx in 6" placement="top">
+                                            <template #content>
                                             <span class="font-gs text-base point"> {{
                                                     idx <=
                                                     character.constellationsList.length ? character.constellationsList[idx -
                                                     1].name : $t("gs_lockedConstel")
                                                 }} </span>
-                                        </template>
-                                        <div v-if="idx <= character.constellationsList.length" class="relative">
-                                            <div
-                                                class="absolute bottom-0 left-2 w-8 h-8 rounded-full bg-black z-20 opacity-70">
+                                            </template>
+                                            <div v-if="idx <= character.constellationsList.length" class="relative">
+                                                <div
+                                                    class="absolute bottom-0 left-2 w-8 h-8 rounded-full bg-black z-20 opacity-70">
+                                                </div>
+                                                <img class="relative h-8 rounded-full ml-2 z-30"
+                                                     :src="'https://enka.network/ui/' + character.constellationsList[idx - 1].assets.icon + '.png'"/>
                                             </div>
-                                            <img class="relative h-8 rounded-full ml-2 z-30"
-                                                 :src="'https://enka.network/ui/' + character.constellationsList[idx - 1].assets.icon + '.png'"/>
-                                        </div>
-                                        <div v-else>
-                                            <img src="../../../assets/locked.png"
-                                                 class="w-8 opacity-70 ml-2 bg-black rounded-full"/>
-                                        </div>
-                                    </MyTooltip>
+                                            <div v-else>
+                                                <img src="../../../assets/locked.png"
+                                                     class="w-8 opacity-70 ml-2 bg-black rounded-full"/>
+                                            </div>
+                                        </MyTooltip>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <!-- 右侧详情 -->
-                        <div class=" w-5/12 h-full absolute top-7 right-6 bottom-4 flex flex-col z-20">
-                            <!-- 角色名字-->
-                            <div class="w-full text-right">
+                            <!-- 右侧详情 -->
+                            <div class=" w-5/12 h-full absolute top-7 right-6 bottom-4 flex flex-col z-20">
+                                <!-- 角色名字-->
+                                <div class="w-full text-right">
                                 <span class=" text-white font-gs font-bold"
                                       style="font-size: 2.15rem; line-height: 2.5rem;">{{ character.name }}</span>
-                            </div>
-                            <!-- 详情第一块：属性 -->
-                            <div
-                                class="mt-2 text-gray-200 text-lg text-left w-full rounded-xl p-2 pl-4 grid grid-cols-3 grid-rows-3 bg-opacity-20 bg-black backdrop-blur-lg">
-                                <div class="w-full flex flex-row" style="grid-column: 1; grid-row: 1;">
-                                    <!-- <span class="text-gray-300">生命</span> -->
-                                    <StatIcon game="gs" stat="FIGHT_PROP_HP" fill="#d1d5db" class="w-5 h-5"
-                                              style="margin-top: 1px;"/>
-                                    <span class="text-gray-200 text-right font-gs ml-3">{{
-                                            parseInt(character.stats.maxHp.value as string)
-                                        }}</span>
                                 </div>
-                                <div class="w-full flex flex-row" style="grid-column: 2; grid-row: 1;">
-                                    <StatIcon game="gs" stat="FIGHT_PROP_ATTACK" fill="#d1d5db" class="w-5 h-5"
-                                              style="margin-top: 1px;"/>
-                                    <span class="text-gray-200 text-right font-gs ml-3">{{
-                                            parseInt(character.stats.atk.value as string)
-                                        }}</span>
-                                </div>
-                                <div class="w-full flex flex-row" style="grid-column: 3; grid-row: 1;">
-                                    <StatIcon game="gs" stat="FIGHT_PROP_DEFENSE" fill="#d1d5db" class="w-5 h-5"
-                                              style="margin-top: 1px;"/>
-                                    <span class="text-gray-200 text-right font-gs ml-3">{{
-                                            parseInt(character.stats.def.value as string)
-                                        }}</span>
-                                </div>
-                                <div class="w-full flex flex-row" style="grid-column: 1; grid-row: 2;">
-                                    <StatIcon game="gs" stat="FIGHT_PROP_CHARGE_EFFICIENCY" fill="#d1d5db"
-                                              class="w-5 h-5"
-                                              style="margin-top: 1px;"/>
-                                    <span class="text-gray-200 text-right font-gs ml-3">{{
-                                            (character.stats.energyRecharge.value as number * 100).toFixed(1)
-                                        }}%</span>
-                                </div>
-                                <div class="w-full flex flex-row" style="grid-column: 2; grid-row: 2;">
-                                    <StatIcon game="gs" stat="FIGHT_PROP_ELEMENT_MASTERY" fill="#d1d5db" class="w-5 h-5"
-                                              style="margin-top: 1px;"/>
-                                    <span class="text-gray-200 text-right font-gs ml-3">{{
-                                            parseInt(!character.stats.elementalMastery.value ? '0' :
-                                                character.stats.elementalMastery.value as string)
-                                        }}</span>
-                                </div>
-                                <div class="w-full flex flex-row" style="grid-column: 3; grid-row: 2;">
-                                    <!-- <span class="text-gray-300">能量</span> -->
-                                    <StatIcon game="gs" stat="CUSTOM_ENERGY_REQUIRED" fill="#d1d5db" class="w-5 h-5"
-                                              style="margin-top: 1px;"/>
-                                    <span class="text-gray-200 text-right font-gs ml-3">{{
-                                            getCharElementEnergy(index)
-                                        }}</span>
-                                </div>
-                                <div class="w-full flex flex-row" style="grid-column: 1; grid-row: 3;">
-                                    <StatIcon game="gs" stat="FIGHT_PROP_CRITICAL" fill="#d1d5db" class="w-5 h-5"
-                                              style="margin-top: 1px;"/>
-                                    <span class="text-gray-200 text-right font-gs ml-3">{{
-                                            (character.stats.critRate.value as number * 100).toFixed(1)
-                                        }}%</span>
-                                </div>
-                                <div class="w-full flex flex-row" style="grid-column: 2; grid-row: 3;">
-                                    <StatIcon game="gs" stat="FIGHT_PROP_CRITICAL_HURT" fill="#d1d5db" class="w-5 h-5"
-                                              style="margin-top: 1px;"/>
-                                    <span class="text-gray-200 text-right font-gs ml-3">{{
-                                            (character.stats.critDamage.value as number * 100).toFixed(1)
-                                        }}%</span>
-                                </div>
+                                <!-- 详情第一块：属性 -->
                                 <div
-                                    class="mx-2 rounded-full text-sm bg-white bg-opacity-20 text-center hover:bg-opacity-30 active:scale-95 active:bg-opacity-40 cursor-default transition-all px-1"
-                                    @click="showCharDetails(index)" style="grid-column: 3; grid-row: 3;">
-                                    <div class="font-gs" style="margin-top: 5px;">{{ $t("gs_details") }}</div>
-                                </div>
-                            </div>
-                            <!-- 详情第二块：武器 -->
-                            <div class="mt-2 w-full rounded-xl flex flex-row bg-opacity-20 bg-black backdrop-blur-lg"
-                                 style="height: 84px;">
-                                <img class="h-full"
-                                     :src="'https://enka.network/ui/' + character.equipment.weapon.assets.awakenIcon + '.png'"/>
-                                <div class="w-full h-full relative">
-                                    <div class="flex flex-row justify-between ml-2 mt-4">
-                                        <div class="text-gray-200 font-gs mt-1 truncated"
-                                             style="max-width: 300px; font-size: 1.4rem; line-height: 2rem;">
-                                            {{ character.equipment.weapon.name }}
-                                        </div>
-                                        <div
-                                            class="absolute right-1 bottom-1 text-gray-100 rounded-full bg-opacity-20 bg-white px-2">
-                                            <span class="font-gs">{{ character.equipment.weapon.level }} / </span>
-                                            <span class="text-gray-300 font-serif">{{
-                                                    ascLevelMap[character.equipment.weapon.ascensionLevel ?
-                                                        character.equipment.weapon.ascensionLevel as number : 0]
-                                                }}</span>
-                                        </div>
-                                        <div class="text-gray-400 mr-2 text-sm absolute right-0 top-0">{{
-                                                $t('gs_refinement')
-                                            }}
-                                            <span class="text-gray-200 font-gs text-base">{{
-                                                    character.equipment.weapon.refinement.level as number + 1
-                                                }}</span>
-                                        </div>
+                                    class="mt-2 text-gray-200 text-lg text-left w-full rounded-xl p-2 pl-4 grid grid-cols-3 grid-rows-3 bg-opacity-20 bg-black backdrop-blur-lg">
+                                    <div class="w-full flex flex-row" style="grid-column: 1; grid-row: 1;">
+                                        <!-- <span class="text-gray-300">生命</span> -->
+                                        <StatIcon game="gs" stat="FIGHT_PROP_HP" fill="#d1d5db" class="w-5 h-5"
+                                                  style="margin-top: 1px;"/>
+                                        <span class="text-gray-200 text-right font-gs ml-3">{{
+                                                parseInt(character.stats.maxHp.value as string)
+                                            }}</span>
                                     </div>
-                                    <div class="text-gray-300 ml-2 mt-1 text-left grid grid-cols-3">
-                                        <div class="flex flex-row" style="grid-column: 1;">
-                                            <!-- {{ $t('gs_statATK') }} -->
-                                            <StatIcon game="gs" stat="FIGHT_PROP_ATTACK" fill="#d1d5db"
-                                                      class="w-5 h-5 mr-2"
-                                                      style="margin-top: 1px;"/>
-                                            <span class="text-gray-200 font-gs text-lg">{{
-                                                    character.equipment.weapon.weaponStats[0].statValue
-                                                }}</span>
-                                        </div>
-                                        <div v-if="character.equipment.weapon.weaponStats.length > 1"
-                                             class="ml-2 flex flex-row" style="grid-column: 2 / 4;">
-                                            <!-- {{ $t(`gs_${character.equipment.weapon.weaponStats[1].stat}`) }} -->
-                                            <StatIcon game="gs" :stat="character.equipment.weapon.weaponStats[1].stat"
-                                                      fill="#d1d5db" class="w-5 h-5 mr-2" style="margin-top: 1px;"/>
-                                            <span class="text-gray-200 font-gs text-lg">{{
-                                                    character.equipment.weapon.weaponStats[1].statValue
-                                                }}{{
-                                                    showPercentage(character.equipment.weapon.weaponStats[1].stat)
-                                                }}</span>
-                                        </div>
+                                    <div class="w-full flex flex-row" style="grid-column: 2; grid-row: 1;">
+                                        <StatIcon game="gs" stat="FIGHT_PROP_ATTACK" fill="#d1d5db" class="w-5 h-5"
+                                                  style="margin-top: 1px;"/>
+                                        <span class="text-gray-200 text-right font-gs ml-3">{{
+                                                parseInt(character.stats.atk.value as string)
+                                            }}</span>
                                     </div>
-
+                                    <div class="w-full flex flex-row" style="grid-column: 3; grid-row: 1;">
+                                        <StatIcon game="gs" stat="FIGHT_PROP_DEFENSE" fill="#d1d5db" class="w-5 h-5"
+                                                  style="margin-top: 1px;"/>
+                                        <span class="text-gray-200 text-right font-gs ml-3">{{
+                                                parseInt(character.stats.def.value as string)
+                                            }}</span>
+                                    </div>
+                                    <div class="w-full flex flex-row" style="grid-column: 1; grid-row: 2;">
+                                        <StatIcon game="gs" stat="FIGHT_PROP_CHARGE_EFFICIENCY" fill="#d1d5db"
+                                                  class="w-5 h-5"
+                                                  style="margin-top: 1px;"/>
+                                        <span class="text-gray-200 text-right font-gs ml-3">{{
+                                                (character.stats.energyRecharge.value as number * 100).toFixed(1)
+                                            }}%</span>
+                                    </div>
+                                    <div class="w-full flex flex-row" style="grid-column: 2; grid-row: 2;">
+                                        <StatIcon game="gs" stat="FIGHT_PROP_ELEMENT_MASTERY" fill="#d1d5db"
+                                                  class="w-5 h-5"
+                                                  style="margin-top: 1px;"/>
+                                        <span class="text-gray-200 text-right font-gs ml-3">{{
+                                                parseInt(!character.stats.elementalMastery.value ? '0' :
+                                                    character.stats.elementalMastery.value as string)
+                                            }}</span>
+                                    </div>
+                                    <div class="w-full flex flex-row" style="grid-column: 3; grid-row: 2;">
+                                        <!-- <span class="text-gray-300">能量</span> -->
+                                        <StatIcon game="gs" stat="CUSTOM_ENERGY_REQUIRED" fill="#d1d5db" class="w-5 h-5"
+                                                  style="margin-top: 1px;"/>
+                                        <span class="text-gray-200 text-right font-gs ml-3">{{
+                                                getCharElementEnergy(index)
+                                            }}</span>
+                                    </div>
+                                    <div class="w-full flex flex-row" style="grid-column: 1; grid-row: 3;">
+                                        <StatIcon game="gs" stat="FIGHT_PROP_CRITICAL" fill="#d1d5db" class="w-5 h-5"
+                                                  style="margin-top: 1px;"/>
+                                        <span class="text-gray-200 text-right font-gs ml-3">{{
+                                                (character.stats.critRate.value as number * 100).toFixed(1)
+                                            }}%</span>
+                                    </div>
+                                    <div class="w-full flex flex-row" style="grid-column: 2; grid-row: 3;">
+                                        <StatIcon game="gs" stat="FIGHT_PROP_CRITICAL_HURT" fill="#d1d5db"
+                                                  class="w-5 h-5"
+                                                  style="margin-top: 1px;"/>
+                                        <span class="text-gray-200 text-right font-gs ml-3">{{
+                                                (character.stats.critDamage.value as number * 100).toFixed(1)
+                                            }}%</span>
+                                    </div>
+                                    <div
+                                        class="mx-2 rounded-full text-sm bg-white bg-opacity-20 text-center hover:bg-opacity-30 active:scale-95 active:bg-opacity-40 cursor-default transition-all px-1"
+                                        @click="showCharDetails(index)" style="grid-column: 3; grid-row: 3;">
+                                        <div class="font-gs" style="margin-top: 5px;">{{ $t("gs_details") }}</div>
+                                    </div>
                                 </div>
-                            </div>
-                            <!-- 详情第三块：圣遗物 -->
-                            <MyCarousel
-                                v-if="character.equipment.artifacts && character.equipment.artifacts.length > 0"
-                                class="relative mt-2 w-full h-40 rounded-xl bg-opacity-20 bg-black backdrop-blur-lg"
-                                show-arrow="never" show-indicator="always"
-                                :autoplay="false">
-                                <div v-for="artifact in character.equipment.artifacts"
-                                     class="pb-2 pr-2 pl-4 flex flex-row h-40 text-gray-200 w-full">
-                                    <img style="height: 140%; margin-left: -15px; margin-top: -45px;"
-                                         class="artifact-mask w-28 object-cover"
-                                         :src="'https://enka.network/ui/' + artifact.icon + '.png'"/>
+                                <!-- 详情第二块：武器 -->
+                                <div
+                                    class="mt-2 w-full rounded-xl flex flex-row bg-opacity-20 bg-black backdrop-blur-lg"
+                                    style="height: 84px;">
+                                    <img class="h-full"
+                                         :src="'https://enka.network/ui/' + character.equipment.weapon.assets.awakenIcon + '.png'"/>
                                     <div class="w-full h-full relative">
-                                        <div class="text-gray-400 mr-2 text-sm absolute right-0 top-1">
-                                            {{ artifact.name }}
+                                        <div class="flex flex-row justify-between ml-2 mt-4">
+                                            <div class="text-gray-200 font-gs mt-1 truncated"
+                                                 style="max-width: 300px; font-size: 1.4rem; line-height: 2rem;">
+                                                {{ character.equipment.weapon.name }}
+                                            </div>
+                                            <div
+                                                class="absolute right-1 bottom-1 text-gray-100 rounded-full bg-opacity-20 bg-white px-2">
+                                                <span class="font-gs">{{ character.equipment.weapon.level }} / </span>
+                                                <span class="text-gray-300 font-serif">{{
+                                                        ascLevelMap[character.equipment.weapon.ascensionLevel ?
+                                                            character.equipment.weapon.ascensionLevel as number : 0]
+                                                    }}</span>
+                                            </div>
+                                            <div class="text-gray-400 mr-2 text-sm absolute right-0 top-0">{{
+                                                    $t('gs_refinement')
+                                                }}
+                                                <span class="text-gray-200 font-gs text-base">{{
+                                                        character.equipment.weapon.refinement.level as number + 1
+                                                    }}</span>
+                                            </div>
                                         </div>
-                                        <!-- 主词条、等级 -->
-                                        <div class="text-left mt-7 w-full flex flex-row">
-                                            <StatIcon game="gs" :stat="artifact.mainstat.stat" fill="#eee"
-                                                      class="w-6 h-6 mr-1" style="margin-top: 3px;"/>
-                                            <!-- <span class="text-gray-200 text-xl">{{ $t(`gs_${artifact.mainstat.stat}`)
-                                            }}</span> -->
-                                            <span class="text-gray-200 text-3xl ml-2 font-gs">{{
-                                                    artifact.mainstat.statValue
-                                                }}{{
-                                                    showPercentage(artifact.mainstat.stat)
-                                                }}</span>
-                                            <div :class="{ 'border-orange-400 bg-orange-900 text-orange-300': artifact.stars == 5,
+                                        <div class="text-gray-300 ml-2 mt-1 text-left grid grid-cols-3">
+                                            <div class="flex flex-row" style="grid-column: 1;">
+                                                <!-- {{ $t('gs_statATK') }} -->
+                                                <StatIcon game="gs" stat="FIGHT_PROP_ATTACK" fill="#d1d5db"
+                                                          class="w-5 h-5 mr-2"
+                                                          style="margin-top: 1px;"/>
+                                                <span class="text-gray-200 font-gs text-lg">{{
+                                                        character.equipment.weapon.weaponStats[0].statValue
+                                                    }}</span>
+                                            </div>
+                                            <div v-if="character.equipment.weapon.weaponStats.length > 1"
+                                                 class="ml-2 flex flex-row" style="grid-column: 2 / 4;">
+                                                <!-- {{ $t(`gs_${character.equipment.weapon.weaponStats[1].stat}`) }} -->
+                                                <StatIcon game="gs"
+                                                          :stat="character.equipment.weapon.weaponStats[1].stat"
+                                                          fill="#d1d5db" class="w-5 h-5 mr-2" style="margin-top: 1px;"/>
+                                                <span class="text-gray-200 font-gs text-lg">{{
+                                                        character.equipment.weapon.weaponStats[1].statValue
+                                                    }}{{
+                                                        showPercentage(character.equipment.weapon.weaponStats[1].stat)
+                                                    }}</span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!-- 详情第三块：圣遗物 -->
+                                <MyCarousel
+                                    v-if="character.equipment.artifacts && character.equipment.artifacts.length > 0"
+                                    class="relative mt-2 w-full h-40 rounded-xl bg-opacity-20 bg-black backdrop-blur-lg"
+                                    show-arrow="never" show-indicator="always"
+                                    :autoplay="false">
+                                    <div v-for="artifact in character.equipment.artifacts"
+                                         class="pb-2 pr-2 pl-4 flex flex-row h-40 text-gray-200 w-full">
+                                        <img style="height: 140%; margin-left: -15px; margin-top: -45px;"
+                                             class="artifact-mask w-28 object-cover"
+                                             :src="'https://enka.network/ui/' + artifact.icon + '.png'"/>
+                                        <div class="w-full h-full relative">
+                                            <div class="text-gray-400 mr-2 text-sm absolute right-0 top-1">
+                                                {{ artifact.name }}
+                                            </div>
+                                            <!-- 主词条、等级 -->
+                                            <div class="text-left mt-7 w-full flex flex-row">
+                                                <StatIcon game="gs" :stat="artifact.mainstat.stat" fill="#eee"
+                                                          class="w-6 h-6 mr-1" style="margin-top: 3px;"/>
+                                                <!-- <span class="text-gray-200 text-xl">{{ $t(`gs_${artifact.mainstat.stat}`)
+                                                }}</span> -->
+                                                <span class="text-gray-200 text-3xl ml-2 font-gs">{{
+                                                        artifact.mainstat.statValue
+                                                    }}{{
+                                                        showPercentage(artifact.mainstat.stat)
+                                                    }}</span>
+                                                <div :class="{ 'border-orange-400 bg-orange-900 text-orange-300': artifact.stars == 5,
                                               'border-purple-400 bg-purple-900 text-purple-300': artifact.stars == 4,
                                               'border-blue-400 bg-blue-900 text-blue-300': artifact.stars == 3,
                                               'border-green-400 bg-green-900 text-green-300': artifact.stars == 2}"
-                                                 class="h-full justify-end mt-1 ml-2 font-gs rounded-full border px-2">
-                                                +{{ artifact.level - 1 }}
+                                                     class="h-full justify-end mt-1 ml-2 font-gs rounded-full border px-2">
+                                                    +{{ artifact.level - 1 }}
+                                                </div>
                                             </div>
-                                        </div>
-                                        <!-- 副词条 -->
-                                        <div v-if="artifact.substats && artifact.substats.length > 0"
-                                             class="grid grid-cols-2 mt-2 grid-rows-2 gap-1 w-full text-left">
-                                            <div v-for="substat in artifact.substats" class="flex flex-row">
-                                                <!-- <span class="text-gray-300 text-lg">{{ getPropShortName(substat.stat)
-                                                }}</span> -->
-                                                <StatIcon game="gs" :stat="substat.stat" fill="#d1d5db"
-                                                          class="w-4 h-4 mr-1"
-                                                          style="margin-top: 2px;"/>
-                                                <span class="text-gray-300 font-gs text-xl ml-2">{{
-                                                        substat.statValue
-                                                    }}{{ showPercentage(substat.stat) }}</span>
+                                            <!-- 副词条 -->
+                                            <div v-if="artifact.substats && artifact.substats.length > 0"
+                                                 class="grid grid-cols-2 mt-2 grid-rows-2 gap-1 w-full text-left">
+                                                <div v-for="substat in artifact.substats" class="flex flex-row">
+                                                    <!-- <span class="text-gray-300 text-lg">{{ getPropShortName(substat.stat)
+                                                    }}</span> -->
+                                                    <StatIcon game="gs" :stat="substat.stat" fill="#d1d5db"
+                                                              class="w-4 h-4 mr-1"
+                                                              style="margin-top: 2px;"/>
+                                                    <span class="text-gray-300 font-gs text-xl ml-2">{{
+                                                            substat.statValue
+                                                        }}{{ showPercentage(substat.stat) }}</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div v-else class="mt-2 text-left text-gray-300 text-lg">{{
-                                                $t('gs_noSubstats')
-                                            }}
+                                            <div v-else class="mt-2 text-left text-gray-300 text-lg">{{
+                                                    $t('gs_noSubstats')
+                                                }}
+                                            </div>
                                         </div>
                                     </div>
+                                </MyCarousel>
+                                <div v-else
+                                     class="mt-2 w-full h-40 rounded-xl pt-16 text-gray-200 text-center align-middle bg-opacity-20 bg-black backdrop-blur-lg">
+                                    {{ $t('gs_noArtifacts') }}
                                 </div>
-                            </MyCarousel>
-                            <div v-else
-                                 class="mt-2 w-full h-40 rounded-xl pt-16 text-gray-200 text-center align-middle bg-opacity-20 bg-black backdrop-blur-lg">
-                                {{ $t('gs_noArtifacts') }}
-                            </div>
-                            <div v-if="character.equipment.artifacts && character.equipment.artifacts.length > 0"
-                                 class="flex flex-row justify-between">
-                                <div class="text-gray-200 ml-1 text-left text-sm">
-                                    {{ $t('gs_critScore') }}
-                                    <span class="text-gray-100 font-gs">{{
-                                            calcCritScoreTotal(index).toFixed(1)
-                                        }}</span>
-                                </div>
-                                <div class="text-gray-200 mt-1 mr-1 text-right text-sm">
+                                <div v-if="character.equipment.artifacts && character.equipment.artifacts.length > 0"
+                                     class="flex flex-row justify-between">
+                                    <div class="text-gray-200 ml-1 text-left text-sm">
+                                        {{ $t('gs_critScore') }}
+                                        <span class="text-gray-100 font-gs">{{
+                                                calcCritScoreTotal(index).toFixed(1)
+                                            }}</span>
+                                    </div>
+                                    <div class="text-gray-200 mt-1 mr-1 text-right text-sm">
                                     <pre class="font-gs text-sm"
                                          style="line-height: 1rem;">{{ getArtifactSetInfo(index) }}</pre>
+                                    </div>
                                 </div>
-                            </div>
-                            <div v-else class="flex flex-row justify-between text-sm">
-                                <div class="text-gray-200 ml-1 mt-1">
-                                    {{ $t('gs_critScore') }}
-                                    <span class="text-gray-100 font-gs">0</span>
-                                </div>
-                                <div class="text-gray-200 mt-1 mr-1 font-gs">
-                                    {{ $t('gs_noArtifactSets') }}
+                                <div v-else class="flex flex-row justify-between text-sm">
+                                    <div class="text-gray-200 ml-1 mt-1">
+                                        {{ $t('gs_critScore') }}
+                                        <span class="text-gray-100 font-gs">0</span>
+                                    </div>
+                                    <div class="text-gray-200 mt-1 mr-1 font-gs">
+                                        {{ $t('gs_noArtifactSets') }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </MyCarousel>
         </div>
         <div v-else-if="!playerInfoReady" class="mt-4 mb-4">{{ $t('gs_emptyPlayerTip') }}</div>
         <div v-else class="mt-4 mb-4">{{ $t('gs_showcaseTip') }}</div>
@@ -732,7 +743,7 @@ const findSkillIdByProud = (proudId: number): number => {
 }
 
 .gacha-mask {
-    -webkit-mask: linear-gradient(transparent, white 15%, white 85%, transparent)
+    -webkit-mask: linear-gradient(transparent, white 3rem)
 }
 
 .left-gacha {

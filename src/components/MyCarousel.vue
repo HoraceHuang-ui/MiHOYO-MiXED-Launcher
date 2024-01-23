@@ -18,6 +18,10 @@ const props = defineProps({
     showIndicator: {
         type: String as PropType<'always' | 'hover' | 'never'>,
         default: 'never'
+    },
+    animation: {
+        type: String as PropType<'swipe' | 'fade-swipe'>,
+        default: 'swipe'
     }
 })
 
@@ -73,6 +77,13 @@ const prevPane = () => {
     }
 }
 
+const setPane = (idx: number) => {
+    if (!panes.value || idx < 0 || idx >= panes.value!!.length) {
+        return
+    }
+    curIdx.value = idx
+}
+
 const onMouseEnter = () => {
     hoverShowArrow.value = true
     hoverShowIndicator.value = true
@@ -100,32 +111,65 @@ watch(curIdx, (newId: number, oldId: number) => {
         newItem.style.transition = 'none';
         newItem.style.display = 'flex';
 
-        if (newId > oldId) {
-            newItem.style.transform = `translateX(${panesWrapper.value!!.clientWidth}px)`;
-        } else {
-            newItem.style.transform = `translateX(-${panesWrapper.value!!.clientWidth}px)`;
-        }
-
-        setTimeout(() => {
+        if (props.animation === 'swipe') {
             if (newId > oldId) {
-                oldItem.style.transform = `translateX(-${panesWrapper.value!!.clientWidth}px)`;
+                newItem.style.transform = `translateX(${panesWrapper.value!!.clientWidth}px)`;
             } else {
-                oldItem.style.transform = `translateX(${panesWrapper.value!!.clientWidth}px)`;
+                newItem.style.transform = `translateX(-${panesWrapper.value!!.clientWidth}px)`;
             }
 
-            newItem.style.transition = 'all 0.4s ease';
-            newItem.style.transform = 'translateX(0)';
-        }, 10);
+            setTimeout(() => {
+                if (newId > oldId) {
+                    oldItem.style.transform = `translateX(-${panesWrapper.value!!.clientWidth}px)`;
+                } else {
+                    oldItem.style.transform = `translateX(${panesWrapper.value!!.clientWidth}px)`;
+                }
 
-        useTimeout(() => {
-            oldItem!!.style.display = 'none';
-            console.log('timeout')
-        }, 410).start()
+                newItem.style.transition = 'all 0.4s ease';
+                newItem.style.transform = 'translateX(0)';
+            }, 10);
+
+            useTimeout(() => {
+                oldItem!!.style.display = 'none';
+            }, 410).start()
+        } else if (props.animation === 'fade-swipe') {
+            if (newId > oldId) {
+                newItem.style.transform = `translateX(25%)`;
+                newItem.style.opacity = '0';
+            } else {
+                newItem.style.transform = `translateX(-25%)`;
+                newItem.style.opacity = '0';
+            }
+
+            setTimeout(() => {
+                if (newId > oldId) {
+                    oldItem.style.transform = `translateX(-25%)`;
+                    oldItem.style.opacity = '0'
+                } else {
+                    oldItem.style.transform = `translateX(25%)`;
+                    oldItem.style.opacity = '0'
+                }
+
+                newItem.style.transition = 'all 0.4s ease';
+                newItem.style.opacity = '1'
+                newItem.style.transform = 'translateX(0)';
+            }, 10);
+
+            useTimeout(() => {
+                oldItem!!.style.display = 'none';
+            }, 410).start()
+        }
     }
 })
 
 onMounted(() => {
     refreshState()
+})
+
+defineExpose({
+    nextPane,
+    prevPane,
+    setPane
 })
 </script>
 

@@ -10,6 +10,7 @@ import SRCharDetailsDialog from "./SRCharDetailsDialog.vue";
 import MyTag from "../../../components/MyTag.vue";
 import ScrollWrapper from "../../../components/ScrollWrapper.vue";
 import MyTooltip from "../../../components/MyTooltip.vue";
+import MyCarousel from "../../../components/MyCarousel.vue";
 
 // import rankMap from '../textMaps/character_ranks.json' with { type: 'json' }
 
@@ -38,6 +39,7 @@ const pages = computed(() =>
         : 0
 )
 const charsScrollbar = ref()
+const cardsCarouselRef = ref()
 const showcaseIdx = ref(0)
 const ascLevelMap = [20, 30, 40, 50, 60, 70, 80]
 let rankMap: Record<string, RankInfo> = {}
@@ -167,6 +169,11 @@ const requestInfo = () => {
     console.log(uid)
 }
 
+const setShowcase = (index: number) => {
+    cardsCarouselRef.value?.setPane?.(index)
+    showcaseIdx.value = index
+}
+
 const charsPageNext = () => {
     if (charsPage.value < pages.value) {
         charsPage.value++
@@ -291,7 +298,7 @@ const showCharDetails = (index: number) => {
         <!-- BODY -->
         <div v-if="playerInfoReady && playerInfo.characters.length > 0" class="relative">
             <!-- 角色头像列表 8人一页 -->
-            <div class="flex flex-row w-full justify-between">
+            <div class="flex flex-row w-full justify-between absolute top-0">
                 <div class="relative z-50" style="width: 30.5%;">
                     <div
                         class="absolute right-2 top-3 rounded-full w-9 h-9 pt-1 bg-white hover:bg-gray-200 active:-translate-x-1 transition-all bg-opacity-80"
@@ -305,7 +312,7 @@ const showCharDetails = (index: number) => {
                     <div class="flex flex-row justify-center">
                         <div class="flex flex-row flex-nowrap w-max">
                             <div v-for="(character, index) in playerInfo.characters" class="relative w-12 h-12 z-50"
-                                 @click="showcaseIdx = index">
+                                 @click="setShowcase(index)">
                                 <div class="absolute bottom-0 w-9 h-9 border-2 rounded-full bg-white transition-all"
                                      :class="{ 'border-blue-600 border-3': showcaseIdx == index }"
                                      style="left: 10px;"></div>
@@ -324,353 +331,372 @@ const showCharDetails = (index: number) => {
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- 角色详情卡片 -->
-        <div v-for="(character, index) in playerInfo.characters" class="z-0 relative w-full">
-            <div class="mt-4 w-full absolute top-0 left-0 right-0 transition-all" :class="{ 'opacity-0 translate-x-40 pointer-events-none': showcaseIdx < index,
-                'opacity-100 pointer-events-auto': showcaseIdx == index,
-                'opacity-0 -translate-x-40 pointer-events-none': showcaseIdx > index }"
-                 style="transition-duration: 300ms;">
-                <!-- absolute： 卡片元素背景、元素图标 -->
-                <img class="relative z-0 w-full" src="../../../assets/srBg.jpg" style="border-radius: 4.5vh;"/>
-                <img class="h-1/4 absolute opacity-50" :src="character.element ? apiUrl + character.element.icon : ''"
-                     style="top: -7px; right: -18px;"/>
-                <!-- 卡片前景 -->
-                <div class="flex flex-row h-full absolute top-0 left-0 right-0 bottom-0 z-10">
-                    <!-- 立绘 -->
-                    <div class="left-gacha w-7/12 inline-block object-cover absolute left-0 bottom-0 z-10"
-                         style="height: 117%;">
-                        <img class="gacha-mask inline-block object-cover bottom-0 left-0 absolute z-10" loading="lazy"
-                             style="height: 100%;" :src="apiUrl + character.portrait"/>
-                    </div>
-                    <!-- 左上角命途、等级 -->
-                    <div class="absolute top-2 left-2 z-50 rounded-full backdrop-blur-lg bg-opacity-25 bg-black h-12">
-                        <div class="ml-3" style="margin-top: 10px;">
-                            <img class="inline h-6 mb-2" :src="character.path ? apiUrl + character.path.icon: ''"/>
-                            <span class=" text-gray-200 font-sr-sans text-xl">
+
+            <!-- 角色详情卡片 -->
+            <MyCarousel ref="cardsCarouselRef" class="gacha-mask relative z-0" :autoplay="false" show-arrow="never"
+                        animation="fade-swipe"
+                        style="width: 984px; height: 620px">
+                <div v-for="(character, index) in playerInfo.characters" class="z-0 relative w-full mt-12">
+                    <div class="mt-4 w-full absolute top-0 left-0 right-0 transition-all"
+                         style="transition-duration: 300ms;">
+                        <!-- absolute： 卡片元素背景、元素图标 -->
+                        <img class="relative z-0 w-full" src="../../../assets/srBg.jpg" style="border-radius: 4.5vh;"/>
+                        <img class="h-1/4 absolute opacity-50"
+                             :src="character.element ? apiUrl + character.element.icon : ''"
+                             style="top: -7px; right: -18px;"/>
+                        <!-- 卡片前景 -->
+                        <div class="flex flex-row h-full absolute top-0 left-0 right-0 bottom-0 z-10">
+                            <!-- 立绘 -->
+                            <div class="left-gacha w-7/12 inline-block object-cover absolute left-0 bottom-0 z-10"
+                                 style="height: 117%;">
+                                <img class="inline-block object-cover bottom-0 left-0 absolute z-10"
+                                     loading="lazy"
+                                     style="height: 100%;" :src="apiUrl + character.portrait"/>
+                            </div>
+                            <!-- 左上角命途、等级 -->
+                            <div
+                                class="absolute top-2 left-2 z-50 rounded-full backdrop-blur-lg bg-opacity-25 bg-black h-12">
+                                <div class="ml-3" style="margin-top: 10px;">
+                                    <img class="inline h-6 mb-2"
+                                         :src="character.path ? apiUrl + character.path.icon: ''"/>
+                                    <span class=" text-gray-200 font-sr-sans text-xl">
                                 Lv. {{ character.level }} /
                             </span>
-                            <span class=" text-gray-400 text-lg mr-4 font-sr-sans">
+                                    <span class=" text-gray-400 text-lg mr-4 font-sr-sans">
                                 {{ ascLevelMap[character.promotion] }}
                             </span>
-                        </div>
-                    </div>
-                    <!-- 左下角星魂 -->
-                    <div class="absolute bottom-2 left-2 z-50">
-                        <div class="flex flex-col">
-                            <div class="flex flex-row relative">
-                                <MyTooltip v-for="idx in 6" placement="top">
-                                    <template #content>
-                                        <div class=" max-w-lg" v-if="ranksReady">
-                                            <div class="font-sr text-xl">
-                                                {{ rankMap[character.id + "0" + idx.toString()].name }}
-                                                <span v-if="idx > character.rank" class="ml-1 text-base text-gray-200">{{
-                                                        $t('sr_lockedRank')
-                                                    }}</span>
-                                            </div>
-                                            <div class="font-sr-sans text-sm mt-1 whitespace-pre-wrap">{{
-                                                    parseRankDesc(rankMap[character.id + "0" + idx.toString()].desc)
-                                                }}
-                                            </div>
-                                        </div>
-                                    </template>
-                                    <div v-if="idx <= character.rank" class="relative">
-                                        <div
-                                            class="absolute bottom-0 left-2 w-8 h-8 rounded-full bg-black z-20 opacity-70">
-                                        </div>
-                                        <img class="relative h-8 rounded-full ml-2 z-30"
-                                             :src="apiUrl + character.rank_icons[idx - 1]"/>
-                                    </div>
-                                    <div v-else>
-                                        <img src="../../../assets/locked.png"
-                                             class="w-8 opacity-70 ml-2 bg-black rounded-full"/>
-                                    </div>
-                                </MyTooltip>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <!-- 右侧详情 -->
-                    <div class=" w-1/2 h-full absolute top-6 right-6 bottom-4 flex flex-col z-20">
-                        <!-- 角色名字 -->
-                        <div class="w-full text-right">
+                            <!-- 左下角星魂 -->
+                            <div class="absolute bottom-2 left-2 z-50">
+                                <div class="flex flex-col">
+                                    <div class="flex flex-row relative">
+                                        <MyTooltip v-for="idx in 6" placement="top">
+                                            <template #content>
+                                                <div class=" max-w-lg" v-if="ranksReady">
+                                                    <div class="font-sr text-xl">
+                                                        {{ rankMap[character.id + "0" + idx.toString()].name }}
+                                                        <span v-if="idx > character.rank"
+                                                              class="ml-1 text-base text-gray-200">{{
+                                                                $t('sr_lockedRank')
+                                                            }}</span>
+                                                    </div>
+                                                    <div class="font-sr-sans text-sm mt-1 whitespace-pre-wrap">{{
+                                                            parseRankDesc(rankMap[character.id + "0" + idx.toString()].desc)
+                                                        }}
+                                                    </div>
+                                                </div>
+                                            </template>
+                                            <div v-if="idx <= character.rank" class="relative">
+                                                <div
+                                                    class="absolute bottom-0 left-2 w-8 h-8 rounded-full bg-black z-20 opacity-70">
+                                                </div>
+                                                <img class="relative h-8 rounded-full ml-2 z-30"
+                                                     :src="apiUrl + character.rank_icons[idx - 1]"/>
+                                            </div>
+                                            <div v-else>
+                                                <img src="../../../assets/locked.png"
+                                                     class="w-8 opacity-70 ml-2 bg-black rounded-full"/>
+                                            </div>
+                                        </MyTooltip>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 右侧详情 -->
+                            <div class=" w-1/2 h-full absolute top-6 right-6 bottom-4 flex flex-col z-20">
+                                <!-- 角色名字 -->
+                                <div class="w-full text-right">
                             <span class=" text-white" style="font-size: 2.15rem; line-height: 2.5rem;"
                                   :class="$t('sr_displayCompactFont') === 'true' ? 'font-sr-sans' : 'font-sr'">{{
                                     character.name
                                 }}</span>
-                        </div>
-                        <!-- 右侧第一块：属性 -->
-                        <div
-                            class="mt-2 text-gray-200 text-xl text-left w-full rounded-xl px-2 py-3 pl-4 bg-black bg-opacity-20 backdrop-blur-md grid grid-cols-3 grid-rows-2">
-                            <div class="w-full flex flex-row">
-                                <StatIcon game="sr" :stat="character.attributes[0].field" fill="#d1d5db" class="h-5 w-5"
-                                          style="margin-top: 1px;"/>
-                                <span class="text-gray-200 text-right font-sr-sans ml-3">{{
-                                        Math.floor(character.attributes[0].value) +
-                                        Math.floor(findField(character.additions,
-                                            "hp").value)
-                                    }}</span>
-                            </div>
-                            <div class="w-full flex flex-row">
-                                <StatIcon game="sr" :stat="character.attributes[1].field" fill="#d1d5db" class="h-5 w-5"
-                                          style="margin-top: 1px;"/>
-                                <span class="text-gray-200 text-right font-sr-sans ml-3">{{
-                                        Math.floor(character.attributes[1].value) +
-                                        Math.floor(findField(character.additions,
-                                            "atk").value)
-                                    }}</span>
-                            </div>
-                            <div class="w-full flex flex-row">
-                                <StatIcon game="sr" :stat="character.attributes[2].field" fill="#d1d5db" class="h-5 w-5"
-                                          style="margin-top: 1px;"/>
-                                <span class="text-gray-200 text-right font-sr-sans ml-3">{{
-                                        Math.floor(character.attributes[2].value) +
-                                        Math.floor(findField(character.additions,
-                                            "def").value)
-                                    }}</span>
-                            </div>
-                            <div class="w-full flex flex-row">
-                                <StatIcon game="sr" :stat="character.attributes[4].field" fill="#d1d5db" class="h-5 w-5"
-                                          style="margin-top: 1px;"/>
-                                <span class="text-gray-200 text-right font-sr-sans ml-3">{{
-                                        ((character.attributes[4].value + findField(character.additions,
-                                            "crit_rate").value) * 100).toFixed(1)
-                                    }}%</span>
-                            </div>
-                            <div class="w-full flex flex-row">
-                                <StatIcon game="sr" :stat="character.attributes[5].field" fill="#d1d5db" class="h-5 w-5"
-                                          style="margin-top: 1px;"/>
-                                <span class="text-gray-200 text-right font-sr-sans ml-3">{{
-                                        ((character.attributes[5].value + findField(character.additions,
-                                            "crit_dmg").value) * 100).toFixed(1)
-                                    }}%</span>
-                            </div>
-                            <div
-                                class="mx-2 rounded-full text-sm bg-white bg-opacity-20 text-center hover:bg-opacity-30 active:scale-95 active:bg-opacity-40 cursor-default transition-all"
-                                @click="showCharDetails(index)">
-                                <div class=" font-sr-sans" style="margin-top: 6px;">{{ $t('sr_details') }}</div>
-                            </div>
-                        </div>
-                        <!-- 右侧第二块：光锥 -->
-                        <div v-if="character.light_cone"
-                             class="mt-2 w-full rounded-xl flex flex-row bg-black bg-opacity-20 backdrop-blur-md"
-                             style="height: 90px;">
-                            <img class="object-cover w-44 h-full" :src="apiUrl + character.light_cone.preview"/>
-                            <div class="w-full h-full relative">
-                                <div class="flex flex-row justify-between ml-2 mt-5">
-                                    <div class="truncated text-gray-200 text-2xl text-left font-sr-sans"
-                                         :class="$t('sr_displayCompactFont') === 'true' ? 'font-sr-sans' : 'font-sr'"
-                                         style="width: 340px;">
-                                        {{ character.light_cone ? character.light_cone.name : '' }}
-                                    </div>
-                                    <div class="text-gray-300 mr-2 text-sm absolute right-0 top-0">
-                                        {{ $t('sr_superimposition') }}
-                                        <span class="text-gray-100 font-sr-sans text-base">{{
-                                                character.light_cone ? character.light_cone.rank : ''
+                                </div>
+                                <!-- 右侧第一块：属性 -->
+                                <div
+                                    class="mt-2 text-gray-200 text-xl text-left w-full rounded-xl px-2 py-3 pl-4 bg-black bg-opacity-20 backdrop-blur-md grid grid-cols-3 grid-rows-2">
+                                    <div class="w-full flex flex-row">
+                                        <StatIcon game="sr" :stat="character.attributes[0].field" fill="#d1d5db"
+                                                  class="h-5 w-5"
+                                                  style="margin-top: 1px;"/>
+                                        <span class="text-gray-200 text-right font-sr-sans ml-3">{{
+                                                Math.floor(character.attributes[0].value) +
+                                                Math.floor(findField(character.additions,
+                                                    "hp").value)
                                             }}</span>
                                     </div>
+                                    <div class="w-full flex flex-row">
+                                        <StatIcon game="sr" :stat="character.attributes[1].field" fill="#d1d5db"
+                                                  class="h-5 w-5"
+                                                  style="margin-top: 1px;"/>
+                                        <span class="text-gray-200 text-right font-sr-sans ml-3">{{
+                                                Math.floor(character.attributes[1].value) +
+                                                Math.floor(findField(character.additions,
+                                                    "atk").value)
+                                            }}</span>
+                                    </div>
+                                    <div class="w-full flex flex-row">
+                                        <StatIcon game="sr" :stat="character.attributes[2].field" fill="#d1d5db"
+                                                  class="h-5 w-5"
+                                                  style="margin-top: 1px;"/>
+                                        <span class="text-gray-200 text-right font-sr-sans ml-3">{{
+                                                Math.floor(character.attributes[2].value) +
+                                                Math.floor(findField(character.additions,
+                                                    "def").value)
+                                            }}</span>
+                                    </div>
+                                    <div class="w-full flex flex-row">
+                                        <StatIcon game="sr" :stat="character.attributes[4].field" fill="#d1d5db"
+                                                  class="h-5 w-5"
+                                                  style="margin-top: 1px;"/>
+                                        <span class="text-gray-200 text-right font-sr-sans ml-3">{{
+                                                ((character.attributes[4].value + findField(character.additions,
+                                                    "crit_rate").value) * 100).toFixed(1)
+                                            }}%</span>
+                                    </div>
+                                    <div class="w-full flex flex-row">
+                                        <StatIcon game="sr" :stat="character.attributes[5].field" fill="#d1d5db"
+                                                  class="h-5 w-5"
+                                                  style="margin-top: 1px;"/>
+                                        <span class="text-gray-200 text-right font-sr-sans ml-3">{{
+                                                ((character.attributes[5].value + findField(character.additions,
+                                                    "crit_dmg").value) * 100).toFixed(1)
+                                            }}%</span>
+                                    </div>
                                     <div
-                                        class="absolute right-1 bottom-1 px-2 rounded-full font-sr-sans bg-opacity-20 bg-white">
+                                        class="mx-2 rounded-full text-sm bg-white bg-opacity-20 text-center hover:bg-opacity-30 active:scale-95 active:bg-opacity-40 cursor-default transition-all"
+                                        @click="showCharDetails(index)">
+                                        <div class=" font-sr-sans" style="margin-top: 6px;">{{ $t('sr_details') }}</div>
+                                    </div>
+                                </div>
+                                <!-- 右侧第二块：光锥 -->
+                                <div v-if="character.light_cone"
+                                     class="mt-2 w-full rounded-xl flex flex-row bg-black bg-opacity-20 backdrop-blur-md"
+                                     style="height: 90px;">
+                                    <img class="object-cover w-44 h-full" :src="apiUrl + character.light_cone.preview"/>
+                                    <div class="w-full h-full relative">
+                                        <div class="flex flex-row justify-between ml-2 mt-5">
+                                            <div class="truncated text-gray-200 text-2xl text-left font-sr-sans"
+                                                 :class="$t('sr_displayCompactFont') === 'true' ? 'font-sr-sans' : 'font-sr'"
+                                                 style="width: 340px;">
+                                                {{ character.light_cone ? character.light_cone.name : '' }}
+                                            </div>
+                                            <div class="text-gray-300 mr-2 text-sm absolute right-0 top-0">
+                                                {{ $t('sr_superimposition') }}
+                                                <span class="text-gray-100 font-sr-sans text-base">{{
+                                                        character.light_cone ? character.light_cone.rank : ''
+                                                    }}</span>
+                                            </div>
+                                            <div
+                                                class="absolute right-1 bottom-1 px-2 rounded-full font-sr-sans bg-opacity-20 bg-white">
                                         <span class="text-gray-200 text-xl">{{
                                                 character.light_cone ? character.light_cone.level : ''
                                             }} /</span>
-                                        <span class="text-gray-400 ml-1">{{
-                                                ascLevelMap[character.light_cone ? character.light_cone.promotion : 0]
-                                            }}</span>
-                                    </div>
-                                </div>
-                                <div class="text-gray-300 ml-2 text-left grid grid-cols-4 mt-1">
-                                    <div class="flex flex-row">
-                                        <StatIcon game="sr" :stat="character.light_cone.attributes[0].field"
-                                                  fill="#d1d5db"
-                                                  class="h-5 w-5 mr-2" style="margin-top: 3px;"/>
-                                        <span class="text-gray-200 font-sr-sans text-lg">{{
-                                                character.light_cone ? character.light_cone.attributes[0].display : '-'
-                                            }}</span>
-                                    </div>
-                                    <div class="flex flex-row">
-                                        <StatIcon game="sr" :stat="character.light_cone.attributes[1].field"
-                                                  fill="#d1d5db"
-                                                  class="h-5 w-5 mr-2" style="margin-top: 3px;"/>
-                                        <span class="text-gray-200 font-sr-sans text-lg">{{
-                                                character.light_cone ? character.light_cone.attributes[1].display : '-'
-                                            }}</span>
-                                    </div>
-                                    <div class="flex flex-row">
-                                        <StatIcon game="sr" :stat="character.light_cone.attributes[2].field"
-                                                  fill="#d1d5db"
-                                                  class="h-5 w-5 mr-2" style="margin-top: 3px;"/>
-                                        <span class="text-gray-200 font-sr-sans text-lg">{{
-                                                character.light_cone ? character.light_cone.attributes[2].display : '-'
-                                            }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div v-else
-                             class="mt-2 w-full rounded-xl align-middle text-center bg-black bg-opacity-20 backdrop-blur-md"
-                             style="height: 90px;">
-                            {{ $t('sr_noLightcone') }}
-                        </div>
-                        <!-- 右侧第三块：行迹 -->
-                        <div
-                            class="mt-2 px-2 py-3 w-full rounded-xl bg-black bg-opacity-20 backdrop-blur-md grid grid-cols-4 grid-rows-1 relative z-50">
-                            <div v-for="idx in 4" class="h-full flex flex-row cursor-default">
-                                <MyTooltip placement="left" max-width="500px">
-                                    <template #content>
-                                        <div class="max-w-md">
-                                            <div class="font-sr text-xl">
-                                                {{ character.skills[idx - 1].name }}
-                                            </div>
-                                            <div class="font-sr-sans text-sm mt-1">
-                                                {{
-                                                    character.skills[idx - 1].simple_desc ? character.skills[idx -
-                                                        1].simple_desc :
-                                                        character.skills[idx - 1].desc
-                                                }}
+                                                <span class="text-gray-400 ml-1">{{
+                                                        ascLevelMap[character.light_cone ? character.light_cone.promotion : 0]
+                                                    }}</span>
                                             </div>
                                         </div>
-                                    </template>
-                                    <div class="h-12 w-12 p-1 rounded-full border-2"
-                                         :style="`border-color: ${character.element ? character.element.color : 'white'}`">
-                                        <img :src="apiUrl + character.skills[idx - 1].icon"/>
+                                        <div class="text-gray-300 ml-2 text-left grid grid-cols-4 mt-1">
+                                            <div class="flex flex-row">
+                                                <StatIcon game="sr" :stat="character.light_cone.attributes[0].field"
+                                                          fill="#d1d5db"
+                                                          class="h-5 w-5 mr-2" style="margin-top: 3px;"/>
+                                                <span class="text-gray-200 font-sr-sans text-lg">{{
+                                                        character.light_cone ? character.light_cone.attributes[0].display : '-'
+                                                    }}</span>
+                                            </div>
+                                            <div class="flex flex-row">
+                                                <StatIcon game="sr" :stat="character.light_cone.attributes[1].field"
+                                                          fill="#d1d5db"
+                                                          class="h-5 w-5 mr-2" style="margin-top: 3px;"/>
+                                                <span class="text-gray-200 font-sr-sans text-lg">{{
+                                                        character.light_cone ? character.light_cone.attributes[1].display : '-'
+                                                    }}</span>
+                                            </div>
+                                            <div class="flex flex-row">
+                                                <StatIcon game="sr" :stat="character.light_cone.attributes[2].field"
+                                                          fill="#d1d5db"
+                                                          class="h-5 w-5 mr-2" style="margin-top: 3px;"/>
+                                                <span class="text-gray-200 font-sr-sans text-lg">{{
+                                                        character.light_cone ? character.light_cone.attributes[2].display : '-'
+                                                    }}</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                </MyTooltip>
+                                </div>
+                                <div v-else
+                                     class="mt-2 w-full rounded-xl align-middle text-center bg-black bg-opacity-20 backdrop-blur-md"
+                                     style="height: 90px;">
+                                    {{ $t('sr_noLightcone') }}
+                                </div>
+                                <!-- 右侧第三块：行迹 -->
                                 <div
-                                    v-if="character.skill_trees[idx - 1].level >= character.skill_trees[idx - 1].max_level"
-                                    class="ml-2 mt-2 text-orange-300 text-xl align-middle h-full font-sr-sans">MAX
-                                </div>
-                                <div v-else class="ml-2 mt-2 text-lg align-middle h-full font-sr-sans">
-                                    <div class="text-gray-200" v-if="!rankAdditions[character.skills[idx - 1].id]">
-                                        {{ character.skill_trees[idx - 1].level }} <span class="text-gray-400">/{{
-                                            character.skill_trees[idx - 1].max_level
-                                        }}</span>
+                                    class="mt-2 px-2 py-3 w-full rounded-xl bg-black bg-opacity-20 backdrop-blur-md grid grid-cols-4 grid-rows-1 relative z-50">
+                                    <div v-for="idx in 4" class="h-full flex flex-row cursor-default">
+                                        <MyTooltip placement="left" max-width="500px">
+                                            <template #content>
+                                                <div class="max-w-md">
+                                                    <div class="font-sr text-xl">
+                                                        {{ character.skills[idx - 1].name }}
+                                                    </div>
+                                                    <div class="font-sr-sans text-sm mt-1">
+                                                        {{
+                                                            character.skills[idx - 1].simple_desc ? character.skills[idx -
+                                                                1].simple_desc :
+                                                                character.skills[idx - 1].desc
+                                                        }}
+                                                    </div>
+                                                </div>
+                                            </template>
+                                            <div class="h-12 w-12 p-1 rounded-full border-2"
+                                                 :style="`border-color: ${character.element ? character.element.color : 'white'}`">
+                                                <img :src="apiUrl + character.skills[idx - 1].icon"/>
+                                            </div>
+                                        </MyTooltip>
+                                        <div
+                                            v-if="character.skill_trees[idx - 1].level >= character.skill_trees[idx - 1].max_level"
+                                            class="ml-2 mt-2 text-orange-300 text-xl align-middle h-full font-sr-sans">
+                                            MAX
+                                        </div>
+                                        <div v-else class="ml-2 mt-2 text-lg align-middle h-full font-sr-sans">
+                                            <div class="text-gray-200"
+                                                 v-if="!rankAdditions[character.skills[idx - 1].id]">
+                                                {{ character.skill_trees[idx - 1].level }} <span class="text-gray-400">/{{
+                                                    character.skill_trees[idx - 1].max_level
+                                                }}</span>
+                                            </div>
+                                            <div v-else class=" text-cyan-400">
+                                                {{
+                                                    character.skill_trees[idx - 1].level + rankAdditions[character.skills[idx -
+                                                    1].id]
+                                                }} <span class="text-gray-400">/{{
+                                                    character.skill_trees[idx - 1].max_level +
+                                                    rankAdditions[character.skills[idx -
+                                                    1].id]
+                                                }}</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div v-else class=" text-cyan-400">
-                                        {{
-                                            character.skill_trees[idx - 1].level + rankAdditions[character.skills[idx -
-                                            1].id]
-                                        }} <span class="text-gray-400">/{{
-                                            character.skill_trees[idx - 1].max_level +
-                                            rankAdditions[character.skills[idx -
-                                            1].id]
-                                        }}</span>
-                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <!-- 右侧第四块：遗器 -->
-                        <MyCarousel v-if="character.relics && character.relics.length > 0"
-                                    class="mt-2 w-full h-40 rounded-xl bg-black bg-opacity-20 backdrop-blur-md relative z-20"
-                                    show-arrow="never" show-indicator="always"
-                                    :autoplay="false">
-                            <div v-for="relic in character.relics"
-                                 class="pb-2 pr-2 pl-4 w-full flex flex-row h-40 text-gray-200">
-                                <img style="height: 100%; margin-left: -20px;" class="artifact-mask w-36 object-cover"
-                                     :src="apiUrl + relic.icon"/>
-                                <div class=" w-full h-full relative">
-                                    <div class="text-gray-400 absolute right-0 top-1 flex flex-row">
-                                        {{ relic.name }}
-                                        <div :class="{ 'border-orange-400 bg-orange-900 text-orange-300': relic.rarity == 5,
+                                <!-- 右侧第四块：遗器 -->
+                                <MyCarousel v-if="character.relics && character.relics.length > 0"
+                                            class="mt-2 w-full h-40 rounded-xl bg-black bg-opacity-20 backdrop-blur-md relative z-20"
+                                            show-arrow="never" show-indicator="always"
+                                            :autoplay="false">
+                                    <div v-for="relic in character.relics"
+                                         class="pb-2 pr-2 pl-4 w-full flex flex-row h-40 text-gray-200">
+                                        <img style="height: 100%; margin-left: -20px;"
+                                             class="artifact-mask w-36 object-cover"
+                                             :src="apiUrl + relic.icon"/>
+                                        <div class=" w-full h-full relative">
+                                            <div class="text-gray-400 absolute right-0 top-1 flex flex-row">
+                                                {{ relic.name }}
+                                                <div :class="{ 'border-orange-400 bg-orange-900 text-orange-300': relic.rarity == 5,
                                                 'border-purple-400 bg-purple-900 text-purple-300': relic.rarity == 4,
                                                 'border-blue-400 bg-blue-900 text-blue-300': relic.rarity == 3 ,
                                                 'border-green-400 bg-green-900 text-green-300': relic.rarity == 2 }"
-                                             class="h-full justify-end ml-2 font-sr-sans rounded-full border px-2">
-                                            +{{ relic.level }}
-                                        </div>
-                                    </div>
-                                    <!-- 主词条、等级 -->
-                                    <div class="text-left mt-7 w-full flex flex-row">
-                                        <div class="mt-1 flex flex-row">
-                                            <StatIcon game="sr" :stat="relic.main_affix.field" fill="#d1d5db"
-                                                      class="h-5 w-5 mr-2" style="margin-top: 6px;"/>
-                                            <div class="text-gray-200 text-lg truncated" style="max-width: 220px">
-                                                {{ relic.main_affix.name }}
+                                                     class="h-full justify-end ml-2 font-sr-sans rounded-full border px-2">
+                                                    +{{ relic.level }}
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div>
+                                            <!-- 主词条、等级 -->
+                                            <div class="text-left mt-7 w-full flex flex-row">
+                                                <div class="mt-1 flex flex-row">
+                                                    <StatIcon game="sr" :stat="relic.main_affix.field" fill="#d1d5db"
+                                                              class="h-5 w-5 mr-2" style="margin-top: 6px;"/>
+                                                    <div class="text-gray-200 text-lg truncated"
+                                                         style="max-width: 220px">
+                                                        {{ relic.main_affix.name }}
+                                                    </div>
+                                                </div>
+                                                <div>
                                             <span class="text-gray-200 text-3xl ml-2 font-sr-sans">{{
                                                     relic.main_affix.display
                                                 }}</span>
-                                        </div>
-                                    </div>
-                                    <!-- 副词条 -->
-                                    <div v-if="relic.sub_affix && relic.sub_affix.length > 0"
-                                         class="grid grid-cols-2 mt-2 pr-2 grid-rows-2 gap-1 w-full text-left">
-                                        <div v-for="substat in relic.sub_affix" class="flex flex-row justify-between">
-                                            <div class="flex flex-row">
-                                                <StatIcon game="sr" :stat="substat.field" fill="#ccc"
-                                                          class="h-5 w-5 mr-2"
-                                                          style="margin-top: 4px;"/>
-                                                <span class="text-gray-200 font-sr-sans text-xl ml-2">{{
-                                                        substat.display
-                                                    }}</span>
-                                            </div>
-                                            <div class="flex flex-row mr-5">
-                                                <div v-for="i in substat.count - 1"
-                                                     class="ml-1 mt-0 text-center text-sm">
-                                                    <img src="../../../assets/statIcons/statEnhance.png"
-                                                         class="h-4 invert opacity-70 mt-1"
-                                                         :style="`transform: translate(calc(${substat.count - i - 1}*5px));`"/>
                                                 </div>
                                             </div>
+                                            <!-- 副词条 -->
+                                            <div v-if="relic.sub_affix && relic.sub_affix.length > 0"
+                                                 class="grid grid-cols-2 mt-2 pr-2 grid-rows-2 gap-1 w-full text-left">
+                                                <div v-for="substat in relic.sub_affix"
+                                                     class="flex flex-row justify-between">
+                                                    <div class="flex flex-row">
+                                                        <StatIcon game="sr" :stat="substat.field" fill="#ccc"
+                                                                  class="h-5 w-5 mr-2"
+                                                                  style="margin-top: 4px;"/>
+                                                        <span class="text-gray-200 font-sr-sans text-xl ml-2">{{
+                                                                substat.display
+                                                            }}</span>
+                                                    </div>
+                                                    <div class="flex flex-row mr-5">
+                                                        <div v-for="i in substat.count - 1"
+                                                             class="ml-1 mt-0 text-center text-sm">
+                                                            <img src="../../../assets/statIcons/statEnhance.png"
+                                                                 class="h-4 invert opacity-70 mt-1"
+                                                                 :style="`transform: translate(calc(${substat.count - i - 1}*5px));`"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div v-else class="mt-2 text-left text-gray-300 text-lg">{{
+                                                    $t('sr_noSubstats')
+                                                }}
+                                            </div>
                                         </div>
                                     </div>
-                                    <div v-else class="mt-2 text-left text-gray-300 text-lg">{{ $t('sr_noSubstats') }}
+                                </MyCarousel>
+                                <div v-else
+                                     class="mt-2 w-full h-40 rounded-xl pt-16 text-gray-200 text-center align-middle bg-black bg-opacity-20 backdrop-blur-md">
+                                    {{ $t('sr_noRelics') }}
+                                </div>
+                                <div v-if="character.relics && character.relics.length > 0"
+                                     class="flex flex-row justify-between">
+                                    <div class=" text-gray-900 ml-1 mt-1 flex flex-row">
+                                        <div class="rounded-full bg-gray-200 font-serif font-bold middle h-6 w-6">{{
+                                                $t('sr_outerSets')
+                                            }}
+                                        </div>
+                                        <pre class="text-gray-100 text-left font-sr ml-2 text-sm"
+                                             style="margin-top: 2px;">{{ getOuterSets(character.relic_sets) }}</pre>
                                     </div>
-                                </div>
-                            </div>
-                        </MyCarousel>
-                        <div v-else
-                             class="mt-2 w-full h-40 rounded-xl pt-16 text-gray-200 text-center align-middle bg-black bg-opacity-20 backdrop-blur-md">
-                            {{ $t('sr_noRelics') }}
-                        </div>
-                        <div v-if="character.relics && character.relics.length > 0"
-                             class="flex flex-row justify-between">
-                            <div class=" text-gray-900 ml-1 mt-1 flex flex-row">
-                                <div class="rounded-full bg-gray-200 font-serif font-bold middle h-6 w-6">{{
-                                        $t('sr_outerSets')
-                                    }}
-                                </div>
-                                <pre class="text-gray-100 text-left font-sr ml-2 text-sm"
-                                     style="margin-top: 2px;">{{ getOuterSets(character.relic_sets) }}</pre>
-                            </div>
-                            <div class="text-gray-900 mt-1 mr-1 flex flex-row">
+                                    <div class="text-gray-900 mt-1 mr-1 flex flex-row">
                                 <pre class="text-gray-100 mr-2 text-right font-sr text-sm"
                                      style="margin-top: 2px;">{{ getInnerSet(character.relic_sets) }}</pre>
-                                <div class="rounded-full bg-gray-200 font-serif font-bold middle h-6 w-6">{{
-                                        $t('sr_innerSets')
-                                    }}
+                                        <div class="rounded-full bg-gray-200 font-serif font-bold middle h-6 w-6">{{
+                                                $t('sr_innerSets')
+                                            }}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div v-else class="flex flex-row justify-between">
-                            <div class=" text-gray-900 ml-1 mt-1 flex flex-row">
-                                <div class="rounded-full bg-gray-200 font-serif font-bold middle h-6 w-6">{{
-                                        $t('sr_outerSets')
-                                    }}
-                                </div>
-                                <div class="text-gray-100 font-sr ml-2 text-sm" style="margin-top: 2px;">{{
-                                        $t('sr_noRelicSets')
-                                    }}
-                                </div>
-                            </div>
-                            <div class="text-gray-900 mt-1 mr-1 font-sr flex flex-row">
-                                <div class="text-gray-100 mr-2 text-sm" style="margin-top: 2px;">{{
-                                        $t('sr_noRelicSets')
-                                    }}
-                                </div>
-                                <div class="rounded-full bg-gray-200 font-serif font-bold middle h-6 w-6">{{
-                                        $t('sr_innerSets')
-                                    }}
+                                <div v-else class="flex flex-row justify-between">
+                                    <div class=" text-gray-900 ml-1 mt-1 flex flex-row">
+                                        <div class="rounded-full bg-gray-200 font-serif font-bold middle h-6 w-6">{{
+                                                $t('sr_outerSets')
+                                            }}
+                                        </div>
+                                        <div class="text-gray-100 font-sr ml-2 text-sm" style="margin-top: 2px;">{{
+                                                $t('sr_noRelicSets')
+                                            }}
+                                        </div>
+                                    </div>
+                                    <div class="text-gray-900 mt-1 mr-1 font-sr flex flex-row">
+                                        <div class="text-gray-100 mr-2 text-sm" style="margin-top: 2px;">{{
+                                                $t('sr_noRelicSets')
+                                            }}
+                                        </div>
+                                        <div class="rounded-full bg-gray-200 font-serif font-bold middle h-6 w-6">{{
+                                                $t('sr_innerSets')
+                                            }}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </MyCarousel>
         </div>
-        <div v-if="!playerInfoReady" class="mt-4 mb-4">{{ $t('gs_emptyPlayerTip') }}</div>
-        <div v-else class="mt-4 mb-4">{{ $t('gs_showcaseTip') }}</div>
+        <div v-else class="mt-4 mb-4">{{ $t('gs_emptyPlayerTip') }}</div>
     </div>
 </template>
 
@@ -684,7 +710,7 @@ const showCharDetails = (index: number) => {
 }
 
 .gacha-mask {
-    -webkit-mask: linear-gradient(transparent 5%, white 15%, white 85%, transparent)
+    -webkit-mask: linear-gradient(transparent 1rem, white 3rem)
 }
 
 .left-gacha {
