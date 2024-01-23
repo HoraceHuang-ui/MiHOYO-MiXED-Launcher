@@ -184,7 +184,7 @@ defineExpose({
             <div
                 v-if="panes && panes.length > 1 && showIndicator !== 'never' && (showIndicator === 'always' || hoverShowIndicator)"
                 class="w-full absolute bottom-1 left-0 right-0 flex flex-row justify-center">
-                <div class="bg-gray-600 bg-opacity-15 px-2 rounded-full flex flex-row">
+                <div class="bg-gray-600 bg-opacity-20 px-2 rounded-full flex flex-row">
                     <div v-for="idx in panes.length"
                          class="py-2 mx-1"
                          @mouseenter="curIdx = idx-1">
@@ -225,7 +225,7 @@ defineExpose({
 }
 
 .indicator-unselected {
-    @apply w-5 bg-gray-500 opacity-80;
+    @apply w-5 bg-gray-400 opacity-90;
 }
 
 .slide-up-enter-from, .slide-up-leave-to {

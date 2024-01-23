@@ -426,7 +426,7 @@ const findSkillIdByProud = (proudId: number): number => {
             <!-- 角色详情卡片 -->
             <MyCarousel ref="cardsCarouselRef" class="gacha-mask relative z-0" :autoplay="false" show-arrow="never"
                         animation="fade-swipe"
-                        style="width: 960px; height: 545px">
+                        style="width: 960px; height: 543px; border-radius: 0 0 4.5vh 4.5vh">
                 <div v-for="(character, index) in playerInfo.characters" class="z-0 relative w-full mt-12">
                     <div class="mt-4 w-full absolute top-0 left-0 right-0 transition-all"
                          style="transition-duration: 300ms;">
@@ -653,7 +653,7 @@ const findSkillIdByProud = (proudId: number): number => {
                                              class="artifact-mask w-28 object-cover"
                                              :src="'https://enka.network/ui/' + artifact.icon + '.png'"/>
                                         <div class="w-full h-full relative">
-                                            <div class="text-gray-400 mr-2 text-sm absolute right-0 top-1">
+                                            <div class="text-gray-400 mr-2 text-sm absolute right-0 top-1 truncated">
                                                 {{ artifact.name }}
                                             </div>
                                             <!-- 主词条、等级 -->
@@ -737,6 +737,10 @@ const findSkillIdByProud = (proudId: number): number => {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.font-gs {
+    font-family: genshin-font, serif;
+}
 
 .char-side-icon {
     -webkit-mask: radial-gradient(white 80%, transparent)
