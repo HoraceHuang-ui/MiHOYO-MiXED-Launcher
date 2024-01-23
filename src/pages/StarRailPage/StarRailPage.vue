@@ -201,7 +201,7 @@ const refresh = () => {
                            class="absolute left-16 top-96 z-50 rounded-xl transition-all backdrop-blur-md pl-3 pr-1 font-sr-sans"
                            style="height: 112px; width: 396px; background-color: rgb(255 255 255 / 0.7)"/>
         </Transition>
-        <ScrollWrapper ref="scrollBarRef" height="91vh" width="82vw" class="scroll-wrapper absolute z-40"
+        <ScrollWrapper ref="scrollBarRef" height="91vh" class="scroll-wrapper absolute z-40"
                        @scroll="handleScroll"
                        show-bar="never">
             <div class="items-scroll flex flex-col content-center items-center w-full">
@@ -265,7 +265,6 @@ const refresh = () => {
 .scroll-wrapper {
     top: 2vh;
     left: 8vw;
-    border-radius: 4.5vh 4.5vh 0 0;
 }
 
 .items-scroll {
