@@ -193,6 +193,18 @@ const requestInfo = () => {
     })
 }
 
+const getNamecard = (arr: string[]) => {
+    for (const s of arr) {
+        if (s === '') {
+            continue
+        }
+        if (s[s.length - 1] === 'P') {
+            return s
+        }
+    }
+    return 'UI_NameCardPic_0_P'
+}
+
 const setShowcase = (index: number) => {
     cardsCarouselRef.value?.setPane?.(index)
     showcaseIdx.value = index
@@ -341,9 +353,10 @@ const findSkillIdByProud = (proudId: number): number => {
     <div class="bg-white" style="border-radius: 4.5vh;" :style="playerInfoReady ? 'height: 86.5vh;' : ''">
         <div class="flex flex-row w-full p-0 relative justify-between" style="height: 9vh;">
             <!-- 右上角名片 -->
-            <img v-if="playerInfoReady && playerInfo.player.namecard.assets.picPath[0] !== ''"
-                 class="absolute top-0 right-0 bottom-0 z-0" style="height: 9vh;"
-                 :src="'https://enka.network/ui/' + playerInfo.player.namecard.assets.picPath[0] + '.png'"/>
+            <img v-if="playerInfoReady && playerInfo.player.namecard.assets.picPath"
+                 class="namecard-mask absolute top-0 right-0 bottom-0 z-0 w-1/3 object-cover"
+                 style="height: 9vh; border-radius: 0 4.5vh 4.5vh 0"
+                 :src="`https://enka.network/ui/${getNamecard(playerInfo.player.namecard.assets.picPath)}.png`"/>
             <div v-if="playerInfoLoading" class="absolute bottom-0 z-0" style="margin-left: 1vw; right: 2vw; top: 3vh;">
                 {{
                     $t('gs_loadingPlayerInfo')
@@ -401,17 +414,20 @@ const findSkillIdByProud = (proudId: number): number => {
                         <i class="bi bi-chevron-left text-lg text-center"/>
                     </div>
                 </div>
+
                 <ScrollWrapper ref="charsScrollbar" class="flex flex-row justify-center" width="50%" :no-resize="true"
                                show-bar="never">
-                    <div class="flex flex-row flex-nowrap w-max">
-                        <div v-for="(character, index) in playerInfo.characters" class="relative w-12 h-12 z-50"
-                             @click="setShowcase(index)">
-                            <div class="absolute bottom-0 w-9 h-9 border-2 rounded-full bg-white transition-all"
-                                 :class="{ 'border-blue-600 border-3': showcaseIdx == index }"
-                                 style="left: 10px;"></div>
-                            <img
-                                class="absolute bottom-0 char-side-icon rounded-full ml-1 w-12 h-12 hover:transform hover:scale-110 hover:-translate-y-1 active:scale-100 active:translate-y-0 transition-all object-cover"
-                                :src="'https://enka.network/ui/' + (character.costumeId != '' ? character.assets.costumes[0].sideIconName : character.assets.sideIcon) + '.png'"/>
+                    <div class="flex flex-row justify-center">
+                        <div class="flex flex-row flex-nowrap w-max">
+                            <div v-for="(character, index) in playerInfo.characters" class="relative w-12 h-12 z-50"
+                                 @click="setShowcase(index)">
+                                <div class="absolute bottom-0 w-9 h-9 border-2 rounded-full bg-white transition-all"
+                                     :class="{ 'border-blue-600 border-3': showcaseIdx == index }"
+                                     style="left: 10px;"></div>
+                                <img
+                                    class="absolute bottom-0 char-side-icon rounded-full ml-1 w-12 h-12 hover:transform hover:scale-110 hover:-translate-y-1 active:scale-100 active:translate-y-0 transition-all object-cover"
+                                    :src="'https://enka.network/ui/' + (character.costumeId != '' ? character.assets.costumes[0].sideIconName : character.assets.sideIcon) + '.png'"/>
+                            </div>
                         </div>
                     </div>
                 </ScrollWrapper>
@@ -740,6 +756,10 @@ const findSkillIdByProud = (proudId: number): number => {
 
 .font-gs {
     font-family: genshin-font, serif;
+}
+
+.namecard-mask {
+    -webkit-mask: linear-gradient(90deg, transparent, white 50%)
 }
 
 .char-side-icon {
