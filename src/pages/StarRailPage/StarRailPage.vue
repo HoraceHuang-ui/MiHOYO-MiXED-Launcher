@@ -199,7 +199,8 @@ const refresh = () => {
                        class="absolute left-16 top-96 z-50 rounded-xl transition-all backdrop-blur-md pl-3 pr-1 font-sr-sans"
                        :class="hideElements ? 'opacity-0 -translate-y-2 pointer-events-none blur-md -translate-x-14 scale-110' : 'opacity-100 pointer-events-auto'"
                        style="height: 112px; width: 396px; background-color: rgb(255 255 255 / 0.7); transition-duration: 500ms;"/>
-        <ScrollWrapper ref="scrollBarRef" height="91vh" class="scroll-wrapper absolute z-40" @scroll="handleScroll"
+        <ScrollWrapper ref="scrollBarRef" height="91vh" width="82vw" class="scroll-wrapper absolute z-40"
+                       @scroll="handleScroll"
                        show-bar="never">
             <div class="items-scroll flex flex-col content-center items-center w-full">
                 <div class="w-full flex flex-row justify-between">
