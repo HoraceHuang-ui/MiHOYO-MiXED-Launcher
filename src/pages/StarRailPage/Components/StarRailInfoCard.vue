@@ -350,7 +350,6 @@ const showCharDetails = (index: number) => {
                             <div class="left-gacha w-7/12 absolute left-0 bottom-0 z-10"
                                  style="height: 117%;">
                                 <img class="inline-block object-cover bottom-0 left-0 absolute z-10"
-                                     loading="lazy"
                                      style="height: 100%;" :src="apiUrl + character.portrait"/>
                             </div>
                             <!-- 左上角命途、等级 -->
