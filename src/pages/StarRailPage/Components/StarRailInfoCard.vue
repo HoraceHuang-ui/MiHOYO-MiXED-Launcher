@@ -347,7 +347,7 @@ const showCharDetails = (index: number) => {
                         <!-- 卡片前景 -->
                         <div class="flex flex-row h-full absolute top-0 left-0 right-0 bottom-0 z-10">
                             <!-- 立绘 -->
-                            <div class="left-gacha w-7/12 inline-block object-cover absolute left-0 bottom-0 z-10"
+                            <div class="left-gacha w-7/12 absolute left-0 bottom-0 z-10"
                                  style="height: 117%;">
                                 <img class="inline-block object-cover bottom-0 left-0 absolute z-10"
                                      loading="lazy"

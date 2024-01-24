@@ -203,9 +203,9 @@ const refresh = () => {
     <div class="transition-all relative"
          :class="launcherInfoReady ? 'opacity-100' : 'opacity-0 blur-lg scale-90'"
          style="width: 98vw; height: 92vh; transition-duration: 400ms;">
-        <div class="bg-pic rounded-3xl w-full h-full" style="transition-duration: 500ms;"
+        <div class="bg-pic rounded-3xl" style="transition-duration: 500ms;"
              :class="hideElements ? 'scale-x-95 translate-y-3' : ''">
-            <img class="top-0 rounded-3xl transition-all"
+            <img class="top-0 rounded-3xl transition-all w-full h-full object-cover"
                  :class="hideElements ? 'blur-md scale-125 brightness-75' : ''"
                  style="transition-duration: 500ms;"
                  :src="launcherInfoReady && launcherInfo.adv ? launcherInfo.adv.background : '../../src/assets/gsbanner.png'"
@@ -275,6 +275,7 @@ const refresh = () => {
 
 .bg-pic {
     width: 98vw;
+    height: 96.5vh;
     -webkit-mask: linear-gradient(white 50%, transparent)
 }
 

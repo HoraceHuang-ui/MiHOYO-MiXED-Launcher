@@ -448,13 +448,13 @@ const findSkillIdByProud = (proudId: number): number => {
                          style="transition-duration: 300ms;">
                         <!-- absolute： 卡片元素背景、元素图标 -->
                         <img class="relative z-0" :src="getCharElementAssets(index)!!.bg"
-                             style="border-radius: 4.5vh; height: 40vw;"/>
+                             style="border-radius: 4.5vh"/>
                         <img class="h-1/4 absolute opacity-50" :src="getCharElementAssets(index)!!.ico"
-                             style="top: -7px; right: -18px;"/>
+                             style="top: -7px; right: -18px"/>
                         <!-- 卡片前景 -->
                         <div class="flex flex-row h-full absolute top-0 left-0 right-0 bottom-0 z-10">
                             <!-- 立绘 -->
-                            <div class="left-gacha w-2/3 inline-block object-cover absolute left-0 bottom-0 z-10"
+                            <div class="left-gacha w-2/3 object-cover absolute left-0 bottom-0 z-10"
                                  style="height: 115%;">
                                 <img
                                     class="inline-block object-cover bottom-0 left-0 absolute z-10 h-full pointer-events-none"

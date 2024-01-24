@@ -186,12 +186,13 @@ const refresh = () => {
     </LoadFailedBlock>
     <div class="transition-all relative" :class="launcherInfoReady ? 'opacity-100' : 'opacity-0 blur-lg scale-90'"
          style="width: 98vw; height: 92vh; transition-duration: 400ms;">
-        <div class="bg-pic h-full w-full" style="transition-duration: 500ms; border-radius: 1.5rem 1.5rem 0 0;"
+        <div class="bg-pic"
+             style="transition-duration: 500ms; border-radius: 1.5rem 1.5rem 0 0;"
              :class="{ 'scale-95': hideElements }">
-            <img class=" top-0 rounded-3xl transition-all"
+            <img class=" top-0 rounded-3xl transition-all h-full w-full object-cover"
                  :class="hideElements ? 'blur-md scale-125 brightness-75' : ''"
                  style="transition-duration: 500ms;"
-                 :src="launcherInfo.adv && launcherInfoReady ? launcherInfo.adv.background : ''"
+                 :src="launcherInfo.adv && launcherInfoReady ? launcherInfo.adv.background : '../../src/assets/hi3banner.webp'"
                  @touchmove.prevent @mousewheel.prevent/>
         </div>
         <Transition name="banner">
@@ -261,6 +262,7 @@ const refresh = () => {
 
 .bg-pic {
     width: 98vw;
+    height: 96.5vh;
     /* -webkit-mask: linear-gradient(white 50%, transparent) */
     -webkit-mask: linear-gradient(white, white);
 }
