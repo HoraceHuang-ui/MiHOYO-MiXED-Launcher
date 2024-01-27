@@ -110,7 +110,7 @@ fetch('../../app.asar/package.json')
 # Credits
 
 - [electron-vite/electron-vite-vue](https://github.com/electron-vite/electron-vite-vue)
-- [enkanetwork.js](https://github.com/Jelosus2/enkanetwork.js)
+- [enka-network-api](https://github.com/yuko1101/enka-network-api)
 - [Mar-7th/MiHoMo API](https://march7th.xiaohei.moe/zh/resource/mihomo_api.html) | [Mar-7th/StarRailRes](https://github.com/Mar-7th/StarRailRes)
 
 # Translation

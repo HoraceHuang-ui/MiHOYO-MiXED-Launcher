@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import {computed, onMounted, ref} from 'vue'
 import {translate} from '../i18n'
+import {dialogComponent, dialogStyle} from "../types/dialog/dialog";
+import {useDialog} from "../utils/template-dialog";
 
 const gsGamePath = ref('')
 const srGamePath = ref('')
 const hi3GamePath = ref('')
 const transitionShow = ref(false)
 const bgPath = ref('')
+
+const dialogStyle = ref<dialogStyle>('gs')
 
 const DEFAULT_BG = '../../src/assets/gsbanner.png'
 const bgImage = computed(() => {
@@ -19,6 +23,31 @@ onMounted(async () => {
     hi3GamePath.value = await window.store.get('hi3GamePath')
     bgPath.value = await window.store.get('mainBgPath')
     transitionShow.value = true
+
+    window.store.get('dialogStyle').then((style: dialogStyle) => {
+        if (!style) {
+            window.store.set('dialogStyle', 'gs', false)
+        }
+        dialogStyle.value = style
+    })
+
+    window.store.get('newApi').then((resp: boolean) => {
+        if (!resp) {
+            useDialog(dialogComponent(dialogStyle.value), {}, {
+                title: '欢迎使用miXeD！',
+                msg: '由于API变更，此次更新将清除您的原神账号信息，请您重新获取。为您带来不便敬请谅解！',
+                showCancel: false
+            })
+            window.store.delete('genshinInfo')
+            window.store.set('newApi', true, false)
+        }
+    })
+
+    // window.enka.getGenshinPlayer('267685260', 'chs').then((resp: any) => {
+    //     console.log(resp)
+    // }).catch((err) => {
+    //     console.error(err)
+    // })
 })
 
 const genshin = async () => {
@@ -45,7 +74,7 @@ const honkai3 = async () => {
     }
 }
 
-const setPic = async () => {
+const setPic = () => {
     window.dialog.showAndCopy({
         title: translate('mainBgDialog_title'),
         properties: ['openFile'],

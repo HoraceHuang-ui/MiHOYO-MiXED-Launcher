@@ -9,10 +9,7 @@ const Store = require('electron-store');
 const store = new Store();
 const child = require('child_process')
 const {dialog} = require('electron');
-const {Wrapper} = require('enkanetwork.js')
-const {genshin} = new Wrapper({
-    language: 'zh-CN'
-})
+const {EnkaClient, TextAssets, DynamicTextAssets} = require("enka-network-api");
 
 // The built directory structure
 //
@@ -153,10 +150,27 @@ async function createWindow() {
     });
 
     ipcMain.handle("enka:getGenshinPlayer", async (_event, uid, lang) => {
-        console.log("genshin enka ipcMain" + uid)
-        genshin.language = lang
-        const result = await genshin.getPlayer(uid)
-        return result
+        function convertObjectToJson(obj: any) {
+            if (typeof obj !== "object" || obj === null || obj === undefined) return obj;
+            const entries = Object.entries(obj)
+                .filter(([key, value]) => !key.startsWith("_") && !(value instanceof EnkaClient)) // filter out private properties and EnkaClient instance, which has circular object
+                .map(([key, value]) => [key, convertObjectToJson(value)]);
+            if (obj instanceof TextAssets) {
+                entries.push(["text", obj instanceof DynamicTextAssets ? obj.getNullableReplacedText() : obj.getNullable()]); // convert TextAssets to string
+            }
+            return Object.fromEntries(entries);
+        }
+
+        const enka = new EnkaClient({
+            defaultLanguage: lang,
+            requestTimeout: 10000
+        })
+
+        try {
+            return convertObjectToJson(await enka.fetchUser(uid, false))
+        } catch {
+            return convertObjectToJson(await enka.fetchUser(uid, true))
+        }
     })
 
     ipcMain.handle("path:joinDirnameAsset", (_event, arg) => {

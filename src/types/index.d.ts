@@ -20,7 +20,7 @@ export interface IDialog {
 }
 
 export interface IEnka {
-    getGenshinPlayer: (uid: String, lang: String) => Promise<any>
+    getGenshinPlayer: (uid: String, lang: String) => Promise<any>,
 }
 
 export interface IWin {

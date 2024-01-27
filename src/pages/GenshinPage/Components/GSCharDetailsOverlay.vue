@@ -2,16 +2,16 @@
 import {ref} from 'vue'
 import StatIcon from "../../../components/StatIcon.vue";
 import DialogListItem from "../../../components/DialogListItem.vue";
-import {Stats} from "enkanetwork.js";
 import {translate} from "../../../i18n";
 import TemplateDialog from "../../../components/TemplateDialog.vue";
+import ScrollWrapper from "../../../components/ScrollWrapper.vue";
 
-defineProps({
+const props = defineProps({
     title: {
         type: String,
         default: 'Character Details'
     },
-    character: {
+    stats: {
         type: Object,
         required: true
     }
@@ -19,25 +19,32 @@ defineProps({
 
 const dialogRef = ref<any>(null)
 
-const trimStats = (stats: Stats) => {
-    const trim = ['baseHp', 'hpPercentage', 'maxHp', 'currentHp', 'baseAtk', 'atk', 'atkPercentage', 'def', 'baseDef', 'defPercentage', 'Cost', 'Energy', 'Mastery']
-    const res = {...stats}
-    const entries = Object.entries(stats)
+const trimStats = (stats: any) => {
+    const trim = ['HP', 'PERCENT', 'ATTACK', 'DEFENSE', 'BASE_SPEED', 'MASTERY']
+    const res: Record<string, any> = {}
 
-    for (const [stat, val] of entries) {
-        let flag = false;
+    for (const stat of Object.values(stats)) {
+        let flag = false
         for (const t of trim) {
-            if (stat.endsWith(t) || val.value === '' || val.value === '0') {
-                flag = true;
+            if (stat.fightProp.endsWith(t) || stat.value == 0) {
+                flag = true
                 break
             }
         }
-        if (flag) {
-            delete (res as any)[stat]
+        if (!flag) {
+            res[stat.fightProp] = stat
         }
     }
 
     return res
+}
+
+const displayStat = (stat: any) => {
+    if (stat.isPercent) {
+        return `${(stat.value * 100).toFixed(1)}%`
+    } else {
+        return `${stat.value.toFixed(0)}`
+    }
 }
 
 const closeDialog = () => {
@@ -48,7 +55,7 @@ const closeDialog = () => {
 <template>
     <TemplateDialog width="50%" class="text-gray-100" ref="dialogRef">
         <div class="w-full font-gs text-center text-xl mb-2">{{
-                character.name + ' ' + translate('gs_charDetails')
+                title
             }}
         </div>
         <div
@@ -65,66 +72,68 @@ const closeDialog = () => {
             </div>
         </div>
 
-        <div class="flex flex-col content-center justify-center w-full px-5 mt-5">
-            <DialogListItem class="font-gs" :name="translate('gs_FIGHT_PROP_HP')">
-                <template #icon>
-                    <StatIcon game="gs" stat="FIGHT_PROP_HP" fill="#eee" class="w-4 h-4" style="margin-top: 2px;"/>
-                </template>
-                <div class="font-gs">
-                    <span>{{ parseInt(character.stats.baseHp.value as string) }}</span>
-                    <span
-                        v-if="character.stats.maxHp.value != character.stats.baseHp.value"
-                        class="ml-1 text-blue-400">+{{
-                            parseInt(character.stats.maxHp.value as string)
-                            - parseInt(character.stats.baseHp.value as string)
-                        }}</span>
-                </div>
-            </DialogListItem>
-            <DialogListItem class="font-gs" :name="translate('gs_FIGHT_PROP_ATTACK')">
-                <template #icon>
-                    <StatIcon game="gs" stat="FIGHT_PROP_ATTACK" fill="#eee" class="w-4 h-4"
-                              style="margin-top: 2px;"/>
-                </template>
-                <div class="font-gs">
-                    <span>{{ parseInt(character.stats.baseAtk.value as string) }}</span>
-                    <span
-                        v-if="parseInt(character.stats.atk.value as string) != parseInt(character.stats.baseAtk.value as string)"
-                        class="ml-1 text-blue-400">+{{
-                            parseInt(character.stats.atk.value as string) -
-                            parseInt(character.stats.baseAtk.value as string)
-                        }}</span>
-                </div>
-            </DialogListItem>
-            <DialogListItem class="font-gs" :name="translate('gs_FIGHT_PROP_DEFENSE')">
-                <template #icon>
-                    <StatIcon game="gs" stat="FIGHT_PROP_DEFENSE" fill="#eee" class="w-4 h-4"
-                              style="margin-top: 2px;"/>
-                </template>
-                <div class="font-gs">
-                    <span>{{ parseInt(character.stats.baseDef.value as string) }}</span>
-                    <span
-                        v-if="parseInt(character.stats.def.value as string) != parseInt(character.stats.baseDef.value as string)"
-                        class="ml-1 text-blue-400">+{{
-                            parseInt(character.stats.def.value as string) -
-                            parseInt(character.stats.baseDef.value as string)
-                        }}</span>
-                </div>
-            </DialogListItem>
-            <DialogListItem class="font-gs" :name="translate('gs_FIGHT_PROP_ELEMENT_MASTERY')"
-                            :val="character.stats.elementalMastery.value ? parseInt(character.stats.elementalMastery.value as string).toString() : '0'">
-                <template #icon>
-                    <StatIcon game="gs" stat="FIGHT_PROP_ELEMENT_MASTERY" fill="#eee" class="w-4 h-4"
-                              style="margin-top: 2px;"/>
-                </template>
-            </DialogListItem>
-            <DialogListItem v-for="(stat, key) in trimStats(character.stats)"
-                            class="font-gs" :name="translate(`gs_${key}`)"
-                            :val="(stat.value as number * 100).toFixed(1).toString() + '%'">
-                <template #icon>
-                    <StatIcon game="gs" :stat="key" fill="#eee" class="w-4 h-4" style="margin-top: 2px;"/>
-                </template>
-            </DialogListItem>
-        </div>
+        <ScrollWrapper show-bar="always" style="max-height: 80vh" :no-resize="false">
+            <div class="flex flex-col content-center justify-center w-full px-5 mt-5">
+                <DialogListItem class="font-gs" :name="translate('gs_FIGHT_PROP_HP')">
+                    <template #icon>
+                        <StatIcon game="gs" stat="FIGHT_PROP_HP" fill="#eee" class="w-4 h-4" style="margin-top: 2px;"/>
+                    </template>
+                    <div class="font-gs">
+                        <span>{{ stats['0'].value.toFixed(0) }}</span>
+                        <span
+                            v-if="stats['37'].value.toFixed(0) != stats['0'].value.toFixed(0)"
+                            class="ml-1 text-blue-400">+{{
+                                stats['37'].value.toFixed(0)
+                                - stats['0'].value.toFixed(0)
+                            }}</span>
+                    </div>
+                </DialogListItem>
+                <DialogListItem class="font-gs" :name="translate('gs_FIGHT_PROP_ATTACK')">
+                    <template #icon>
+                        <StatIcon game="gs" stat="FIGHT_PROP_ATTACK" fill="#eee" class="w-4 h-4"
+                                  style="margin-top: 2px;"/>
+                    </template>
+                    <div class="font-gs">
+                        <span>{{ stats['3'].value.toFixed(0) }}</span>
+                        <span
+                            v-if="stats['38'].value.toFixed(0) != stats['3'].value.toFixed(0)"
+                            class="ml-1 text-blue-400">+{{
+                                stats['38'].value.toFixed(0) -
+                                stats['3'].value.toFixed(0)
+                            }}</span>
+                    </div>
+                </DialogListItem>
+                <DialogListItem class="font-gs" :name="translate('gs_FIGHT_PROP_DEFENSE')">
+                    <template #icon>
+                        <StatIcon game="gs" stat="FIGHT_PROP_DEFENSE" fill="#eee" class="w-4 h-4"
+                                  style="margin-top: 2px;"/>
+                    </template>
+                    <div class="font-gs">
+                        <span>{{ stats['6'].value.toFixed(0) }}</span>
+                        <span
+                            v-if="stats['39'].value.toFixed(0) != stats['6'].value.toFixed(0)"
+                            class="ml-1 text-blue-400">+{{
+                                stats['39'].value.toFixed(0) -
+                                stats['6'].value.toFixed(0)
+                            }}</span>
+                    </div>
+                </DialogListItem>
+                <DialogListItem class="font-gs" :name="translate('gs_FIGHT_PROP_ELEMENT_MASTERY')"
+                                :val="stats['16'].value.toFixed(0)">
+                    <template #icon>
+                        <StatIcon game="gs" stat="FIGHT_PROP_ELEMENT_MASTERY" fill="#eee" class="w-4 h-4"
+                                  style="margin-top: 2px;"/>
+                    </template>
+                </DialogListItem>
+                <DialogListItem v-for="(val, name) in trimStats(stats)"
+                                class="font-gs" :name="val.fightPropName.text"
+                                :val="displayStat(val)">
+                    <template #icon>
+                        <StatIcon game="gs" :stat="name" fill="#eee" class="w-4 h-4" style="margin-top: 2px;"/>
+                    </template>
+                </DialogListItem>
+            </div>
+        </ScrollWrapper>
     </TemplateDialog>
 </template>
 
