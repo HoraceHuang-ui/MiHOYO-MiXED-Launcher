@@ -2,7 +2,6 @@ import {rmSync} from 'node:fs'
 import {defineConfig} from 'vite'
 import vue from '@vitejs/plugin-vue'
 import electron from 'vite-plugin-electron'
-import renderer from 'vite-plugin-electron-renderer'
 import pkg from './package.json'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
@@ -62,8 +61,6 @@ export default defineConfig(({command}) => {
                     },
                 }
             ]),
-            // Use Node.js API in the Renderer-process
-            renderer(),
             AutoImport({
                 resolvers: [],
             }),

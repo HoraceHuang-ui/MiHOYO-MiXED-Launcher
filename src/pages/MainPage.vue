@@ -43,7 +43,7 @@ onMounted(async () => {
         }
     })
 
-    // window.enka.getGenshinPlayer('267685260', 'chs').then((resp: any) => {
+    // window.enka.getGenshinPlayer('193320369', 'chs').then((resp: any) => {
     //     console.log(resp)
     // }).catch((err) => {
     //     console.error(err)

@@ -1,15 +1,21 @@
-import {app, BrowserWindow, ipcMain, Menu, nativeTheme, shell, Tray} from 'electron'
+// const {dialog} = require('electron');
+import {app, BrowserWindow, dialog, ipcMain, Menu, nativeTheme, shell, Tray} from 'electron'
 import axios from 'axios'
 import {release} from 'node:os'
+// const Store = require('electron-store')
+import Store from 'electron-store'
+// const child = require('child_process')
+import child from 'child_process'
+// const {EnkaClient, TextAssets, DynamicTextAssets} = require("enka-network-api");
+import {DynamicTextAssets, EnkaClient, TextAssets} from "enka-network-api";
 
-const fs = require('fs').promises
-var path = require('path')
+import {promises as fs} from 'fs';
 
-const Store = require('electron-store');
+// const fs = require('fs').promises
+// var path = require('path')
+import path from 'path'
+
 const store = new Store();
-const child = require('child_process')
-const {dialog} = require('electron');
-const {EnkaClient, TextAssets, DynamicTextAssets} = require("enka-network-api");
 
 // The built directory structure
 //
@@ -128,14 +134,7 @@ async function createWindow() {
         try {
             const result = await dialog.showOpenDialog(win, options)
             if (!result.canceled && result.filePaths.length > 0) {
-                try {
-                    await fs.access(imageFolder)
-                } catch {
-                    await fs.mkdir(imageFolder)
-                }
-
                 const sourcePath = result.filePaths[0];
-
                 const dataURL = await fs.readFile(sourcePath, 'base64')
                     .then(data => `data:image/png;base64,${data}`)
 
@@ -157,6 +156,13 @@ async function createWindow() {
                 .map(([key, value]) => [key, convertObjectToJson(value)]);
             if (obj instanceof TextAssets) {
                 entries.push(["text", obj instanceof DynamicTextAssets ? obj.getNullableReplacedText() : obj.getNullable()]); // convert TextAssets to string
+            }
+            if (obj instanceof Array) {
+                const arr = []
+                for (const [_, entry] of entries) {
+                    arr.push(entry)
+                }
+                return arr
             }
             return Object.fromEntries(entries);
         }

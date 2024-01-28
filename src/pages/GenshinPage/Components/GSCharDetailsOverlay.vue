@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref} from 'vue'
+import {PropType, ref} from 'vue'
 import StatIcon from "../../../components/StatIcon.vue";
 import DialogListItem from "../../../components/DialogListItem.vue";
 import {translate} from "../../../i18n";
@@ -12,18 +12,18 @@ const props = defineProps({
         default: 'Character Details'
     },
     stats: {
-        type: Object,
+        type: Array as PropType<any[]>,
         required: true
     }
 })
 
 const dialogRef = ref<any>(null)
 
-const trimStats = (stats: any) => {
+const trimStats = (stats: any[]) => {
     const trim = ['HP', 'PERCENT', 'ATTACK', 'DEFENSE', 'BASE_SPEED', 'MASTERY']
     const res: Record<string, any> = {}
 
-    for (const stat of Object.values(stats)) {
+    for (const stat of stats) {
         let flag = false
         for (const t of trim) {
             if (stat.fightProp.endsWith(t) || stat.value == 0) {
@@ -79,12 +79,12 @@ const closeDialog = () => {
                         <StatIcon game="gs" stat="FIGHT_PROP_HP" fill="#eee" class="w-4 h-4" style="margin-top: 2px;"/>
                     </template>
                     <div class="font-gs">
-                        <span>{{ stats['0'].value.toFixed(0) }}</span>
+                        <span>{{ stats[0].value.toFixed(0) }}</span>
                         <span
-                            v-if="stats['37'].value.toFixed(0) != stats['0'].value.toFixed(0)"
+                            v-if="stats[37].value.toFixed(0) != stats[0].value.toFixed(0)"
                             class="ml-1 text-blue-400">+{{
-                                stats['37'].value.toFixed(0)
-                                - stats['0'].value.toFixed(0)
+                                stats[37].value.toFixed(0)
+                                - stats[0].value.toFixed(0)
                             }}</span>
                     </div>
                 </DialogListItem>
@@ -94,12 +94,12 @@ const closeDialog = () => {
                                   style="margin-top: 2px;"/>
                     </template>
                     <div class="font-gs">
-                        <span>{{ stats['3'].value.toFixed(0) }}</span>
+                        <span>{{ stats[3].value.toFixed(0) }}</span>
                         <span
-                            v-if="stats['38'].value.toFixed(0) != stats['3'].value.toFixed(0)"
+                            v-if="stats[38].value.toFixed(0) != stats[3].value.toFixed(0)"
                             class="ml-1 text-blue-400">+{{
-                                stats['38'].value.toFixed(0) -
-                                stats['3'].value.toFixed(0)
+                                stats[38].value.toFixed(0) -
+                                stats[3].value.toFixed(0)
                             }}</span>
                     </div>
                 </DialogListItem>
@@ -109,17 +109,17 @@ const closeDialog = () => {
                                   style="margin-top: 2px;"/>
                     </template>
                     <div class="font-gs">
-                        <span>{{ stats['6'].value.toFixed(0) }}</span>
+                        <span>{{ stats[6].value.toFixed(0) }}</span>
                         <span
-                            v-if="stats['39'].value.toFixed(0) != stats['6'].value.toFixed(0)"
+                            v-if="stats[39].value.toFixed(0) != stats[6].value.toFixed(0)"
                             class="ml-1 text-blue-400">+{{
-                                stats['39'].value.toFixed(0) -
-                                stats['6'].value.toFixed(0)
+                                stats[39].value.toFixed(0) -
+                                stats[6].value.toFixed(0)
                             }}</span>
                     </div>
                 </DialogListItem>
                 <DialogListItem class="font-gs" :name="translate('gs_FIGHT_PROP_ELEMENT_MASTERY')"
-                                :val="stats['16'].value.toFixed(0)">
+                                :val="stats[16].value.toFixed(0)">
                     <template #icon>
                         <StatIcon game="gs" stat="FIGHT_PROP_ELEMENT_MASTERY" fill="#eee" class="w-4 h-4"
                                   style="margin-top: 2px;"/>

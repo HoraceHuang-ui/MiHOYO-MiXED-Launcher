@@ -18,9 +18,13 @@ const uidInput = ref('')
 let uid = '';
 const charsPage = ref(0);
 const pages = computed(() => {
-    return playerInfo.value.characters && playerInfo.value.characters.length > 10
-        ? Math.floor((playerInfo.value.characters.length - 10) / 6 - 0.1) + 1
-        : 0
+    if (!playerInfo.value) {
+        return 0
+    } else {
+        return playerInfo.value && playerInfo.value.characters && playerInfo.value.characters.length > 10
+            ? Math.floor((playerInfo.value.characters.length - 10) / 6 - 0.1) + 1
+            : 0
+    }
 })
 const playerInfoReady = ref(false)
 const playerInfoLoading = ref(false)
@@ -63,16 +67,16 @@ const mergeToPlayerinfo = (newArr: any[]) => {
         let newChar = newArr[i]
         let exists = false;
         // for (let j = playerInfo.value.characters.length - 1; j >= 0; j--) {
-        for (let j = 0; j < playerInfo.value.characters.length; j++) {
-            let oldChar = playerInfo.value.characters[j]
+        for (let j = 0; j < playerInfo.value!!.characters.length; j++) {
+            let oldChar = playerInfo.value!!.characters[j]
             if (oldChar.characterData.id == newChar.characterData.id) {
-                playerInfo.value.characters[j] = newChar
+                playerInfo.value!!.characters[j] = newChar
                 exists = true
                 break
             }
         }
         if (!exists) {
-            playerInfo.value.characters.push(newChar)
+            playerInfo.value!!.characters.push(newChar)
         }
     }
 }
@@ -101,15 +105,16 @@ const requestInfo = () => {
     playerInfoFailed.value = false
     window.enka.getGenshinPlayer(uid, translate('gs_enkaLangCode'))
         .then((resp) => {
+            console.log(resp)
             if (playerInfo.value && playerInfo.value.uid == resp.uid) {
-                mergeToPlayerinfo(Object.values(resp.characters))
+                mergeToPlayerinfo(resp.characters)
                 const temp = playerInfo.value.characters
                 playerInfo.value = Object.fromEntries(Object.entries(resp).filter(([key]) => key !== 'characters'))
                 playerInfo.value.characters = temp
             } else {
-                resp.characters = Object.values(resp.characters)
                 playerInfo.value = resp
             }
+            console.log(playerInfo.value)
             playerInfo.value.characters.sort(function (a: any, b: any) {
                 // 等级
                 if (a.level < b.level) {
@@ -136,7 +141,6 @@ const requestInfo = () => {
             })
             window.store.set('genshinInfo', JSON.stringify(playerInfo.value), true)
             playerInfoLoading.value = false
-            console.log(playerInfo.value)
             router.push({
                 name: 'tempPage',
                 query: {
@@ -156,7 +160,11 @@ const setShowcase = (index: number) => {
 }
 
 const getCharElementAssets = (id: number) => {
-    const charElementId = playerInfo.value.characters[id].characterData.element.id
+    if (!(playerInfo.value!!.characters[id].characterData.element)) {
+        return elementAssets.hydro
+    }
+
+    const charElementId = playerInfo.value!!.characters[id].characterData.element!!.id
 
     switch (charElementId) {
         case "Water":
@@ -186,14 +194,14 @@ const displayStat = (stat: any) => {
 
 const calcCritScoreTotal = (id: number) => {
     let score = 0.0
-    const artifacts = Object.values(playerInfo.value.characters[id].artifacts)
+    const artifacts = playerInfo.value!!.characters[id].artifacts
     artifacts.forEach((artifact: any) => {
         if (artifact.mainstat.fightProp == "FIGHT_PROP_CRITICAL_HURT") {
             score += artifact.mainstat.value
         } else if (artifact.mainstat.fightProp == "FIGHT_PROP_CRITICAL") {
             score += artifact.mainstat.value * 2
         }
-        const substats = Object.values(artifact.substats.total)
+        const substats = artifact.substats.total
         substats.forEach((substat: any) => {
             if (substat.fightProp == "FIGHT_PROP_CRITICAL_HURT") {
                 score += substat.value
@@ -207,7 +215,7 @@ const calcCritScoreTotal = (id: number) => {
 
 const getArtifactSetInfo = (id: number) => {
     const tokens: string[] = []
-    const artifacts = Object.values(playerInfo.value.characters[id].artifacts)
+    const artifacts = playerInfo.value!!.characters[id].artifacts
     const sets = new Map<string, number>()
     artifacts.forEach((artifact: any) => {
         const setName = artifact.artifactData.set.name.text
@@ -263,7 +271,7 @@ const charsPagePrev = () => {
     }
 }
 
-const showCharDetails = (stats: any, name: string) => {
+const showCharDetails = (stats: any[], name: string) => {
     useDialog(GSCharDetailsOverlay, {}, {
         title: name + ' ' + translate('gs_charDetails'),
         stats: stats
@@ -272,13 +280,13 @@ const showCharDetails = (stats: any, name: string) => {
 </script>
 
 <template>
-    <div class="bg-white" style="border-radius: 4.5vh;" :style="playerInfoReady ? 'height: 86.5vh;' : ''">
+    <div class="bg-white" style="border-radius: 4.5vh;" :style="playerInfoReady && playerInfo ? 'height: 86.5vh;' : ''">
         <div class="flex flex-row w-full p-0 relative justify-between" style="height: 9vh;">
             <!-- 右上角名片 -->
-            <img v-if="playerInfoReady"
+            <img v-if="playerInfoReady && playerInfo"
                  class="namecard-mask absolute top-0 right-0 bottom-0 z-0 w-1/3 object-cover"
                  style="height: 9vh; border-radius: 0 4.5vh 4.5vh 0"
-                 :src="playerInfo.profileCard.pictures['1'].url"/>
+                 :src="playerInfo.profileCard.pictures[1].url"/>
             <div v-if="playerInfoLoading" class="absolute bottom-0 z-0" style="margin-left: 1vw; right: 2vw; top: 3vh;">
                 {{
                     $t('gs_loadingPlayerInfo')
@@ -290,7 +298,8 @@ const showCharDetails = (stats: any, name: string) => {
             </div>
             <!-- 左上角头像、昵称 -->
             <!-- playerInfo.player.profilePicture.assets.icon -->
-            <div v-if="playerInfoReady" class="flex flex-row content-start items-center" style="width: 35vw;">
+            <div v-if="playerInfoReady && playerInfo" class="flex flex-row content-start items-center"
+                 style="width: 35vw;">
                 <img class="rounded-full h-12 border-2 bg-slate-200" style="margin-left: 1vw;"
                      :src="playerInfo.profilePicture.icon.url"/>
                 <div class="font-gs" style="margin-left: 1vw; font-size: larger;">{{
@@ -303,7 +312,7 @@ const showCharDetails = (stats: any, name: string) => {
                 <CustomUIDInput v-model="uidInput" @submit="requestInfo"/>
             </div>
             <!-- 右侧 WL AR -->
-            <div v-if="playerInfoReady" style="width: 35vw; position: relative;">
+            <div v-if="playerInfoReady && playerInfo" style="width: 35vw; position: relative;">
                 <div class="h-full flex flex-row justify-end items-center">
                     <MyTag class="mx-2">
                         <div class="flex flex-row">
@@ -326,7 +335,7 @@ const showCharDetails = (stats: any, name: string) => {
             <div v-else style="width: 35vw"/>
         </div>
         <!-- BODY -->
-        <div v-if="playerInfoReady && playerInfo.showCharacterDetails" class="relative">
+        <div v-if="playerInfoReady && playerInfo" class="relative">
             <!-- 角色头像列表 10人一页 -->
             <div class="flex flex-row w-full justify-between absolute top-0">
                 <div class="relative z-50 w-1/4">
@@ -429,17 +438,16 @@ const showCharDetails = (stats: any, name: string) => {
                                             <template #content>
                                                 <span class="font-gs text-base point"> {{
                                                         idx <=
-                                                        Object.keys(character.unlockedConstellations).length ? character.unlockedConstellations[`${idx -
-                                                        1}`].name.text : $t("gs_lockedConstel")
+                                                        character.unlockedConstellations.length ? character.unlockedConstellations[idx - 1].name.text : $t("gs_lockedConstel")
                                                     }} </span>
                                             </template>
-                                            <div v-if="idx <= Object.keys(character.unlockedConstellations).length"
+                                            <div v-if="idx <= character.unlockedConstellations.length"
                                                  class="relative">
                                                 <div
                                                     class="absolute bottom-0 left-2 w-8 h-8 rounded-full bg-black z-20 opacity-70">
                                                 </div>
                                                 <img class="relative h-8 rounded-full ml-2 z-30"
-                                                     :src="character.unlockedConstellations[`${idx - 1}`].icon.url"/>
+                                                     :src="character.unlockedConstellations[idx - 1].icon.url"/>
                                             </div>
                                             <div v-else>
                                                 <img src="../../../assets/locked.png"
@@ -503,7 +511,7 @@ const showCharDetails = (stats: any, name: string) => {
                                         <StatIcon game="gs" stat="CUSTOM_ENERGY_REQUIRED" fill="#d1d5db" class="w-5 h-5"
                                                   style="margin-top: 1px;"/>
                                         <span class="text-gray-200 text-right font-gs ml-3">{{
-                                                character.skillLevels['2'].skill.costElemVal
+                                                character.skillLevels[2].skill.costElemVal
                                             }}</span>
                                     </div>
                                     <div class="w-full flex flex-row" style="grid-column: 1; grid-row: 3;">
@@ -562,17 +570,17 @@ const showCharDetails = (stats: any, name: string) => {
                                                           class="w-5 h-5 mr-2"
                                                           style="margin-top: 1px;"/>
                                                 <span class="text-gray-200 font-gs text-lg">{{
-                                                        character.weapon.weaponStats['0'].value.toFixed(0)
+                                                        character.weapon.weaponStats[0].value.toFixed(0)
                                                     }}</span>
                                             </div>
-                                            <div v-if="Object.keys(character.weapon.weaponStats).length > 1"
+                                            <div v-if="character.weapon.weaponStats.length > 1"
                                                  class="ml-2 flex flex-row" style="grid-column: 2 / 4;">
                                                 <!-- {{ $t(`gs_${character.equipment.weapon.weaponStats[1].stat}`) }} -->
                                                 <StatIcon game="gs"
-                                                          :stat="character.weapon.weaponStats['1'].fightProp"
+                                                          :stat="character.weapon.weaponStats[1].fightProp"
                                                           fill="#d1d5db" class="w-5 h-5 mr-2" style="margin-top: 1px;"/>
                                                 <span class="text-gray-200 font-gs text-lg">{{
-                                                        displayStat(character.weapon.weaponStats['1'])
+                                                        displayStat(character.weapon.weaponStats[1])
                                                     }}</span>
                                             </div>
                                         </div>
@@ -581,11 +589,11 @@ const showCharDetails = (stats: any, name: string) => {
                                 </div>
                                 <!-- 详情第三块：圣遗物 -->
                                 <MyCarousel
-                                    v-if="character.artifacts && Object.keys(character.artifacts).length > 0"
+                                    v-if="character.artifacts && character.artifacts.length > 0"
                                     class="relative mt-2 w-full h-40 rounded-xl bg-opacity-20 bg-black backdrop-blur-lg"
                                     show-arrow="never" show-indicator="always"
                                     :autoplay="false">
-                                    <div v-for="artifact in Object.values(character.artifacts)"
+                                    <div v-for="artifact in character.artifacts"
                                          class="pb-2 pr-2 pl-4 flex flex-row h-40 text-gray-200 w-full">
                                         <img style="height: 140%; margin-left: -15px; margin-top: -45px;"
                                              class="artifact-mask w-28 object-cover"
@@ -598,8 +606,6 @@ const showCharDetails = (stats: any, name: string) => {
                                             <div class="text-left mt-7 w-full flex flex-row">
                                                 <StatIcon game="gs" :stat="artifact.mainstat.fightProp" fill="#eee"
                                                           class="w-6 h-6 mr-1" style="margin-top: 3px;"/>
-                                                <!-- <span class="text-gray-200 text-xl">{{ $t(`gs_${artifact.mainstat.stat}`)
-                                                }}</span> -->
                                                 <span class="text-gray-200 text-3xl ml-2 font-gs">
                                                     {{ displayStat(artifact.mainstat) }}
                                                 </span>
@@ -613,9 +619,9 @@ const showCharDetails = (stats: any, name: string) => {
                                             </div>
                                             <!-- 副词条 -->
                                             <div
-                                                v-if="artifact.substats && Object.keys(artifact.substats.total).length > 0"
+                                                v-if="artifact.substats && artifact.substats.total.length > 0"
                                                 class="grid grid-cols-2 mt-2 grid-rows-2 gap-1 w-full text-left">
-                                                <div v-for="substat in Object.values(artifact.substats.total)"
+                                                <div v-for="substat in artifact.substats.total"
                                                      class="flex flex-row">
                                                     <!-- <span class="text-gray-300 text-lg">{{ getPropShortName(substat.stat)
                                                     }}</span> -->
@@ -638,7 +644,7 @@ const showCharDetails = (stats: any, name: string) => {
                                      class="mt-2 w-full h-40 rounded-xl pt-16 text-gray-200 text-center align-middle bg-opacity-20 bg-black backdrop-blur-lg">
                                     {{ $t('gs_noArtifacts') }}
                                 </div>
-                                <div v-if="character.artifacts && Object.keys(character.artifacts).length > 0"
+                                <div v-if="character.artifacts && character.artifacts.length > 0"
                                      class="flex flex-row justify-between">
                                     <div class="text-gray-200 ml-1 text-left text-sm">
                                         {{ $t('gs_critScore') }}
