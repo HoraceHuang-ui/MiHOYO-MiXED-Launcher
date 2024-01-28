@@ -22,7 +22,7 @@ const openLink = (url: string) => {
 
 <template>
     <MyTabs class="text-sm" v-model="tabsModel" :tabs="tabs">
-        <div v-for="key in keys" :key="key">
+        <div v-for="key in keys" :key="key" class="w-full">
             <ScrollWrapper height="64px">
                 <div class="h-max pr-2 pb-2">
                     <div v-for="post in postTypeMap.get(key)"
