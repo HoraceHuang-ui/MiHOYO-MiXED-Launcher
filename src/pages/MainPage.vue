@@ -34,20 +34,14 @@ onMounted(async () => {
     window.store.get('newApi').then((resp: boolean) => {
         if (!resp) {
             useDialog(dialogComponent(dialogStyle.value), {}, {
-                title: '欢迎使用miXeD！',
-                msg: '由于API变更，此次更新将清除您的原神账号信息，请您重新获取。为您带来不便敬请谅解！',
+                title: translate('gs_apiChangeTitle'),
+                msg: translate('gs_apiChangeText'),
                 showCancel: false
             })
             window.store.delete('genshinInfo')
             window.store.set('newApi', true, false)
         }
     })
-
-    // window.enka.getGenshinPlayer('193320369', 'chs').then((resp: any) => {
-    //     console.log(resp)
-    // }).catch((err) => {
-    //     console.error(err)
-    // })
 })
 
 const genshin = async () => {

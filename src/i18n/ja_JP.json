@@ -47,6 +47,8 @@
   "mainpage_title": "miHoYo miXeD ランチャー",
   "mainpage_buttonText": "{game}を起動！",
   "genshin_launcherContentsUrl": "https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=false&key=gcStgarh&language=ja-jp&launcher_id=10",
+  "gs_apiChangeTitle": "Welcome to miXeD!",
+  "gs_apiChangeText": "Due to API change, this update will wipe your Genshin Impact player data, please retrieve again. Apologies for inconvenience!",
   "gs_enkaLangCode": "ja",
   "gs_emptyPlayerTip": "キャラの詳細がここに表示されます",
   "gs_showcaseTip": "キャラの詳細情報が利用できません。ゲーム内で「キャラクターの詳細を表示」を有効にして、もう一度お試しください。",

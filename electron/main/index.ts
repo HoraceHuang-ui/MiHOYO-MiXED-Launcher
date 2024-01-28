@@ -152,10 +152,12 @@ async function createWindow() {
         function convertObjectToJson(obj: any) {
             if (typeof obj !== "object" || obj === null || obj === undefined) return obj;
             const entries = Object.entries(obj)
-                .filter(([key, value]) => !key.startsWith("_") && !(value instanceof EnkaClient)) // filter out private properties and EnkaClient instance, which has circular object
+                // filter out private properties and EnkaClient instance, which has circular object
+                .filter(([key, value]) => !key.startsWith("_") && !(value instanceof EnkaClient))
                 .map(([key, value]) => [key, convertObjectToJson(value)]);
             if (obj instanceof TextAssets) {
-                entries.push(["text", obj instanceof DynamicTextAssets ? obj.getNullableReplacedText() : obj.getNullable()]); // convert TextAssets to string
+                // convert TextAssets to string
+                entries.push(["text", obj instanceof DynamicTextAssets ? obj.getNullableReplacedText() : obj.getNullable()]);
             }
             if (obj instanceof Array) {
                 const arr = []

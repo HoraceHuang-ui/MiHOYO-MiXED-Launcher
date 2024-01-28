@@ -47,6 +47,8 @@
   "mainpage_title": "米哈游聚合啓動器",
   "mainpage_buttonText": "{game}啓動",
   "genshin_launcherContentsUrl": "https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=false&key=gcStgarh&language=zh-tw&launcher_id=10",
+  "gs_apiChangeTitle": "歡迎使用miXeD！",
+  "gs_apiChangeText": "由於API變更，此次更新將清除您的原神賬戶信息，請您重新獲取。爲您帶來不便敬請諒解！",
   "gs_enkaLangCode": "zh-TW",
   "gs_emptyPlayerTip": "此處將顯示角色的詳細信息",
   "gs_showcaseTip": "當前暫無詳細信息，請在游戲内打開”顯示角色詳情“后再試。",
