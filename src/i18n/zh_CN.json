@@ -47,7 +47,7 @@
   "mainpage_title": "米哈游聚合启动器",
   "mainpage_buttonText": "{game}启动",
   "genshin_launcherContentsUrl": "https://sdk-static.mihoyo.com/hk4e_cn/mdk/launcher/api/content?filter_adv=false&key=eYd89JmJ&language=zh-cn&launcher_id=18",
-  "gs_apiChangeTitle": "欢迎使用miXeD！",
+  "gs_apiChangeTitle": "欢迎使用 miXeD！",
   "gs_apiChangeText": "由于API变更，此次更新将清除您的原神账号信息，请您重新获取。为您带来不便敬请谅解！",
   "gs_enkaLangCode": "chs",
   "gs_emptyPlayerTip": "此处将显示角色的详细信息",
