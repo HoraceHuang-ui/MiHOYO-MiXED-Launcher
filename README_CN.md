@@ -139,3 +139,4 @@ fetch('../../app.asar/package.json')
     - `hi3LauncherPath`
     - `hi3GamePath`
     - `honkai3Upd`
+    - `gsCostume` 原神显示衣装立绘 ~~（国服会痛失原皮莫娜哦）~~

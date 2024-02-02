@@ -144,3 +144,4 @@ Click the badge below to help translate miXeD to your language:
     - `hi3LauncherPath`
     - `hi3GamePath`
     - `honkai3Upd`
+    - `gsCostume` Display costume splash images in Genshin Impact
