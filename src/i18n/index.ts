@@ -35,11 +35,11 @@ export const currentLocale = () => {
     return i18n.global.locale
 }
 
-export const translate = (key: string, bindings?: any) => {
+export const translate = (key: string, bindings?: Record<string, any>) => {
     if (!key || key === '') {
         return ''
     }
-    return i18n.global.t(key, bindings)
+    return bindings ? i18n.global.t(key, bindings) : i18n.global.t(key)
 }
 
 export const translateMultiple = (keys: string[]) => {

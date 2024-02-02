@@ -79,7 +79,7 @@ onMounted(async () => {
                         title: translate('general_gameUpdBoxTitle'),
                         msg: translate('general_gameUpdBoxText1', {
                             game: gameName,
-                            beDays: translate('general_beDays', 42 - timeDelta.value)
+                            beDays: translate('general_beDays', {n: 42 - timeDelta.value})
                         }),
                         msgCenter: false,
                         showCancel: true
@@ -98,7 +98,7 @@ onMounted(async () => {
                         title: translate('general_gameUpdBoxTitle'),
                         msg: translate('general_gameUpdBoxText2', {
                             game: gameName,
-                            days: translate('general_days', timeDelta.value)
+                            days: translate('general_days', {n: timeDelta.value})
                         }),
                         msgCenter: false,
                         showCancel: true
