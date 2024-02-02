@@ -14,7 +14,6 @@ const gameName = translate('general_gs')
 
 const gsLauncherPath = ref('')
 const gsGamePath = ref('')
-const displayConfirm = ref(false)
 const launcherPath = ref('')
 const gamePath = ref('')
 const timeUpd3_8 = Date.parse("2023/07/05 12:00:00 UTC+8")

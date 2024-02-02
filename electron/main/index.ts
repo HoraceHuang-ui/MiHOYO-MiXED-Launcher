@@ -8,12 +8,15 @@ import Store from 'electron-store'
 import child from 'child_process'
 // const {EnkaClient, TextAssets, DynamicTextAssets} = require("enka-network-api");
 import {DynamicTextAssets, EnkaClient, TextAssets} from "enka-network-api";
-
 import {promises as fs} from 'fs';
 
 // const fs = require('fs').promises
 // var path = require('path')
 import path from 'path'
+
+const enka = new EnkaClient({
+    requestTimeout: 10000
+})
 
 const store = new Store();
 
@@ -169,16 +172,17 @@ async function createWindow() {
             return Object.fromEntries(entries);
         }
 
-        const enka = new EnkaClient({
-            defaultLanguage: lang,
-            requestTimeout: 10000
-        })
+        enka.options.defaultLanguage = lang
 
         try {
             return convertObjectToJson(await enka.fetchUser(uid, false))
         } catch {
             return convertObjectToJson(await enka.fetchUser(uid, true))
         }
+    })
+
+    ipcMain.handle("enka:updateCache", (_event) => {
+        return enka.cachedAssetsManager.fetchAllContents()
     })
 
     ipcMain.handle("path:joinDirnameAsset", (_event, arg) => {

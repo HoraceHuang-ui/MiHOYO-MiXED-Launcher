@@ -24,6 +24,9 @@ contextBridge.exposeInMainWorld("dialog", {
 contextBridge.exposeInMainWorld("enka", {
     getGenshinPlayer: async (uid: String, lang: String) => {
         return await ipcRenderer.invoke("enka:getGenshinPlayer", uid, lang)
+    },
+    updateCache: () => {
+        return ipcRenderer.invoke("enka:updateCache")
     }
 })
 contextBridge.exposeInMainWorld("win", {

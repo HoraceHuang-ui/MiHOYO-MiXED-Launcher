@@ -21,6 +21,7 @@ export interface IDialog {
 
 export interface IEnka {
     getGenshinPlayer: (uid: String, lang: String) => Promise<any>,
+    updateCache: () => Promise<void>
 }
 
 export interface IWin {
