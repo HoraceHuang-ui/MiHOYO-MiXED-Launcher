@@ -31,6 +31,7 @@ const playerInfoLoading = ref(false)
 const playerInfoFailed = ref(false)
 const charsScrollbar = ref()
 const showcaseIdx = ref(0)
+const showCostume = ref(false)
 const elementAssets = {
     cryo: {
         bg: '../../src/assets/elementBgs/cryo.png',
@@ -81,7 +82,7 @@ const mergeToPlayerinfo = (newArr: any[]) => {
     }
 }
 
-onMounted(() => {
+onMounted(async () => {
     window.store.get('genshinInfo')
         .then((value) => {
             if (value) {
@@ -94,6 +95,7 @@ onMounted(() => {
         }).catch((err) => {
         console.error(err)
     })
+    showCostume.value = await window.store.get('gsCostume')
 })
 
 const router = useRouter()
@@ -149,8 +151,12 @@ const requestInfo = () => {
             })
         }).catch((err) => {
         console.error(err)
-        playerInfoLoading.value = false
-        playerInfoFailed.value = true
+        if (err.toString().startsWith('Error: Error invoking remote method \'enka:getGenshinPlayer\': AssetsNotFoundError:')) {
+            window.enka.updateCache().then(requestInfo)
+        } else {
+            playerInfoLoading.value = false
+            playerInfoFailed.value = true
+        }
     })
 }
 
@@ -389,7 +395,7 @@ const showCharDetails = (stats: any[], name: string) => {
                                  style="height: 115%;">
                                 <img
                                     class="inline-block object-cover bottom-0 left-0 absolute z-10 h-full pointer-events-none"
-                                    :src="character.characterData.splashImage.url"/>
+                                    :src="showCostume ? character.costume.splashImage.url : character.characterData.splashImage.url"/>
                             </div>
                             <!-- 左上角等级 -->
                             <div

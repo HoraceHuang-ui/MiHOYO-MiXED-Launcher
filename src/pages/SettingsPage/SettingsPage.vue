@@ -45,7 +45,7 @@ const checkUpdFailed = ref(false)
 const updChecking = ref(false)
 const quitOnClose = ref(true)
 const trayOnLaunch = ref(true)
-const DEFAULT_BG = '../../src/assets/gsbanner.png'
+const gsCostume = ref(false)
 
 onMounted(async () => {
     lang.value = localStorage.lang || 'en-US'
@@ -62,6 +62,8 @@ onMounted(async () => {
     bgPath.value = await window.store.get('mainBgPath')
     dialogStyle.value = await window.store.get('dialogStyle')
     transitionShow.value = true
+
+    gsCostume.value = await window.store.get('gsCostume')
 
     // BUILD: '../../app.asar/package.json'
     // DEV: '../../package.json'
@@ -147,9 +149,12 @@ const switchQuitAction = async () => {
     await window.store.set('quitOnClose', quitOnClose.value, false)
 }
 
-const switchLaunchTray = async () => {
-    console.log(trayOnLaunch.value)
-    await window.store.set('trayOnLaunch', trayOnLaunch.value, false)
+const switchLaunchTray = () => {
+    window.store.set('trayOnLaunch', trayOnLaunch.value, false)
+}
+
+const switchGsCostume = () => {
+    window.store.set('gsCostume', gsCostume.value, false)
 }
 
 const showLangDialog = () => {
@@ -268,6 +273,10 @@ const testTabIdx = ref(0)
                             }}
                         </option>
                     </select>
+                </div>
+                <div class="form-item">
+                    <div class="h-full py-1">Display costume Gacha [Genshin Impact]</div>
+                    <CustomSwitch class="ml-3" v-model="gsCostume" @change="switchGsCostume"></CustomSwitch>
                 </div>
 
                 <!-- ABOUT -->
