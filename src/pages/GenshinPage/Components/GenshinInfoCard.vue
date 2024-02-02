@@ -641,24 +641,24 @@ const countRolledSubstat = (stats: any[], prop: string) => {
                                                 v-if="artifact.substats && artifact.substats.total.length > 0"
                                                 class="grid grid-cols-2 mt-2 grid-rows-2 gap-1 w-full text-left">
                                                 <div v-for="substat in artifact.substats.total"
-                                                     class="flex flex-row justify-between">
+                                                     class="flex flex-row relative">
                                                     <!-- <span class="text-gray-300 text-lg">{{ getPropShortName(substat.stat)
                                                     }}</span> -->
                                                     <div class="flex flex-row">
                                                         <StatIcon game="gs" :stat="substat.fightProp" fill="#d1d5db"
                                                                   class="w-4 h-4 mr-1"
                                                                   style="margin-top: 2px;"/>
-                                                        <span class="text-gray-300 font-gs text-xl ml-1">{{
+                                                        <span class="text-gray-300 font-gs text-lg ml-1">{{
                                                                 displayStat(substat)
                                                             }}</span>
                                                     </div>
-                                                    <div class="flex flex-row mr-3">
+                                                    <div class="flex flex-row absolute right-3">
                                                         <div
-                                                            v-for="i in countRolledSubstat(artifact.substats.split, substat.fightProp, artifact.artifactData.stars)"
-                                                            class="ml-1 mt-0 text-center text-sm">
+                                                            v-for="i in countRolledSubstat(artifact.substats.split, substat.fightProp)"
+                                                            class="ml-1 text-center text-sm" style="margin-top: 1px">
                                                             <img src="../../../assets/statIcons/statEnhance.png"
                                                                  class="h-4 invert opacity-70 mt-1"
-                                                                 :style="`transform: translate(calc(${countRolledSubstat(artifact.substats.split, substat.fightProp, artifact.artifactData.stars) - i}*5px));`"/>
+                                                                 :style="`transform: translate(calc(${countRolledSubstat(artifact.substats.split, substat.fightProp) - i}*5px));`"/>
                                                         </div>
                                                     </div>
                                                 </div>
