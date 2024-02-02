@@ -146,6 +146,7 @@
   "settings_dialogStyle": "弹窗样式",
   "settings_dialogStyleTitle": "{game}弹窗样式预览",
   "settings_dialogStyleText": "您即将切换到{game}样式弹窗。是否确定切换？",
+  "settings_gsCostume": "Display costume splash image [Genshin Impact]",
   "settings_about": "关于",
   "settings_checkUpdates": "检查更新",
   "settings_latestVersion": "当前已是最新",
