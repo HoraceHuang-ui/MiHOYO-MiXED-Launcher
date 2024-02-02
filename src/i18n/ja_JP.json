@@ -146,6 +146,7 @@
   "settings_dialogStyle": "Dialog style",
   "settings_dialogStyleTitle": "Dialog Preview for {game}",
   "settings_dialogStyleText": "You are about to switch to {game} stylized dialog. Continue?",
+  "settings_gsCostume": "Display costume splash image [Genshin Impact]",
   "settings_about": "About",
   "settings_checkUpdates": "アップデートを確認",
   "settings_latestVersion": "すでに最新バージョンです",
