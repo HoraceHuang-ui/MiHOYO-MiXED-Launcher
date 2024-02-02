@@ -275,7 +275,7 @@ const testTabIdx = ref(0)
                     </select>
                 </div>
                 <div class="form-item">
-                    <div class="h-full py-1">Display costume Gacha [Genshin Impact]</div>
+                    <div class="h-full py-1">{{ $t('settings_gsCostume') }}</div>
                     <CustomSwitch class="ml-3" v-model="gsCostume" @change="switchGsCostume"></CustomSwitch>
                 </div>
 

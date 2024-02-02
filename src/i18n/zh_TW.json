@@ -146,6 +146,7 @@
   "settings_dialogStyle": "對話框樣式",
   "settings_dialogStyleTitle": "{game}對話框樣式預覽",
   "settings_dialogStyleText": "您即將切換到{game}樣式對話框。是否確定切換？",
+  "settings_gsCostume": "原神顯示衣裝立繪",
   "settings_about": "關於",
   "settings_checkUpdates": "檢查更新",
   "settings_latestVersion": "當前已是最新",
