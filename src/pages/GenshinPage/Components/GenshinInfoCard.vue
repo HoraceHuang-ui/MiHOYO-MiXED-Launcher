@@ -32,6 +32,7 @@ const playerInfoFailed = ref(false)
 const charsScrollbar = ref()
 const showcaseIdx = ref(0)
 const showCostume = ref(false)
+const retriedCache = ref(false)
 const elementAssets = {
     cryo: {
         bg: '../../src/assets/elementBgs/cryo.png',
@@ -151,9 +152,11 @@ const requestInfo = () => {
             })
         }).catch((err) => {
         console.error(err)
-        if (err.toString().startsWith('Error: Error invoking remote method \'enka:getGenshinPlayer\': AssetsNotFoundError:')) {
+        if (err.toString().startsWith('Error: Error invoking remote method \'enka:getGenshinPlayer\': AssetsNotFoundError:') && !retriedCache.value) {
+            retriedCache.value = true
             window.enka.updateCache().then(requestInfo)
         } else {
+            retriedCache.value = false
             playerInfoLoading.value = false
             playerInfoFailed.value = true
         }
