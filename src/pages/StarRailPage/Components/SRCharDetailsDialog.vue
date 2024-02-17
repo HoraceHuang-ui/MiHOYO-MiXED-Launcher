@@ -3,7 +3,6 @@ import StarRailDialog from "./StarRailDialog.vue"
 import StatIcon from "../../../components/StatIcon.vue";
 import DialogListItem from "../../../components/DialogListItem.vue";
 import {AttributeInfo} from "../../../types/starrail/srPlayerInfo";
-import {translate} from "../../../i18n";
 
 defineProps({
     title: {
@@ -49,7 +48,7 @@ const trimAdditions = (additions: AttributeInfo[]) => {
 <template>
     <StarRailDialog :title="title">
         <div class="flex flex-col content-center justify-center w-full px-5">
-            <DialogListItem class="font-sr-sans" :name="translate('sr_hp')">
+            <DialogListItem class="font-sr-sans" :name="character.attributes[0].name">
                 <template #icon>
                     <StatIcon game="sr" stat="hp" fill="#666" class="w-4 h-4 mr-1" style="margin-top: 2px;"/>
                 </template>
@@ -62,7 +61,7 @@ const trimAdditions = (additions: AttributeInfo[]) => {
                         }}</span>
                 </div>
             </DialogListItem>
-            <DialogListItem class="font-sr-sans" :name="translate('sr_atk')">
+            <DialogListItem class="font-sr-sans" :name="character.attributes[1].name">
                 <template #icon>
                     <StatIcon game="sr" stat="atk" fill="#666" class="w-4 h-4 mr-1" style="margin-top: 2px;"/>
                 </template>
@@ -75,7 +74,7 @@ const trimAdditions = (additions: AttributeInfo[]) => {
                         }}</span>
                 </div>
             </DialogListItem>
-            <DialogListItem class="font-sr-sans" :name="translate('sr_def')">
+            <DialogListItem class="font-sr-sans" :name="character.attributes[2].name">
                 <template #icon>
                     <StatIcon game="sr" stat="def" fill="#666" class="w-4 h-4 mr-1" style="margin-top: 2px;"/>
                 </template>
@@ -88,7 +87,7 @@ const trimAdditions = (additions: AttributeInfo[]) => {
                         }}</span>
                 </div>
             </DialogListItem>
-            <DialogListItem class="font-sr-sans" :name="translate('sr_spd')">
+            <DialogListItem class="font-sr-sans" :name="character.attributes[3].name">
                 <template #icon>
                     <StatIcon game="sr" stat="spd" fill="#666" class="w-4 h-4 mr-1" style="margin-top: 2px;"/>
                 </template>
@@ -101,13 +100,13 @@ const trimAdditions = (additions: AttributeInfo[]) => {
                         }}</span>
                 </div>
             </DialogListItem>
-            <DialogListItem class="font-sr-sans" :name="translate('sr_crit_rate')"
+            <DialogListItem class="font-sr-sans" :name="character.attributes[4].name"
                             :val="((character.attributes[4].value + findField(character.additions, 'crit_rate').value) * 100).toFixed(1) + '%'">
                 <template #icon>
                     <StatIcon game="sr" stat="crit_rate" fill="#666" class="w-4 h-4 mr-1" style="margin-top: 2px;"/>
                 </template>
             </DialogListItem>
-            <DialogListItem class="font-sr-sans" :name="translate('sr_crit_dmg')"
+            <DialogListItem class="font-sr-sans" :name="character.attributes[5].name"
                             :val="((character.attributes[5].value + findField(character.additions, 'crit_dmg').value) * 100).toFixed(1) + '%'">
                 <template #icon>
                     <StatIcon game="sr" stat="crit_dmg" fill="#666" class="w-4 h-4 mr-1" style="margin-top: 2px;"/>
