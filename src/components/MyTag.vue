@@ -2,19 +2,19 @@
 defineProps({
     bgColor: {
         type: String,
-        default: '#ECF5FF'
+        default: 'ECF5FF'
     },
     fgColor: {
         type: String,
-        default: '#409EFF'
+        default: '409EFF'
     }
 })
 </script>
 
 <template>
     <div
-        class="rounded-full border-red-600 bg-red-100 text-red-600 text-sm py-1.5 px-2.5"
-        :style="{backgroundColor: bgColor, color: fgColor}"
+        class="rounded-full border-red-600 bg-red-100 text-red-600 text-sm py-1.5 px-2.5 backdrop-blur-sm"
+        :style="{backgroundColor: `#${bgColor}CC`, color: `#${fgColor}`}"
     >
         <slot/>
     </div>
