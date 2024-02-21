@@ -2,7 +2,6 @@
 import {PropType, ref} from 'vue'
 import StatIcon from "../../../components/StatIcon.vue";
 import DialogListItem from "../../../components/DialogListItem.vue";
-import {translate} from "../../../i18n";
 import TemplateDialog from "../../../components/TemplateDialog.vue";
 import ScrollWrapper from "../../../components/ScrollWrapper.vue";
 
@@ -74,7 +73,7 @@ const closeDialog = () => {
 
         <ScrollWrapper show-bar="always" style="max-height: 80vh" :no-resize="false">
             <div class="flex flex-col content-center justify-center w-full px-5 mt-5">
-                <DialogListItem class="font-gs" :name="translate('gs_FIGHT_PROP_HP')">
+                <DialogListItem class="font-gs" :name="stats[1].fightPropName.text">
                     <template #icon>
                         <StatIcon game="gs" stat="FIGHT_PROP_HP" fill="#eee" class="w-4 h-4" style="margin-top: 2px;"/>
                     </template>
@@ -88,7 +87,7 @@ const closeDialog = () => {
                             }}</span>
                     </div>
                 </DialogListItem>
-                <DialogListItem class="font-gs" :name="translate('gs_FIGHT_PROP_ATTACK')">
+                <DialogListItem class="font-gs" :name="stats[4].fightPropName.text">
                     <template #icon>
                         <StatIcon game="gs" stat="FIGHT_PROP_ATTACK" fill="#eee" class="w-4 h-4"
                                   style="margin-top: 2px;"/>
@@ -103,7 +102,7 @@ const closeDialog = () => {
                             }}</span>
                     </div>
                 </DialogListItem>
-                <DialogListItem class="font-gs" :name="translate('gs_FIGHT_PROP_DEFENSE')">
+                <DialogListItem class="font-gs" :name="stats[7].fightPropName.text">
                     <template #icon>
                         <StatIcon game="gs" stat="FIGHT_PROP_DEFENSE" fill="#eee" class="w-4 h-4"
                                   style="margin-top: 2px;"/>
@@ -118,7 +117,7 @@ const closeDialog = () => {
                             }}</span>
                     </div>
                 </DialogListItem>
-                <DialogListItem class="font-gs" :name="translate('gs_FIGHT_PROP_ELEMENT_MASTERY')"
+                <DialogListItem class="font-gs" :name="stats[16].fightPropName.text"
                                 :val="stats[16].value.toFixed(0)">
                     <template #icon>
                         <StatIcon game="gs" stat="FIGHT_PROP_ELEMENT_MASTERY" fill="#eee" class="w-4 h-4"
