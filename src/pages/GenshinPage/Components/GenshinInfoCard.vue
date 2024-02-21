@@ -340,7 +340,7 @@ const countRolledSubstat = (stats: any[], prop: string) => {
                         <div class="flex flex-row">
                             {{ $t('gs_worldLv') }}
                             <span class="font-gs" style="margin-left: 1ch; margin-top: 1px;">
-                                {{ playerInfo.level }}
+                                {{ playerInfo.worldLevel }}
                             </span>
                         </div>
                     </MyTag>
@@ -348,7 +348,7 @@ const countRolledSubstat = (stats: any[], prop: string) => {
                         <div class="flex flex-row">
                             {{ $t('gs_playerLv') }}
                             <span class="font-gs" style="margin-left: 1ch; margin-top: 1px;">
-                                {{ playerInfo.worldLevel }}
+                                {{ playerInfo.level }}
                             </span>
                         </div>
                     </MyTag>
@@ -359,18 +359,19 @@ const countRolledSubstat = (stats: any[], prop: string) => {
         <!-- BODY -->
         <div v-if="playerInfoReady && playerInfo" class="relative">
             <!-- 角色头像列表 10人一页 -->
-            <div class="flex flex-row w-full justify-between absolute top-0">
-                <div class="relative z-50 w-1/4">
-                    <div
-                        class="absolute right-2 top-3 rounded-full w-9 h-9 pt-1 bg-white hover:bg-gray-200 active:-translate-x-1 transition-all bg-opacity-80"
-                        @click="charsPagePrev" :class="charsPage == 0 ? 'disabled' : ''">
-                        <i class="bi bi-chevron-left text-lg text-center"/>
+            <div class="flex flex-row w-full justify-center absolute top-0">
+                <div class="flex flex-row justify-between" style="width: 72%">
+                    <div class="relative z-50" style="width: 15%;">
+                        <div
+                            class="absolute right-2 top-3 rounded-full w-9 h-9 pt-1 bg-white hover:bg-gray-200 active:-translate-x-1 transition-all bg-opacity-80"
+                            @click="charsPagePrev" :class="charsPage == 0 ? 'disabled' : ''">
+                            <i class="bi bi-chevron-left text-lg text-center"/>
+                        </div>
                     </div>
-                </div>
 
-                <ScrollWrapper ref="charsScrollbar" class="flex flex-row justify-center" width="50%" :no-resize="true"
-                               show-bar="never">
-                    <div class="flex flex-row justify-center">
+                    <ScrollWrapper ref="charsScrollbar" width="auto"
+                                   :no-resize="true" show-bar="never"
+                                   style="max-width: 70%">
                         <div class="flex flex-row flex-nowrap w-max">
                             <div v-for="(character, index) in playerInfo.characters" class="relative w-12 h-12 z-50"
                                  @click="setShowcase(index)">
@@ -382,13 +383,14 @@ const countRolledSubstat = (stats: any[], prop: string) => {
                                     :src="character.costume.sideIcon.url"/>
                             </div>
                         </div>
-                    </div>
-                </ScrollWrapper>
-                <div class="relative z-50 w-1/4">
-                    <div
-                        class="absolute left-2 top-3 rounded-full w-9 h-9 pt-1 bg-white hover:bg-gray-200 active:translate-x-1 transition-all bg-opacity-80"
-                        @click="charsPageNext" :class="charsPage == pages ? 'disabled' : ''">
-                        <i class="bi bi-chevron-right text-lg text-center"/>
+                    </ScrollWrapper>
+
+                    <div class="relative z-50" style="width: 15%;">
+                        <div
+                            class="absolute left-2 top-3 rounded-full w-9 h-9 pt-1 bg-white hover:bg-gray-200 active:translate-x-1 transition-all bg-opacity-80"
+                            @click="charsPageNext" :class="charsPage == pages ? 'disabled' : ''">
+                            <i class="bi bi-chevron-right text-lg text-center"/>
+                        </div>
                     </div>
                 </div>
             </div>
