@@ -299,7 +299,7 @@ const showCharDetails = (index: number) => {
         <div v-if="playerInfoReady && playerInfo.characters.length > 0" class="relative">
             <!-- 角色头像列表 10人一页 -->
             <div class="flex flex-row w-full justify-center absolute top-0">
-                <div class="flex flex-row justify-between" style="width: 72%">
+                <div class="flex flex-row justify-between" style="width: 70%">
                     <div class="relative z-50" style="width: 15%;">
                         <div
                             class="absolute right-2 top-3 rounded-full w-9 h-9 pt-1 bg-white hover:bg-gray-200 active:-translate-x-1 transition-all bg-opacity-80"
@@ -523,8 +523,8 @@ const showCharDetails = (index: number) => {
                                     </div>
                                 </div>
                                 <div v-else
-                                     class="mt-2 w-full rounded-xl align-middle text-center bg-black bg-opacity-20 backdrop-blur-md"
-                                     style="height: 90px;">
+                                     class="mt-2 pt-7 w-full rounded-xl text-center text-gray-300 bg-black bg-opacity-20 backdrop-blur-md"
+                                     style="height: 90px">
                                     {{ $t('sr_noLightcone') }}
                                 </div>
                                 <!-- 右侧第三块：行迹 -->
