@@ -12,6 +12,6 @@ const app = createApp(App)
 app.use(router)
 app.use(i18n, {globalInstall: true})
 app.mount('#app')
-// .$nextTick(() => {
-//   postMessage({ payload: 'removeLoading' }, '*')
-// })
+    .$nextTick(() => {
+        postMessage({payload: 'removeLoading'}, '*')
+    })
