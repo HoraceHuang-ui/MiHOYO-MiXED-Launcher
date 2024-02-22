@@ -3,7 +3,7 @@ import {computed, onMounted, ref} from 'vue'
 import {useRouter} from 'vue-router'
 import {translate} from '../../../i18n'
 import StatIcon from '../../../components/StatIcon.vue'
-import {RankInfo, RankLevelUpSkillInfo} from '../../../types/starrail/srRankMap'
+import {RankInfo} from '../../../types/starrail/srRankMap'
 import {AttributeInfo, CharacterInfo, FormattedApiInfo, RelicSetInfo} from '../../../types/starrail/srPlayerInfo'
 import {useDialog} from '../../../utils/template-dialog'
 import SRCharDetailsDialog from "./SRCharDetailsDialog.vue";
@@ -44,29 +44,6 @@ const showcaseIdx = ref(0)
 const ascLevelMap = [20, 30, 40, 50, 60, 70, 80]
 let rankMap: Record<string, RankInfo> = {}
 const ranksReady = ref(false)
-// const rankAdditions = ref([])
-const rankAdditions = computed(() => {
-    if (!ranksReady.value || !playerInfoReady.value) {
-        return {}
-    }
-    let res: Record<string, number> = {}
-    playerInfo.value.characters.forEach((character: CharacterInfo) => {
-        const rank = character.rank
-        if (rank >= 3 && rank < 5) {
-            rankMap[character.id + "03"].level_up_skills.forEach((obj: RankLevelUpSkillInfo) => {
-                res[obj.id] = obj.num
-            })
-        } else if (rank >= 5) {
-            rankMap[character.id + "03"].level_up_skills.forEach((obj: RankLevelUpSkillInfo) => {
-                res[obj.id] = obj.num
-            })
-            rankMap[character.id + "05"].level_up_skills.forEach((obj: RankLevelUpSkillInfo) => {
-                res[obj.id] = obj.num
-            })
-        }
-    })
-    return res
-})
 
 onMounted(() => {
     fetch(translate('sr_charRanksJsonUrl'))
@@ -558,19 +535,16 @@ const showCharDetails = (index: number) => {
                                         </div>
                                         <div v-else class="ml-2 mt-2 text-lg align-middle h-full font-sr-sans">
                                             <div class="text-gray-200"
-                                                 v-if="!rankAdditions[character.skills[idx - 1].id]">
+                                                 v-if="character.skill_trees[idx - 1].max_level <= (idx == 1 ? 6 : 10)">
                                                 {{ character.skill_trees[idx - 1].level }} <span class="text-gray-400">/{{
                                                     character.skill_trees[idx - 1].max_level
                                                 }}</span>
                                             </div>
                                             <div v-else class=" text-cyan-400">
                                                 {{
-                                                    character.skill_trees[idx - 1].level + rankAdditions[character.skills[idx -
-                                                    1].id]
+                                                    character.skill_trees[idx - 1].level + (idx == 1 ? 1 : 2)
                                                 }} <span class="text-gray-400">/{{
-                                                    character.skill_trees[idx - 1].max_level +
-                                                    rankAdditions[character.skills[idx -
-                                                    1].id]
+                                                    character.skill_trees[idx - 1].max_level
                                                 }}</span>
                                             </div>
                                         </div>
