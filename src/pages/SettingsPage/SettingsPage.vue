@@ -211,8 +211,6 @@ const showClearDialog = () => {
         showCancel: true
     })
 }
-
-const testTabIdx = ref(0)
 </script>
 
 <template>
