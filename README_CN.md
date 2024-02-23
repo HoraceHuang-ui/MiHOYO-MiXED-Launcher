@@ -1,3 +1,5 @@
+<img width="100%" src="https://repository-images.githubusercontent.com/671397180/328eb1ee-078a-4e1f-9c81-074fa9522ce3"/>
+
 [English Document](/README.md)
 
 # 米家聚合启动器
