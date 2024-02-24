@@ -117,14 +117,27 @@ fetch('../../app.asar/package.json')
 
 # Translation
 
+## Supported Languages
+
 - **English** @HoraceHuang-ui
 - **简体中文** @HoraceHuang-ui
-- **繁體中文** @HoraceHuang-ui *(Needs revision)*
-- **日本語** @JonathanKwok
-- **Русский** @MCheping8108
-- **Français** @MCheping8108
+- **繁體中文** @HoraceHuang-ui $^1$
+- **日本語** @JonathanKwok $^2$
+- **Русский** @MCheping8108 $^{1,2}$
+- **Français** @MCheping8108 $^{1,2}$
 
-Click the badge below to help translate miXeD to your language:
+$^1$ `Needs revision.` Certain words or phrases may be inappropriate in context. Further localization by native speakers
+is needed.
+
+$^2$ `Needs completion.` The strings translated by machine are shown in blue, i.e., haven't been approved. Further
+localization by native speakers is needed.
+
+## Contributing
+
+To add a new language,
+
+1. Open an issue specifying that language and country/region.
+2. Click the badge below to help translate miXeD to your language:
 
 [![Crowdin](https://badges.crowdin.net/mihoyo-mixed-launcher/localized.svg)](https://crowdin.com/project/mihoyo-mixed-launcher)
 
