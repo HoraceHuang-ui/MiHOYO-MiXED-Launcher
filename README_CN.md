@@ -113,14 +113,25 @@ fetch('../../app.asar/package.json')
 
 # 翻译
 
+## 支持的语言
+
 - **English** @HoraceHuang-ui
 - **简体中文** @HoraceHuang-ui
-- **繁體中文** @HoraceHuang-ui *(需要修改)*
-- **日本語** @JonathanKwok
-- **Русский** @MCheping8108
-- **Français** @MCheping8108
+- **繁體中文** @HoraceHuang-ui $^1$
+- **日本語** @JonathanKwok $^2$
+- **Русский** @MCheping8108 $^{1,2}$
+- **Français** @MCheping8108 $^{1,2}$
 
-点击下方徽章来帮助参与翻译：
+$^1$ `需要修改。` 部分用词或短语可能在上下文中不合适。需要母语人士进一步修改。
+
+$^2$ `需要补全。` 标蓝的（即未被批准的）字符串是机翻的。需要母语人士进一步修改。
+
+## 贡献
+
+要添加一个新语言翻译，
+
+1. 开启一个 issue 并指定语言和国家/地区。
+2. 点击下方徽章来帮助参与翻译：
 
 [![Crowdin](https://badges.crowdin.net/mihoyo-mixed-launcher/localized.svg)](https://crowdin.com/project/mihoyo-mixed-launcher)
 
