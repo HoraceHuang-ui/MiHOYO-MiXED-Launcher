@@ -1,4 +1,4 @@
-<img width="100%" style="border-radius: 15px; margin-top: 5px" src="https://repository-images.githubusercontent.com/671397180/328eb1ee-078a-4e1f-9c81-074fa9522ce3"/>
+<img width="100%" style="border-radius: 15px; margin-top: 5px" src="https://repository-images.githubusercontent.com/671397180/2b5ef74f-f584-4921-872b-9fbc66155641"/>
 
 [简体中文文档](/README_CN.md)
 
