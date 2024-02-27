@@ -131,10 +131,8 @@ const requestInfo = () => {
                     } else if (a.maxLevel > b.maxLevel) {
                         return -1
                     } else {
-                        // 双爆分
-                        const critA = a.stats.critRate.value * 2 + a.stats.critDamage.value
-                        const critB = b.stats.critRate.value * 2 + b.stats.critDamage.value
-                        if (critA < critB) {
+                        // 天赋总等级
+                        if (totalSkillLvs(a) < totalSkillLvs(b)) {
                             return 1
                         } else {
                             return -1
@@ -161,6 +159,14 @@ const requestInfo = () => {
             playerInfoFailed.value = true
         }
     })
+}
+
+const totalSkillLvs = (c: any) => {
+    let res = 0
+    for (const skill of c.skillLevels) {
+        res += skill.level.base
+    }
+    return res
 }
 
 const setShowcase = (index: number) => {

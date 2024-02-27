@@ -115,8 +115,15 @@ const requestInfo = () => {
                     // 突破等级
                     if (a.promotion < b.promotion) {
                         return 1
-                    } else {
+                    } else if (a.promotion > b.promotion) {
                         return -1
+                    } else {
+                        // 行迹总等级
+                        if (totalSkillLvs(a) < totalSkillLvs(b)) {
+                            return 1
+                        } else {
+                            return -1
+                        }
                     }
                     //     // 双爆分
                     //     const critA = a.stats.critRate.value * 200 + a.stats.critDamage.value * 100
@@ -144,6 +151,14 @@ const requestInfo = () => {
     })
     playerInfoLoading.value = true
     console.log(uid)
+}
+
+const totalSkillLvs = (c: CharacterInfo) => {
+    let res = 0
+    for (const skill of c.skill_trees) {
+        res += skill.level
+    }
+    return res
 }
 
 const setShowcase = (index: number) => {
