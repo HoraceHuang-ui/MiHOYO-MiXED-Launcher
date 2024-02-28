@@ -1,5 +1,6 @@
 {
   "general_loading": "Chargement en cours...",
+  "general_welcomeTitle": "Bienvenue sur miXeD!",
   "general_cancel": "Abandonner",
   "general_confirm": "Confirm",
   "general_mainpage": "Domicile",
@@ -47,8 +48,6 @@
   "mainpage_title": "miHoYo miXeD Launcher",
   "mainpage_buttonText": "Lancer {game}",
   "genshin_launcherContentsUrl": "https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=false&key=gcStgarh&language=fr-fr&launcher_id=10",
-  "gs_apiChangeTitle": "Bienvenue sur miXeD!",
-  "gs_apiChangeText": "En raison du changement d'API, cette mise à jour va effacer vos données de joueur de Genshin Impact, veuillez récupérer à nouveau. Toutes nos excuses pour les inconvénients !",
   "gs_enkaLangCode": "fr",
   "gs_emptyPlayerTip": "Les détails du joueur s'afficheront ici",
   "gs_showcaseTip": "Les détails du joueur ne sont pas disponibles, veuillez activer 'Afficher les détails du personnage' dans le jeu et réessayez.",
