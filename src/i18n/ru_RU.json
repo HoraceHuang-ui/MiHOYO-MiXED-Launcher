@@ -1,7 +1,7 @@
 {
   "general_loading": "Загрузка...",
-  "general_welcomeTitle": "Welcome to miXeD!",
-  "general_langText": "Let's get started by setting up your language preference.",
+  "general_welcomeTitle": "Добро пожаловать в miXeD!",
+  "general_langText": "Давайте начнем с настройки языка.",
   "general_cancel": "Отмена",
   "general_confirm": "Подтвердить",
   "general_mainpage": "Главная",
@@ -79,7 +79,7 @@
   "sr_noRelicSets": "Нет наборов артефактов",
   "sr_charDetails": "Подробности",
   "sr_lockedRank": "(Заблокировано)",
-  "sr_noLightcone": "No Light Cone Equipped",
+  "sr_noLightcone": "Светоконус не экипирован",
   "sr_noSubstats": "Нет подстатистики",
   "sr_noRelics": "Нет Реликвии",
   "hi3_launcherContentsUrl": "https://sdk-os-static.mihoyo.com/bh3_global/mdk/launcher/api/content?filter_adv=false&key=dpz65xJ3&language=ru-ru&launcher_id=10",
