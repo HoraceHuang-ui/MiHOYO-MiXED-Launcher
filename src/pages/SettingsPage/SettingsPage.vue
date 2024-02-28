@@ -48,7 +48,7 @@ const trayOnLaunch = ref(true)
 const gsCostume = ref(false)
 
 onMounted(async () => {
-    lang.value = localStorage.lang || 'en-US'
+    lang.value = localStorage.lang || 'en_US'
     quitOnClose.value = await window.store.get('quitOnClose')
     if (quitOnClose.value === undefined) {
         await window.store.set('quitOnClose', true, false)
@@ -202,6 +202,7 @@ const showClearDialog = () => {
     useDialog(dialogComponent(dialogStyle.value), {
         onOk(dispose: Function) {
             window.store.clear()
+            localStorage.clear()
             router.go(0)
             dispose()
         }

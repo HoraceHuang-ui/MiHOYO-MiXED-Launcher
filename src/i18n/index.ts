@@ -67,3 +67,22 @@ export const switchLang = (language: lang) => {
     localStorage.lang = language
     i18n.global.locale = language
 }
+
+export const str2Lang = (str: string | null): lang | null => {
+    switch (str) {
+        case 'en_US':
+            return 'en_US'
+        case 'zh_CN':
+            return 'zh_CN'
+        case 'zh_TW':
+            return 'zh_TW'
+        case 'ru_RU':
+            return 'ru_RU'
+        case 'ja_JP':
+            return 'ja_JP'
+        case 'fr_FR':
+            return 'fr_FR'
+        default:
+            return null
+    }
+}

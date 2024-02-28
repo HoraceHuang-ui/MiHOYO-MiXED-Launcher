@@ -3,22 +3,29 @@
  */
 {
   $schema: "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
-  appId: "YourAppID",
+  appId: "com.horacehyy.mixed",
   asar: true,
   directories: {
     output: "release/${version}",
   },
-  files: ["dist-electron", "dist"],
+  files: [
+    "dist-electron",
+    "dist"
+  ],
   mac: {
     artifactName: "${productName}_${version}.${ext}",
-    target: ["dmg"],
+    target: [
+      "dmg"
+    ],
   },
   win: {
     requestedExecutionLevel: "requireAdministrator",
     target: [
       {
         target: "nsis",
-        arch: ["x64"],
+        arch: [
+          "x64"
+        ],
       },
     ],
     artifactName: "${productName}_${version}.${ext}",

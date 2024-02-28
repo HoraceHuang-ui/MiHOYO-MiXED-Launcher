@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import {computed, onMounted, ref} from 'vue'
-import {translate} from '../i18n'
-import {dialogComponent, dialogStyle} from "../types/dialog/dialog";
-import {useDialog} from "../utils/template-dialog";
+import {h, onMounted, ref} from 'vue'
+import {availableLangCodes, availableLangNames, lang, str2Lang, translate} from '../i18n'
+import {dialogComponent, dialogStyle} from "../types/dialog/dialog"
+import {useDialog} from "../utils/template-dialog"
+import {useRouter} from 'vue-router'
+
+const router = useRouter()
 
 const gsGamePath = ref('')
 const srGamePath = ref('')
@@ -13,9 +16,7 @@ const bgPath = ref('')
 const dialogStyle = ref<dialogStyle>('gs')
 
 const DEFAULT_BG = '../../src/assets/gsbanner.png'
-const bgImage = computed(() => {
-    return bgPath.value ? bgPath.value : DEFAULT_BG
-})
+const lang = ref<lang | null>(null)
 
 onMounted(async () => {
     gsGamePath.value = await window.store.get('gsGamePath')
@@ -29,17 +30,52 @@ onMounted(async () => {
             window.store.set('dialogStyle', 'gs', false)
         }
         dialogStyle.value = style
-    })
 
-    window.store.get('newApi').then((resp: boolean) => {
-        if (!resp) {
-            useDialog(dialogComponent(dialogStyle.value), {}, {
-                title: translate('gs_apiChangeTitle'),
-                msg: translate('gs_apiChangeText'),
-                showCancel: false
+        lang.value = str2Lang(localStorage.getItem('lang'))
+        if (!lang.value) {
+            localStorage.setItem('lang', 'en_US')
+            lang.value = 'en_US'
+            useDialog(dialogComponent(dialogStyle.value), {
+                onOk(dispose: Function) {
+                    if (lang.value !== 'en_US') {
+                        router.go(0)
+                    }
+                    dispose()
+                },
+                onCancel(dispose: Function) {
+                    if (lang.value !== 'en_US') {
+                        router.go(0)
+                    }
+                    dispose()
+                }
+            }, {
+                title: translate('general_welcomeTitle'),
+                msg: translate('general_langText'),
+                vnode: h('div', {
+                        style: {
+                            'display': 'flex',
+                            'flex-direction': 'row',
+                            'justify-content': 'center',
+                            'width': '100%'
+                        }
+                    }, h('select', {
+                        style: {
+                            'border-width': '2px',
+                            'border-radius': '9999px',
+                            'margin-top': '0.5rem',
+                            'padding': '0.25rem 0.5rem',
+                            'transition': 'all 0.2s',
+                        },
+                        onChange: (e: Event) => {
+                            const target = e.target as HTMLSelectElement
+                            localStorage.setItem('lang', target.value)
+                            lang.value = str2Lang(target.value)
+                        }
+                    }, availableLangCodes.map((langCode, i) => {
+                        return h('option', {value: langCode}, availableLangNames[i])
+                    }))
+                )
             })
-            window.store.delete('genshinInfo')
-            window.store.set('newApi', true, false)
         }
     })
 })
@@ -145,5 +181,9 @@ const resetPic = () => {
 .bottom-area {
     @apply bottom-0;
     height: 20vh;
+}
+
+.lang-select {
+    @apply border-2 rounded-full py-1 px-2 ml-3 hover:bg-gray-100 transition-all;
 }
 </style>

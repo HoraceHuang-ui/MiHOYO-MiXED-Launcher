@@ -228,7 +228,7 @@ async function createWindow() {
 
     const contextMenu = Menu.buildFromTemplate([
         {
-            label: '退出', click: () => {
+            label: 'Quit', click: () => {
                 win.destroy()
             }
         },
