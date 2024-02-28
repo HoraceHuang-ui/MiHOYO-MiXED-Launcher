@@ -87,7 +87,7 @@ const onDialogOk = () => {
             <div class="ml-3" style="margin-top: 5px; grid-column: 1 / 3;">
                 <span class="font-gs mr-2">{{ translate('general_game') }}</span>
                 {{
-                    launcherPath === '' ? '' : (combinePaths ? launcherPath + '\\Genshin Impact Game\\YuanShen.exe' :
+                    launcherPath === '' ? gamePath : (combinePaths ? launcherPath + '\\Genshin Impact Game\\YuanShen.exe' :
                         gamePath)
                 }}
             </div>

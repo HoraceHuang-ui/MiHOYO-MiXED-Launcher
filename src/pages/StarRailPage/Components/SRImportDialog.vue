@@ -86,7 +86,7 @@ const onDialogOk = () => {
             <div class="ml-3" style="margin-top: 5px; grid-column: 1 / 3;">
                 <span class="font-bold mr-2">{{ translate('general_game') }}</span>
                 {{
-                    launcherPath === '' ? '' : (combinePaths ? launcherPath + '\\Game\\StarRail.exe' :
+                    launcherPath === '' ? gamePath : (combinePaths ? launcherPath + '\\Game\\StarRail.exe' :
                         gamePath)
                 }}
             </div>
