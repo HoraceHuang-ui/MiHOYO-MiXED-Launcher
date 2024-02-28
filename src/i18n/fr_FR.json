@@ -1,6 +1,7 @@
 {
   "general_loading": "Chargement en cours...",
   "general_welcomeTitle": "Bienvenue sur miXeD!",
+  "general_langText": "Commençons par configurer vos préférences linguistiques.",
   "general_cancel": "Abandonner",
   "general_confirm": "Confirm",
   "general_mainpage": "Domicile",
@@ -78,7 +79,7 @@
   "sr_noRelicSets": "Aucun effet d'ensemble",
   "sr_charDetails": "Détails",
   "sr_lockedRank": "(Verrouillé)",
-  "sr_noLightcone": "Aucun Light Cone équipé",
+  "sr_noLightcone": "Aucun Lightcone équipé",
   "sr_noSubstats": "Aucune Substats",
   "sr_noRelics": "Aucune relique",
   "hi3_launcherContentsUrl": "https://sdk-os-static.mihoyo.com/bh3_global/mdk/launcher/api/content?filter_adv=false&key=dpz65xJ3&language=fr-fr&launcher_id=10",
