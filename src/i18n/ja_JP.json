@@ -1,6 +1,7 @@
 {
   "general_loading": "読み込み中...",
-  "general_welcomeTitle": "miXeDへようこそ！",
+  "general_welcomeTitle": "Welcome to miXeD!",
+  "general_langText": "Let's get started by setting up your language preference.",
   "general_cancel": "キャンセル",
   "general_confirm": "確認",
   "general_mainpage": "ホームページ",
@@ -78,7 +79,7 @@
   "sr_noRelicSets": "セット効果なし",
   "sr_charDetails": "ステータス",
   "sr_lockedRank": "(ロック)",
-  "sr_noLightcone": "光円錐が装備されていません",
+  "sr_noLightcone": "No Light Cone Equipped",
   "sr_noSubstats": "サブスタットなし",
   "sr_noRelics": "遺物なし",
   "hi3_launcherContentsUrl": "https://sdk-os-static.mihoyo.com/bh3_global/mdk/launcher/api/content?filter_adv=false&key=ojevZ0EyIyZNCy4n&language=ja-jp&launcher_id=19",
