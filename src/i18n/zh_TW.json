@@ -1,6 +1,7 @@
 {
   "general_loading": "載入中...",
-  "general_welcomeTitle": "歡迎使用 miXeD！",
+  "general_welcomeTitle": "Welcome to miXeD!",
+  "general_langText": "Let's get started by setting up your language preference.",
   "general_cancel": "取消",
   "general_confirm": "確定",
   "general_mainpage": "主頁",
@@ -78,7 +79,7 @@
   "sr_noRelicSets": "暫無套裝",
   "sr_charDetails": "角色詳情",
   "sr_lockedRank": "（未解鎖）",
-  "sr_noLightcone": "暫未裝配光錐",
+  "sr_noLightcone": "No Light Cone Equipped",
   "sr_noSubstats": "暫無副詞條",
   "sr_noRelics": "暫未裝配遺器",
   "hi3_launcherContentsUrl": "https://sdk-os-static.mihoyo.com/bh3_global/mdk/launcher/api/content?filter_adv=false&key=demhUTcW&language=zh-tw&launcher_id=8",
