@@ -85,7 +85,7 @@
   "hi3_launcherContentsUrl": "https://sdk-os-static.mihoyo.com/bh3_global/mdk/launcher/api/content?filter_adv=false&key=dpz65xJ3&language=fr-fr&launcher_id=10",
   "settings_general": "Général",
   "settings_selectLang": "Langue",
-  "settings_langChangeText": "You are about to switch to Français (fr_FR), the app will reload and ALL saved local game profile info will be erased. Continue?",
+  "settings_langChangeText": "Vous êtes sur le point de passer à Français (fr_FR), l'application se rechargera et TOUTES les informations de profil de jeu local seront effacées. Continuer?",
   "settings_langChangeTitle": "Changer de langue",
   "settings_whenClosingWindow": "Lors de la fermeture d'une fenêtre",
   "settings_quitOnClose": "Quitter l'application",
