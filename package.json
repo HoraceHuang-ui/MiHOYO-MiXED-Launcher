@@ -41,7 +41,7 @@
     "vue-tsc": "^1.8.27"
   },
   "dependencies": {
-    "@octokit/core": "^5.1.0",
+    "@octokit/core": "^6.0.1",
     "axios": "^1.6.7",
     "bootstrap-icons": "^1.11.3",
     "electron-store": "^8.1.0",
