@@ -34,21 +34,21 @@ By HoraceHyy
 
 - 原神启动页面
 
-  <img width="500" src="https://github.com/HoraceHuang-ui/MiHOYO-MiXED-Launcher/assets/67905897/9434ed2a-fa32-49fa-9ce3-353060e80d81"/>
+  <img width="500" src="https://github.com/HoraceHuang-ui/MiHOYO-MiXED-Launcher/assets/67905897/1a3d48f7-a636-40d4-8272-52d81b0f8069"/>
 
   <p></p>
 
 - 原神账号数据
 
-  <img width="500" src="https://github.com/HoraceHuang-ui/MiHOYO-MiXED-Launcher/assets/67905897/1a3d48f7-a636-40d4-8272-52d81b0f8069"/>
+  <img width="500" src="https://github.com/HoraceHuang-ui/MiHOYO-MiXED-Launcher/assets/67905897/9434ed2a-fa32-49fa-9ce3-353060e80d81"/>
 
-<p></p>
+  <p></p>
 
 - 崩坏：星穹铁道启动页面
 
   <img width="500" src="https://github.com/HoraceHuang-ui/MiHOYO-MiXED-Launcher/assets/67905897/99800c57-707d-4753-bd6d-0783556cd427"/>
 
-<p></p>
+  <p></p>
 
 - 崩坏：星穹铁道账号数据
 
