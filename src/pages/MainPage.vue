@@ -60,11 +60,14 @@ onMounted(async () => {
                         }
                     }, h('select', {
                         style: {
-                            'border-width': '2px',
+                            'border-width': '1px',
+                            'border-color': '#CEA652',
                             'border-radius': '9999px',
                             'margin-top': '0.5rem',
                             'padding': '0.25rem 0.5rem',
                             'transition': 'all 0.2s',
+                            'color': '#886a32',
+                            'background-color': '#ECE5D8'
                         },
                         onChange: (e: Event) => {
                             const target = e.target as HTMLSelectElement
@@ -72,7 +75,15 @@ onMounted(async () => {
                             lang.value = str2Lang(target.value)
                         }
                     }, availableLangCodes.map((langCode, i) => {
-                        return h('option', {value: langCode}, availableLangNames[i])
+                        return h('option', {
+                            style: {
+                                'border-width': '1px',
+                                'border-color': '#000000',
+                                'color': '#000000',
+                                'background-color': '#ffffff'
+                            },
+                            value: langCode
+                        }, availableLangNames[i])
                     }))
                 )
             })

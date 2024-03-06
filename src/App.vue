@@ -1,12 +1,9 @@
 <script setup lang="ts">
-import {computed, h, onMounted, ref} from 'vue'
+import {computed, onMounted, ref} from 'vue'
 import {marked} from 'marked'
 import {useRouter} from 'vue-router'
-import {UpdInfo} from "./types/github/ghUpdInfo";
-import {dialogComponent, dialogStyle} from "./types/dialog/dialog";
-import {useDialog} from "./utils/template-dialog";
-import {translate} from "./i18n";
-import UpdateDialogContent from "./components/UpdateDialogContent.vue";
+import {UpdInfo} from './types/github/ghUpdInfo'
+import {dialogStyle} from './types/dialog/dialog'
 
 let appVer = ''
 const dialogStyle = ref<dialogStyle>('gs')
