@@ -109,6 +109,12 @@ fetch('../../app.asar/package.json')
     })
 ```
 
+- The current version of `vite-plugin-electron` dependency isn't compatible with `electron@29.0.0` or later. Please
+  leave the `electron` dependency version unchanged at `28.2.1`.
+- This project isn't ready to make the change to ES Modules yet. The latest `@octokit/core@6.0.1` has become an ES
+  Module, which is incompatible with this project. Please leave the `@octokit/core` dependency version unchanged at
+  `5.1.0`.
+
 # Credits
 
 - [electron-vite/electron-vite-vue](https://github.com/electron-vite/electron-vite-vue)
