@@ -1,26 +1,26 @@
-import {ref} from 'vue'
+import { ref } from 'vue'
 
-export function useTimeout(callback: Function, time: number) {
-    const timer = ref<NodeJS.Timer | number | undefined>()
+export function useTimeout(callback: () => void, time: number) {
+  const timer = ref<NodeJS.Timer | number | undefined>()
 
-    function clear() {
-        if (timer.value) {
-            clearTimeout(timer.value as number)
-            timer.value = undefined
-        }
+  function clear() {
+    if (timer.value) {
+      clearTimeout(timer.value as number)
+      timer.value = undefined
     }
+  }
 
-    function start() {
-        clear()
-        timer.value = setTimeout(() => {
-            clear()
-            callback()
-        }, time)
-    }
+  function start() {
+    clear()
+    timer.value = setTimeout(() => {
+      clear()
+      callback()
+    }, time)
+  }
 
-    return {
-        timer,
-        start,
-        clear,
-    }
+  return {
+    timer,
+    start,
+    clear,
+  }
 }
