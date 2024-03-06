@@ -83,27 +83,30 @@ pnpm build
 ## 提示
 
 - 本程序检测自身更新目前用的是 GitHub
-  API，但一旦把含token的代码同步到这里就会自动销毁，所以构建时请自行申请一个token，放在`electron/main/index.ts`
-  的`Octokit.auth`中。
+  API，但一旦把含 token 的代码同步到这里就会自动销毁，所以构建时请自行申请一个 token，放在 `electron/main/index.ts` 
+  的 `Octokit.auth` 中。
 
 ```ts
-  const {Octokit} = require("@octokit/core")
+const {Octokit} = require("@octokit/core")
 const octokit = new Octokit({
     auth: "<YOUR TOKEN HERE>"
 })
 ```
 
-- 由于一些原因，在开发和生产环境中某些文件的相对路径可能会改变。在`src/pages/SettingsPage.vue`中，`package.json`的相对路径取决于环境。
+- 由于一些原因，在开发和生产环境中某些文件的相对路径可能会改变。在 `src/pages/SettingsPage.vue` 中， `package.json` 的相对路径取决于环境。
 
 ```ts
-  // BUILD: '../../app.asar/package.json'
-  // DEV: '../../package.json'
+// BUILD: '../../app.asar/package.json'
+// DEV: '../../package.json'
 fetch('../../app.asar/package.json')
     .then(response => response.json())
     .then((resp) => {
         appVer.value = resp.version
     })
 ```
+- 当前最新版本的 `vite-plugin-electron` 依赖与 `electron@29.0.0` 或更高版本不兼容。请将依赖 `electron` 的版本保持在 `28.2.1` 不要变。
+- 本项目尚未准备好向 ES Module 转型。最新的 `@octokit/core@6.0.1` 已经转为 ES Module，与本项目不兼容。请将依赖 `@octokit/core`
+的版本保持在 `5.1.0` 不要变。
 
 # 鸣谢
 
@@ -139,7 +142,7 @@ $^2$ `需要补全。` 标蓝的（即未被批准的）字符串是机翻的。
 
 - `electron-store` 存储条目备忘：
     - `targetVersion` 算上忽略更新后的（伪）当前版本
-    - `mainBgPath` 主页背景图片的`base64`
+    - `mainBgPath` 主页背景图片的 `base64`
     - `dialogStyle` 非游戏界面的弹窗样式
     - `gsLauncherPath` 原神官方启动器所在目录
     - `gsGamePath` 原神游戏本体可执行文件的路径
