@@ -3,7 +3,7 @@ import { h, onMounted, ref } from 'vue'
 import {
   availableLangCodes,
   availableLangNames,
-  lang,
+  Lang,
   str2Lang,
   translate,
 } from '../i18n'
@@ -22,7 +22,7 @@ const bgPath = ref('')
 const dialogStyle = ref<DialogStyle>('gs')
 
 const DEFAULT_BG = '../../src/assets/gsbanner.png'
-const lang = ref<lang | null>(null)
+const lang = ref<Lang | null>(null)
 
 onMounted(async () => {
   gsGamePath.value = await window.store.get('gsGamePath')

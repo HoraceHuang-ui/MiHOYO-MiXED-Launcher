@@ -63,7 +63,7 @@ const refreshState = () => {
 }
 
 const nextPane = () => {
-  if (curIdx.value == panes.value?.length - 1) {
+  if (curIdx.value == panes.value!.length - 1) {
     curIdx.value = 0
   } else {
     curIdx.value++
@@ -72,7 +72,7 @@ const nextPane = () => {
 
 const prevPane = () => {
   if (curIdx.value == 0) {
-    curIdx.value = panes.value?.length - 1
+    curIdx.value = panes.value!.length - 1
   } else {
     curIdx.value--
   }
