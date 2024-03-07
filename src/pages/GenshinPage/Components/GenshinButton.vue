@@ -40,10 +40,6 @@ defineProps({
 </template>
 
 <style scoped>
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 .button-wrapper {
   @apply border-2 mx-3 h-9 p-1 rounded-full bg-white transition-all cursor-default shadow-lg;
   background: #4a5366;

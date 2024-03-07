@@ -140,10 +140,6 @@ const onDialogOk = () => {
 </template>
 
 <style scoped>
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 .import-button-enabled {
   @apply text-sm border hover:border-yellow-500 active:bg-white hover:shadow;
   color: #cea652;

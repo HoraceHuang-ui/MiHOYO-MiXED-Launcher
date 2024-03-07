@@ -114,10 +114,6 @@ const onMouseLeave = () => {
 </template>
 
 <style scoped>
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;

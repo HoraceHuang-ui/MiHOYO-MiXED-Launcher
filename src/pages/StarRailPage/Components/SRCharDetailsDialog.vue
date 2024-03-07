@@ -186,8 +186,4 @@ const trimAdditions = (additions: AttributeInfo[]) => {
   </StarRailDialog>
 </template>
 
-<style scoped>
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-</style>
+<style scoped></style>

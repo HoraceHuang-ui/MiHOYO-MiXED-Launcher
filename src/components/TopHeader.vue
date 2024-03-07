@@ -116,10 +116,6 @@ const winMin = () => {
 </template>
 
 <style scoped>
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 .drag {
   -webkit-app-region: drag;
 }

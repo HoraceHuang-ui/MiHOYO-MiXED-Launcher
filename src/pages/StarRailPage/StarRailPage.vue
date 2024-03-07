@@ -341,10 +341,6 @@ const refresh = () => {
 </template>
 
 <style scoped>
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 .bg-pic {
   width: 98vw;
   height: 96.4vh;

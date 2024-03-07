@@ -395,10 +395,6 @@ const showClearDialog = () => {
 </template>
 
 <style scoped>
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 .title {
   @apply text-4xl font-bold mt-8 cursor-default;
 }

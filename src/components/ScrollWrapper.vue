@@ -242,10 +242,6 @@ defineExpose({
 </template>
 
 <style scoped>
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 ::-webkit-scrollbar {
   width: 0 !important;
 }

@@ -16,10 +16,6 @@ defineProps({
 </template>
 
 <style scoped>
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 .icon-loading {
   animation: 1s linear 0s infinite running rotate;
 }
