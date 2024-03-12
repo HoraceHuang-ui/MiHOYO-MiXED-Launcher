@@ -46,10 +46,6 @@ const openLink = (url: string) => {
 </template>
 
 <style scoped>
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 .truncated {
   @apply inline-block max-w-full overflow-ellipsis whitespace-nowrap overflow-hidden;
 }

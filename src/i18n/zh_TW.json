@@ -48,7 +48,7 @@
   "mainBgDialog_filter": "圖片",
   "mainpage_title": "米哈游聚合啓動器",
   "mainpage_buttonText": "{game}啓動",
-  "genshin_launcherContentsUrl": "https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=false&key=gcStgarh&language=zh-tw&launcher_id=10",
+  "gs_launcherContentsUrl": "https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=false&key=gcStgarh&language=zh-tw&launcher_id=10",
   "gs_enkaLangCode": "cht",
   "gs_emptyPlayerTip": "此處將顯示角色的詳細信息",
   "gs_showcaseTip": "當前暫無詳細信息，請在游戲内打開”顯示角色詳情“后再試。",

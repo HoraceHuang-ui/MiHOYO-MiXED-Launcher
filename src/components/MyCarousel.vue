@@ -248,10 +248,6 @@ defineExpose({
 </template>
 
 <style scoped>
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 .indicator-selected {
   @apply w-7 bg-white;
 }

@@ -156,7 +156,7 @@ const requestInfo = () => {
       router.push({
         name: 'tempPage',
         query: {
-          from: '/srpage',
+          from: 'sr',
         },
       })
     })
@@ -973,10 +973,6 @@ const showCharDetails = (index: number) => {
 </template>
 
 <style scoped>
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 .font-sr {
   font-family: sr-font, sans-serif;
 }

@@ -151,10 +151,6 @@ const onDialogOk = () => {
 </template>
 
 <style scoped>
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 .import-button-enabled {
   border-width: 1px;
   border-color: rgb(72, 107, 161);

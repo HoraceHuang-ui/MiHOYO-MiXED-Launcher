@@ -54,10 +54,6 @@ const selectTab = (idx: number) => {
 </template>
 
 <style scoped>
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 .tab-selected {
   @apply text-white bg-blue-600 cursor-default;
 }

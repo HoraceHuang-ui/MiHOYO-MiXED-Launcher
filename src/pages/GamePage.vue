@@ -1,26 +1,62 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { translate } from '../../i18n'
-import { LauncherInfo, PostInfo } from '../../types/launcher/launcherInfo'
-import GenshinInfoCard from './Components/GenshinInfoCard.vue'
-import { useDialog } from '../../utils/template-dialog'
-import GenshinDialog from './Components/GenshinDialog.vue'
-import GSImportDialog from './Components/GSImportDialog.vue'
-import ScrollWrapper from '../../components/ScrollWrapper.vue'
-import MyDropdown from '../../components/MyDropdown.vue'
+import { Component, computed, onMounted, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { translate } from '../i18n'
+import { LauncherInfo, PostInfo } from '../types/launcher/launcherInfo'
+import GenshinInfoCard from './GenshinPage/Components/GenshinInfoCard.vue'
+import { useDialog } from '../utils/template-dialog'
+import GenshinDialog from './GenshinPage/Components/GenshinDialog.vue'
+import GSImportDialog from './GenshinPage/Components/GSImportDialog.vue'
+import ScrollWrapper from '../components/ScrollWrapper.vue'
+import MyDropdown from '../components/MyDropdown.vue'
+import StarRailDialog from './StarRailPage/Components/StarRailDialog.vue'
+import Honkai3Dialog from './Honkai3Page/Components/Honkai3Dialog.vue'
+import SRImportDialog from './StarRailPage/Components/SRImportDialog.vue'
+import HI3ImportDialog from './Honkai3Page/Components/HI3ImportDialog.vue'
+import StarRailInfoCard from './StarRailPage/Components/StarRailInfoCard.vue'
 
-const gameName = translate('general_gs')
+const game = useRoute().query.game
+const gameName = translate(`general_${game}`)
 
-const gsLauncherPath = ref('')
-const gsGamePath = ref('')
 const launcherPath = ref('')
 const gamePath = ref('')
-const timeUpd3_8 = Date.parse('2023/07/05 12:00:00 UTC+8')
 const timeNow = Date.now()
-const timeDelta = computed(
-  () => Math.ceil((timeNow - timeUpd3_8) / 1000 / 3600 / 24 - 0.5) % 42,
-)
+const timeDelta = computed(() => {
+  let timeUpd = 0
+  switch (game) {
+    case 'gs':
+      timeUpd = Date.parse('2023/07/05 12:00:00 UTC+8')
+      break
+    case 'sr':
+      timeUpd = Date.parse('2023/10/11 12:00:00 UTC+8')
+      break
+    case 'hi3':
+      timeUpd = Date.parse('2023/07/06 12:00:00 UTC+8')
+      break
+  }
+  return Math.ceil((timeNow - timeUpd) / 1000 / 3600 / 24 - 0.5) % 42
+})
+const defaultBG = computed(() => {
+  switch (game) {
+    case 'gs':
+      return '../../src/assets/gsbanner.png'
+    case 'sr':
+      return '../../src/assets/srbanner.jpg'
+    case 'hi3':
+      return '../../src/assets/hi3banner.webp'
+  }
+})
+const prefFont = computed(() => {
+  switch (game) {
+    case 'gs':
+      return 'gs'
+    case 'sr':
+      return 'sr-sans'
+    case 'hi3':
+      return 'hi3'
+  }
+})
+let dialogComponent: Component = GenshinDialog
 const launcherInfo = ref<LauncherInfo>({
   adv: undefined,
   banner: [],
@@ -39,9 +75,21 @@ const scrollBarRef = ref()
 const postTypeMap = new Map<string, PostInfo[]>()
 
 onMounted(async () => {
+  switch (game) {
+    case 'gs':
+      dialogComponent = GenshinDialog
+      break
+    case 'sr':
+      dialogComponent = StarRailDialog
+      break
+    case 'hi3':
+      dialogComponent = Honkai3Dialog
+      break
+  }
+
   // 获取原神启动器信息
   window.axios
-    .post(translate('genshin_launcherContentsUrl'))
+    .post(translate(`${game}_launcherContentsUrl`))
     .then(value => {
       launcherInfo.value = value.data
       launcherInfo.value.post.forEach(post => {
@@ -53,30 +101,28 @@ onMounted(async () => {
           postTypeMap.set(post.type, [post])
         }
       })
-      console.log(postTypeMap)
       launcherInfoReady.value = true
-      console.log(launcherInfo.value)
     })
     .catch(err => {
       launcherInfoFailed.value = true
       errMsg.value = err.toString()
     })
-  gsLauncherPath.value = await window.store.get('gsLauncherPath')
-  gsGamePath.value = await window.store.get('gsGamePath')
+  launcherPath.value = await window.store.get(`${game}LauncherPath`)
+  gamePath.value = await window.store.get(`${game}GamePath`)
   window.store
-    .get('genshinUpd')
+    .get(`${game}Upd`)
     .then(resp => {
-      if (gsLauncherPath.value && !resp) {
+      if (launcherPath.value && !resp) {
         if (timeDelta.value > 40) {
           useDialog(
-            GenshinDialog,
+            dialogComponent,
             {
               onCancel(dispose: () => void) {
                 dispose()
               },
               onOk(dispose: () => void) {
-                window.child.exec(gsLauncherPath.value)
-                window.store.set('genshinUpd', true, false)
+                window.child.exec(launcherPath.value)
+                window.store.set(`${game}Upd`, true, false)
                 dispose()
               },
             },
@@ -94,14 +140,14 @@ onMounted(async () => {
           )
         } else if (timeDelta.value > 0 && timeDelta.value < 3) {
           useDialog(
-            GenshinDialog,
+            dialogComponent,
             {
               onCancel(dispose: () => void) {
                 dispose()
               },
               onOk(dispose: () => void) {
-                window.child.exec(gsLauncherPath.value)
-                window.store.set('genshinUpd', true, false)
+                window.child.exec(launcherPath.value)
+                window.store.set(`${game}Upd`, true, false)
                 dispose()
               },
             },
@@ -117,14 +163,14 @@ onMounted(async () => {
           )
         } else if (timeDelta.value == 0) {
           useDialog(
-            GenshinDialog,
+            dialogComponent,
             {
               onCancel(dispose: () => void) {
                 dispose()
               },
               onOk(dispose: () => void) {
-                window.child.exec(gsLauncherPath.value)
-                window.store.set('genshinUpd', true, false)
+                window.child.exec(launcherPath.value)
+                window.store.set(`${game}Upd`, true, false)
                 dispose()
               },
             },
@@ -139,11 +185,11 @@ onMounted(async () => {
           )
         }
       } else if (
-        gsLauncherPath.value &&
+        launcherPath.value &&
         timeDelta.value > 2 &&
         timeDelta.value < 37
       ) {
-        window.store.set('genshinUpd', false, false)
+        window.store.set(`${game}Upd`, false, false)
       }
     })
     .catch(err => {
@@ -152,7 +198,20 @@ onMounted(async () => {
 })
 
 const importButtonClick = () => {
-  useDialog(GSImportDialog, {
+  let importDialogComponent: Component = GSImportDialog
+  switch (game) {
+    case 'gs':
+      importDialogComponent = GSImportDialog
+      break
+    case 'sr':
+      importDialogComponent = SRImportDialog
+      break
+    case 'hi3':
+      importDialogComponent = HI3ImportDialog
+      break
+  }
+
+  useDialog(importDialogComponent, {
     onOk(dispose: () => void) {
       dispose()
       refresh()
@@ -165,8 +224,8 @@ const importButtonClick = () => {
   })
 }
 
-const gsLaunch = async () => {
-  await window.child.exec(gsGamePath.value)
+const launchGame = async () => {
+  await window.child.exec(gamePath.value)
   const trayOnLaunch = await window.store.get('trayOnLaunch')
   if (trayOnLaunch) {
     window.win.tray()
@@ -178,17 +237,17 @@ const handleCommand = (idx: number) => {
 
   switch (commands[idx]) {
     case 'openLauncher':
-      window.child.exec(gsLauncherPath.value)
+      window.child.exec(launcherPath.value)
       break
     case 'clearPath':
-      window.store.delete('gsLauncherPath')
-      window.store.delete('gsGamePath')
-      window.store.delete('genshinUpd')
-      gsLauncherPath.value = ''
-      gsGamePath.value = ''
+      window.store.delete(`${game}LauncherPath`)
+      window.store.delete(`${game}GamePath`)
+      window.store.delete(`${game}Upd`)
+      launcherPath.value = ''
+      gamePath.value = ''
       break
     case 'clearPlayerinfo':
-      window.store.delete('genshinInfo')
+      window.store.delete(`${game}Info`)
       refresh()
       break
   }
@@ -200,11 +259,10 @@ const handleScroll = ({ top }: Record<string, number>) => {
 
 const router = useRouter()
 const refresh = () => {
-  console.log('click on refresh')
   router.push({
     name: 'tempPage',
     query: {
-      from: '/gspage',
+      from: game,
     },
   })
 }
@@ -223,7 +281,9 @@ const refresh = () => {
       height="120"
       width="120"
     />
-    <div class="mt-3 font-gs text-xl">{{ $t('general_loading') }}</div>
+    <div class="mt-3 text-xl" :class="`font-${game}`">
+      {{ $t('general_loading') }}
+    </div>
   </div>
   <LoadFailedBlock
     v-else-if="launcherInfoFailed"
@@ -250,7 +310,7 @@ const refresh = () => {
         :src="
           launcherInfoReady && launcherInfo.adv
             ? launcherInfo.adv.background
-            : '../../src/assets/gsbanner.png'
+            : defaultBG
         "
         @touchmove.prevent
         @mousewheel.prevent
@@ -278,7 +338,8 @@ const refresh = () => {
           !hideElements
         "
         :postTypeMap="postTypeMap"
-        class="absolute left-16 top-96 z-50 rounded-xl backdrop-blur-md pl-3 pr-1 font-gs"
+        class="absolute left-16 top-96 z-50 rounded-xl backdrop-blur-md pl-3 pr-1"
+        :class="`font-${prefFont}`"
         style="
           height: 112px;
           width: 396px;
@@ -296,19 +357,20 @@ const refresh = () => {
       <div
         class="items-scroll flex flex-col content-center items-center w-full"
       >
-        <div class="w-full flex flex-row justify-between">
-          <div class="w-1"></div>
+        <div class="w-full flex flex-row relative">
+          <div class="h-16 my-3" />
           <div
-            v-if="gsGamePath"
-            class="transition-all"
-            :class="hideElements ? ' -translate-x-96' : ''"
+            v-if="gamePath"
+            class="absolute right-0 transition-all"
+            :class="hideElements ? 'right-1/2 translate-x-1/2' : ''"
             style="transition-duration: 500ms"
           >
             <div
-              class="mx-2 my-3 flex flex-row rounded-full bg-yellow-400 font-gs"
+              class="mx-2 my-3 flex flex-row rounded-full bg-yellow-400"
+              :class="`font-${prefFont}`"
             >
               <button
-                @click="gsLaunch"
+                @click="launchGame"
                 class="pl-4 px-4 text-2xl font-bold rounded-full h-16 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all"
               >
                 {{ $t('general_launchGame') }}
@@ -332,33 +394,34 @@ const refresh = () => {
               </MyDropdown>
             </div>
           </div>
-          <div v-else>
-            <div class="justify-between flex flex-row">
-              <div class="w-1"></div>
-              <div class="flex flex-row">
-                <button
-                  @click="importButtonClick"
-                  class="mx-2 my-3 rounded-full h-16 text-2xl bg-yellow-400 font-gs w-48 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all cursor-default"
-                  :class="hideElements ? ' -translate-x-96' : ''"
-                  style="transition-duration: 500ms"
-                >
-                  {{ $t('general_importGame') }}
-                </button>
-              </div>
-            </div>
-          </div>
+          <button
+            v-else
+            @click="importButtonClick"
+            class="absolute right-0 mx-2 my-3 rounded-full h-16 text-2xl bg-yellow-400 w-48 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all cursor-default"
+            :class="
+              hideElements
+                ? `font-${prefFont} right-1/2 translate-x-1/2`
+                : `font-${prefFont}`
+            "
+            style="transition-duration: 500ms"
+          >
+            {{ $t('general_importGame') }}
+          </button>
         </div>
-        <GenshinInfoCard class="my-2 w-full mb-4 shadow-md"></GenshinInfoCard>
+        <GenshinInfoCard
+          v-if="game === 'gs'"
+          class="my-2 w-full mb-4 shadow-md"
+        />
+        <StarRailInfoCard
+          v-else-if="game === 'sr'"
+          class="my-2 w-full mb-4 shadow-md"
+        />
       </div>
     </ScrollWrapper>
   </div>
 </template>
 
 <style scoped>
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 .bg-pic {
   width: 98vw;
   height: 96.5vh;
@@ -373,22 +436,6 @@ const refresh = () => {
 .items-scroll {
   margin-top: 67vh;
   width: 80vw;
-}
-
-.import-button-enabled {
-  @apply border border-gray-400 text-gray-600 hover:border-blue-400 hover:text-blue-500 hover:bg-blue-100 active:bg-blue-300;
-}
-
-.import-button-disabled {
-  @apply bg-gray-100 text-gray-400 pointer-events-none;
-}
-
-.confirm-button-enabled {
-  @apply bg-blue-600 text-white hover:bg-blue-500 active:scale-90;
-}
-
-.confirm-button-disabled {
-  @apply bg-blue-200 text-white pointer-events-none;
 }
 
 .banner-enter-from,

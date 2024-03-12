@@ -163,10 +163,6 @@ defineExpose({
 </template>
 
 <style scoped>
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 .v-enter-active .outer {
   transition: opacity 0.5s ease;
 }

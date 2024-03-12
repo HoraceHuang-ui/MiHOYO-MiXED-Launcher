@@ -27,8 +27,4 @@ const openLink = (url: string) => {
   </MyCarousel>
 </template>
 
-<style scoped>
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-</style>
+<style scoped></style>

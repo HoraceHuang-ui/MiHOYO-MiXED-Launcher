@@ -152,7 +152,7 @@ const requestInfo = () => {
       router.push({
         name: 'tempPage',
         query: {
-          from: '/gspage',
+          from: 'gs',
         },
       })
     })
@@ -993,10 +993,6 @@ const countRolledSubstat = (stats: any[], prop: string) => {
 </template>
 
 <style scoped>
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 .font-gs {
   font-family: genshin-font, serif;
 }

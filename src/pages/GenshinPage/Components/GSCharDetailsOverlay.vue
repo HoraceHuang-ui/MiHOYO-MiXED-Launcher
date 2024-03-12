@@ -180,10 +180,6 @@ const closeDialog = () => {
 </template>
 
 <style scoped>
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 .divider-bg {
   background: #dad2c5;
 }

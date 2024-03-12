@@ -22,15 +22,30 @@ const home = () => {
 }
 const genshin = () => {
   selection.value = 1
-  router.push('/gspage')
+  router.push({
+    name: 'tempPage',
+    query: {
+      from: 'gs',
+    },
+  })
 }
 const starRail = () => {
   selection.value = 2
-  router.push('/srpage')
+  router.push({
+    name: 'tempPage',
+    query: {
+      from: 'sr',
+    },
+  })
 }
 const honkai3 = () => {
   selection.value = 3
-  router.push('/hipage')
+  router.push({
+    name: 'tempPage',
+    query: {
+      from: 'hi3',
+    },
+  })
 }
 const settings = () => {
   selection.value = 4
@@ -116,10 +131,6 @@ const winMin = () => {
 </template>
 
 <style scoped>
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 .drag {
   -webkit-app-region: drag;
 }

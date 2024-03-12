@@ -48,10 +48,6 @@ defineProps({
 </template>
 
 <style scoped>
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 .button-wrapper {
   @apply mx-3 h-9 rounded transition-all cursor-default;
 }
