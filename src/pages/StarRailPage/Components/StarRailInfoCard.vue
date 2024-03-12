@@ -156,7 +156,7 @@ const requestInfo = () => {
       router.push({
         name: 'tempPage',
         query: {
-          from: '/srpage',
+          from: 'sr',
         },
       })
     })

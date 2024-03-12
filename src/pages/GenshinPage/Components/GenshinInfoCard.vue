@@ -152,7 +152,7 @@ const requestInfo = () => {
       router.push({
         name: 'tempPage',
         query: {
-          from: '/gspage',
+          from: 'gs',
         },
       })
     })

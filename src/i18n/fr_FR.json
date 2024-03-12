@@ -48,7 +48,7 @@
   "mainBgDialog_filter": "Image",
   "mainpage_title": "miHoYo miXeD Launcher",
   "mainpage_buttonText": "Lancer {game}",
-  "genshin_launcherContentsUrl": "https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=false&key=gcStgarh&language=fr-fr&launcher_id=10",
+  "gs_launcherContentsUrl": "https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=false&key=gcStgarh&language=fr-fr&launcher_id=10",
   "gs_enkaLangCode": "fr",
   "gs_emptyPlayerTip": "Les détails du joueur s'afficheront ici",
   "gs_showcaseTip": "Les détails du joueur ne sont pas disponibles, veuillez activer 'Afficher les détails du personnage' dans le jeu et réessayez.",

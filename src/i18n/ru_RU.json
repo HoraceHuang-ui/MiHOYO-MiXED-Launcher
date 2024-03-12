@@ -48,7 +48,7 @@
   "mainBgDialog_filter": "Изображение",
   "mainpage_title": "Запуск miHoYo miXeD",
   "mainpage_buttonText": "Запустить {game}",
-  "genshin_launcherContentsUrl": "https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=false&key=gcStgarh&language=ru-ru&launcher_id=10",
+  "gs_launcherContentsUrl": "https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=false&key=gcStgarh&language=ru-ru&launcher_id=10",
   "gs_enkaLangCode": "ru",
   "gs_emptyPlayerTip": "Информация о игроке будет отображена здесь",
   "gs_showcaseTip": "Информация о игроке недоступна. Включите 'Отображение деталей персонажей' в игре и попробуйте снова.",
