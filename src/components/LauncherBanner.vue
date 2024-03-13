@@ -16,7 +16,11 @@ const openLink = (url: string) => {
 </script>
 
 <template>
-  <MyCarousel show-arrow="hover">
+  <MyCarousel
+    show-arrow="hover"
+    show-indicator="hover"
+    indicator-style="circle"
+  >
     <img
       v-for="banner in banners"
       @click="openLink(banner.url)"

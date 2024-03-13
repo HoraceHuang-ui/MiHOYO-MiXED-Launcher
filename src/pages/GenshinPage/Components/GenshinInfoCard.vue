@@ -847,6 +847,7 @@ const countRolledSubstat = (stats: any[], prop: string) => {
                   class="relative mt-2 w-full h-40 rounded-xl bg-opacity-20 bg-black backdrop-blur-lg"
                   show-arrow="never"
                   show-indicator="always"
+                  :indicator-bg="false"
                   :autoplay="false"
                 >
                   <div

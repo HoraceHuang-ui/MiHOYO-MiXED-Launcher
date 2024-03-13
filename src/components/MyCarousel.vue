@@ -19,6 +19,14 @@ const props = defineProps({
     type: String as PropType<'always' | 'hover' | 'never'>,
     default: 'never',
   },
+  indicatorStyle: {
+    type: String as PropType<'circle' | 'bar'>,
+    default: 'bar',
+  },
+  indicatorBg: {
+    type: Boolean,
+    default: true,
+  },
   animation: {
     type: String as PropType<'swipe' | 'fade-swipe'>,
     default: 'swipe',
@@ -195,19 +203,29 @@ defineExpose({
         "
         class="w-full absolute bottom-1 left-0 right-0 flex flex-row justify-center"
       >
-        <div class="bg-gray-600 bg-opacity-20 px-2 rounded-full flex flex-row">
+        <div
+          class="px-1 rounded-full flex flex-row"
+          :class="
+            indicatorBg ? 'bg-gray-700 bg-opacity-30 backdrop-blur-md' : ''
+          "
+        >
           <div
             v-for="idx in panes.length"
-            class="py-2 mx-1"
+            class="mx-1"
+            :class="indicatorStyle === 'bar' ? 'my-2' : 'my-1'"
             @mouseenter="curIdx = idx - 1"
             :key="idx"
           >
             <div
-              class="h-1 rounded-full transition-all"
+              class="rounded-full transition-all"
               :class="
                 curIdx == idx - 1
-                  ? 'indicator-selected'
-                  : 'indicator-unselected'
+                  ? indicatorStyle === 'bar'
+                    ? 'bar-indicator-selected'
+                    : 'circle-indicator-selected'
+                  : indicatorStyle === 'bar'
+                    ? 'bar-indicator-unselected'
+                    : 'circle-indicator-unselected'
               "
             />
           </div>
@@ -248,12 +266,20 @@ defineExpose({
 </template>
 
 <style scoped>
-.indicator-selected {
-  @apply w-7 bg-white;
+.bar-indicator-selected {
+  @apply w-7 h-1 bg-white;
 }
 
-.indicator-unselected {
-  @apply w-5 bg-gray-400 opacity-90;
+.bar-indicator-unselected {
+  @apply w-5 h-1 bg-gray-400 opacity-90;
+}
+
+.circle-indicator-selected {
+  @apply w-5 h-2 bg-white;
+}
+
+.circle-indicator-unselected {
+  @apply w-2 h-2 bg-gray-200 opacity-90;
 }
 
 .slide-up-enter-from,

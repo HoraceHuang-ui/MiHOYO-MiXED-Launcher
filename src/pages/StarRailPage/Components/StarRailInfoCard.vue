@@ -798,6 +798,7 @@ const showCharDetails = (index: number) => {
                   class="mt-2 w-full h-40 rounded-xl bg-black bg-opacity-20 backdrop-blur-md relative z-20"
                   show-arrow="never"
                   show-indicator="always"
+                  :indicator-bg="false"
                   :autoplay="false"
                 >
                   <div
