@@ -202,7 +202,7 @@ async function createWindow() {
     }
   })
 
-  ipcMain.handle('enka:updateCache', _event => {
+  ipcMain.handle('enka:updateCache', () => {
     return enka.cachedAssetsManager.fetchAllContents()
   })
 
