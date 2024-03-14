@@ -430,12 +430,12 @@ const refresh = () => {
 
 .scroll-wrapper {
   top: 2vh;
-  left: 9vw;
+  left: 8vw;
 }
 
 .items-scroll {
   margin-top: 67vh;
-  width: 80vw;
+  width: 82vw;
 }
 
 .banner-enter-from,

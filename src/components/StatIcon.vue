@@ -20,6 +20,7 @@ import gs_geoIcon from '../assets/statIcons/gs/geoIcon.vue'
 import gs_physicalIcon from '../assets/statIcons/gs/physicalIcon.vue'
 import gs_healingIcon from '../assets/statIcons/gs/healingIcon.vue'
 import gs_shieldIcon from '../assets/statIcons/gs/shieldIcon.vue'
+import gs_friendshipIcon from '../assets/statIcons/gs/friendshipIcon.vue'
 
 import sr_hpIcon from '../assets/statIcons/sr/hpIcon.vue'
 import sr_breakEffIcon from '../assets/statIcons/sr/breakEffIcon.vue'
@@ -171,6 +172,10 @@ const props = defineProps({
       />
       <gs_shieldIcon
         v-if="props.stat === 'shieldStrength'"
+        :fill="props.fill"
+      />
+      <gs_friendshipIcon
+        v-if="props.stat === 'friendship'"
         :fill="props.fill"
       />
     </div>
