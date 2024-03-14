@@ -14,7 +14,7 @@ const imgs = [
   '../../src/assets/failedEmojis/wuwuboFailed.png',
   '../../src/assets/failedEmojis/hi3Failed.png',
 ]
-const sources = ['/gspage', '/srpage', '/hipage']
+const sources = ['gs', 'sr', 'hi3']
 
 const router = useRouter()
 const refresh = () => {
