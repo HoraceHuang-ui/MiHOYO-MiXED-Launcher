@@ -464,7 +464,7 @@ const countRolledSubstat = (stats: any[], prop: string) => {
         :autoplay="false"
         show-arrow="never"
         animation="fade-swipe"
-        style="width: 960px; height: 543px; border-radius: 0 0 4.5vh 4.5vh"
+        style="width: 82vw; height: 82vh; border-radius: 0 0 4.5vh 4.5vh"
       >
         <div
           v-for="(character, index) in playerInfo.characters"
@@ -611,11 +611,27 @@ const countRolledSubstat = (stats: any[], prop: string) => {
               >
                 <!-- 角色名字-->
                 <div class="w-full text-right">
-                  <span
+                  <div
                     class="text-white font-gs font-bold"
                     style="font-size: 2.15rem; line-height: 2.5rem"
-                    >{{ character.characterData.name.text }}</span
                   >
+                    {{ character.characterData.name.text }}
+                  </div>
+                  <div
+                    class="text-white flex font-gs flex-row justify-end text-sm opacity-90 mt-0.5"
+                    style="line-height: 1rem"
+                  >
+                    <StatIcon
+                      class="w-4 h-4"
+                      fill="#d1d5db"
+                      stat="friendship"
+                      game="gs"
+                    />
+                    <div class="ml-1">{{ character.friendship }}</div>
+                    <div class="ml-2">
+                      「{{ character.characterData.details.title.text }}」
+                    </div>
+                  </div>
                 </div>
                 <!-- 详情第一块：属性 -->
                 <div

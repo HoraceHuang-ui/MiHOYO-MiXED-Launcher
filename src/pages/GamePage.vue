@@ -36,6 +36,17 @@ const timeDelta = computed(() => {
   }
   return Math.ceil((timeNow - timeUpd) / 1000 / 3600 / 24 - 0.5) % 42
 })
+const gameNo = computed(() => {
+  switch (game) {
+    case 'gs':
+      return 0
+    case 'sr':
+      return 1
+    case 'hi3':
+      return 2
+  }
+  return -1
+})
 const defaultBG = computed(() => {
   switch (game) {
     case 'gs':
@@ -45,6 +56,7 @@ const defaultBG = computed(() => {
     case 'hi3':
       return '../../src/assets/hi3banner.webp'
   }
+  return '../../src/assets/gsbanner.png'
 })
 const prefFont = computed(() => {
   switch (game) {
@@ -53,8 +65,9 @@ const prefFont = computed(() => {
     case 'sr':
       return 'sr-sans'
     case 'hi3':
-      return 'hi3'
+      return 'normal'
   }
+  return 'normal'
 })
 let dialogComponent: Component = GenshinDialog
 const launcherInfo = ref<LauncherInfo>({
@@ -289,7 +302,7 @@ const refresh = () => {
     v-else-if="launcherInfoFailed"
     class="absolute z-10 -translate-x-1/2"
     style="margin-left: 50%; margin-top: 25vh"
-    :gameNo="0"
+    :gameNo="gameNo"
     :errMsg="errMsg"
   >
   </LoadFailedBlock>
@@ -430,12 +443,12 @@ const refresh = () => {
 
 .scroll-wrapper {
   top: 2vh;
-  left: 9vw;
+  left: 8vw;
 }
 
 .items-scroll {
   margin-top: 67vh;
-  width: 80vw;
+  width: 82vw;
 }
 
 .banner-enter-from,
