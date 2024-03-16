@@ -260,7 +260,7 @@ const showClearDialog = () => {
       />
     </div>
     <ScrollWrapper height="91vh" class="scroll-wrapper absolute z-40">
-      <div class="text-left px-10 py-5 w-[52%]">
+      <div class="text-left px-10 pb-5 w-[52%]">
         <!-- GENERAL -->
         <div class="title">{{ $t('settings_general') }}</div>
         <div class="form-item">
