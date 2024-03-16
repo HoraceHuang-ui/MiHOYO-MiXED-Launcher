@@ -249,6 +249,7 @@ const showClearDialog = () => {
 
 <template>
   <div
+    class="relative"
     :class="transitionShow ? '' : 'opacity-0 blur-lg scale-90'"
     style="transition-duration: 400ms"
   >
@@ -259,7 +260,7 @@ const showClearDialog = () => {
       />
     </div>
     <ScrollWrapper height="91vh" class="scroll-wrapper absolute z-40">
-      <div class="text-left px-10 pt-10 w-1/2">
+      <div class="text-left px-10 py-5 w-[52%]">
         <!-- GENERAL -->
         <div class="title">{{ $t('settings_general') }}</div>
         <div class="form-item">
@@ -411,7 +412,7 @@ const showClearDialog = () => {
 }
 
 .scroll-wrapper {
-  top: 2vh;
+  top: 0;
   left: 1vw;
   width: 96vw;
   border-radius: 5vh 5vh 0 0;
