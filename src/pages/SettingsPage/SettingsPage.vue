@@ -22,6 +22,7 @@ import UpdateDialogContent from '../../components/UpdateDialogContent.vue'
 import LoadingIcon from '../../components/LoadingIcon.vue'
 import ScrollWrapper from '../../components/ScrollWrapper.vue'
 import MySelect from '../../components/MySelect.vue'
+import MyTextSwitch from '../../components/MyTextSwitch.vue'
 
 const lang = ref<Lang>('en_US')
 const selectedLangIdx = ref(0)
@@ -288,27 +289,32 @@ const showClearDialog = () => {
         </div>
         <div class="form-item">
           <div class="h-full py-1">{{ $t('settings_whenClosingWindow') }}</div>
-          <div
-            class="ml-3 rounded-full flex flex-row py-1 w-64 bg-white relative cursor-pointer"
-            @click="switchQuitAction"
-          >
-            <div
-              class="rounded-full bg-blue-500 w-1/2 absolute top-0 bottom-0 z-0 transition-all"
-              :class="quitOnClose ? 'left-0' : 'left-32'"
-            ></div>
-            <div
-              class="rounded-full w-1/2 absolute z-10 left-0 text-center transition-all"
-              :class="{ 'text-white': quitOnClose }"
-            >
-              {{ $t('settings_quitOnClose') }}
-            </div>
-            <div
-              class="rounded-full w-1/2 absolute z-10 right-0 text-center transition-all"
-              :class="{ 'text-white': !quitOnClose }"
-            >
-              {{ $t('settings_trayOnClose') }}
-            </div>
-          </div>
+          <MyTextSwitch
+            v-model="quitOnClose"
+            :right-text="$t('settings_trayOnClose')"
+            :left-text="$t('settings_quitOnClose')"
+          />
+          <!--          <div-->
+          <!--            class="ml-3 rounded-full flex flex-row py-1 w-64 bg-white relative cursor-pointer"-->
+          <!--            @click="switchQuitAction"-->
+          <!--          >-->
+          <!--            <div-->
+          <!--              class="rounded-full bg-blue-500 w-1/2 absolute top-0 bottom-0 z-0 transition-all"-->
+          <!--              :class="quitOnClose ? 'left-0' : 'left-32'"-->
+          <!--            ></div>-->
+          <!--            <div-->
+          <!--              class="rounded-full w-1/2 absolute z-10 left-0 text-center transition-all"-->
+          <!--              :class="{ 'text-white': quitOnClose }"-->
+          <!--            >-->
+          <!--              {{ $t('settings_quitOnClose') }}-->
+          <!--            </div>-->
+          <!--            <div-->
+          <!--              class="rounded-full w-1/2 absolute z-10 right-0 text-center transition-all"-->
+          <!--              :class="{ 'text-white': !quitOnClose }"-->
+          <!--            >-->
+          <!--              {{ $t('settings_trayOnClose') }}-->
+          <!--            </div>-->
+          <!--          </div>-->
         </div>
         <div class="form-item">
           <div class="h-full py-1">{{ $t('settings_trayOnLaunch') }}</div>

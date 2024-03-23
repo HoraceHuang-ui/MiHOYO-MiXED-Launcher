@@ -20,6 +20,7 @@ declare module 'vue' {
     MySelect: typeof import('./src/components/MySelect.vue')['default']
     MyTabs: typeof import('./src/components/MyTabs.vue')['default']
     MyTag: typeof import('./src/components/MyTag.vue')['default']
+    MyTextSwitch: typeof import('./src/components/MyTextSwitch.vue')['default']
     MyTooltip: typeof import('./src/components/MyTooltip.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
