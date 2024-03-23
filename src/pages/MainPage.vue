@@ -1,15 +1,10 @@
 <script setup lang="ts">
 import { h, onMounted, ref } from 'vue'
-import {
-  availableLangCodes,
-  availableLangNames,
-  Lang,
-  str2Lang,
-  translate,
-} from '../i18n'
+import { availableLangNames, str2Lang, translate } from '../i18n'
 import { dialogComponent, DialogStyle } from '../types/dialog/dialog'
 import { useDialog } from '../utils/template-dialog'
 import { useRouter } from 'vue-router'
+import MySelect from '../components/MySelect.vue'
 
 const router = useRouter()
 
@@ -22,7 +17,7 @@ const bgPath = ref('')
 const dialogStyle = ref<DialogStyle>('gs')
 
 const DEFAULT_BG = '../../src/assets/gsbanner.png'
-const lang = ref<Lang | null>(null)
+const lang = ref(0)
 
 onMounted(async () => {
   gsGamePath.value = await window.store.get('gsGamePath')
@@ -37,43 +32,40 @@ onMounted(async () => {
     }
     dialogStyle.value = style
 
-    lang.value = str2Lang(localStorage.getItem('lang'))
-    if (!lang.value) {
+    const langCode = str2Lang(localStorage.getItem('lang'))
+    if (!langCode) {
       localStorage.setItem('lang', 'en_US')
-      lang.value = 'en_US'
+      lang.value = 0
       useDialog(
         dialogComponent(dialogStyle.value),
         {
           onOk(dispose: () => void) {
-            if (lang.value !== 'en_US') {
+            if (lang.value !== 0) {
               router.go(0)
             }
             dispose()
           },
           onCancel(dispose: () => void) {
-            if (lang.value !== 'en_US') {
-              router.go(0)
-            }
+            lang.value = 0
             dispose()
           },
         },
         {
           title: translate('general_welcomeTitle'),
           msg: translate('general_langText'),
-          vnode: h(
-            'div',
-            {
-              style: {
-                display: 'flex',
-                'flex-direction': 'row',
-                'justify-content': 'center',
-                width: '100%',
-              },
-            },
+          vnode: () =>
             h(
-              'select',
+              'div',
               {
                 style: {
+                  display: 'flex',
+                  'flex-direction': 'row',
+                  'justify-content': 'center',
+                  width: '100%',
+                },
+              },
+              h(MySelect, {
+                selectorStyle: {
                   'border-width': '1px',
                   'border-color': '#CEA652',
                   'border-radius': '9999px',
@@ -83,29 +75,14 @@ onMounted(async () => {
                   color: '#886a32',
                   'background-color': '#ECE5D8',
                 },
-                onChange: (e: Event) => {
-                  const target = e.target as HTMLSelectElement
-                  localStorage.setItem('lang', target.value)
-                  lang.value = str2Lang(target.value)
+                items: availableLangNames,
+                modelValue: lang.value,
+                middle: true,
+                onChange: (idx: number) => {
+                  lang.value = idx
                 },
-              },
-              availableLangCodes.map((langCode, i) => {
-                return h(
-                  'option',
-                  {
-                    style: {
-                      'border-width': '1px',
-                      'border-color': '#000000',
-                      color: '#000000',
-                      'background-color': '#ffffff',
-                    },
-                    value: langCode,
-                  },
-                  availableLangNames[i],
-                )
               }),
             ),
-          ),
         },
       )
     }

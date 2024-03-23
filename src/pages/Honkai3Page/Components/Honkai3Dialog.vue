@@ -38,7 +38,7 @@ const props = defineProps({
     default: true,
   },
   vnode: {
-    type: Object as PropType<VNode>,
+    type: Object as PropType<() => VNode | undefined>,
     default: undefined,
   },
 })
