@@ -169,7 +169,14 @@ const requestInfo = () => {
       ) {
         retriedCache.value = true
         window.enka.updateCache().then(requestInfo)
-      } else if (err.toString().startsWith('Error: Error invoking remote method \'enka:getGenshinPlayer\': Error: Complete Genshin data cache not found.') && !retriedCompleteCache.value) {
+      } else if (
+        err
+          .toString()
+          .startsWith(
+            "Error: Error invoking remote method 'enka:getGenshinPlayer': Error: Complete Genshin data cache not found.",
+          ) &&
+        !retriedCompleteCache.value
+      ) {
         retriedCompleteCache.value = true
         window.enka.updateCache().then(requestInfo)
       } else {
