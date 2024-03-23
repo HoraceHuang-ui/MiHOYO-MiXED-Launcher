@@ -28,7 +28,7 @@ const i18n = createI18n<[MessageSchema], Lang>({
 
 export default i18n
 
-export const availableLangCodes = [
+export const availableLangCodes: Lang[] = [
   'en_US',
   'zh_CN',
   'zh_TW',
@@ -36,7 +36,7 @@ export const availableLangCodes = [
   'ja_JP',
   'fr_FR',
 ]
-export const availableLangNames = [
+export const availableLangNames: string[] = [
   'English',
   '简体中文',
   '繁體中文',

@@ -17,6 +17,7 @@ declare module 'vue' {
     MyCarousel: typeof import('./src/components/MyCarousel.vue')['default']
     MyCheckbox: typeof import('./src/components/MyCheckbox.vue')['default']
     MyDropdown: typeof import('./src/components/MyDropdown.vue')['default']
+    MySelect: typeof import('./src/components/MySelect.vue')['default']
     MyTabs: typeof import('./src/components/MyTabs.vue')['default']
     MyTag: typeof import('./src/components/MyTag.vue')['default']
     MyTooltip: typeof import('./src/components/MyTooltip.vue')['default']

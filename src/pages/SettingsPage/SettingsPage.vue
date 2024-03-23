@@ -21,8 +21,10 @@ import { useDialog } from '../../utils/template-dialog'
 import UpdateDialogContent from '../../components/UpdateDialogContent.vue'
 import LoadingIcon from '../../components/LoadingIcon.vue'
 import ScrollWrapper from '../../components/ScrollWrapper.vue'
+import MySelect from '../../components/MySelect.vue'
 
 const lang = ref<Lang>('en_US')
+const selectedLangIdx = ref(0)
 const dialogStyle = ref<DialogStyle>('gs')
 const transitionShow = ref(false)
 const bgPath = ref('')
@@ -54,8 +56,18 @@ const quitOnClose = ref(true)
 const trayOnLaunch = ref(true)
 const gsCostume = ref(false)
 
+const setLangIdx = () => {
+  for (let i = 0; i < availableLangCodes.length; i++) {
+    if (availableLangCodes[i] === lang.value) {
+      selectedLangIdx.value = i
+      break
+    }
+  }
+}
+
 onMounted(async () => {
   lang.value = localStorage.lang || 'en_US'
+  setLangIdx()
   let a = await window.store.get('quitOnClose')
   if (a === undefined) {
     await window.store.set('quitOnClose', true, false)
@@ -175,12 +187,14 @@ const switchGsCostume = () => {
   window.store.set('gsCostume', gsCostume.value, false)
 }
 
-const showLangDialog = () => {
+const showLangDialog = (idx: number) => {
+  lang.value = availableLangCodes[idx]
   useDialog(
     dialogComponent(dialogStyle.value),
     {
       onCancel(dispose: () => void) {
         lang.value = localStorage.lang
+        setLangIdx()
         dispose()
       },
       onOk(dispose: () => void) {
@@ -265,20 +279,25 @@ const showClearDialog = () => {
         <div class="title">{{ $t('settings_general') }}</div>
         <div class="form-item">
           <div class="h-full py-1">{{ $t('settings_selectLang') }}</div>
-          <select
-            name="language"
+          <MySelect
+            v-model="selectedLangIdx"
+            :items="availableLangNames"
             @change="showLangDialog"
-            v-model="lang"
-            class="border-2 rounded-full py-1 px-2 ml-3 hover:bg-gray-100 transition-all"
-          >
-            <option
-              v-for="(langCode, i) in availableLangCodes"
-              :key="i"
-              :value="langCode"
-            >
-              {{ availableLangNames[i] }}
-            </option>
-          </select>
+          ></MySelect>
+          <!--          <select-->
+          <!--            name="language"-->
+          <!--            @change="showLangDialog"-->
+          <!--            v-model="lang"-->
+          <!--            class="border-2 rounded-full py-1 px-2 ml-3 hover:bg-gray-100 transition-all"-->
+          <!--          >-->
+          <!--            <option-->
+          <!--              v-for="(langCode, i) in availableLangCodes"-->
+          <!--              :key="i"-->
+          <!--              :value="langCode"-->
+          <!--            >-->
+          <!--              {{ availableLangNames[i] }}-->
+          <!--            </option>-->
+          <!--          </select>-->
         </div>
         <div class="form-item">
           <div class="h-full py-1">{{ $t('settings_whenClosingWindow') }}</div>
