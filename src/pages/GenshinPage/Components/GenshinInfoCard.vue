@@ -35,6 +35,7 @@ const charsScrollbar = ref()
 const showcaseIdx = ref(0)
 const showCostume = ref(false)
 const retriedCache = ref(false)
+const retriedCompleteCache = ref(false)
 const elementAssets = {
   cryo: {
     bg: '../../src/assets/elementBgs/cryo.png',
@@ -168,8 +169,12 @@ const requestInfo = () => {
       ) {
         retriedCache.value = true
         window.enka.updateCache().then(requestInfo)
+      } else if (err.toString().startsWith('Error: Error invoking remote method \'enka:getGenshinPlayer\': Error: Complete Genshin data cache not found.') && !retriedCompleteCache.value) {
+        retriedCompleteCache.value = true
+        window.enka.updateCache().then(requestInfo)
       } else {
         retriedCache.value = false
+        retriedCompleteCache.value = false
         playerInfoLoading.value = false
         playerInfoFailed.value = true
       }
