@@ -15,11 +15,15 @@ const props = defineProps({
   },
   width: {
     type: String,
-    default: '100%',
+    default: 'max-content',
   },
   selected: {
     type: Number,
     default: -1,
+  },
+  middle: {
+    type: Boolean,
+    default: false,
   },
 })
 
@@ -38,7 +42,7 @@ const wrapperStyles: Record<string, any> = {
   },
   bottom: {
     top: 'calc(100% + 10px)',
-    // left: 0,
+    left: 0,
     right: 0,
   },
   left: {
@@ -54,19 +58,19 @@ const wrapperRef = ref<HTMLElement>()
 const dropdownRef = ref<HTMLElement>()
 let timer: NodeJS.Timeout | number | undefined = undefined
 
-const transformX = computed(() => {
+const transform = computed(() => {
   if (!wrapperRef.value || !dropdownRef.value) return {}
   if (props.placement === 'top' || props.placement === 'bottom') {
     return wrapperRef.value.clientWidth >= dropdownRef.value.clientWidth
       ? {}
       : {
-          transform: 'translateX(-50%)',
+          transform: `translateX(-${((dropdownRef.value.clientWidth - wrapperRef.value.clientWidth) / 2).toFixed(0)}px)`,
         }
   } else {
     return wrapperRef.value.clientHeight >= dropdownRef.value.clientHeight
       ? {}
       : {
-          transform: 'translateY(-50%)',
+          transform: `translateY(-${((dropdownRef.value.clientHeight - wrapperRef.value.clientHeight) / 2).toFixed(0)}px)`,
         }
   }
 })
@@ -104,14 +108,14 @@ const sendCommand = (idx: number) => {
 
     <Transition name="fade">
       <div
-        class="absolute min-w-full min-h-full overflow-visible flex flex-row z-50"
+        class="absolute min-w-full overflow-visible flex flex-row z-50"
         :style="{ ...wrapperStyles[placement], width: width }"
         v-if="showMenu"
         ref="dropdownRef"
       >
         <div
-          class="px-1 py-0.5 bg-white rounded-xl w-fit h-fit min-w-full text-center shadow-md"
-          :style="transformX"
+          class="px-1 py-0.5 bg-white rounded-xl w-fit h-fit min-w-full text-center text-nowrap shadow-md"
+          :style="middle ? transform : undefined"
           @mouseenter="onMouseEnter"
           @mouseleave="onMouseLeave"
         >

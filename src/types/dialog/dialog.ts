@@ -4,7 +4,7 @@ import StarRailDialog from '../../pages/StarRailPage/Components/StarRailDialog.v
 import Honkai3Dialog from '../../pages/Honkai3Page/Components/Honkai3Dialog.vue'
 
 export type DialogStyle = 'gs' | 'sr' | 'hi3'
-export const availableDialogStyles = ['gs', 'sr', 'hi3']
+export const availableDialogStyles: DialogStyle[] = ['gs', 'sr', 'hi3']
 export const availableDialogStyleDescs = [
   translate('general_gs'),
   translate('general_sr'),

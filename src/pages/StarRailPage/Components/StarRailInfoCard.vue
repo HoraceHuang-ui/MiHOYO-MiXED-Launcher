@@ -733,7 +733,7 @@ const showCharDetails = (index: number) => {
                     :key="idx"
                     class="h-full flex flex-row cursor-default"
                   >
-                    <MyTooltip placement="left" max-width="500px">
+                    <MyTooltip placement="left" max-width="500px" middle>
                       <template #content>
                         <div class="max-w-md">
                           <div class="font-sr text-xl">

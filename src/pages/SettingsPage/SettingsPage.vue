@@ -26,6 +26,7 @@ import MySelect from '../../components/MySelect.vue'
 const lang = ref<Lang>('en_US')
 const selectedLangIdx = ref(0)
 const dialogStyle = ref<DialogStyle>('gs')
+const selectedDialogStyleIdx = ref(0)
 const transitionShow = ref(false)
 const bgPath = ref('')
 const appVer = ref('')
@@ -56,18 +57,9 @@ const quitOnClose = ref(true)
 const trayOnLaunch = ref(true)
 const gsCostume = ref(false)
 
-const setLangIdx = () => {
-  for (let i = 0; i < availableLangCodes.length; i++) {
-    if (availableLangCodes[i] === lang.value) {
-      selectedLangIdx.value = i
-      break
-    }
-  }
-}
-
 onMounted(async () => {
   lang.value = localStorage.lang || 'en_US'
-  setLangIdx()
+  selectedLangIdx.value = availableLangCodes.indexOf(lang.value)
   let a = await window.store.get('quitOnClose')
   if (a === undefined) {
     await window.store.set('quitOnClose', true, false)
@@ -84,6 +76,9 @@ onMounted(async () => {
   }
   bgPath.value = await window.store.get('mainBgPath')
   dialogStyle.value = await window.store.get('dialogStyle')
+  selectedDialogStyleIdx.value = availableDialogStyles.indexOf(
+    dialogStyle.value,
+  )
   transitionShow.value = true
 
   gsCostume.value = await window.store.get('gsCostume')
@@ -194,7 +189,7 @@ const showLangDialog = (idx: number) => {
     {
       onCancel(dispose: () => void) {
         lang.value = localStorage.lang
-        setLangIdx()
+        selectedLangIdx.value = availableLangCodes.indexOf(lang.value)
         dispose()
       },
       onOk(dispose: () => void) {
@@ -217,11 +212,15 @@ const showLangDialog = (idx: number) => {
 }
 
 const showDialogStyleChange = () => {
+  dialogStyle.value = availableDialogStyles[selectedDialogStyleIdx.value]
   useDialog(
     dialogComponent(dialogStyle.value),
     {
       async onCancel(dispose: () => void) {
         dialogStyle.value = await window.store.get('dialogStyle')
+        selectedDialogStyleIdx.value = availableDialogStyles.indexOf(
+          dialogStyle.value,
+        )
         dispose()
       },
       onOk(dispose: () => void) {
@@ -283,21 +282,9 @@ const showClearDialog = () => {
             v-model="selectedLangIdx"
             :items="availableLangNames"
             @change="showLangDialog"
-          ></MySelect>
-          <!--          <select-->
-          <!--            name="language"-->
-          <!--            @change="showLangDialog"-->
-          <!--            v-model="lang"-->
-          <!--            class="border-2 rounded-full py-1 px-2 ml-3 hover:bg-gray-100 transition-all"-->
-          <!--          >-->
-          <!--            <option-->
-          <!--              v-for="(langCode, i) in availableLangCodes"-->
-          <!--              :key="i"-->
-          <!--              :value="langCode"-->
-          <!--            >-->
-          <!--              {{ availableLangNames[i] }}-->
-          <!--            </option>-->
-          <!--          </select>-->
+            middle
+            selector-class="border-2 bg-white py-1 px-2 hover:bg-gray-100 transition-all"
+          />
         </div>
         <div class="form-item">
           <div class="h-full py-1">{{ $t('settings_whenClosingWindow') }}</div>
@@ -344,20 +331,13 @@ const showClearDialog = () => {
         <div class="title">{{ $t('settings_appearance') }}</div>
         <div class="form-item">
           <div class="h-full py-1">{{ $t('settings_dialogStyle') }}</div>
-          <select
-            name="dialogStyle"
+          <MySelect
+            v-model="selectedDialogStyleIdx"
+            :items="availableDialogStyleDescs"
             @change="showDialogStyleChange"
-            v-model="dialogStyle"
-            class="border-2 rounded-full py-1 px-2 ml-3 hover:bg-gray-100 transition-all"
-          >
-            <option
-              v-for="(styleCode, i) in availableDialogStyles"
-              :key="i"
-              :value="styleCode"
-            >
-              {{ availableDialogStyleDescs[i] }}
-            </option>
-          </select>
+            middle
+            selector-class="border-2 bg-white py-1 px-2 hover:bg-gray-100 transition-all"
+          />
         </div>
         <div class="form-item">
           <div class="h-full py-1">{{ $t('settings_gsCostume') }}</div>
@@ -365,7 +345,7 @@ const showClearDialog = () => {
             class="ml-3"
             v-model="gsCostume"
             @change="switchGsCostume"
-          ></CustomSwitch>
+          />
         </div>
 
         <!-- ABOUT -->

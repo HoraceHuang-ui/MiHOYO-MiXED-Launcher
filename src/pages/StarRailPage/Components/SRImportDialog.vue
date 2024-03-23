@@ -124,7 +124,8 @@ const onDialogOk = () => {
         />
         <MyTooltip
           placement="right"
-          max-width="500px"
+          max-width="400px"
+          middle
           :content="`<${translate('general_launcherDirectory')}>\\Game\\StarRail.exe`"
         >
           <div

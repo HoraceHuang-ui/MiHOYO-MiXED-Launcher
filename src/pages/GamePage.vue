@@ -398,6 +398,7 @@ const refresh = () => {
                   $t('general_clearGamePath'),
                   $t('general_clearProfileInfo'),
                 ]"
+                middle
               >
                 <button
                   class="text-xl text-gray-900 px-2 h-16 rounded-full hover:bg-yellow-500 transition-all"
