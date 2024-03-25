@@ -121,7 +121,7 @@ const sendCommand = (idx: number) => {
         >
           <div
             v-for="(item, idx) in items"
-            class="py-1 my-0.5 rounded-lg cursor-default hover:bg-yellow-100 hover:text-yellow-600 active:bg-yellow-400 active:text-yellow-800 transition-all"
+            class="py-1 px-2 my-0.5 rounded-lg cursor-default hover:bg-yellow-100 hover:text-yellow-600 active:bg-yellow-400 active:text-yellow-800 transition-all"
             :class="{ itemClass, 'item-selected': selected == idx }"
             @click="sendCommand(idx)"
             :key="idx"
