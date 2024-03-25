@@ -530,15 +530,15 @@ const showCharDetails = (index: number) => {
                 </div>
                 <!-- 右侧第一块：属性 -->
                 <div
-                  class="mt-2 text-gray-200 text-xl text-left w-full rounded-xl px-2 py-3 pl-4 bg-black bg-opacity-20 backdrop-blur-md grid grid-cols-3 grid-rows-2"
+                  class="mt-2 text-gray-200 text-xl text-left w-full rounded-xl px-2 py-3 pl-4 bg-black bg-opacity-20 backdrop-blur-md grid grid-cols-4 grid-rows-2"
                 >
                   <div class="w-full flex flex-row">
                     <StatIcon
                       game="sr"
-                      :stat="character.attributes[0].field"
+                      stat="hp"
                       fill="#d1d5db"
                       class="h-5 w-5"
-                      style="margin-top: 1px"
+                      style="margin-top: 3px"
                     />
                     <span class="text-gray-200 text-right font-sr-sans ml-3">{{
                       Math.floor(character.attributes[0].value) +
@@ -548,10 +548,10 @@ const showCharDetails = (index: number) => {
                   <div class="w-full flex flex-row">
                     <StatIcon
                       game="sr"
-                      :stat="character.attributes[1].field"
+                      stat="atk"
                       fill="#d1d5db"
                       class="h-5 w-5"
-                      style="margin-top: 1px"
+                      style="margin-top: 3px"
                     />
                     <span class="text-gray-200 text-right font-sr-sans ml-3">{{
                       Math.floor(character.attributes[1].value) +
@@ -561,10 +561,10 @@ const showCharDetails = (index: number) => {
                   <div class="w-full flex flex-row">
                     <StatIcon
                       game="sr"
-                      :stat="character.attributes[2].field"
+                      stat="def"
                       fill="#d1d5db"
                       class="h-5 w-5"
-                      style="margin-top: 1px"
+                      style="margin-top: 3px"
                     />
                     <span class="text-gray-200 text-right font-sr-sans ml-3">{{
                       Math.floor(character.attributes[2].value) +
@@ -574,10 +574,42 @@ const showCharDetails = (index: number) => {
                   <div class="w-full flex flex-row">
                     <StatIcon
                       game="sr"
-                      :stat="character.attributes[4].field"
+                      stat="effect_res"
                       fill="#d1d5db"
                       class="h-5 w-5"
-                      style="margin-top: 1px"
+                      style="margin-top: 3px"
+                    />
+                    <span class="text-gray-200 text-right font-sr-sans ml-3"
+                      >{{
+                        (
+                          findField(character.additions, 'effect_res').value *
+                          100
+                        ).toFixed(1)
+                      }}%</span
+                    >
+                  </div>
+                  <div class="w-full flex flex-row">
+                    <StatIcon
+                      game="sr"
+                      stat="spd"
+                      fill="#d1d5db"
+                      class="h-5 w-5"
+                      style="margin-top: 3px"
+                    />
+                    <span class="text-gray-200 text-right font-sr-sans ml-3">{{
+                      (
+                        character.attributes[3].value +
+                        findField(character.additions, 'spd').value
+                      ).toFixed(0)
+                    }}</span>
+                  </div>
+                  <div class="w-full flex flex-row">
+                    <StatIcon
+                      game="sr"
+                      stat="crit_rate"
+                      fill="#d1d5db"
+                      class="h-5 w-5"
+                      style="margin-top: 3px"
                     />
                     <span class="text-gray-200 text-right font-sr-sans ml-3"
                       >{{
@@ -592,10 +624,10 @@ const showCharDetails = (index: number) => {
                   <div class="w-full flex flex-row">
                     <StatIcon
                       game="sr"
-                      :stat="character.attributes[5].field"
+                      stat="crit_dmg"
                       fill="#d1d5db"
                       class="h-5 w-5"
-                      style="margin-top: 1px"
+                      style="margin-top: 3px"
                     />
                     <span class="text-gray-200 text-right font-sr-sans ml-3"
                       >{{
@@ -608,7 +640,7 @@ const showCharDetails = (index: number) => {
                     >
                   </div>
                   <div
-                    class="mx-2 rounded-full text-sm bg-white bg-opacity-20 text-center hover:bg-opacity-30 active:scale-95 active:bg-opacity-40 cursor-default transition-all"
+                    class="mr-2 rounded-full text-sm bg-white bg-opacity-20 text-center hover:bg-opacity-30 active:scale-95 active:bg-opacity-40 cursor-default transition-all"
                     @click="showCharDetails(index)"
                   >
                     <div class="font-sr-sans" style="margin-top: 6px">
