@@ -25,6 +25,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  trigger: {
+    type: String as PropType<'hover' | 'click'>,
+    default: 'hover',
+  },
 })
 
 const emit = defineEmits(['command'])
@@ -82,12 +86,23 @@ const hideMenu = () => {
 }
 
 const onMouseEnter = () => {
+  if (props.trigger === 'click') return
+
   if (!showMenu.value) {
     showMenu.value = true
   } else {
     clearTimeout(timer)
     timer = undefined
   }
+}
+
+const onMouseEnterMenu = () => {
+  clearTimeout(timer)
+  timer = undefined
+}
+
+const mouseClick = () => {
+  showMenu.value = !showMenu.value
 }
 
 const onMouseLeave = () => {
@@ -102,7 +117,12 @@ const sendCommand = (idx: number) => {
 
 <template>
   <div class="relative">
-    <div @mouseenter="onMouseEnter" @mouseleave="onMouseLeave" ref="wrapperRef">
+    <div
+      @mouseenter="onMouseEnter"
+      @mouseleave="onMouseLeave"
+      ref="wrapperRef"
+      @click="mouseClick"
+    >
       <slot />
     </div>
 
@@ -116,7 +136,7 @@ const sendCommand = (idx: number) => {
         <div
           class="px-1 py-0.5 bg-white rounded-xl w-fit h-fit min-w-full text-center text-nowrap shadow-md"
           :style="middle ? transform : undefined"
-          @mouseenter="onMouseEnter"
+          @mouseenter="onMouseEnterMenu"
           @mouseleave="onMouseLeave"
         >
           <div

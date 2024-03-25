@@ -42,6 +42,7 @@ const selectionChange = (idx: number) => {
     :item-class="itemClass"
     :selected="modelValue"
     :middle="middle"
+    trigger="click"
     @command="selectionChange"
   >
     <div
