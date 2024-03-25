@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { h, onMounted, ref } from 'vue'
-import { availableLangNames, str2Lang, translate } from '../i18n'
+import {
+  availableLangCodes,
+  availableLangNames,
+  str2Lang,
+  translate,
+  translateWithLocale,
+} from '../i18n'
 import { dialogComponent, DialogStyle } from '../types/dialog/dialog'
 import { useDialog } from '../utils/template-dialog'
 import { useRouter } from 'vue-router'
@@ -41,6 +47,7 @@ onMounted(async () => {
         {
           onOk(dispose: () => void) {
             if (lang.value !== 0) {
+              localStorage.setItem('lang', availableLangCodes[lang.value])
               router.go(0)
             }
             dispose()
@@ -51,8 +58,16 @@ onMounted(async () => {
           },
         },
         {
-          title: translate('general_welcomeTitle'),
-          msg: translate('general_langText'),
+          title: () =>
+            translateWithLocale(
+              'general_welcomeTitle',
+              availableLangCodes[lang.value],
+            ),
+          msg: () =>
+            translateWithLocale(
+              'general_langText',
+              availableLangCodes[lang.value],
+            ),
           vnode: () =>
             h(
               'div',

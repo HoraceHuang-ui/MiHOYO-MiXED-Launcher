@@ -8,8 +8,10 @@ const props = defineProps({
     default: '50%',
   },
   title: {
-    type: String,
-    default: 'Template HK3 Dialog',
+    type: Object as PropType<(() => string) | string>,
+    default: () => {
+      return 'Template GS Dialog'
+    },
   },
   showCancel: {
     type: Boolean,
@@ -20,8 +22,10 @@ const props = defineProps({
     default: true,
   },
   msg: {
-    type: String,
-    default: '',
+    type: Object as PropType<(() => string) | string>,
+    default: () => {
+      return ''
+    },
   },
   msgCenter: {
     type: Boolean,
@@ -109,7 +113,7 @@ defineExpose({
               class="text-center w-full font-bold text-2xl"
               style="color: #51c3f9"
             >
-              {{ title }}
+              {{ typeof title === 'string' ? title : title() }}
             </div>
             <div
               class="text-center w-full opacity-60 text-xs font-bold"
@@ -129,7 +133,7 @@ defineExpose({
                   class="px-5 text-lg"
                   :class="msgCenter ? 'text-center' : 'text-left'"
                 >
-                  {{ msg }}
+                  {{ typeof msg === 'string' ? msg : msg() }}
                 </div>
                 <component :is="vnode" />
                 <slot />
