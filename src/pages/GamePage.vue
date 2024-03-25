@@ -61,13 +61,13 @@ const defaultBG = computed(() => {
 const prefFont = computed(() => {
   switch (game) {
     case 'gs':
-      return 'gs'
+      return 'font-gs'
     case 'sr':
-      return 'sr-sans'
+      return 'font-sr-sans'
     case 'hi3':
-      return 'normal'
+      return 'font-bold'
   }
-  return 'normal'
+  return 'font-normal'
 })
 let dialogComponent: Component = GenshinDialog
 const launcherInfo = ref<LauncherInfo>({
@@ -352,7 +352,7 @@ const refresh = () => {
         "
         :postTypeMap="postTypeMap"
         class="absolute left-16 top-96 z-50 rounded-xl backdrop-blur-md pl-3 pr-1"
-        :class="`font-${prefFont}`"
+        :class="prefFont"
         style="
           height: 112px;
           width: 396px;
@@ -380,7 +380,7 @@ const refresh = () => {
           >
             <div
               class="mx-2 my-3 flex flex-row rounded-full bg-yellow-400"
-              :class="`font-${prefFont}`"
+              :class="prefFont"
             >
               <button
                 @click="launchGame"
@@ -401,7 +401,7 @@ const refresh = () => {
                 middle
               >
                 <button
-                  class="text-xl text-gray-900 px-2 h-16 rounded-full hover:bg-yellow-500 transition-all"
+                  class="text-xl text-gray-900 px-2 h-16 rounded-full hover:bg-yellow-500 transition-all font-gs"
                 >
                   …
                 </button>
