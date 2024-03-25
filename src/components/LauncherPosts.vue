@@ -12,7 +12,7 @@ defineProps({
 })
 
 const tabsModel = ref(0)
-const keys = ['POST_TYPE_INFO', 'POST_TYPE_ACTIVITY', 'POST_TYPE_ANNOUNCE']
+const keys = ['POST_TYPE_ACTIVITY', 'POST_TYPE_ANNOUNCE', 'POST_TYPE_INFO']
 const tabs = translateMultiple(keys)
 
 const openLink = (url: string) => {

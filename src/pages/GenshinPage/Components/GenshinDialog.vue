@@ -8,8 +8,10 @@ const props = defineProps({
     default: '50%',
   },
   title: {
-    type: String,
-    default: 'Template GS Dialog',
+    type: Object as PropType<(() => string) | string>,
+    default: () => {
+      return 'Template GS Dialog'
+    },
   },
   showCancel: {
     type: Boolean,
@@ -20,8 +22,10 @@ const props = defineProps({
     default: true,
   },
   msg: {
-    type: String,
-    default: '',
+    type: Object as PropType<(() => string) | string>,
+    default: () => {
+      return ''
+    },
   },
   msgCenter: {
     type: Boolean,
@@ -38,7 +42,7 @@ const props = defineProps({
     default: true,
   },
   vnode: {
-    type: Object as PropType<VNode>,
+    type: Object as PropType<() => VNode | undefined>,
     default: undefined,
   },
 })
@@ -136,7 +140,7 @@ defineExpose({
           <div>
             <div class="pt-4 ml-6 mr-6">
               <div class="text-center w-full font-gs text-xl text-black">
-                {{ title }}
+                {{ typeof title === 'string' ? title : title() }}
               </div>
             </div>
             <div class="w-full flex flex-row justify-center mt-1">
@@ -168,7 +172,7 @@ defineExpose({
                 class="font-gs px-5"
                 :class="msgCenter ? 'text-center' : 'text-left'"
               >
-                {{ msg }}
+                {{ typeof msg === 'string' ? msg : msg() }}
               </div>
               <component :is="vnode" />
               <slot />

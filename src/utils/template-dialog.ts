@@ -11,19 +11,20 @@ export function useDialog(
   props: Record<string, any> = {},
 ) {
   const container = document.createElement('div')
-  const dialogVNode = h(component, {
-    ...props,
-    onOk: () => {
-      essentials && essentials.onOk ? essentials.onOk(dispose) : dispose()
-    },
-    onCancel: () => {
-      essentials && essentials.onCancel
-        ? essentials.onCancel(dispose)
-        : dispose()
-    },
-  })
+  const dialogVNode = () =>
+    h(component, {
+      ...props,
+      onOk: () => {
+        essentials && essentials.onOk ? essentials.onOk(dispose) : dispose()
+      },
+      onCancel: () => {
+        essentials && essentials.onCancel
+          ? essentials.onCancel(dispose)
+          : dispose()
+      },
+    })
 
-  render(dialogVNode, container)
+  render(dialogVNode(), container)
   document.body.appendChild(container)
 
   const dispose = () => {

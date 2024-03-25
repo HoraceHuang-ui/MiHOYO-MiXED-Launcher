@@ -25,6 +25,7 @@
     "src",
     "auto-imports.d.ts",
     "node_modules/.pnpm/unplugin-auto-import@0.17.3/node_modules/unplugin-auto-import/auto-imports.d.ts",
+    "node_modules/.pnpm/unplugin-auto-import@0.17.5/node_modules/unplugin-auto-import/auto-imports.d.ts",
     "node_modules/.pnpm/unplugin-auto-import@0.17.5/node_modules/unplugin-auto-import/auto-imports.d.ts"
   ],
   "references": [

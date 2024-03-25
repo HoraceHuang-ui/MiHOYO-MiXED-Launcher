@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { PropType, ref } from 'vue'
+import { computed, PropType, ref } from 'vue'
 
-defineProps({
+const props = defineProps({
   content: {
     type: String,
     required: false,
@@ -13,6 +13,10 @@ defineProps({
   maxWidth: {
     type: String,
     default: '300px',
+  },
+  middle: {
+    type: Boolean,
+    default: false,
   },
 })
 
@@ -41,7 +45,26 @@ const wrapperStyles: Record<string, any> = {
 }
 
 const showTooltip = ref(false)
+const wrapperRef = ref<HTMLElement>()
+const dropdownRef = ref<HTMLElement>()
 let timer: NodeJS.Timeout | number | undefined = undefined
+
+const transform = computed(() => {
+  if (!wrapperRef.value || !dropdownRef.value) return {}
+  if (props.placement === 'top' || props.placement === 'bottom') {
+    return wrapperRef.value.clientWidth >= dropdownRef.value.clientWidth
+      ? {}
+      : {
+          transform: `translateX(-${((dropdownRef.value.clientWidth - wrapperRef.value.clientWidth) / 2).toFixed(0)}px)`,
+        }
+  } else {
+    return wrapperRef.value.clientHeight >= dropdownRef.value.clientHeight
+      ? {}
+      : {
+          transform: `translateY(-${((dropdownRef.value.clientHeight - wrapperRef.value.clientHeight) / 2).toFixed(0)}px)`,
+        }
+  }
+})
 
 const hideTooltip = () => {
   showTooltip.value = false
@@ -65,18 +88,20 @@ const onMouseLeave = () => {
 
 <template>
   <div class="relative">
-    <div @mouseenter="onMouseEnter" @mouseleave="onMouseLeave">
+    <div @mouseenter="onMouseEnter" @mouseleave="onMouseLeave" ref="wrapperRef">
       <slot />
     </div>
 
     <Transition name="fade">
       <div
-        class="absolute min-w-full min-h-full overflow-visible flex flex-row z-50"
-        :style="{ ...wrapperStyles[placement], width: maxWidth }"
+        class="absolute min-w-full min-h-full w-max overflow-visible flex flex-row z-50"
+        :style="{ ...wrapperStyles[placement], maxWidth: maxWidth }"
         v-if="showTooltip"
       >
         <div
           class="p-2 bg-opacity-80 bg-black rounded-lg text-gray-100 w-fit h-fit text-left"
+          ref="dropdownRef"
+          :style="middle ? transform : undefined"
           @mouseenter="onMouseEnter"
           @mouseleave="onMouseLeave"
         >

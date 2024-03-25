@@ -110,21 +110,21 @@ const winMin = () => {
       />
     </div>
     <div class="example focus drag" style="width: 35vw">
-      <div class="traffic-lights no-drag mt-2">
-        <button
+      <div class="traffic-lights no-drag mt-2 flex flex-row py-3">
+        <div
           class="traffic-light traffic-light-maximize mx-1"
           id="maximize"
-        ></button>
-        <button
+        ></div>
+        <div
           class="traffic-light traffic-light-minimize mx-1"
           id="minimize"
           @click="winMin"
-        ></button>
-        <button
+        ></div>
+        <div
           class="traffic-light traffic-light-close mx-1"
           id="close"
           @click="winClose"
-        ></button>
+        ></div>
       </div>
     </div>
   </div>

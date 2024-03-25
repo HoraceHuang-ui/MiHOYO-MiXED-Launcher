@@ -21,9 +21,13 @@ import { useDialog } from '../../utils/template-dialog'
 import UpdateDialogContent from '../../components/UpdateDialogContent.vue'
 import LoadingIcon from '../../components/LoadingIcon.vue'
 import ScrollWrapper from '../../components/ScrollWrapper.vue'
+import MySelect from '../../components/MySelect.vue'
+import MyTextSwitch from '../../components/MyTextSwitch.vue'
 
 const lang = ref<Lang>('en_US')
+const selectedLangIdx = ref(0)
 const dialogStyle = ref<DialogStyle>('gs')
+const selectedDialogStyleIdx = ref(0)
 const transitionShow = ref(false)
 const bgPath = ref('')
 const appVer = ref('')
@@ -56,6 +60,7 @@ const gsCostume = ref(false)
 
 onMounted(async () => {
   lang.value = localStorage.lang || 'en_US'
+  selectedLangIdx.value = availableLangCodes.indexOf(lang.value)
   let a = await window.store.get('quitOnClose')
   if (a === undefined) {
     await window.store.set('quitOnClose', true, false)
@@ -72,6 +77,9 @@ onMounted(async () => {
   }
   bgPath.value = await window.store.get('mainBgPath')
   dialogStyle.value = await window.store.get('dialogStyle')
+  selectedDialogStyleIdx.value = availableDialogStyles.indexOf(
+    dialogStyle.value,
+  )
   transitionShow.value = true
 
   gsCostume.value = await window.store.get('gsCostume')
@@ -175,12 +183,14 @@ const switchGsCostume = () => {
   window.store.set('gsCostume', gsCostume.value, false)
 }
 
-const showLangDialog = () => {
+const showLangDialog = (idx: number) => {
+  lang.value = availableLangCodes[idx]
   useDialog(
     dialogComponent(dialogStyle.value),
     {
       onCancel(dispose: () => void) {
         lang.value = localStorage.lang
+        selectedLangIdx.value = availableLangCodes.indexOf(lang.value)
         dispose()
       },
       onOk(dispose: () => void) {
@@ -203,11 +213,15 @@ const showLangDialog = () => {
 }
 
 const showDialogStyleChange = () => {
+  dialogStyle.value = availableDialogStyles[selectedDialogStyleIdx.value]
   useDialog(
     dialogComponent(dialogStyle.value),
     {
       async onCancel(dispose: () => void) {
         dialogStyle.value = await window.store.get('dialogStyle')
+        selectedDialogStyleIdx.value = availableDialogStyles.indexOf(
+          dialogStyle.value,
+        )
         dispose()
       },
       onOk(dispose: () => void) {
@@ -249,6 +263,7 @@ const showClearDialog = () => {
 
 <template>
   <div
+    class="relative"
     :class="transitionShow ? '' : 'opacity-0 blur-lg scale-90'"
     style="transition-duration: 400ms"
   >
@@ -259,49 +274,26 @@ const showClearDialog = () => {
       />
     </div>
     <ScrollWrapper height="91vh" class="scroll-wrapper absolute z-40">
-      <div class="text-left px-10 pt-10 w-1/2">
+      <div class="text-left px-10 pb-5 w-[52%]">
         <!-- GENERAL -->
         <div class="title">{{ $t('settings_general') }}</div>
         <div class="form-item">
           <div class="h-full py-1">{{ $t('settings_selectLang') }}</div>
-          <select
-            name="language"
+          <MySelect
+            v-model="selectedLangIdx"
+            :items="availableLangNames"
             @change="showLangDialog"
-            v-model="lang"
-            class="border-2 rounded-full py-1 px-2 ml-3 hover:bg-gray-100 transition-all"
-          >
-            <option
-              v-for="(langCode, i) in availableLangCodes"
-              :key="i"
-              :value="langCode"
-            >
-              {{ availableLangNames[i] }}
-            </option>
-          </select>
+            middle
+            selector-class="border-2 bg-white py-1 px-2 hover:bg-gray-100 transition-all"
+          />
         </div>
         <div class="form-item">
           <div class="h-full py-1">{{ $t('settings_whenClosingWindow') }}</div>
-          <div
-            class="ml-3 rounded-full flex flex-row py-1 w-64 bg-white relative cursor-pointer"
-            @click="switchQuitAction"
-          >
-            <div
-              class="rounded-full bg-blue-500 w-1/2 absolute top-0 bottom-0 z-0 transition-all"
-              :class="quitOnClose ? 'left-0' : 'left-32'"
-            ></div>
-            <div
-              class="rounded-full w-1/2 absolute z-10 left-0 text-center transition-all"
-              :class="{ 'text-white': quitOnClose }"
-            >
-              {{ $t('settings_quitOnClose') }}
-            </div>
-            <div
-              class="rounded-full w-1/2 absolute z-10 right-0 text-center transition-all"
-              :class="{ 'text-white': !quitOnClose }"
-            >
-              {{ $t('settings_trayOnClose') }}
-            </div>
-          </div>
+          <MyTextSwitch
+            v-model="quitOnClose"
+            :right-text="$t('settings_trayOnClose')"
+            :left-text="$t('settings_quitOnClose')"
+          />
         </div>
         <div class="form-item">
           <div class="h-full py-1">{{ $t('settings_trayOnLaunch') }}</div>
@@ -324,20 +316,13 @@ const showClearDialog = () => {
         <div class="title">{{ $t('settings_appearance') }}</div>
         <div class="form-item">
           <div class="h-full py-1">{{ $t('settings_dialogStyle') }}</div>
-          <select
-            name="dialogStyle"
+          <MySelect
+            v-model="selectedDialogStyleIdx"
+            :items="availableDialogStyleDescs"
             @change="showDialogStyleChange"
-            v-model="dialogStyle"
-            class="border-2 rounded-full py-1 px-2 ml-3 hover:bg-gray-100 transition-all"
-          >
-            <option
-              v-for="(styleCode, i) in availableDialogStyles"
-              :key="i"
-              :value="styleCode"
-            >
-              {{ availableDialogStyleDescs[i] }}
-            </option>
-          </select>
+            middle
+            selector-class="border-2 bg-white py-1 px-2 hover:bg-gray-100 transition-all"
+          />
         </div>
         <div class="form-item">
           <div class="h-full py-1">{{ $t('settings_gsCostume') }}</div>
@@ -345,7 +330,7 @@ const showClearDialog = () => {
             class="ml-3"
             v-model="gsCostume"
             @change="switchGsCostume"
-          ></CustomSwitch>
+          />
         </div>
 
         <!-- ABOUT -->
@@ -411,7 +396,7 @@ const showClearDialog = () => {
 }
 
 .scroll-wrapper {
-  top: 2vh;
+  top: 0;
   left: 1vw;
   width: 96vw;
   border-radius: 5vh 5vh 0 0;
