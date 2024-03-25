@@ -171,7 +171,6 @@ const needsUpdate = (latestStr: string) => {
 }
 
 const switchQuitAction = () => {
-  quitOnClose.value = !quitOnClose.value
   window.store.set('quitOnClose', quitOnClose.value, false)
 }
 
@@ -293,6 +292,7 @@ const showClearDialog = () => {
             v-model="quitOnClose"
             :right-text="$t('settings_trayOnClose')"
             :left-text="$t('settings_quitOnClose')"
+            @change="switchQuitAction"
           />
         </div>
         <div class="form-item">

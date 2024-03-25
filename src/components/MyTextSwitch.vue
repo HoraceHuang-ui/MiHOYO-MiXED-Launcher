@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, ref } from 'vue'
 
 const props = defineProps({
   modelValue: {
@@ -15,7 +15,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'change'])
 
 const max = (a: number, b: number) => (a > b ? a : b)
 
@@ -35,13 +35,9 @@ const sliderTransform = computed(() => {
   }
 })
 
-watch(unitWidth, () => {
-  console.log('width: ' + unitWidth.value.toString())
-})
-
 const switchState = () => {
-  console.log('width: ' + unitWidth.value.toString())
   emit('update:modelValue', !props.modelValue)
+  emit('change')
 }
 </script>
 
