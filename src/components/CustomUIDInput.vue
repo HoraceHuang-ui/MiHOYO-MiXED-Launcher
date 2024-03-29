@@ -1,6 +1,10 @@
 <script setup lang="ts">
-defineProps(['modelValue'])
-defineEmits(['submit', 'update:modelValue'])
+import { defineModel } from 'vue'
+
+const value = defineModel({
+  type: String,
+})
+defineEmits(['submit'])
 </script>
 
 <template>
@@ -8,11 +12,8 @@ defineEmits(['submit', 'update:modelValue'])
     <input
       class="px-2 rounded-full"
       :placeholder="$t('uidInput_placeholder')"
+      v-model="value"
       style="width: 16vw; margin: 1px"
-      :value="modelValue"
-      @input="
-        $emit('update:modelValue', ($event.target as HTMLInputElement).value)
-      "
       @keyup.native.enter="$emit('submit')"
     />
     <button

@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, defineModel, ref } from 'vue'
+
+const state = defineModel({
+  type: Boolean,
+  required: true,
+})
 
 const props = defineProps({
-  modelValue: {
-    type: Boolean,
-  },
   leftText: {
     type: String,
     required: true,
@@ -15,7 +17,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['update:modelValue', 'change'])
+const emit = defineEmits(['change'])
 
 const max = (a: number, b: number) => (a > b ? a : b)
 
@@ -29,14 +31,14 @@ const unitWidth = computed(() => {
 
 const sliderTransform = computed(() => {
   return {
-    transform: props.modelValue
+    transform: state.value
       ? 'translateX(0)'
       : `translateX(calc(${unitWidth.value}px + 5px))`,
   }
 })
 
 const switchState = () => {
-  emit('update:modelValue', !props.modelValue)
+  state.value = !state.value
   emit('change')
 }
 </script>
@@ -54,7 +56,7 @@ const switchState = () => {
     <div
       ref="leftRef"
       class="rounded-full absolute z-10 left-0 text-center transition-all text-nowrap"
-      :class="{ 'text-white': modelValue }"
+      :class="{ 'text-white': state }"
       :style="{ width: `${unitWidth}px` }"
     >
       {{ leftText }}
@@ -62,7 +64,7 @@ const switchState = () => {
     <div
       ref="rightRef"
       class="rounded-full absolute z-10 right-0 text-center transition-all text-nowrap"
-      :class="{ 'text-white': !modelValue }"
+      :class="{ 'text-white': !state }"
       :style="{ width: `${unitWidth}px` }"
     >
       {{ rightText }}

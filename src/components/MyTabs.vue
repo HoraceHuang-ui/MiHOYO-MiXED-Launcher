@@ -1,28 +1,28 @@
 <script setup lang="ts">
-import { PropType, ref } from 'vue'
+import { defineModel, PropType, ref } from 'vue'
 import ScrollWrapper from './ScrollWrapper.vue'
 import MyCarousel from './MyCarousel.vue'
 
+const tabIdx = defineModel({
+  type: Number,
+  required: true,
+})
+
 const props = defineProps({
-  modelValue: {
-    type: Number,
-    required: true,
-  },
   tabs: {
     type: Array as PropType<string[]>,
     required: true,
   },
 })
-const emit = defineEmits(['update:modelValue'])
 
 const panesWrapper = ref()
 
 const selectTab = (idx: number) => {
-  if (idx == props.modelValue) {
+  if (idx == tabIdx.value) {
     return
   }
   panesWrapper.value?.setPane?.(idx)
-  emit('update:modelValue', idx)
+  tabIdx.value = idx
 }
 </script>
 
@@ -33,7 +33,7 @@ const selectTab = (idx: number) => {
         <div
           v-for="(tabText, idx) in tabs"
           class="mx-1 rounded-full px-3 py-0.5 transition-all"
-          :class="idx == modelValue ? 'tab-selected' : 'tab-unselected'"
+          :class="idx == tabIdx ? 'tab-selected' : 'tab-unselected'"
           @click="selectTab(idx)"
           :key="idx"
         >

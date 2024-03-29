@@ -92,7 +92,7 @@ onMounted(async () => {
     .then(value => {
       if (value) {
         playerInfoReady.value = true
-        uid = value.uid
+        uid = value.uid.toString()
         uidInput.value = uid
         playerInfo.value = value
       }

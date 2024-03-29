@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { PropType } from 'vue'
+import { defineModel, PropType } from 'vue'
+
+const selectedIdx = defineModel({
+  type: Number,
+  default: -1,
+})
 
 const props = defineProps({
   items: {
@@ -28,7 +33,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'change'])
 
 const selectionChange = (idx: number) => {
-  emit('update:modelValue', idx)
+  selectedIdx.value = idx
   if (idx === props.modelValue) {
     return
   }
@@ -40,7 +45,7 @@ const selectionChange = (idx: number) => {
   <MyDropdown
     :items="items"
     :item-class="itemClass"
-    :selected="modelValue"
+    :selected="selectedIdx"
     :middle="middle"
     trigger="click"
     @command="selectionChange"
@@ -50,7 +55,7 @@ const selectionChange = (idx: number) => {
       :class="selectorClass"
       :style="selectorStyle"
     >
-      <div class="mr-4">{{ modelValue == -1 ? '' : items[modelValue] }}</div>
+      <div class="mr-4">{{ selectedIdx == -1 ? '' : items[selectedIdx] }}</div>
       <i class="bi bi-chevron-down" />
     </div>
   </MyDropdown>
