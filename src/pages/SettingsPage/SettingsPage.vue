@@ -261,23 +261,16 @@ const showClearDialog = () => {
 </script>
 
 <template>
-  <div
-    class="relative"
-    :class="transitionShow ? '' : 'opacity-0 blur-lg scale-90'"
-    style="transition-duration: 400ms"
-  >
-    <div class="bg-pic">
-      <img
-        class="object-cover w-full h-full blur-xl opacity-25 scale-105"
-        :src="bgPath ? bgPath : '../../src/assets/gsbanner.png'"
-      />
+  <div class="page-wrapper" :class="{ from: !transitionShow }">
+    <div class="bg-pic-wrapper">
+      <img :src="bgPath ? bgPath : '../../src/assets/gsbanner.png'" />
     </div>
-    <ScrollWrapper height="91vh" class="scroll-wrapper absolute z-40">
-      <div class="text-left px-10 pb-5 w-[52%]">
+    <ScrollWrapper height="91vh" class="scroll-wrapper">
+      <div class="scroll-content-wrapper">
         <!-- GENERAL -->
         <div class="title">{{ $t('settings_general') }}</div>
         <div class="form-item">
-          <div class="h-full py-1">{{ $t('settings_selectLang') }}</div>
+          <div class="form-item-text">{{ $t('settings_selectLang') }}</div>
           <MySelect
             v-model="selectedLangIdx"
             :items="availableLangNames"
@@ -287,7 +280,9 @@ const showClearDialog = () => {
           />
         </div>
         <div class="form-item">
-          <div class="h-full py-1">{{ $t('settings_whenClosingWindow') }}</div>
+          <div class="form-item-text">
+            {{ $t('settings_whenClosingWindow') }}
+          </div>
           <MyTextSwitch
             v-model="quitOnClose"
             :right-text="$t('settings_trayOnClose')"
@@ -296,26 +291,22 @@ const showClearDialog = () => {
           />
         </div>
         <div class="form-item">
-          <div class="h-full py-1">{{ $t('settings_trayOnLaunch') }}</div>
+          <div class="form-item-text">{{ $t('settings_trayOnLaunch') }}</div>
           <CustomSwitch
-            class="ml-3"
             v-model="trayOnLaunch"
             @change="switchLaunchTray"
           ></CustomSwitch>
         </div>
         <div class="form-item">
-          <div
-            class="hover:underline active:text-orange-300 text-blue-700 cursor-pointer"
-            @click="showClearDialog"
-          >
+          <a @click="showClearDialog">
             {{ $t('settings_clearAllData') }}
-          </div>
+          </a>
         </div>
 
         <!-- APPEARANCE -->
         <div class="title">{{ $t('settings_appearance') }}</div>
         <div class="form-item">
-          <div class="h-full py-1">{{ $t('settings_dialogStyle') }}</div>
+          <div class="form-item-text">{{ $t('settings_dialogStyle') }}</div>
           <MySelect
             v-model="selectedDialogStyleIdx"
             :items="availableDialogStyleDescs"
@@ -325,31 +316,20 @@ const showClearDialog = () => {
           />
         </div>
         <div class="form-item">
-          <div class="h-full py-1">{{ $t('settings_gsCostume') }}</div>
-          <CustomSwitch
-            class="ml-3"
-            v-model="gsCostume"
-            @change="switchGsCostume"
-          />
+          <div class="form-item-text">{{ $t('settings_gsCostume') }}</div>
+          <CustomSwitch v-model="gsCostume" @change="switchGsCostume" />
         </div>
 
         <!-- ABOUT -->
         <div class="title">{{ $t('settings_about') }}</div>
-        <div
-          class="form-item rounded-full bg-white pl-3 border border-red-400 font-mono"
-          style="width: fit-content"
-        >
+        <div class="form-item version-area-wrapper">
           miHoYo miXeD Launcher
-          <div
-            class="rounded-full ml-2 px-2 bg-red-400 text-white font-sans cursor-default"
-          >
-            v{{ appVer }}
-          </div>
+          <div class="version">v{{ appVer }}</div>
         </div>
         <div class="form-item">
           <div class="flex flex-row">
             <img
-              class="img-link cursor-pointer"
+              class="img-link"
               src="../../assets/github-mark.png"
               @click="
                 openLink(
@@ -359,8 +339,8 @@ const showClearDialog = () => {
             />
             <button
               @click="checkUpdates"
-              class="rounded-full cursor-default ml-3 px-3"
-              :class="latest ? 'button-disabled' : 'button-enabled'"
+              class="update-button"
+              :class="latest ? 'disabled' : 'enabled'"
             >
               {{
                 latest
@@ -369,7 +349,7 @@ const showClearDialog = () => {
               }}
             </button>
             <LoadingIcon v-if="updChecking" />
-            <div class="text-red-600 ml-3 mt-1.5" v-if="checkUpdFailed">
+            <div class="update-failed-text" v-if="checkUpdFailed">
               {{ $t('settings_checkUpdFailed') }}
             </div>
           </div>
@@ -379,38 +359,80 @@ const showClearDialog = () => {
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+.page-wrapper {
+  @apply relative;
+  transition-duration: 400ms;
+
+  &.from {
+    @apply opacity-0 blur-lg scale-90;
+  }
+}
+
+.bg-pic-wrapper {
+  width: 98vw;
+  height: 92vh;
+  border-radius: 24px 24px 0 0;
+  -webkit-mask: linear-gradient(white, white);
+
+  img {
+    @apply size-full object-cover;
+    @apply blur-xl opacity-25 scale-105;
+  }
+}
+
+.scroll-wrapper {
+  @apply absolute z-40 top-0 left-[1vw] w-[96vw];
+  border-radius: 5vh 5vh 0 0;
+}
+
+.scroll-content-wrapper {
+  @apply text-left px-10 pb-5 w-[52%];
+}
+
 .title {
   @apply text-4xl font-bold mt-8 cursor-default;
 }
 
 .form-item {
-  @apply flex flex-row justify-between mt-4 ml-8 cursor-default;
+  @apply flex flex-row justify-between;
+  @apply mt-4 ml-8 cursor-default;
 }
 
-.bg-pic {
-  width: 98vw;
-  height: 92vh;
-  border-radius: 24px 24px 0 0;
-  -webkit-mask: linear-gradient(white, white);
+.form-item-text {
+  @apply h-full py-1;
 }
 
-.scroll-wrapper {
-  top: 0;
-  left: 1vw;
-  width: 96vw;
-  border-radius: 5vh 5vh 0 0;
+.version-area-wrapper {
+  @apply w-fit pl-3 rounded-full;
+  @apply bg-white border border-red-400 font-mono;
+}
+
+.version {
+  @apply ml-2 px-2 rounded-full;
+  @apply bg-red-400 text-white font-sans cursor-default;
 }
 
 .img-link {
-  @apply w-9 h-9 hover:opacity-70 active:scale-90 transition-all;
+  @apply w-9 h-9;
+  @apply hover:opacity-70 active:scale-90 transition-all cursor-pointer;
 }
 
-.button-enabled {
-  @apply bg-white border border-gray-500 text-gray-600 hover:border-blue-500 hover:text-blue-600 hover:bg-blue-100 transition-all active:bg-blue-300;
+.update-button {
+  @apply ml-3 px-3 rounded-full cursor-default;
+
+  &.enabled {
+    @apply bg-white border border-gray-500 text-gray-600 transition-all;
+    @apply hover:border-blue-500 hover:text-blue-600 hover:bg-blue-100;
+    @apply active:bg-blue-300;
+  }
+  &.disabled {
+    @apply opacity-70 bg-gray-100 border border-gray-300 text-gray-400;
+    @apply pointer-events-none cursor-not-allowed;
+  }
 }
 
-.button-disabled {
-  @apply opacity-70 bg-gray-100 border border-gray-300 text-gray-400 pointer-events-none cursor-not-allowed;
+.update-failed-text {
+  @apply text-red-600 ml-3 mt-1.5;
 }
 </style>

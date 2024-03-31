@@ -88,7 +88,7 @@ const mergeToPlayerinfo = (newArr: any[]) => {
 
 onMounted(async () => {
   window.store
-    .get('genshinInfo')
+    .get('gsInfo')
     .then(value => {
       if (value) {
         playerInfoReady.value = true
@@ -148,7 +148,7 @@ const requestInfo = () => {
           }
         }
       })
-      window.store.set('genshinInfo', JSON.stringify(playerInfo.value), true)
+      window.store.set('gsInfo', JSON.stringify(playerInfo.value), true)
       playerInfoLoading.value = false
       router.push({
         name: 'tempPage',

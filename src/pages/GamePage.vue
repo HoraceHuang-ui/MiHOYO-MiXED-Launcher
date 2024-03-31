@@ -282,14 +282,10 @@ const refresh = () => {
 </script>
 
 <template>
-  <div
-    v-if="!launcherInfoFailed && !launcherInfoReady"
-    class="absolute pointer-events-none z-0 align-middle justify-center text-center"
-    style="top: 45%; left: 45%"
-  >
+  <div v-if="!launcherInfoFailed && !launcherInfoReady" class="loading-wrapper">
     <img
       :src="'../../src/assets/kleeLoading.gif'"
-      class="align-middle self-center object-scale-down"
+      class="loading-image"
       loading="eager"
       height="120"
       width="120"
@@ -300,26 +296,16 @@ const refresh = () => {
   </div>
   <LoadFailedBlock
     v-else-if="launcherInfoFailed"
-    class="absolute z-10 -translate-x-1/2"
-    style="margin-left: 50%; margin-top: 25vh"
+    class="failed-wrapper"
     :gameNo="gameNo"
     :errMsg="errMsg"
   >
   </LoadFailedBlock>
-  <div
-    class="transition-all relative"
-    :class="launcherInfoReady ? 'opacity-100' : 'opacity-0 blur-lg scale-90'"
-    style="width: 98vw; height: 92vh; transition-duration: 400ms"
-  >
-    <div
-      class="bg-pic rounded-3xl"
-      style="transition-duration: 500ms"
-      :class="hideElements ? 'scale-x-95 translate-y-3' : ''"
-    >
+  <div class="content-wrapper" :class="{ from: !launcherInfoReady }">
+    <div class="bg-pic-wrapper" :class="{ scrolled: hideElements }">
       <img
-        class="top-0 rounded-3xl transition-all w-full h-full object-cover"
-        :class="hideElements ? 'blur-md scale-125 brightness-75' : ''"
-        style="transition-duration: 500ms"
+        class="bg-pic"
+        :class="{ scrolled: hideElements }"
         :src="
           launcherInfoReady && launcherInfo.adv
             ? launcherInfo.adv.background
@@ -337,9 +323,8 @@ const refresh = () => {
           launcherInfo.banner.length > 0 &&
           !hideElements
         "
-        class="absolute left-16 top-48 z-50 rounded-xl"
+        class="launcher-banner"
         :banners="launcherInfo.banner"
-        style="height: 182px; width: 396px"
       />
     </Transition>
     <Transition name="posts">
@@ -351,105 +336,175 @@ const refresh = () => {
           !hideElements
         "
         :postTypeMap="postTypeMap"
-        class="absolute left-16 top-96 z-50 rounded-xl backdrop-blur-md pl-3 pr-1"
+        class="launcher-posts"
         :class="prefFont"
-        style="
-          height: 112px;
-          width: 396px;
-          background-color: rgb(255 255 255 / 0.7);
-        "
       />
     </Transition>
     <ScrollWrapper
       ref="scrollBarRef"
       height="91vh"
-      class="scroll-wrapper absolute z-40"
+      class="scroll-wrapper"
       @scroll="handleScroll"
       show-bar="never"
     >
-      <div
-        class="items-scroll flex flex-col content-center items-center w-full"
-      >
-        <div class="w-full flex flex-row relative">
+      <div class="items-scroll">
+        <div class="launch-area-wrapper">
           <div class="h-16 my-3" />
           <div
             v-if="gamePath"
-            class="absolute right-0 transition-all"
-            :class="hideElements ? 'right-1/2 translate-x-1/2' : ''"
-            style="transition-duration: 500ms"
+            class="launch-button-wrapper"
+            :class="[{ scrolled: hideElements }, prefFont]"
           >
-            <div
-              class="mx-2 my-3 flex flex-row rounded-full bg-yellow-400"
-              :class="prefFont"
+            <button @click="launchGame" class="launch-button">
+              {{ $t('general_launchGame') }}
+            </button>
+            <MyDropdown
+              class="launch-dropdown"
+              @command="handleCommand"
+              placement="top"
+              width="200px"
+              :items="[
+                $t('general_openOfficialLauncher'),
+                $t('general_clearGamePath'),
+                $t('general_clearProfileInfo'),
+              ]"
+              middle
             >
-              <button
-                @click="launchGame"
-                class="pl-4 px-4 text-2xl font-bold rounded-full h-16 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all"
-              >
-                {{ $t('general_launchGame') }}
-              </button>
-              <MyDropdown
-                class="h-full px-1 text-sm"
-                @command="handleCommand"
-                placement="top"
-                width="200px"
-                :items="[
-                  $t('general_openOfficialLauncher'),
-                  $t('general_clearGamePath'),
-                  $t('general_clearProfileInfo'),
-                ]"
-                middle
-              >
-                <button
-                  class="text-xl text-gray-900 px-2 h-16 rounded-full hover:bg-yellow-500 transition-all font-gs"
-                >
-                  …
-                </button>
-              </MyDropdown>
-            </div>
+              <button class="font-gs">…</button>
+            </MyDropdown>
           </div>
           <button
             v-else
             @click="importButtonClick"
-            class="absolute right-0 mx-2 my-3 rounded-full h-16 text-2xl bg-yellow-400 w-48 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all cursor-default"
-            :class="
-              hideElements
-                ? `font-${prefFont} right-1/2 translate-x-1/2`
-                : `font-${prefFont}`
-            "
-            style="transition-duration: 500ms"
+            class="import-button"
+            :class="[{ scrolled: hideElements }, prefFont]"
           >
             {{ $t('general_importGame') }}
           </button>
         </div>
-        <GenshinInfoCard
-          v-if="game === 'gs'"
-          class="my-2 w-full mb-4 shadow-md"
-        />
-        <StarRailInfoCard
-          v-else-if="game === 'sr'"
-          class="my-2 w-full mb-4 shadow-md"
-        />
+        <GenshinInfoCard v-if="game === 'gs'" class="game-info-card" />
+        <StarRailInfoCard v-else-if="game === 'sr'" class="game-info-card" />
       </div>
     </ScrollWrapper>
   </div>
 </template>
 
-<style scoped>
-.bg-pic {
+<style lang="scss" scoped>
+.loading-wrapper {
+  @apply absolute z-0 top-[45%] left-[45%];
+  @apply align-middle justify-center text-center;
+  @apply pointer-events-none;
+}
+
+.loading-image {
+  @apply align-middle self-center object-scale-down;
+}
+
+.failed-wrapper {
+  @apply absolute z-10 -translate-x-1/2 ml-[50%] mt-[25vh];
+}
+
+.content-wrapper {
+  @apply relative w-[98vw] h-[92vh];
+  @apply transition-all;
+  transition-duration: 400ms;
+
+  &.from {
+    @apply opacity-0 blur-lg scale-90;
+  }
+}
+
+.bg-pic-wrapper {
+  @apply rounded-3xl;
   width: 98vw;
   height: 96.5vh;
   -webkit-mask: linear-gradient(white 50%, transparent);
+  transition-duration: 500ms;
+
+  &.scrolled {
+    @apply scale-x-95 translate-y-3;
+  }
+}
+
+.bg-pic {
+  @apply top-0 rounded-3xl w-full h-full;
+  @apply transition-all object-cover;
+  transition-duration: 500ms;
+
+  &.scrolled {
+    @apply blur-md scale-125 brightness-75;
+  }
+}
+
+.launcher-banner {
+  @apply absolute left-16 top-48 z-50 rounded-xl;
+  height: 182px;
+  width: 396px;
+}
+
+.launcher-posts {
+  @apply absolute left-16 top-96 z-50 rounded-xl pl-3 pr-1;
+  @apply backdrop-blur-md;
+  height: 112px;
+  width: 396px;
+  background-color: rgb(255 255 255 / 0.7);
 }
 
 .scroll-wrapper {
+  @apply absolute z-40;
   top: 2vh;
   left: 8vw;
 }
 
 .items-scroll {
+  @apply flex flex-col;
   margin-top: 67vh;
   width: 82vw;
+}
+
+.launch-area-wrapper {
+  @apply w-full flex flex-row relative;
+}
+
+.launch-button-wrapper {
+  @apply absolute right-0;
+  @apply flex flex-row mx-2 my-3 rounded-full bg-yellow-400;
+  @apply transition-all;
+  transition-duration: 500ms;
+
+  &.scrolled {
+    @apply right-1/2 translate-x-1/2;
+  }
+}
+
+.launch-button {
+  @apply pl-4 px-4 h-16 rounded-full;
+  @apply text-2xl font-bold;
+  @apply hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all;
+}
+
+.launch-dropdown {
+  @apply h-full px-1 text-sm;
+
+  button {
+    @apply text-xl text-gray-900 px-2 h-16 rounded-full hover:bg-yellow-500 transition-all;
+  }
+}
+
+.import-button {
+  @apply text-2xl cursor-default;
+  @apply absolute right-0 mx-2 my-3 px-4 h-16 rounded-full;
+  @apply bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all;
+  min-width: 160px;
+  transition-duration: 500ms;
+
+  &.scrolled {
+    @apply right-1/2 translate-x-1/2;
+  }
+}
+
+.game-info-card {
+  @apply my-2 w-full mb-4 shadow-md;
 }
 
 .banner-enter-from,

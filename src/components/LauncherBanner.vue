@@ -24,11 +24,14 @@ const openLink = (url: string) => {
     <img
       v-for="banner in banners"
       @click="openLink(banner.url)"
-      class="object-scale-down cursor-pointer"
       :src="banner.img"
       :key="banner.banner_id"
     />
   </MyCarousel>
 </template>
 
-<style scoped></style>
+<style scoped>
+img {
+  @apply object-scale-down cursor-pointer;
+}
+</style>

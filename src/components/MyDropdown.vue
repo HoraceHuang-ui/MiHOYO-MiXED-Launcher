@@ -116,7 +116,7 @@ const sendCommand = (idx: number) => {
 </script>
 
 <template>
-  <div class="relative">
+  <div class="main-wrapper">
     <div
       @mouseenter="onMouseEnter"
       @mouseleave="onMouseLeave"
@@ -128,21 +128,21 @@ const sendCommand = (idx: number) => {
 
     <Transition name="fade">
       <div
-        class="absolute min-w-full overflow-visible flex flex-row z-50"
+        class="dropdown-wrapper"
         :style="{ ...wrapperStyles[placement], width: width }"
         v-if="showMenu"
         ref="dropdownRef"
       >
         <div
-          class="px-1 py-0.5 bg-white rounded-xl w-fit h-fit min-w-full text-center text-nowrap shadow-md"
+          class="items-wrapper"
           :style="middle ? transform : undefined"
           @mouseenter="onMouseEnterMenu"
           @mouseleave="onMouseLeave"
         >
           <div
             v-for="(item, idx) in items"
-            class="py-1 px-2 my-0.5 rounded-lg cursor-default hover:bg-yellow-100 hover:text-yellow-600 active:bg-yellow-400 active:text-yellow-800 transition-all"
-            :class="{ itemClass, 'item-selected': selected == idx }"
+            class="item"
+            :class="[{ selected: idx === selected }, itemClass]"
             @click="sendCommand(idx)"
             :key="idx"
           >
@@ -154,9 +154,31 @@ const sendCommand = (idx: number) => {
   </div>
 </template>
 
-<style scoped>
-.item-selected {
-  @apply bg-yellow-100 text-yellow-600;
+<style lang="scss" scoped>
+.main-wrapper {
+  @apply relative;
+}
+
+.dropdown-wrapper {
+  @apply absolute z-50;
+  @apply min-w-full overflow-visible flex flex-row;
+}
+
+.items-wrapper {
+  @apply px-1 py-0.5 w-fit h-fit min-w-full;
+  @apply bg-white rounded-xl;
+  @apply text-center text-nowrap shadow-md;
+}
+
+.item {
+  @apply py-1 px-2 my-0.5;
+  @apply rounded-lg cursor-default transition-all;
+  @apply hover:bg-yellow-100 hover:text-yellow-600;
+  @apply active:bg-yellow-400 active:text-yellow-800;
+
+  &.selected {
+    @apply bg-yellow-100 text-yellow-600;
+  }
 }
 
 .fade-enter-from,

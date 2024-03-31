@@ -8,22 +8,32 @@ defineEmits(['submit'])
 </script>
 
 <template>
-  <div class="flex flex-row rounded-full border border-gray-400 h-10">
+  <div class="wrapper">
     <input
-      class="px-2 rounded-full"
       :placeholder="$t('uidInput_placeholder')"
       v-model="value"
-      style="width: 16vw; margin: 1px"
       @keyup.native.enter="$emit('submit')"
     />
-    <button
-      class="rounded-full bg-gray-100 px-3 hover:bg-gray-300 active:bg-gray-500 active:scale-90 transition-all"
-      style="min-width: 5rem"
-      @click="$emit('submit')"
-    >
+    <button @click="$emit('submit')">
       {{ $t('uidInput_query') }}
     </button>
   </div>
 </template>
 
-<style scoped></style>
+<style lang="scss" scoped>
+.wrapper {
+  @apply flex flex-row h-10;
+  @apply rounded-full border border-gray-400;
+
+  input {
+    @apply px-2 w-[16vw] m-[1px];
+    @apply rounded-full;
+  }
+
+  button {
+    @apply px-3 rounded-full;
+    @apply bg-gray-100 hover:bg-gray-300 active:bg-gray-500 active:scale-90 transition-all;
+    min-width: 5rem;
+  }
+}
+</style>

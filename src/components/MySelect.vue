@@ -50,15 +50,16 @@ const selectionChange = (idx: number) => {
     trigger="click"
     @command="selectionChange"
   >
-    <div
-      class="w-fit rounded-full py-1 px-3 flex flex-row justify-between"
-      :class="selectorClass"
-      :style="selectorStyle"
-    >
-      <div class="mr-4">{{ selectedIdx == -1 ? '' : items[selectedIdx] }}</div>
-      <i class="bi bi-chevron-down" />
+    <div class="selector-wrapper" :class="selectorClass" :style="selectorStyle">
+      {{ selectedIdx == -1 ? '' : items[selectedIdx] }}
+      <i class="bi bi-chevron-down ml-4" />
     </div>
   </MyDropdown>
 </template>
 
-<style scoped></style>
+<style scoped>
+.selector-wrapper {
+  @apply w-fit py-1 px-3 rounded-full;
+  @apply flex flex-row justify-between;
+}
+</style>

@@ -83,17 +83,11 @@ defineExpose({
 <template>
   <transition :duration="600">
     <div v-if="cShow">
-      <div
-        class="outer absolute top-0 bottom-0 left-0 right-0 z-50 opacity-40 bg-black"
-        @click="cancelClick"
-      />
-      <div
-        class="inner absolute z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center"
-        :style="`width: ${width}`"
-      >
+      <div class="outer modal" @click="cancelClick" />
+      <div class="inner dialog-wrapper" :style="`width: ${width}`">
         <div
           v-if="!showCancel && !showOk"
-          class="z-50 w-6 h-6 p-1 absolute right-6 top-5 rounded-full hover:opacity-70 hover:scale-125 active:opacity-50 active:scale-90 transition-all cursor-pointer"
+          class="close-button"
           @click="cancelClick"
         >
           <img
@@ -102,49 +96,43 @@ defineExpose({
           />
         </div>
 
-        <div class="z-50 w-6 h-6 absolute top-0 left-0">
-          <img
-            style="filter: drop-shadow(1px 1px 2px #aaaaaa)"
-            src="../../../assets/gsDialog/gsDialogCorner.png"
-          />
+        <div class="dialog-corner top-0 left-0">
+          <img src="../../../assets/gsDialog/gsDialogCorner.png" />
         </div>
-        <div class="z-50 w-6 h-6 absolute top-0 right-0">
+        <div class="dialog-corner top-0 right-0">
           <img
-            style="filter: drop-shadow(1px 1px 2px #aaaaaa)"
             class="rotate-90"
             src="../../../assets/gsDialog/gsDialogCorner.png"
           />
         </div>
         <div
-          class="z-50 w-6 h-6 absolute bottom-0 right-0"
+          class="dialog-corner bottom-0 right-0"
           style="transform: translate(1px, 9px)"
         >
           <img
-            style="filter: drop-shadow(1px 1px 2px #aaaaaa)"
             class="rotate-180"
             src="../../../assets/gsDialog/gsDialogCorner.png"
           />
         </div>
         <div
-          class="z-50 w-6 h-6 absolute bottom-0 left-0"
+          class="dialog-corner bottom-0 left-0"
           style="transform: translate(1px, 9px)"
         >
           <img
-            style="filter: drop-shadow(1px 1px 2px #aaaaaa)"
             class="-rotate-90"
             src="../../../assets/gsDialog/gsDialogCorner.png"
           />
         </div>
 
-        <div class="dialog-wrapper flex flex-col justify-between">
+        <div class="dialog-content-wrapper">
           <div>
-            <div class="pt-4 ml-6 mr-6">
-              <div class="text-center w-full font-gs text-xl text-black">
+            <div class="title font-gs">
+              <div class="text">
                 {{ typeof title === 'string' ? title : title() }}
               </div>
             </div>
-            <div class="w-full flex flex-row justify-center mt-1">
-              <div class="w-5/6 flex flex-row justify-center relative">
+            <div class="divider-wrapper">
+              <div class="divider-contents">
                 <img
                   style="height: 9px; transform: rotate3d(0, 1, 0, 180deg)"
                   src="../../../assets/gsDialog/gsDividerSide.png"
@@ -161,17 +149,14 @@ defineExpose({
             </div>
           </div>
 
-          <div class="w-full h-full relative flex flex-col justify-center">
-            <img
-              class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full object-contain"
-              style="height: 200px"
-              src="../../../assets/gsDialog/gsDialogBg.png"
-            />
-            <div ref="mainArea" class="px-6 py-6" style="z-index: 60">
-              <div
-                class="font-gs px-5"
-                :class="msgCenter ? 'text-center' : 'text-left'"
-              >
+          <div class="dialog-mid-wrapper">
+            <img class="bg-img" src="../../../assets/gsDialog/gsDialogBg.png" />
+            <div
+              ref="mainArea"
+              class="main-contents font-gs"
+              style="z-index: 60"
+            >
+              <div :class="msgCenter ? 'text-center' : 'text-left'">
                 {{ typeof msg === 'string' ? msg : msg() }}
               </div>
               <component :is="vnode" />
@@ -180,8 +165,8 @@ defineExpose({
           </div>
 
           <div>
-            <div class="w-full flex flex-row justify-center mt-1">
-              <div class="w-5/6 flex flex-row justify-center relative">
+            <div class="divider-wrapper">
+              <div class="divider-contents">
                 <img
                   style="height: 9px; transform: rotate3d(0, 1, 0, 180deg)"
                   src="../../../assets/gsDialog/gsDividerSide.png"
@@ -197,10 +182,7 @@ defineExpose({
               </div>
             </div>
 
-            <div
-              v-if="showCancel || showOk"
-              class="w-full justify-center flex flex-row py-2"
-            >
+            <div v-if="showCancel || showOk" class="buttons-wrapper">
               <GenshinButton
                 v-if="showCancel"
                 type="cancel"
@@ -221,7 +203,81 @@ defineExpose({
   </transition>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+.modal {
+  @apply absolute top-0 bottom-0 left-0 right-0 z-50;
+  @apply opacity-40 bg-black;
+}
+
+.dialog-wrapper {
+  @apply absolute z-50 top-1/2 left-1/2;
+  @apply -translate-x-1/2 -translate-y-1/2 flex justify-center;
+}
+
+.close-button {
+  @apply absolute z-50 w-6 h-6 p-1 right-6 top-5;
+  @apply rounded-full transition-all cursor-pointer;
+  @apply hover:opacity-70 hover:scale-125 active:opacity-50 active:scale-90;
+
+  img {
+    @apply invert opacity-60;
+  }
+}
+
+.dialog-corner {
+  @apply absolute z-50 w-6 h-6;
+
+  img {
+    filter: drop-shadow(1px 1px 2px #aaaaaa);
+  }
+}
+
+.dialog-content-wrapper {
+  @apply flex flex-col justify-between;
+  min-height: 320px;
+  background: #e4e2dc;
+  width: calc(100% - 10px);
+  transform: translateY(4px);
+  border-radius: 20px;
+}
+
+.title {
+  @apply pt-4 mx-6;
+
+  & > .text {
+    @apply text-center w-full text-xl text-black;
+  }
+}
+
+.divider-wrapper {
+  @apply w-full flex flex-row justify-center mt-1;
+}
+
+.divider-contents {
+  @apply w-5/6 flex flex-row justify-center relative;
+}
+
+.divider-bg {
+  background: #dad2c5;
+}
+
+.dialog-mid-wrapper {
+  @apply w-full h-full px-6 relative flex flex-col justify-center;
+}
+
+.main-contents {
+  @apply p-6;
+}
+
+.bg-img {
+  @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
+  @apply w-full h-[200px] object-contain;
+}
+
+.buttons-wrapper {
+  @apply w-full justify-center flex flex-row py-2;
+}
+
 .v-enter-active .outer {
   transition: opacity 0.5s ease;
 }
@@ -249,17 +305,5 @@ defineExpose({
 .v-leave-to .inner {
   opacity: 0;
   transform: translate(-50%, -20%);
-}
-
-.dialog-wrapper {
-  min-height: 320px;
-  background: #e4e2dc;
-  width: calc(100% - 10px);
-  transform: translateY(4px);
-  border-radius: 20px;
-}
-
-.divider-bg {
-  background: #dad2c5;
 }
 </style>

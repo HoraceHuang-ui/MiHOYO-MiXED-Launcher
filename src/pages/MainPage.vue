@@ -158,68 +158,75 @@ const resetPic = () => {
 </script>
 
 <template>
-  <div
-    :class="transitionShow ? '' : 'opacity-0 blur-lg scale-90'"
-    style="transition-duration: 400ms"
-  >
+  <div class="content-wrapper" :class="{ from: !transitionShow }">
     <img
-      class="bg-pic object-cover"
+      class="bg-pic"
       :src="bgPath ? bgPath : '../../src/assets/gsbanner.png'"
       alt="Background image of Home page"
     />
-    <div class="bottom-area absolute justify-center w-full">
-      <h1 class="text-5xl font-gs" style="margin-bottom: 10px">
+    <div class="bottom-area">
+      <h1 class="title-text font-gs" style="margin-bottom: 10px">
         {{ translate('mainpage_title') }}
       </h1>
-      <button
-        v-if="gsGamePath"
-        @click="genshin"
-        class="p-3 mx-2 my-2 font-bold text-xl transition-all bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 cursor-default"
-      >
+      <button v-if="gsGamePath" @click="genshin" class="game-button">
         {{ translate('mainpage_buttonText', { game: $t('general_gsShort') }) }}
       </button>
-      <button
-        v-if="srGamePath"
-        @click="starRail"
-        class="p-3 mx-2 my-2 font-bold text-xl transition-all bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 cursor-default"
-      >
+      <button v-if="srGamePath" @click="starRail" class="game-button">
         {{ translate('mainpage_buttonText', { game: $t('general_srShort') }) }}
       </button>
-      <button
-        v-if="hi3GamePath"
-        @click="honkai3"
-        class="p-3 mx-2 my-2 font-bold text-xl transition-all bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 cursor-default"
-      >
+      <button v-if="hi3GamePath" @click="honkai3" class="game-button">
         {{ translate('mainpage_buttonText', { game: $t('general_hi3Short') }) }}
       </button>
     </div>
-    <div
-      class="rounded-full fixed left-8 bottom-4 w-10 h-10 bg-white pt-2 hover:bg-gray-100 active:bg-gray-400 active:scale-90 transition-all"
-      @click="setPic"
-    >
-      <i class="bi bi-image h-full w-full" />
+    <div class="icon-button pt-2 left-8" @click="setPic">
+      <i class="bi bi-image size-full" />
     </div>
     <div
       v-if="bgPath && bgPath !== DEFAULT_BG"
-      class="rounded-full fixed left-20 bottom-4 w-10 h-10 bg-white pt-1.5 hover:bg-gray-100 active:bg-gray-400 active:scale-90 transition-all"
+      class="icon-button pt-1.5 left-20"
       @click="resetPic"
     >
-      <i class="text-lg bi bi-arrow-clockwise h-full w-full" />
+      <i class="text-lg bi bi-arrow-clockwise size-full" />
     </div>
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+.content-wrapper {
+  transition-duration: 400ms;
+
+  &.from {
+    @apply opacity-0 blur-lg scale-90;
+  }
+}
+
 .bg-pic {
+  @apply object-cover;
   width: 98vw;
   height: 92vh;
   border-radius: 24px 24px 0 0;
   -webkit-mask: linear-gradient(white 30%, rgb(255 255 255 / 0.1));
 }
 
+.title-text {
+  @apply text-5xl;
+}
+
 .bottom-area {
-  @apply bottom-0;
+  @apply absolute bottom-0 w-full justify-center;
   height: 20vh;
+}
+
+.game-button {
+  @apply p-3 mx-2 my-2;
+  @apply font-bold text-xl bg-yellow-400 cursor-default;
+  @apply hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all;
+}
+
+.icon-button {
+  @apply fixed bottom-4 w-10 h-10;
+  @apply rounded-full bg-white;
+  @apply hover:bg-gray-100 active:bg-gray-400 active:scale-90 transition-all;
 }
 
 .lang-select {

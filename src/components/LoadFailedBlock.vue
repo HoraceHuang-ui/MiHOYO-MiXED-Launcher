@@ -28,17 +28,10 @@ const refresh = () => {
 </script>
 
 <template>
-  <div class="items-center justify-center text-center">
-    <img
-      :src="imgs[gameNo]"
-      class="object-scale-down -translate-x-1/2"
-      style="margin-left: 50%"
-      loading="eager"
-      height="120"
-      width="120"
-    />
+  <div class="wrapper">
+    <img :src="imgs[gameNo]" loading="eager" height="120" width="120" />
     <div
-      class="mt-3 text-xl"
+      class="failed-text"
       :class="{
         'font-gs': gameNo == 0,
         'font-sr': gameNo == 1,
@@ -47,15 +40,33 @@ const refresh = () => {
     >
       {{ $t('general_loadingFailed') }}
     </div>
-    <div
-      class="hover:underline active:text-orange-300 text-blue-500 cursor-pointer -translate-x-1/2"
-      style="margin-left: 50%"
-      @click="refresh"
-    >
+    <a @click="refresh">
       {{ $t('general_refresh') }}
-    </div>
-    <div class="text-center max-w-xl mt-5">{{ errMsg }}</div>
+    </a>
+    <div class="error-msg">{{ errMsg }}</div>
   </div>
 </template>
 
-<style scoped></style>
+<style lang="scss" scoped>
+.wrapper {
+  @apply items-center justify-center text-center;
+
+  img {
+    @apply object-scale-down -translate-x-1/2;
+    margin-left: 50%;
+  }
+
+  a {
+    @apply -translate-x-1/2;
+    margin-left: 50%;
+  }
+}
+
+.failed-text {
+  @apply mt-3 text-xl;
+}
+
+.error-msg {
+  @apply text-center max-w-xl mt-5;
+}
+</style>

@@ -15,53 +15,51 @@ defineProps({
 </script>
 
 <template>
-  <div
-    class="button-wrapper font-sr-sans0"
-    :style="type === 'cancel' ? 'background: #4CC5FE' : 'background: #FBE05B'"
-  >
-    <div
-      class="flex flex-row mt-0.5 w-full h-full justify-center"
-      v-if="type === 'cancel'"
-    >
-      <img
-        class="h-2/3 mt-1 mr-2"
-        src="../../../assets/hi3Dialog/hi3DialogCancel.png"
-      />
-      <div class="font-bold mt-0.5">
+  <div class="button-wrapper" :class="`bg-${type}`">
+    <div class="button" v-if="type === 'cancel'">
+      <img src="../../../assets/hi3Dialog/hi3DialogCancel.png" />
+      <div class="button-text">
         {{ text && text !== '' ? text : translate('general_cancel') }}
       </div>
     </div>
-
-    <div
-      class="flex flex-row mt-0.5 w-full h-full justify-center"
-      v-if="type === 'ok'"
-    >
-      <img
-        class="h-2/3 mt-1 mr-2"
-        src="../../../assets/hi3Dialog/hi3DialogOk.png"
-      />
-      <div class="font-bold mt-0.5">
+    <div class="button" v-if="type === 'ok'">
+      <img src="../../../assets/hi3Dialog/hi3DialogOk.png" />
+      <div class="button-text">
         {{ text && text !== '' ? text : translate('general_confirm') }}
       </div>
     </div>
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .button-wrapper {
   @apply mx-3 h-9 rounded transition-all cursor-default;
+
+  &:hover {
+    @apply opacity-70;
+  }
+  &:active {
+    @apply opacity-50;
+  }
 }
 
-.button-wrapper:hover {
-  @apply opacity-70;
+.button {
+  @apply flex flex-row mt-0.5 size-full justify-center;
+
+  img {
+    @apply h-2/3 mt-1 mr-2;
+  }
 }
 
-.button-wrapper:active {
-  @apply opacity-50;
+.button-text {
+  @apply font-bold mt-0.5;
 }
 
-.button-icon {
-  @apply text-center rounded-full w-5 h-5 text-orange-200 mr-2;
-  background: #262626;
+.bg-cancel {
+  background: #4cc5fe;
+}
+
+.bg-ok {
+  background: #fbe05b;
 }
 </style>

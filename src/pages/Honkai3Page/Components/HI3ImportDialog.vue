@@ -86,35 +86,24 @@ const onDialogOk = () => {
     :close-on-ok="false"
     ref="dialogRef"
   >
-    <div class="px-1 grid grid-cols-2 gap-4">
-      <button
-        @click="hiLauncherImport"
-        class="import-button-enabled py-1 px-2 rounded-full transition-all"
-      >
+    <div class="import-buttons-wrapper">
+      <button @click="hiLauncherImport" class="import-button enabled">
         {{ translate('general_importLauncher') }}
       </button>
       <button
         @click="hiGameImport"
-        class="py-1 px-2 rounded-full transition-all"
-        :class="
-          combinePaths ? 'import-button-disabled' : 'import-button-enabled'
-        "
+        class="import-button"
+        :class="combinePaths ? 'disabled' : 'enabled'"
       >
         {{ translate('general_importGame') }}
       </button>
-      <div
-        class="ml-3 text-gray-200"
-        style="margin-top: 5px; grid-column: 1 / 3"
-      >
+      <div class="path-wrapper">
         <span class="theme-color font-bold mr-2">{{
           translate('general_launcher')
         }}</span>
         {{ launcherPath === '' ? '' : launcherPath + '\\launcher.exe' }}
       </div>
-      <div
-        class="ml-3 text-gray-200"
-        style="margin-top: 5px; grid-column: 1 / 3"
-      >
+      <div class="path-wrapper">
         <span class="theme-color font-bold mr-2">{{
           translate('general_game')
         }}</span>
@@ -126,7 +115,7 @@ const onDialogOk = () => {
               : gamePath
         }}
       </div>
-      <div class="flex flex-row">
+      <div class="combine-paths-wrapper">
         <MyCheckbox
           v-model="combinePaths"
           :text="translate('general_defaultStructure')"
@@ -139,37 +128,43 @@ const onDialogOk = () => {
           middle
           :content="`<${translate('general_launcherDirectory')}>\\Games\\BH3.exe`"
         >
-          <div
-            class="ml-2 rounded-full w-5 h-5 bg-gray-400 text-white text-center font-bold text-sm cursor-help"
-            style="margin-top: 5px"
-          >
-            ?
-          </div>
+          <div class="combine-paths-help">?</div>
         </MyTooltip>
       </div>
     </div>
   </Honkai3Dialog>
 </template>
 
-<style scoped>
-.import-button-enabled {
-  border-width: 1px;
-  border-color: rgb(72, 107, 161);
-  background: rgb(72, 107, 161, 0.5);
-  color: #51c3f9;
+<style lang="scss" scoped>
+.import-buttons-wrapper {
+  @apply px-1 grid grid-cols-2 gap-4;
 }
 
-.import-button-enabled:hover {
-  @apply border-blue-400;
-  background: rgb(72, 107, 161, 0.8);
+.import-button {
+  @apply py-1 px-2 rounded-full transition-all;
+
+  &.enabled {
+    border-width: 1px;
+    border-color: rgb(72, 107, 161);
+    background: rgb(72, 107, 161, 0.5);
+    color: #51c3f9;
+
+    &:hover {
+      @apply border-blue-400;
+      background: rgb(72, 107, 161, 0.8);
+    }
+    &:active {
+      background: rgb(130, 167, 229);
+    }
+  }
+  &.disabled {
+    @apply text-gray-400 pointer-events-none;
+  }
 }
 
-.import-button-enabled:active {
-  background: rgb(130, 167, 229);
-}
-
-.import-button-disabled {
-  @apply text-gray-400 pointer-events-none;
+.path-wrapper {
+  @apply ml-3 mt-[5px] text-gray-200;
+  grid-column: 1 / 3;
 }
 
 .confirm-button-enabled {
@@ -182,5 +177,15 @@ const onDialogOk = () => {
 
 .theme-color {
   color: #51c3f9;
+}
+
+.combine-paths-wrapper {
+  @apply flex flex-row;
+}
+
+.combine-paths-help {
+  @apply ml-2 mt-[5px] w-5 h-5 rounded-full;
+  @apply text-center font-bold text-sm;
+  @apply bg-gray-400 text-white cursor-help;
 }
 </style>

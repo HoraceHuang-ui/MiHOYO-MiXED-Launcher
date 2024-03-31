@@ -25,14 +25,26 @@ defineProps({
 <template>
   <div
     @click="state = !state"
-    class="flex flex-row cursor-pointer hover:text-green-600"
-    :class="state ? 'font-bold' : ''"
+    class="wrapper"
+    :class="{ selected: state }"
     :style="{ color: state ? onColor : offColor }"
   >
-    <i v-if="state" class="bi bi-check-circle-fill mr-1" />
-    <i v-else class="bi bi-circle mr-1" />
+    <i v-if="state" class="bi bi-check-circle-fill" />
+    <i v-else class="bi bi-circle" />
     {{ text }}
   </div>
 </template>
 
-<style scoped></style>
+<style lang="scss" scoped>
+.wrapper {
+  @apply flex flex-row cursor-pointer;
+
+  &.selected {
+    @apply font-bold;
+  }
+
+  i {
+    @apply mr-1;
+  }
+}
+</style>

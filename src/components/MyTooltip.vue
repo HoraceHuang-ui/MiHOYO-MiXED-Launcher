@@ -94,12 +94,12 @@ const onMouseLeave = () => {
 
     <Transition name="fade">
       <div
-        class="absolute min-w-full min-h-full w-max overflow-visible flex flex-row z-50"
+        class="tooltip-wrapper"
         :style="{ ...wrapperStyles[placement], maxWidth: maxWidth }"
         v-if="showTooltip"
       >
         <div
-          class="p-2 bg-opacity-80 bg-black rounded-lg text-gray-100 w-fit h-fit text-left"
+          class="tooltip"
           ref="dropdownRef"
           :style="middle ? transform : undefined"
           @mouseenter="onMouseEnter"
@@ -114,6 +114,16 @@ const onMouseLeave = () => {
 </template>
 
 <style scoped>
+.tooltip-wrapper {
+  @apply absolute w-max flex flex-row z-50;
+  @apply min-w-full min-h-full overflow-visible;
+}
+
+.tooltip {
+  @apply p-2 w-fit h-fit text-left rounded-lg;
+  @apply bg-opacity-80 bg-black text-gray-100;
+}
+
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;

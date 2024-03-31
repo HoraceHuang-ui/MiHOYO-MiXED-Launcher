@@ -86,27 +86,22 @@ const onDialogOk = () => {
     :close-on-ok="false"
     ref="dialogRef"
   >
-    <div class="px-1 grid grid-cols-2 gap-4">
-      <button
-        @click="srLauncherImport"
-        class="import-button-enabled py-1 px-2 rounded-full transition-all"
-      >
+    <div class="content-wrapper">
+      <button @click="srLauncherImport" class="import-button enabled">
         {{ translate('general_importLauncher') }}
       </button>
       <button
         @click="srGameImport"
-        class="py-1 px-2 rounded-full transition-all"
-        :class="
-          combinePaths ? 'import-button-disabled' : 'import-button-enabled'
-        "
+        class="import-button"
+        :class="combinePaths ? 'disabled' : 'enabled'"
       >
         {{ translate('general_importGame') }}
       </button>
-      <div class="ml-3" style="margin-top: 5px; grid-column: 1 / 3">
+      <div class="path-wrapper">
         <span class="font-bold mr-2">{{ translate('general_launcher') }}</span>
         {{ launcherPath === '' ? '' : launcherPath + '\\launcher.exe' }}
       </div>
-      <div class="ml-3" style="margin-top: 5px; grid-column: 1 / 3">
+      <div class="path-wrapper">
         <span class="font-bold mr-2">{{ translate('general_game') }}</span>
         {{
           launcherPath === ''
@@ -116,7 +111,7 @@ const onDialogOk = () => {
               : gamePath
         }}
       </div>
-      <div class="flex flex-row">
+      <div class="confirm-paths-wrapper">
         <MyCheckbox
           v-model="combinePaths"
           :text="translate('general_defaultStructure')"
@@ -128,25 +123,43 @@ const onDialogOk = () => {
           middle
           :content="`<${translate('general_launcherDirectory')}>\\Game\\StarRail.exe`"
         >
-          <div
-            class="ml-2 rounded-full w-5 h-5 bg-gray-400 text-white text-center font-bold text-sm cursor-help"
-            style="margin-top: 5px"
-          >
-            ?
-          </div>
+          <div class="confirm-paths-help">?</div>
         </MyTooltip>
       </div>
     </div>
   </StarRailDialog>
 </template>
 
-<style scoped>
-.import-button-enabled {
-  @apply border border-gray-400 text-gray-600 hover:border-blue-400 hover:text-blue-500 hover:bg-blue-100 active:bg-blue-300;
+<style lang="scss" scoped>
+.content-wrapper {
+  @apply px-1 grid grid-cols-2 gap-4;
 }
 
-.import-button-disabled {
-  @apply bg-gray-100 text-gray-400 pointer-events-none;
+.import-button {
+  @apply py-1 px-2 rounded-full transition-all;
+
+  &.enabled {
+    @apply border border-gray-400 text-gray-600;
+    @apply hover:border-blue-400 hover:text-blue-500 hover:bg-blue-100 active:bg-blue-300;
+  }
+  &.disabled {
+    @apply bg-gray-100 text-gray-400 pointer-events-none;
+  }
+}
+
+.path-wrapper {
+  @apply ml-3 mt-[5px];
+  grid-column: 1 / 3;
+}
+
+.confirm-paths-wrapper {
+  @apply flex flex-row;
+}
+
+.confirm-paths-help {
+  @apply ml-2 mt-[5px] w-5 h-5 rounded-full;
+  @apply text-center font-bold text-sm;
+  @apply bg-gray-400 text-white cursor-help;
 }
 
 .confirm-button-enabled {

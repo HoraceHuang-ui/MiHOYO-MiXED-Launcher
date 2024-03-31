@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { PostInfo } from '../types/launcher/launcherInfo'
 import MyTabs from './MyTabs.vue'
 import { translateMultiple } from '../i18n'
+import ScrollWrapper from './ScrollWrapper.vue'
 
 defineProps({
   postTypeMap: {
@@ -22,20 +23,19 @@ const openLink = (url: string) => {
 
 <template>
   <MyTabs class="text-sm" v-model="tabsModel" :tabs="tabs">
-    <div v-for="key in keys" :key="key" class="w-full">
+    <div v-for="key in keys" :key="key" class="tab-wrapper">
       <ScrollWrapper height="64px">
-        <div class="h-max pr-2 pb-2">
+        <div class="scroll-content-wrapper">
           <div
             v-for="post in postTypeMap.get(key)"
-            class="w-full justify-between flex flex-row p-1 pl-2 hover:bg-white rounded hover:shadow-md transition-all cursor-default"
-            style="height: 28px"
+            class="link-item"
             @click="openLink(post.url)"
             :key="post.post_id"
           >
-            <div class="mr-1 truncated text-sm mt-0.5" style="max-width: 320px">
+            <div class="left">
               {{ post['tittle'] }}
             </div>
-            <div class="text-sm font-sans font-normal">
+            <div class="right">
               {{ post['show_time'] }}
             </div>
           </div>
@@ -45,8 +45,27 @@ const openLink = (url: string) => {
   </MyTabs>
 </template>
 
-<style scoped>
-.truncated {
-  @apply inline-block max-w-full overflow-ellipsis whitespace-nowrap overflow-hidden;
+<style lang="scss" scoped>
+.tab-wrapper {
+  @apply w-full;
+}
+
+.scroll-content-wrapper {
+  @apply h-max pr-2 pb-2;
+}
+
+.link-item {
+  @apply flex flex-row p-1 pl-2 w-full justify-between rounded;
+  @apply hover:bg-white hover:shadow-md transition-all cursor-pointer;
+  height: 28px;
+
+  .left {
+    @apply mr-1 text-sm mt-0.5 truncate;
+    max-width: 320px;
+  }
+
+  .right {
+    @apply text-sm font-sans font-normal;
+  }
 }
 </style>
