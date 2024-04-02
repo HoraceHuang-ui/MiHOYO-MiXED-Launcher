@@ -26,7 +26,7 @@
   "devDependencies": {
     "@electron-forge/cli": "^7.3.0",
     "@vitejs/plugin-vue": "^5.0.4",
-    "@vue/eslint-config-typescript": "^9.1.0",
+    "@vue/eslint-config-typescript": "^10.0.0",
     "autoprefixer": "^10.4.18",
     "electron": "28.2.1",
     "electron-builder": "^24.13.3",
