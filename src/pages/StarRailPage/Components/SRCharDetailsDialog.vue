@@ -47,79 +47,55 @@ const trimAdditions = (additions: AttributeInfo[]) => {
 
 <template>
   <StarRailDialog :title="title">
-    <div class="flex flex-col content-center justify-center w-full px-5">
+    <div class="list-items-wrapper">
       <DialogListItem class="font-sr-sans" :name="character.attributes[0].name">
         <template #icon>
-          <StatIcon
-            game="sr"
-            stat="hp"
-            fill="#666"
-            class="w-4 h-4 mr-1"
-            style="margin-top: 2px"
-          />
+          <StatIcon game="sr" stat="hp" fill="#666" class="icon" />
         </template>
-        <div class="font-sr-sans">
+        <div>
           <span>{{ character.attributes[0].display }}</span>
           <span
             v-if="findField(character.additions, 'hp').display !== ''"
-            class="ml-1 text-blue-500"
+            class="stat-addition"
             >+{{ findField(character.additions, 'hp').display }}</span
           >
         </div>
       </DialogListItem>
       <DialogListItem class="font-sr-sans" :name="character.attributes[1].name">
         <template #icon>
-          <StatIcon
-            game="sr"
-            stat="atk"
-            fill="#666"
-            class="w-4 h-4 mr-1"
-            style="margin-top: 2px"
-          />
+          <StatIcon game="sr" stat="atk" fill="#666" class="icon" />
         </template>
-        <div class="font-sr-sans">
+        <div>
           <span>{{ character.attributes[1].display }}</span>
           <span
             v-if="findField(character.additions, 'atk').display !== ''"
-            class="ml-1 text-blue-500"
+            class="stat-addition"
             >+{{ findField(character.additions, 'atk').display }}</span
           >
         </div>
       </DialogListItem>
       <DialogListItem class="font-sr-sans" :name="character.attributes[2].name">
         <template #icon>
-          <StatIcon
-            game="sr"
-            stat="def"
-            fill="#666"
-            class="w-4 h-4 mr-1"
-            style="margin-top: 2px"
-          />
+          <StatIcon game="sr" stat="def" fill="#666" class="icon" />
         </template>
-        <div class="font-sr-sans">
+        <div>
           <span>{{ character.attributes[2].display }}</span>
           <span
             v-if="findField(character.additions, 'def').display !== ''"
-            class="ml-1 text-blue-500"
+            class="stat-addition"
             >+{{ findField(character.additions, 'def').display }}</span
           >
         </div>
       </DialogListItem>
       <DialogListItem class="font-sr-sans" :name="character.attributes[3].name">
         <template #icon>
-          <StatIcon
-            game="sr"
-            stat="spd"
-            fill="#666"
-            class="w-4 h-4 mr-1"
-            style="margin-top: 2px"
-          />
+          <StatIcon game="sr" stat="spd" fill="#666" class="icon" />
         </template>
-        <div class="font-sr-sans">
+        <div>
           <span>{{ character.attributes[3].display }}</span>
           <span
             v-if="findField(character.additions, 'spd').display !== ''"
-            class="ml-1 text-blue-500"
+            class="stat-addition"
             >+{{ findField(character.additions, 'spd').display }}</span
           >
         </div>
@@ -136,13 +112,7 @@ const trimAdditions = (additions: AttributeInfo[]) => {
         "
       >
         <template #icon>
-          <StatIcon
-            game="sr"
-            stat="crit_rate"
-            fill="#666"
-            class="w-4 h-4 mr-1"
-            style="margin-top: 2px"
-          />
+          <StatIcon game="sr" stat="crit_rate" fill="#666" class="icon" />
         </template>
       </DialogListItem>
       <DialogListItem
@@ -157,13 +127,7 @@ const trimAdditions = (additions: AttributeInfo[]) => {
         "
       >
         <template #icon>
-          <StatIcon
-            game="sr"
-            stat="crit_dmg"
-            fill="#666"
-            class="w-4 h-4 mr-1"
-            style="margin-top: 2px"
-          />
+          <StatIcon game="sr" stat="crit_dmg" fill="#666" class="icon" />
         </template>
       </DialogListItem>
       <DialogListItem
@@ -173,17 +137,24 @@ const trimAdditions = (additions: AttributeInfo[]) => {
         :val="attr.display"
       >
         <template #icon>
-          <StatIcon
-            game="sr"
-            :stat="attr.field"
-            fill="#666"
-            class="w-4 h-4 mr-1"
-            style="margin-top: 2px"
-          />
+          <StatIcon game="sr" :stat="attr.field" fill="#666" class="icon" />
         </template>
       </DialogListItem>
     </div>
   </StarRailDialog>
 </template>
 
-<style scoped></style>
+<style scoped>
+.list-items-wrapper {
+  @apply flex flex-col content-center justify-center;
+  @apply w-full px-5;
+}
+
+.icon {
+  @apply w-4 h-4 mr-1 mt-[2px];
+}
+
+.stat-addition {
+  @apply ml-1 text-blue-500;
+}
+</style>

@@ -192,20 +192,16 @@ defineExpose({
 <template>
   <div class="overflow-hidden" :style="{ height: height, width: width }">
     <div
-      class="h-full w-full relative overflow-hidden"
+      class="main-wrapper"
       @mouseenter="onMouseEnter"
       @mouseleave="onMouseLeave"
     >
-      <div
-        ref="outerRef"
-        class="h-full w-full overflow-scroll"
-        @scroll="onScroll"
-      >
+      <div ref="outerRef" class="content-wrapper" @scroll="onScroll">
         <div ref="innerRef">
           <slot />
         </div>
       </div>
-      <div class="absolute top-0 bottom-0 right-0.5 w-1.5 rounded-full z-50">
+      <div class="track vertical">
         <div
           v-if="
             heightPre < 1 &&
@@ -215,13 +211,12 @@ defineExpose({
             height: barHeight + 'px',
             transform: `translate(0, ${scrollPadding + translateY - (translateY / (trackHeight - barHeight)) * 2 * scrollPadding}px)`,
           }"
-          style="transition-property: height, width; transition-duration: 0.2s"
-          class="w-1 rounded-full bg-gray-600 opacity-30 hover:w-1.5 hover:opacity-80"
-          :class="vMovingState ? 'opacity-80 w-1.5' : ''"
+          class="bar vertical"
+          :class="{ moving: vMovingState }"
           @mousedown.stop.prevent="vMoveStart"
         />
       </div>
-      <div class="absolute bottom-0 left-0 right-0 h-1.5 rounded-full z-50">
+      <div class="track horizontal">
         <div
           v-if="
             widthPre < 1 &&
@@ -231,9 +226,8 @@ defineExpose({
             width: barWidth + 'px',
             transform: `translate(${scrollPadding + translateX - (translateX / (trackWidth - barWidth)) * 2 * scrollPadding}px, 0)`,
           }"
-          style="transition-property: height, width; transition-duration: 0.2s"
-          class="h-1 rounded-full bg-gray-600 opacity-30 hover:h-1.5 hover:opacity-80"
-          :class="hMovingState ? 'opacity-80 w-1.5' : ''"
+          class="bar horizontal"
+          :class="{ moving: hMovingState }"
           @mousedown.stop.prevent="hMoveStart"
         />
       </div>
@@ -241,7 +235,45 @@ defineExpose({
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+.main-wrapper {
+  @apply size-full relative overflow-hidden;
+}
+
+.content-wrapper {
+  @apply size-full overflow-scroll;
+}
+
+.track {
+  @apply absolute bottom-0 rounded-full z-50;
+
+  &.vertical {
+    @apply top-0 right-0.5 w-1.5;
+  }
+  &.horizontal {
+    @apply left-0 right-0 h-1.5;
+  }
+}
+
+.bar {
+  @apply rounded-full bg-gray-600 opacity-30 hover:opacity-80;
+  transition-property: height, width;
+  transition-duration: 0.2s;
+
+  &.horizontal {
+    @apply h-1 hover:h-1.5;
+    &.moving {
+      @apply opacity-80 h-1.5;
+    }
+  }
+  &.vertical {
+    @apply w-1 hover:w-1.5;
+    &.moving {
+      @apply opacity-80 w-1.5;
+    }
+  }
+}
+
 ::-webkit-scrollbar {
   width: 0 !important;
 }

@@ -184,11 +184,11 @@ defineExpose({
 
 <template>
   <div
-    class="overflow-hidden"
+    class="main-wrapper"
     @mouseenter="onMouseEnter"
     @mouseleave="onMouseLeave"
   >
-    <div ref="panesWrapper" class="overflow-hidden w-full h-full relative">
+    <div ref="panesWrapper" class="panes-wrapper">
       <slot />
     </div>
 
@@ -201,32 +201,22 @@ defineExpose({
           showIndicator !== 'never' &&
           (showIndicator === 'always' || hoverShowIndicator)
         "
-        class="w-full absolute bottom-1 left-0 right-0 flex flex-row justify-center"
+        class="indicator-area-wrapper"
       >
-        <div
-          class="px-1 rounded-full flex flex-row"
-          :class="
-            indicatorBg ? 'bg-gray-700 bg-opacity-30 backdrop-blur-md' : ''
-          "
-        >
+        <div class="indicator-area" :class="{ bg: indicatorBg }">
           <div
             v-for="idx in panes.length"
-            class="mx-1"
-            :class="indicatorStyle === 'bar' ? 'my-2' : 'my-1'"
+            class="indicators-wrapper"
+            :class="indicatorStyle === 'bar' ? 'bar' : 'circle'"
             @mouseenter="curIdx = idx - 1"
             :key="idx"
           >
             <div
-              class="rounded-full transition-all"
-              :class="
-                curIdx == idx - 1
-                  ? indicatorStyle === 'bar'
-                    ? 'bar-indicator-selected'
-                    : 'circle-indicator-selected'
-                  : indicatorStyle === 'bar'
-                    ? 'bar-indicator-unselected'
-                    : 'circle-indicator-unselected'
-              "
+              class="indicator"
+              :class="[
+                indicatorStyle === 'bar' ? 'bar' : 'circle',
+                { selected: curIdx == idx - 1 },
+              ]"
             />
           </div>
         </div>
@@ -242,7 +232,7 @@ defineExpose({
           showArrow !== 'never' &&
           (showArrow === 'always' || hoverShowArrow)
         "
-        class="h-full absolute left-0 top-0 bottom-0 flex flex-col justify-center px-1 bg-gray-600 bg-opacity-30 cursor-pointer hover:bg-opacity-60 transition-all"
+        class="arrow-wrapper left"
         @click="prevPane"
       >
         <i class="bi bi-chevron-left text-white" />
@@ -256,7 +246,7 @@ defineExpose({
           showArrow !== 'never' &&
           (showArrow === 'always' || hoverShowArrow)
         "
-        class="h-full absolute right-0 top-0 bottom-0 flex flex-col justify-center px-1 bg-gray-600 bg-opacity-30 cursor-pointer hover:bg-opacity-60 transition-all"
+        class="arrow-wrapper right"
         @click="nextPane"
       >
         <i class="bi bi-chevron-right text-white" />
@@ -265,21 +255,69 @@ defineExpose({
   </div>
 </template>
 
-<style scoped>
-.bar-indicator-selected {
-  @apply w-7 h-1 bg-white;
+<style lang="scss" scoped>
+.main-wrapper {
+  @apply overflow-hidden;
 }
 
-.bar-indicator-unselected {
-  @apply w-5 h-1 bg-gray-400 opacity-90;
+.panes-wrapper {
+  @apply overflow-hidden w-full h-full relative;
 }
 
-.circle-indicator-selected {
-  @apply w-5 h-2 bg-white;
+.indicator-area-wrapper {
+  @apply absolute bottom-1 left-0 right-0 w-full;
+  @apply flex flex-row justify-center;
 }
 
-.circle-indicator-unselected {
-  @apply w-2 h-2 bg-gray-200 opacity-90;
+.indicator-area {
+  @apply px-1 rounded-full flex flex-row;
+
+  &.bg {
+    @apply bg-gray-700 bg-opacity-30 backdrop-blur-md;
+  }
+}
+
+.indicators-wrapper {
+  @apply mx-1;
+
+  &.bar {
+    @apply my-2;
+  }
+  &.circle {
+    @apply my-1;
+  }
+}
+
+.indicator {
+  @apply bg-gray-400 opacity-90;
+  @apply rounded-full transition-all;
+
+  &.bar {
+    @apply h-1 w-5;
+    &.selected {
+      @apply w-7 bg-white;
+    }
+  }
+
+  &.circle {
+    @apply h-2 w-2;
+    &.selected {
+      @apply w-5 bg-white;
+    }
+  }
+}
+
+.arrow-wrapper {
+  @apply absolute top-0 bottom-0 px-1 h-full;
+  @apply flex flex-col justify-center;
+  @apply bg-gray-600 bg-opacity-30 cursor-pointer hover:bg-opacity-60 transition-all;
+
+  &.left {
+    @apply left-0;
+  }
+  &.right {
+    @apply right-0;
+  }
 }
 
 .slide-up-enter-from,

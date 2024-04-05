@@ -52,16 +52,13 @@ const closeDialog = () => {
 </script>
 
 <template>
-  <TemplateDialog width="50%" class="text-gray-100" ref="dialogRef">
-    <div class="w-full font-gs text-center text-xl mb-2">{{ title }}</div>
-    <div
-      class="z-50 w-6 h-6 p-1 absolute right-1 top-1 rounded-full hover:opacity-70 hover:scale-125 active:opacity-50 active:scale-90 transition-all cursor-pointer"
-      @click="closeDialog"
-    >
+  <TemplateDialog width="50%" class="main-wrapper" ref="dialogRef">
+    <div class="title font-gs">{{ title }}</div>
+    <div class="close-button" @click="closeDialog">
       <img src="../../../assets/gsDialog/gsDialogClose.png" />
     </div>
-    <div class="w-full flex flex-row justify-center mt-1">
-      <div class="w-full flex flex-row justify-center relative">
+    <div class="divider-wrapper">
+      <div class="divider-contents">
         <img
           style="height: 9px; transform: rotate3d(0, 1, 0, 180deg)"
           src="../../../assets/gsDialog/gsDividerSide.png"
@@ -74,27 +71,17 @@ const closeDialog = () => {
       </div>
     </div>
 
-    <ScrollWrapper
-      show-bar="always"
-      style="max-height: 80vh"
-      :no-resize="false"
-    >
-      <div class="flex flex-col content-center justify-center w-full px-5 mt-5">
+    <ScrollWrapper show-bar="always" :no-resize="false">
+      <div class="list-items-wrapper">
         <DialogListItem class="font-gs" :name="stats[1].fightPropName.text">
           <template #icon>
-            <StatIcon
-              game="gs"
-              stat="FIGHT_PROP_HP"
-              fill="#eee"
-              class="w-4 h-4"
-              style="margin-top: 2px"
-            />
+            <StatIcon game="gs" stat="FIGHT_PROP_HP" fill="#eee" class="icon" />
           </template>
-          <div class="font-gs">
+          <div>
             <span>{{ stats[0].value.toFixed(0) }}</span>
             <span
               v-if="stats[37].value.toFixed(0) != stats[0].value.toFixed(0)"
-              class="ml-1 text-blue-400"
+              class="stat-addition"
               >+{{
                 stats[37].value.toFixed(0) - stats[0].value.toFixed(0)
               }}</span
@@ -107,15 +94,14 @@ const closeDialog = () => {
               game="gs"
               stat="FIGHT_PROP_ATTACK"
               fill="#eee"
-              class="w-4 h-4"
-              style="margin-top: 2px"
+              class="icon"
             />
           </template>
           <div class="font-gs">
             <span>{{ stats[3].value.toFixed(0) }}</span>
             <span
               v-if="stats[38].value.toFixed(0) != stats[3].value.toFixed(0)"
-              class="ml-1 text-blue-400"
+              class="stat-addition"
               >+{{
                 stats[38].value.toFixed(0) - stats[3].value.toFixed(0)
               }}</span
@@ -128,15 +114,14 @@ const closeDialog = () => {
               game="gs"
               stat="FIGHT_PROP_DEFENSE"
               fill="#eee"
-              class="w-4 h-4"
-              style="margin-top: 2px"
+              class="icon"
             />
           </template>
           <div class="font-gs">
             <span>{{ stats[6].value.toFixed(0) }}</span>
             <span
               v-if="stats[39].value.toFixed(0) != stats[6].value.toFixed(0)"
-              class="ml-1 text-blue-400"
+              class="stat-addition"
               >+{{
                 stats[39].value.toFixed(0) - stats[6].value.toFixed(0)
               }}</span
@@ -153,8 +138,7 @@ const closeDialog = () => {
               game="gs"
               stat="FIGHT_PROP_ELEMENT_MASTERY"
               fill="#eee"
-              class="w-4 h-4"
-              style="margin-top: 2px"
+              class="icon"
             />
           </template>
         </DialogListItem>
@@ -165,13 +149,7 @@ const closeDialog = () => {
           :val="displayStat(val)"
         >
           <template #icon>
-            <StatIcon
-              game="gs"
-              :stat="name"
-              fill="#eee"
-              class="w-4 h-4"
-              style="margin-top: 2px"
-            />
+            <StatIcon game="gs" :stat="name" fill="#eee" class="icon" />
           </template>
         </DialogListItem>
       </div>
@@ -180,7 +158,47 @@ const closeDialog = () => {
 </template>
 
 <style scoped>
+.main-wrapper {
+  @apply text-gray-100;
+}
+
+.title {
+  @apply w-full text-center text-xl mb-2;
+}
+
+.close-button {
+  @apply absolute z-50 w-6 h-6 p-1 right-1 top-1;
+  @apply rounded-full transition-all cursor-pointer;
+  @apply hover:opacity-70 hover:scale-125 active:opacity-50 active:scale-90;
+}
+
+.divider-wrapper {
+  @apply w-full flex flex-row justify-center mt-1;
+}
+
+.divider-contents {
+  @apply w-5/6 flex flex-row justify-center relative;
+}
+
 .divider-bg {
   background: #dad2c5;
+}
+
+.scroll-wrapper {
+  max-height: 80vh;
+}
+
+.list-items-wrapper {
+  @apply content-center justify-center;
+  @apply flex flex-col w-full px-5 mt-5;
+}
+
+.icon {
+  @apply w-4 h-4;
+  margin-top: 2px;
+}
+
+.stat-addition {
+  @apply ml-1 text-blue-400;
 }
 </style>

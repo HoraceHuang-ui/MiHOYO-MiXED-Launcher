@@ -62,7 +62,7 @@ onMounted(() => {
       console.error('Error loading JSON:', error)
     })
   window.store
-    .get('starRailInfo')
+    .get('srInfo')
     .then(value => {
       if (value) {
         playerInfoReady.value = true
@@ -151,7 +151,7 @@ const requestInfo = () => {
           // }
         }
       })
-      window.store.set('starRailInfo', JSON.stringify(playerInfo.value), true)
+      window.store.set('srInfo', JSON.stringify(playerInfo.value), true)
       playerInfoLoading.value = false
       router.push({
         name: 'tempPage',

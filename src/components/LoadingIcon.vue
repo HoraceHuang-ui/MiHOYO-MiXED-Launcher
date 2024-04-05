@@ -8,15 +8,13 @@ defineProps({
 </script>
 
 <template>
-  <i
-    class="bi bi-arrow-repeat ml-2 text-xl w-9 h-9 text-center icon-loading"
-    :style="{ color: colour }"
-    style="padding-top: 3px"
-  />
+  <i class="bi bi-arrow-repeat icon-loading" :style="{ color: colour }" />
 </template>
 
 <style scoped>
 .icon-loading {
+  @apply ml-2 w-9 h-9 pt-[3px];
+  @apply text-center text-xl;
   animation: 1s linear 0s infinite running rotate;
 }
 

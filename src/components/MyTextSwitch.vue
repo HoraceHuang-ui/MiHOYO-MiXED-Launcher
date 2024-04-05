@@ -45,26 +45,26 @@ const switchState = () => {
 
 <template>
   <div
-    class="ml-3 rounded-full flex flex-row py-1 bg-white relative cursor-pointer"
+    class="main-wrapper"
     :style="{ width: `calc(${unitWidth}px * 2 + 10px)` }"
     @click="switchState"
   >
     <div
-      class="rounded-full bg-blue-500 absolute top-0 bottom-0 z-0 transition-all"
+      class="slider"
       :style="{ width: `calc(${unitWidth}px + 5px)`, ...sliderTransform }"
     ></div>
     <div
       ref="leftRef"
-      class="rounded-full absolute z-10 left-0 text-center transition-all text-nowrap"
-      :class="{ 'text-white': state }"
+      class="selection-text left"
+      :class="{ selected: state }"
       :style="{ width: `${unitWidth}px` }"
     >
       {{ leftText }}
     </div>
     <div
       ref="rightRef"
-      class="rounded-full absolute z-10 right-0 text-center transition-all text-nowrap"
-      :class="{ 'text-white': !state }"
+      class="selection-text right"
+      :class="{ selected: !state }"
       :style="{ width: `${unitWidth}px` }"
     >
       {{ rightText }}
@@ -72,4 +72,30 @@ const switchState = () => {
   </div>
 </template>
 
-<style scoped></style>
+<style lang="scss" scoped>
+.main-wrapper {
+  @apply flex flex-row py-1 ml-3 relative;
+  @apply rounded-full bg-white cursor-pointer;
+}
+
+.slider {
+  @apply absolute top-0 bottom-0 z-0;
+  @apply rounded-full bg-blue-500 transition-all;
+}
+
+.selection-text {
+  @apply absolute z-10;
+  @apply rounded-full text-center text-nowrap transition-all;
+
+  &.left {
+    @apply left-0;
+  }
+  &.right {
+    @apply right-0;
+  }
+
+  &.selected {
+    @apply text-white;
+  }
+}
+</style>

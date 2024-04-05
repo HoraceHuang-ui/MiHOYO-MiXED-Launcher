@@ -81,36 +81,24 @@ defineExpose({
 <template>
   <transition :duration="600">
     <div v-if="cShow">
-      <div
-        class="outer absolute top-0 bottom-0 left-0 right-0 z-50 backdrop-blur-2xl"
-        @click="cancelClick"
-      />
-      <div
-        class="outer bg-black bg-opacity-20 outer absolute top-0 bottom-0 left-0 right-0 z-40"
-      />
-      <div
-        class="inner absolute z-50 top-1/2 left-1/2 border -translate-x-1/2 -translate-y-1/2"
-        style="border-radius: 5px 20px 0 0"
-        :style="`width: ${width}`"
-      >
+      <div class="outer modal" @click="cancelClick" />
+      <div class="outer modal-mask" />
+      <div class="inner dialog-wrapper" :style="`width: ${width}`">
         <div
           v-if="!showCancel && !showOk"
-          class="z-50 w-6 h-6 p-1 absolute right-4 top-3 rounded-full hover:opacity-70 hover:scale-125 active:opacity-50 active:scale-90 transition-all cursor-pointer"
+          class="close-button"
           @click="cancelClick"
         >
           <img src="../../../assets/srCloseButton.png" />
         </div>
-        <div
-          class="bg-white"
-          style="border-radius: 5px 20px 0 0; transform: translate(5px, -5px)"
-        >
-          <div class="pt-4 ml-6 mr-6">
-            <div class="text-center w-full font-sr-sans text-xl text-black">
+        <div class="dialog-content-wrapper">
+          <div class="title-wrapper">
+            <div class="text font-sr-sans">
               {{ typeof title === 'string' ? title : title() }}
             </div>
           </div>
-          <div class="w-full flex flex-row justify-center mt-1">
-            <div class="w-5/6 flex flex-row justify-center relative">
+          <div class="divider-wrapper">
+            <div class="divider-contents">
               <div
                 class="absolute left-0 flex flex-row"
                 style="width: calc(50% - 10px); top: 1px"
@@ -161,7 +149,7 @@ defineExpose({
               </div>
             </div>
           </div>
-          <div class="px-6 py-6">
+          <div class="contents-wrapper">
             <div
               class="font-sr-sans px-5"
               :class="msgCenter ? 'text-center' : 'text-left'"
@@ -171,11 +159,7 @@ defineExpose({
             <component :is="vnode" />
             <slot />
           </div>
-          <div
-            v-if="showCancel || showOk"
-            class="w-full justify-center flex flex-row py-2"
-            style="background: #262626"
-          >
+          <div v-if="showCancel || showOk" class="buttons-wrapper">
             <StarRailButton
               v-if="showCancel"
               type="cancel"
@@ -195,7 +179,68 @@ defineExpose({
   </transition>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+.modal {
+  @apply absolute top-0 bottom-0 left-0 right-0 z-50;
+  @apply backdrop-blur-2xl;
+}
+
+.modal-mask {
+  @apply absolute top-0 bottom-0 left-0 right-0 z-40;
+  @apply bg-black bg-opacity-20;
+}
+
+.dialog-wrapper {
+  @apply absolute z-50 top-1/2 left-1/2;
+  @apply border -translate-x-1/2 -translate-y-1/2;
+  border-radius: 5px 20px 0 0;
+}
+
+.close-button {
+  @apply absolute z-50 w-6 h-6 p-1 right-4 top-3;
+  @apply rounded-full transition-all cursor-pointer;
+  @apply hover:opacity-70 hover:scale-125 active:opacity-50 active:scale-90;
+}
+
+.dialog-content-wrapper {
+  @apply bg-white;
+  border-radius: 5px 20px 0 0;
+  transform: translate(5px, -5px);
+}
+
+.title-wrapper {
+  @apply pt-4 ml-6 mr-6;
+
+  & > .text {
+    @apply text-center w-full text-xl text-black;
+  }
+}
+
+.divider-wrapper {
+  @apply w-full flex flex-row justify-center mt-1;
+}
+
+.divider-contents {
+  @apply w-5/6 flex flex-row justify-center relative;
+}
+
+.divider-bg {
+  background: #aaaaaa;
+}
+
+.divider-border {
+  border-color: #aaaaaa;
+}
+
+.contents-wrapper {
+  @apply px-6 py-6;
+}
+
+.buttons-wrapper {
+  @apply w-full justify-center flex flex-row py-2;
+  background: #262626;
+}
+
 .v-enter-active .outer {
   transition: opacity 0.5s ease;
 }
@@ -223,13 +268,5 @@ defineExpose({
 .v-leave-to .inner {
   opacity: 0;
   transform: translate(-50%, -20%);
-}
-
-.divider-bg {
-  background: #aaaaaa;
-}
-
-.divider-border {
-  border-color: #aaaaaa;
 }
 </style>

@@ -27,13 +27,13 @@ const selectTab = (idx: number) => {
 </script>
 
 <template>
-  <div class="p-2">
+  <div class="main-wrapper">
     <ScrollWrapper show-bar="hover" height="fit-content" class="mt-1">
-      <div class="flex flex-row pb-2">
+      <div class="tabs-wrapper">
         <div
           v-for="(tabText, idx) in tabs"
-          class="mx-1 rounded-full px-3 py-0.5 transition-all"
-          :class="idx == tabIdx ? 'tab-selected' : 'tab-unselected'"
+          class="tab"
+          :class="idx == tabIdx ? 'selected' : 'unselected'"
           @click="selectTab(idx)"
           :key="idx"
         >
@@ -42,7 +42,7 @@ const selectTab = (idx: number) => {
       </div>
     </ScrollWrapper>
     <MyCarousel
-      class="relative w-full h-full"
+      class="carousel"
       ref="panesWrapper"
       animation="fade-swipe"
       show-arrow="never"
@@ -53,12 +53,28 @@ const selectTab = (idx: number) => {
   </div>
 </template>
 
-<style scoped>
-.tab-selected {
-  @apply text-white bg-blue-600 cursor-default;
+<style lang="scss" scoped>
+.main-wrapper {
+  @apply pt-2;
 }
 
-.tab-unselected {
-  @apply cursor-pointer hover:bg-blue-100 hover:text-blue-600;
+.tabs-wrapper {
+  @apply flex flex-row;
+}
+
+.tab {
+  @apply mx-1 px-3 py-0.5;
+  @apply rounded-full transition-all;
+
+  &.selected {
+    @apply text-white bg-blue-600 cursor-default;
+  }
+  &.unselected {
+    @apply cursor-pointer hover:bg-blue-100 hover:text-blue-600;
+  }
+}
+
+.carousel {
+  @apply relative w-full h-full;
 }
 </style>

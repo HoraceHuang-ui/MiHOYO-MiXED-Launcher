@@ -16,16 +16,14 @@ defineProps({
 
 <template>
   <div class="button-wrapper font-sr-sans">
-    <div
-      class="rounded-full border border-gray-300 w-full h-full flex flex-row justify-center text-black"
-    >
-      <div v-if="type === 'cancel'" class="flex flex-row mt-0.5">
+    <div class="button-contents-wrapper">
+      <div v-if="type === 'cancel'" class="button-content">
         <i class="bi bi-x button-icon" />
         <div>
           {{ text && text !== '' ? text : translate('general_cancel') }}
         </div>
       </div>
-      <div v-if="type === 'ok'" class="flex flex-row mt-0.5">
+      <div v-if="type === 'ok'" class="button-content">
         <i class="bi bi-check button-icon" />
         <div>
           {{ text && text !== '' ? text : translate('general_confirm') }}
@@ -35,21 +33,29 @@ defineProps({
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .button-wrapper {
   @apply mx-3 h-9 p-1 rounded-full bg-white transition-all cursor-default;
   border-width: 1px;
   border-color: #262626;
+
+  &:hover {
+    @apply bg-gray-100;
+    border-color: white;
+  }
+  &:active {
+    @apply bg-gray-300;
+    border-color: white;
+  }
 }
 
-.button-wrapper:hover {
-  @apply bg-gray-100;
-  border-color: white;
+.button-contents-wrapper {
+  @apply w-full h-full flex flex-row justify-center rounded-full;
+  @apply border border-gray-300 text-black;
 }
 
-.button-wrapper:active {
-  @apply bg-gray-300;
-  border-color: white;
+.button-content {
+  @apply flex flex-row mt-0.5;
 }
 
 .button-icon {

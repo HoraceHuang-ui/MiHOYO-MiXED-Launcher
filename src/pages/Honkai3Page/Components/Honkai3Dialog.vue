@@ -81,83 +81,50 @@ defineExpose({
 <template>
   <transition :duration="600">
     <div v-if="cShow">
-      <div
-        class="outer absolute top-0 bottom-0 left-0 right-0 z-50"
-        style="background: rgba(10, 17, 33, 0.95)"
-        @click="cancelClick"
-      />
-      <div
-        class="inner rounded-3xl border-2 p-6 absolute z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center"
-        style="border-color: rgba(255, 255, 255, 0.1)"
-        :style="`width: ${width}`"
-      >
-        <div
-          class="dialog-wrapper relative border-2 border-white flex flex-col"
-          style="box-shadow: 0 0 100px 40px rgba(81, 131, 189, 0.29)"
-        >
-          <div
-            class="close-wrapper absolute right-0 top-0"
-            @click="cancelClick"
-          >
-            <i class="bi bi-x w-full text-4xl" style="color: #46c3f9" />
-            <!--                        <img class="invert opacity-60" src="../../../assets/gsDialog/gsDialogClose.png"/>-->
+      <div class="outer modal" @click="cancelClick" />
+      <div class="inner dialog-wrapper" :style="`width: ${width}`">
+        <div class="dialog-content-wrapper">
+          <div class="close-wrapper" @click="cancelClick">
+            <i class="bi bi-x" />
           </div>
 
           <i
-            class="bi bi-exclamation-circle absolute -left-1 -top-2 z-50 text-9xl"
+            class="bi bi-exclamation-circle dialog-deco-icon"
             style="color: rgba(53, 106, 148, 0.2)"
-          ></i>
+          />
 
-          <div class="pt-2 ml-6 mr-6">
-            <div
-              class="text-center w-full font-bold text-2xl"
-              style="color: #51c3f9"
-            >
+          <div class="title-wrapper">
+            <div class="title">
               {{ typeof title === 'string' ? title : title() }}
             </div>
-            <div
-              class="text-center w-full opacity-60 text-xs font-bold"
-              style="color: #51c3f9; font-family: 'Microsoft JhengHei', serif"
-            >
-              - DIALOG -
-            </div>
+            <div class="title-deco-text">- DIALOG -</div>
           </div>
 
-          <div
-            class="bg-blue-300 h-full bg-opacity-10 mt-1 flex flex-col justify-between backdrop-blur-sm"
-            style="z-index: 60; border-radius: 0 0 12px 12px"
-          >
-            <div class="w-full h-full flex flex-col justify-center">
-              <div class="px-6 py-6 text-blue-100">
-                <div
-                  class="px-5 text-lg"
-                  :class="msgCenter ? 'text-center' : 'text-left'"
-                >
-                  {{ typeof msg === 'string' ? msg : msg() }}
-                </div>
-                <component :is="vnode" />
-                <slot />
+          <div class="contents-area-wrapper">
+            <div class="contents-wrapper">
+              <div
+                class="px-5"
+                :class="msgCenter ? 'text-center' : 'text-left'"
+              >
+                {{ typeof msg === 'string' ? msg : msg() }}
               </div>
+              <component :is="vnode" />
+              <slot />
             </div>
 
-            <div>
-              <div
-                v-if="showCancel || showOk"
-                class="w-full justify-center flex flex-row pt-2 pb-3"
-              >
-                <Honkai3Button
-                  v-if="showCancel"
-                  type="cancel"
-                  class="w-1/3"
-                  @click="cancelClick"
-                />
-                <Honkai3Button
-                  v-if="showOk"
-                  type="ok"
-                  class="w-1/3"
-                  @click="okClick"
-                />
-              </div>
+            <div v-if="showCancel || showOk" class="buttons-wrapper">
+              <Honkai3Button
+                v-if="showCancel"
+                type="cancel"
+                class="w-1/3"
+                @click="cancelClick"
+              />
+              <Honkai3Button
+                v-if="showOk"
+                type="ok"
+                class="w-1/3"
+                @click="okClick"
+              />
             </div>
           </div>
         </div>
@@ -166,7 +133,81 @@ defineExpose({
   </transition>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+.modal {
+  @apply absolute top-0 bottom-0 left-0 right-0 z-50;
+  background: rgba(10, 17, 33, 0.95);
+}
+
+.dialog-wrapper {
+  @apply absolute p-6 z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
+  @apply rounded-3xl border-2 flex justify-center;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dialog-content-wrapper {
+  @apply relative w-full flex flex-col;
+  @apply border-2 border-white;
+  min-height: 250px;
+  background: linear-gradient(#1c3350, #285a8c);
+  border-radius: 15px;
+  box-shadow: 0 0 100px 40px rgba(81, 131, 189, 0.29);
+}
+
+.close-wrapper {
+  @apply absolute right-0 top-0 z-50 pt-0.5 h-12 w-16;
+  @apply text-center transition-all cursor-pointer;
+  background: rgb(72, 107, 161, 0.5);
+  border-radius: 0 15px 0 15px;
+
+  &:hover {
+    background: rgb(72, 107, 161, 0.8);
+  }
+  &:active {
+    background: rgb(72, 107, 161);
+  }
+
+  i {
+    @apply w-full text-4xl;
+    color: #46c3f9;
+  }
+}
+
+.dialog-deco-icon {
+  @apply absolute -left-1 -top-2 z-50 text-9xl;
+}
+
+.title-wrapper {
+  @apply pt-2 ml-6 mr-6;
+}
+
+.title {
+  @apply text-center w-full font-bold text-2xl;
+  color: #51c3f9;
+}
+
+.title-deco-text {
+  @apply text-center w-full opacity-60 text-xs font-bold;
+  color: #51c3f9;
+  font-family: 'Microsoft JhengHei', serif;
+}
+
+.contents-area-wrapper {
+  @apply h-full mt-1 flex flex-col justify-between;
+  @apply bg-blue-300 bg-opacity-10 backdrop-blur-sm;
+  z-index: 60;
+  border-radius: 0 0 12px 12px;
+}
+
+.contents-wrapper {
+  @apply w-full h-full flex flex-col;
+  @apply justify-center px-6 py-6 text-lg text-blue-100;
+}
+
+.buttons-wrapper {
+  @apply w-full justify-center flex flex-row pt-2 pb-3;
+}
+
 .v-enter-active .outer {
   transition: opacity 0.5s ease;
 }
@@ -194,26 +235,5 @@ defineExpose({
 .v-leave-to .inner {
   opacity: 0;
   transform: translate(-50%, -20%);
-}
-
-.dialog-wrapper {
-  min-height: 250px;
-  background: linear-gradient(#1c3350, #285a8c);
-  width: 100%;
-  border-radius: 15px;
-}
-
-.close-wrapper {
-  @apply z-50 pt-0.5 h-12 w-16 text-center transition-all cursor-pointer;
-  background: rgb(72, 107, 161, 0.5);
-  border-radius: 0 15px 0 15px;
-}
-
-.close-wrapper:hover {
-  background: rgb(72, 107, 161, 0.8);
-}
-
-.close-wrapper:active {
-  background: rgb(72, 107, 161);
 }
 </style>
