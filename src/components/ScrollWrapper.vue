@@ -247,10 +247,10 @@ defineExpose({
 .track {
   @apply absolute bottom-0 rounded-full z-50;
 
-  &.horizontal {
+  &.vertical {
     @apply top-0 right-0.5 w-1.5;
   }
-  &.vertical {
+  &.horizontal {
     @apply left-0 right-0 h-1.5;
   }
 }

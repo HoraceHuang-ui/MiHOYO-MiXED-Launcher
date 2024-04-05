@@ -28,7 +28,7 @@ const selectTab = (idx: number) => {
 
 <template>
   <div class="main-wrapper">
-    <ScrollWrapper show-bar="hover" height="fit-content">
+    <ScrollWrapper show-bar="hover" height="fit-content" class="mt-1">
       <div class="tabs-wrapper">
         <div
           v-for="(tabText, idx) in tabs"
@@ -55,7 +55,7 @@ const selectTab = (idx: number) => {
 
 <style lang="scss" scoped>
 .main-wrapper {
-  @apply pt-3 pb-1;
+  @apply pt-2;
 }
 
 .tabs-wrapper {
