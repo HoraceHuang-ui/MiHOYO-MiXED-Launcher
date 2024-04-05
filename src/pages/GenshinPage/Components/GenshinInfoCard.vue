@@ -341,7 +341,7 @@ const countRolledSubstat = (stats: any[], prop: string) => {
 
 <template>
   <div
-    class="bg-white"
+    class="bg-white dark:bg-[#222]"
     style="border-radius: 4.5vh"
     :style="playerInfoReady && playerInfo ? 'height: 86.5vh;' : ''"
   >
@@ -423,7 +423,7 @@ const countRolledSubstat = (stats: any[], prop: string) => {
         <div class="flex flex-row justify-between" style="width: 72%">
           <div class="relative z-50" style="width: 15%">
             <div
-              class="absolute right-2 top-3 rounded-full w-9 h-9 pt-1 bg-white hover:bg-gray-200 active:-translate-x-1 transition-all bg-opacity-80"
+              class="absolute right-2 top-3 rounded-full w-9 h-9 pt-1 bg-white hover:bg-gray-200 bg-opacity-80 active:-translate-x-1 transition-all dark:bg-black dark:hover:bg-gray-700 dark:bg-opacity-80"
               @click="charsPagePrev"
               :class="charsPage == 0 ? 'disabled' : ''"
             >
@@ -446,8 +446,11 @@ const countRolledSubstat = (stats: any[], prop: string) => {
                 @click="setShowcase(index)"
               >
                 <div
-                  class="absolute bottom-0 w-9 h-9 border-2 rounded-full bg-white transition-all"
-                  :class="{ 'border-blue-600 border-3': showcaseIdx == index }"
+                  class="absolute bottom-0 w-9 h-9 border-2 rounded-full bg-white transition-all dark:border-2 dark:border-gray-500 dark:bg-[#222]"
+                  :class="{
+                    'border-blue-600 border-3 dark:border-blue-300 dark:border-3 dark:bg-gray-500':
+                      showcaseIdx == index,
+                  }"
                   style="left: 10px"
                 ></div>
                 <img
@@ -1021,7 +1024,7 @@ const countRolledSubstat = (stats: any[], prop: string) => {
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .font-gs {
   font-family: genshin-font, serif;
 }
@@ -1048,6 +1051,10 @@ const countRolledSubstat = (stats: any[], prop: string) => {
 
 .disabled {
   @apply bg-gray-200 opacity-30 pointer-events-none;
+
+  .dark & {
+    @apply bg-gray-600 opacity-40;
+  }
 }
 
 .truncated {

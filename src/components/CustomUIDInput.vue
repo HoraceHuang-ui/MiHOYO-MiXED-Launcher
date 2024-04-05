@@ -25,6 +25,10 @@ defineEmits(['submit'])
   @apply flex flex-row h-10;
   @apply rounded-full border border-gray-400;
 
+  .dark & {
+    @apply border-gray-700;
+  }
+
   input {
     @apply px-2 w-[16vw] m-[1px];
     @apply rounded-full;
@@ -34,6 +38,10 @@ defineEmits(['submit'])
     @apply px-3 rounded-full;
     @apply bg-gray-100 hover:bg-gray-300 active:bg-gray-500 active:scale-90 transition-all;
     min-width: 5rem;
+
+    .dark & {
+      @apply bg-[#444] hover:bg-gray-700 active:bg-gray-600;
+    }
   }
 }
 </style>

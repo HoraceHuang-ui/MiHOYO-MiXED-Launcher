@@ -168,6 +168,10 @@ const sendCommand = (idx: number) => {
   @apply px-1 py-0.5 w-fit h-fit min-w-full;
   @apply bg-white rounded-xl;
   @apply text-center text-nowrap shadow-md;
+
+  .dark & {
+    @apply bg-[#222];
+  }
 }
 
 .item {
@@ -176,8 +180,17 @@ const sendCommand = (idx: number) => {
   @apply hover:bg-yellow-100 hover:text-yellow-600;
   @apply active:bg-yellow-400 active:text-yellow-800;
 
+  .dark & {
+    @apply hover:bg-yellow-900 hover:text-yellow-400;
+    @apply active:bg-yellow-600 active:text-yellow-400;
+  }
+
   &.selected {
     @apply bg-yellow-100 text-yellow-600;
+
+    .dark & {
+      @apply bg-yellow-900 text-yellow-400;
+    }
   }
 }
 

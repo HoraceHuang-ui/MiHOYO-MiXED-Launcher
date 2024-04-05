@@ -180,6 +180,10 @@ defineExpose({
 </template>
 
 <style lang="scss" scoped>
+div {
+  @apply text-black;
+}
+
 .modal {
   @apply absolute top-0 bottom-0 left-0 right-0 z-50;
   @apply backdrop-blur-2xl;

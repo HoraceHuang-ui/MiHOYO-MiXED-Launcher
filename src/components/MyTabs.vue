@@ -71,6 +71,10 @@ const selectTab = (idx: number) => {
   }
   &.unselected {
     @apply cursor-pointer hover:bg-blue-100 hover:text-blue-600;
+
+    .dark & {
+      @apply hover:bg-blue-900 hover:text-blue-200;
+    }
   }
 }
 

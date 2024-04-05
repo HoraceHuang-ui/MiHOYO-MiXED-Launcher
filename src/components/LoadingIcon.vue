@@ -11,11 +11,15 @@ defineProps({
   <i class="bi bi-arrow-repeat icon-loading" :style="{ color: colour }" />
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .icon-loading {
   @apply ml-2 w-9 h-9 pt-[3px];
   @apply text-center text-xl;
   animation: 1s linear 0s infinite running rotate;
+
+  .dark & {
+    @apply invert;
+  }
 }
 
 @keyframes rotate {

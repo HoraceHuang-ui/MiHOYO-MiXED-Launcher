@@ -30,8 +30,12 @@ const openLink = (url: string) => {
   </MyCarousel>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 img {
   @apply object-scale-down cursor-pointer;
+
+  .dark & {
+    @apply brightness-75;
+  }
 }
 </style>

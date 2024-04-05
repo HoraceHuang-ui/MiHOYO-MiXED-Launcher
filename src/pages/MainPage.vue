@@ -218,18 +218,23 @@ const resetPic = () => {
 }
 
 .game-button {
-  @apply p-3 mx-2 my-2;
+  @apply p-3 mx-2 my-2 rounded-lg;
   @apply font-bold text-xl bg-yellow-400 cursor-default;
   @apply hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all;
+
+  .dark & {
+    @apply bg-yellow-700 hover:bg-yellow-600 active:bg-yellow-500;
+  }
 }
 
 .icon-button {
   @apply fixed bottom-4 w-10 h-10;
   @apply rounded-full bg-white;
   @apply hover:bg-gray-100 active:bg-gray-400 active:scale-90 transition-all;
-}
 
-.lang-select {
-  @apply border-2 rounded-full py-1 px-2 ml-3 hover:bg-gray-100 transition-all;
+  .dark & {
+    @apply border border-gray-600;
+    @apply bg-gray-800 hover:bg-gray-600 active:bg-gray-500;
+  }
 }
 </style>

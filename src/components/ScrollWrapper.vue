@@ -202,34 +202,38 @@ defineExpose({
         </div>
       </div>
       <div class="track vertical">
-        <div
-          v-if="
-            heightPre < 1 &&
-            (showBar === 'always' || hoverShowBar || vMovingState)
-          "
-          :style="{
-            height: barHeight + 'px',
-            transform: `translate(0, ${scrollPadding + translateY - (translateY / (trackHeight - barHeight)) * 2 * scrollPadding}px)`,
-          }"
-          class="bar vertical"
-          :class="{ moving: vMovingState }"
-          @mousedown.stop.prevent="vMoveStart"
-        />
+        <Transition name="fade">
+          <div
+            v-if="
+              heightPre < 1 &&
+              (showBar === 'always' || hoverShowBar || vMovingState)
+            "
+            :style="{
+              height: barHeight + 'px',
+              transform: `translate(0, ${scrollPadding + translateY - (translateY / (trackHeight - barHeight)) * 2 * scrollPadding}px)`,
+            }"
+            class="bar vertical"
+            :class="{ moving: vMovingState }"
+            @mousedown.stop.prevent="vMoveStart"
+          />
+        </Transition>
       </div>
       <div class="track horizontal">
-        <div
-          v-if="
-            widthPre < 1 &&
-            (showBar === 'always' || hoverShowBar || hMovingState)
-          "
-          :style="{
-            width: barWidth + 'px',
-            transform: `translate(${scrollPadding + translateX - (translateX / (trackWidth - barWidth)) * 2 * scrollPadding}px, 0)`,
-          }"
-          class="bar horizontal"
-          :class="{ moving: hMovingState }"
-          @mousedown.stop.prevent="hMoveStart"
-        />
+        <Transition name="fade">
+          <div
+            v-if="
+              widthPre < 1 &&
+              (showBar === 'always' || hoverShowBar || hMovingState)
+            "
+            :style="{
+              width: barWidth + 'px',
+              transform: `translate(${scrollPadding + translateX - (translateX / (trackWidth - barWidth)) * 2 * scrollPadding}px, 0)`,
+            }"
+            class="bar horizontal"
+            :class="{ moving: hMovingState }"
+            @mousedown.stop.prevent="hMoveStart"
+          />
+        </Transition>
       </div>
     </div>
   </div>
@@ -260,6 +264,10 @@ defineExpose({
   transition-property: height, width;
   transition-duration: 0.2s;
 
+  .dark & {
+    @apply bg-gray-100 opacity-40;
+  }
+
   &.horizontal {
     @apply h-1 hover:h-1.5;
     &.moving {
@@ -281,5 +289,15 @@ defineExpose({
 ::-webkit-scrollbar {
   width: 0 !important;
   height: 0;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s;
 }
 </style>
