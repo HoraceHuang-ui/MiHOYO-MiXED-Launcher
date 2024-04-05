@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import MyLink from './MyLink.vue'
 
 const props = defineProps({
   gameNo: {
@@ -40,9 +41,9 @@ const refresh = () => {
     >
       {{ $t('general_loadingFailed') }}
     </div>
-    <a @click="refresh">
+    <MyLink @click="refresh">
       {{ $t('general_refresh') }}
-    </a>
+    </MyLink>
     <div class="error-msg">{{ errMsg }}</div>
   </div>
 </template>

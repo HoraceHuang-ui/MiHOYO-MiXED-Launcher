@@ -23,6 +23,7 @@ import LoadingIcon from '../../components/LoadingIcon.vue'
 import ScrollWrapper from '../../components/ScrollWrapper.vue'
 import MySelect from '../../components/MySelect.vue'
 import MyTextSwitch from '../../components/MyTextSwitch.vue'
+import MyLink from '../../components/MyLink.vue'
 
 const lang = ref<Lang>('en_US')
 const selectedLangIdx = ref(0)
@@ -298,9 +299,9 @@ const showClearDialog = () => {
           ></CustomSwitch>
         </div>
         <div class="form-item">
-          <a @click="showClearDialog">
+          <MyLink @click="showClearDialog">
             {{ $t('settings_clearAllData') }}
-          </a>
+          </MyLink>
         </div>
 
         <!-- APPEARANCE -->

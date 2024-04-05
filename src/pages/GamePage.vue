@@ -283,13 +283,15 @@ const refresh = () => {
 
 <template>
   <div v-if="!launcherInfoFailed && !launcherInfoReady" class="loading-wrapper">
-    <img
-      :src="'../../src/assets/kleeLoading.gif'"
-      class="loading-image"
-      loading="eager"
-      height="120"
-      width="120"
-    />
+    <div class="flex flex-row w-full justify-center">
+      <img
+        :src="'../../src/assets/kleeLoading.gif'"
+        class="loading-image"
+        loading="eager"
+        height="120"
+        width="120"
+      />
+    </div>
     <div class="mt-3 text-xl" :class="`font-${game}`">
       {{ $t('general_loading') }}
     </div>
@@ -391,7 +393,7 @@ const refresh = () => {
 
 <style lang="scss" scoped>
 .loading-wrapper {
-  @apply absolute z-0 top-[45%] left-[45%];
+  @apply absolute z-0 w-full top-[45%];
   @apply align-middle justify-center text-center;
   @apply pointer-events-none;
 }
