@@ -94,6 +94,7 @@
   "settings_clearAllData": "すべてのデータを消去",
   "settings_clearAllDataText": "このオプションは、ゲームパス、アプリのバックグラウンド画像、プロフィール情報を含むすべてのデータを消去します。続行しますか？",
   "settings_appearance": "外観設定",
+  "settings_colorTheme": "Color theme",
   "settings_dialogStyle": "ダイアログのスタイル",
   "settings_dialogStyleTitle": "{game} ダイアログ",
   "settings_dialogStyleText": "{game} 様式化されたダイアログに切り替えようとしています。続けますか？",
