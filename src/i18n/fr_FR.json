@@ -94,6 +94,7 @@
   "settings_clearAllData": "Effacer toutes les données",
   "settings_clearAllDataText": "Cette option effacera toutes les données, y compris les chemins de jeu, l'image d'arrière-plan de l'application et les informations de profil. Continuer ?",
   "settings_appearance": "Apparence",
+  "settings_colorTheme": "Color theme",
   "settings_dialogStyle": "Style de fenêtre",
   "settings_dialogStyleTitle": "Aperçu de la boîte de dialogue pour {game}",
   "settings_dialogStyleText": "Vous êtes sur le point de passer à la boîte de dialogue stylisée {game} . Continuer ?",
