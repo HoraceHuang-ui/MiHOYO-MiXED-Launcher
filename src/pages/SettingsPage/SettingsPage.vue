@@ -349,7 +349,7 @@ const showClearDialog = () => {
         <!-- APPEARANCE -->
         <div class="title">{{ $t('settings_appearance') }}</div>
         <div class="form-item hover">
-          <div class="form-item-text">颜色模式</div>
+          <div class="form-item-text">{{ $t('settings_colorTheme') }}</div>
           <MyGroupButtons v-model="colorTheme" @change="colorThemeChange">
             <template #left>
               <i class="bi bi-sun" />

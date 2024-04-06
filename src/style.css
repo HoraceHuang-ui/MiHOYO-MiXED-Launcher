@@ -1,5 +1,4 @@
 @import 'bootstrap-icons/font/bootstrap-icons.css';
-
 :root {
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;
@@ -23,6 +22,7 @@
 }
 
 body {
+    transition: all 0.3s;
     margin: 0;
     place-items: center;
     justify-content: center;

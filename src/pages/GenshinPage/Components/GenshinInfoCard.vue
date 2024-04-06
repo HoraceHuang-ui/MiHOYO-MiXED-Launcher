@@ -448,7 +448,7 @@ const countRolledSubstat = (stats: any[], prop: string) => {
                 <div
                   class="absolute bottom-0 w-9 h-9 border-2 rounded-full bg-white transition-all dark:border-2 dark:border-gray-500 dark:bg-[#222]"
                   :class="{
-                    'border-blue-600 border-3 dark:border-blue-300 dark:border-3 dark:bg-gray-500':
+                    'border-blue-600 border-3 dark:border-3 dark:border-blue-500 dark:bg-gray-500':
                       showcaseIdx == index,
                   }"
                   style="left: 10px"
