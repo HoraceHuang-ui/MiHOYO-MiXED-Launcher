@@ -99,17 +99,19 @@ const onDialogOk = () => {
       </button>
       <div class="path-wrapper">
         <span class="font-gs mr-2">{{ translate('general_launcher') }}</span>
-        {{ launcherPath === '' ? '' : launcherPath + '\\launcher.exe' }}
+        <span class="font-normal">{{
+          launcherPath === '' ? '' : launcherPath + '\\launcher.exe'
+        }}</span>
       </div>
       <div class="path-wrapper" style="margin-top: 5px; grid-column: 1 / 3">
         <span class="font-gs mr-2">{{ translate('general_game') }}</span>
-        {{
+        <span class="font-normal">{{
           launcherPath === ''
             ? gamePath
             : combinePaths
               ? launcherPath + '\\Genshin Impact Game\\YuanShen.exe'
               : gamePath
-        }}
+        }}</span>
       </div>
       <div class="combine-paths-wrapper">
         <MyCheckbox

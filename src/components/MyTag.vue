@@ -1,21 +1,7 @@
-<script setup lang="ts">
-defineProps({
-  bgColor: {
-    type: String,
-    default: 'ECF5FF',
-  },
-  fgColor: {
-    type: String,
-    default: '409EFF',
-  },
-})
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <div
-    class="wrapper"
-    :style="{ backgroundColor: `#${bgColor}CC`, color: `#${fgColor}` }"
-  >
+  <div class="wrapper">
     <slot />
   </div>
 </template>
@@ -24,5 +10,10 @@ defineProps({
 .wrapper {
   @apply rounded-full py-1.5 px-2.5;
   @apply text-sm backdrop-blur-sm;
+  @apply bg-[#ecf5ff] text-[#409eff] bg-opacity-70;
+
+  .dark & {
+    @apply bg-blue-900 text-blue-200 bg-opacity-70;
+  }
 }
 </style>

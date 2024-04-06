@@ -29,9 +29,17 @@ const valueChange = () => {
 
   &.enabled {
     @apply bg-blue-500 border-blue-500;
+
+    .dark & {
+      @apply bg-blue-700 border-blue-700;
+    }
   }
   &.disabled {
     @apply bg-white border-blue-200;
+
+    .dark & {
+      @apply bg-gray-800 border-gray-800;
+    }
   }
 }
 
@@ -41,6 +49,10 @@ const valueChange = () => {
 
   &.enabled {
     @apply left-7 bg-white;
+
+    .dark & {
+      @apply bg-blue-200;
+    }
   }
   &.disabled {
     @apply left-1 bg-blue-500;

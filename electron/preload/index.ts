@@ -141,6 +141,7 @@ function useLoading() {
     }
     .app-loading-wrap {
       position: fixed;
+      color: #eee;
       top: 0;
       left: 0;
       width: 100vw;
@@ -148,7 +149,7 @@ function useLoading() {
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #fff;
+      background: #222;
       z-index: 9;
     }
     .font-genshin {

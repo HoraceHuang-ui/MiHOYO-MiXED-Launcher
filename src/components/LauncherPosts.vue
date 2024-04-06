@@ -55,9 +55,14 @@ const openLink = (url: string) => {
 }
 
 .link-item {
-  @apply flex flex-row p-1 pl-2 w-full justify-between rounded;
+  @apply flex flex-row p-1 pl-2 w-full justify-between text-black rounded;
   @apply hover:bg-white hover:shadow-md transition-all cursor-pointer;
   height: 28px;
+
+  .dark & {
+    @apply text-gray-300;
+    @apply hover:bg-[#001] hover:shadow-gray-600;
+  }
 
   .left {
     @apply mr-1 text-sm mt-0.5 truncate;

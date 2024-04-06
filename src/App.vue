@@ -34,10 +34,38 @@ const updInfo = ref<UpdInfo>({
 })
 
 const skipCurrent = ref(false)
-
+const colorTheme = ref(2)
+const darkModePreference = window.matchMedia('(prefers-color-scheme: dark)')
 const router = useRouter()
+
 onMounted(() => {
-  // window.store.delete("targetVersion")
+  window.store.get('colorTheme').then((theme: number) => {
+    if (!theme) {
+      window.store.set('colorTheme', 2, false)
+    } else {
+      colorTheme.value = theme
+    }
+
+    if (
+      colorTheme.value == 3 ||
+      (colorTheme.value == 2 && darkModePreference.matches)
+    ) {
+      document.body.classList.add('dark')
+    } else {
+      document.body.classList.remove('dark')
+    }
+
+    if (colorTheme.value == 2) {
+      darkModePreference.addEventListener('change', e => {
+        if (e.matches) {
+          document.body.classList.add('dark')
+        } else {
+          document.body.classList.remove('dark')
+        }
+      })
+    }
+  })
+
   window.github
     .getLatestRelease()
     .then((resp: any) => {

@@ -433,8 +433,15 @@ const refresh = () => {
   @apply transition-all object-cover;
   transition-duration: 500ms;
 
+  .dark & {
+    @apply brightness-[85%];
+  }
+
   &.scrolled {
     @apply blur-md scale-125 brightness-75;
+    .dark & {
+      @apply brightness-[50%];
+    }
   }
 }
 
@@ -446,10 +453,13 @@ const refresh = () => {
 
 .launcher-posts {
   @apply absolute left-16 top-96 z-50 rounded-xl pl-3 pr-1;
-  @apply backdrop-blur-md;
+  @apply backdrop-blur-md bg-white bg-opacity-70;
   height: 112px;
   width: 396px;
-  background-color: rgb(255 255 255 / 0.7);
+
+  .dark & {
+    @apply bg-black bg-opacity-60;
+  }
 }
 
 .scroll-wrapper {
@@ -469,10 +479,13 @@ const refresh = () => {
 }
 
 .launch-button-wrapper {
-  @apply absolute right-0;
+  @apply absolute right-0 transition-all;
   @apply flex flex-row mx-2 my-3 rounded-full bg-yellow-400;
-  @apply transition-all;
   transition-duration: 500ms;
+
+  .dark & {
+    @apply bg-yellow-700;
+  }
 
   &.scrolled {
     @apply right-1/2 translate-x-1/2;
@@ -483,13 +496,24 @@ const refresh = () => {
   @apply pl-4 px-4 h-16 rounded-full;
   @apply text-2xl font-bold;
   @apply hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all;
+
+  @apply dark:bg-yellow-700 dark:hover:bg-yellow-600 dark:active:bg-yellow-500;
+
+  .dark & {
+    @apply bg-yellow-700 hover:bg-yellow-600 active:bg-yellow-500;
+  }
 }
 
 .launch-dropdown {
   @apply h-full px-1 text-sm;
 
   button {
-    @apply text-xl text-gray-900 px-2 h-16 rounded-full hover:bg-yellow-500 transition-all;
+    @apply text-xl px-2 h-14 mt-1;
+    @apply rounded-full hover:bg-yellow-500 transition-all;
+
+    .dark & {
+      @apply hover:bg-yellow-600;
+    }
   }
 }
 
@@ -499,6 +523,10 @@ const refresh = () => {
   @apply bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all;
   min-width: 160px;
   transition-duration: 500ms;
+
+  .dark & {
+    @apply bg-yellow-700 hover:bg-yellow-600 active:bg-yellow-500;
+  }
 
   &.scrolled {
     @apply right-1/2 translate-x-1/2;

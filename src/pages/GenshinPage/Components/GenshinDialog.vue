@@ -239,6 +239,10 @@ defineExpose({
   width: calc(100% - 10px);
   transform: translateY(4px);
   border-radius: 20px;
+
+  .dark & {
+    background: #3e4555;
+  }
 }
 
 .title {
@@ -246,11 +250,19 @@ defineExpose({
 
   & > .text {
     @apply text-center w-full text-xl text-black;
+
+    .dark & {
+      @apply text-[#CCBE87];
+    }
   }
 }
 
 .divider-wrapper {
   @apply w-full flex flex-row justify-center mt-1;
+
+  .dark & {
+    @apply opacity-30;
+  }
 }
 
 .divider-contents {
@@ -272,6 +284,10 @@ defineExpose({
 .bg-img {
   @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
   @apply w-full h-[200px] object-contain;
+
+  .dark & {
+    @apply invert opacity-10;
+  }
 }
 
 .buttons-wrapper {

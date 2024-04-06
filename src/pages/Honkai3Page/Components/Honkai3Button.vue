@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { translate } from '../../../i18n'
 import { PropType } from 'vue'
+import { translate } from '../../../i18n'
 
 defineProps({
   // 'ok' | 'cancel'
@@ -53,6 +53,10 @@ defineProps({
 
 .button-text {
   @apply font-bold mt-0.5;
+
+  .dark & {
+    @apply text-black;
+  }
 }
 
 .bg-cancel {

@@ -94,6 +94,7 @@
   "settings_clearAllData": "清除所有数据",
   "settings_clearAllDataText": "此选项将清除游戏路径、启动器背景、账号信息等全部数据。确定继续吗？",
   "settings_appearance": "外观",
+  "settings_colorTheme": "颜色主题",
   "settings_dialogStyle": "弹窗样式",
   "settings_dialogStyleTitle": "{game}弹窗样式预览",
   "settings_dialogStyleText": "您即将切换到{game}样式弹窗。是否确定切换？",

@@ -180,6 +180,10 @@ defineExpose({
 </template>
 
 <style lang="scss" scoped>
+div {
+  @apply text-black;
+}
+
 .modal {
   @apply absolute top-0 bottom-0 left-0 right-0 z-50;
   @apply backdrop-blur-2xl;
@@ -206,6 +210,10 @@ defineExpose({
   @apply bg-white;
   border-radius: 5px 20px 0 0;
   transform: translate(5px, -5px);
+
+  .dark & {
+    @apply bg-gray-100;
+  }
 }
 
 .title-wrapper {

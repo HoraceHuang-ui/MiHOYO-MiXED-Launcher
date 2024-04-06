@@ -5,7 +5,6 @@ import {
   dialog,
   ipcMain,
   Menu,
-  nativeTheme,
   shell,
   Tray,
 } from 'electron'
@@ -240,7 +239,7 @@ async function createWindow() {
 
   // --------- Window configs ------------
   // win.setWindowButtonVisibility(true)
-  nativeTheme.themeSource = 'light'
+  // nativeTheme.themeSource = 'light'
   if (process.env.VITE_DEV_SERVER_URL) {
     // electron-vite-vue#298
     win.loadURL(url)

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { translate } from '../../../i18n'
 import { PropType } from 'vue'
+import { translate } from '../../../i18n'
 
 defineProps({
   // 'ok' | 'cancel'
@@ -37,9 +37,14 @@ defineProps({
 
 <style lang="scss" scoped>
 .button-wrapper {
-  @apply border-2 mx-3 h-9 p-1 rounded-full bg-white transition-all cursor-default shadow-lg;
-  background: #4a5366;
+  @apply border-2 mx-3 h-9 p-1 rounded-full transition-all cursor-default shadow-lg;
+  background-color: #3e4555;
   border-color: #4a5366;
+
+  .dark & {
+    background-color: #ece4d7;
+    border-color: #ece4d7;
+  }
 
   &:hover {
     border-color: #ffe7b2;
@@ -55,6 +60,10 @@ defineProps({
 
 .button-text {
   color: #e5e2dc;
+
+  .dark & {
+    color: #3e4555;
+  }
 }
 
 .button-icon {

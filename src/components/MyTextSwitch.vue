@@ -76,11 +76,19 @@ const switchState = () => {
 .main-wrapper {
   @apply flex flex-row py-1 ml-3 relative;
   @apply rounded-full bg-white cursor-pointer;
+
+  .dark & {
+    @apply bg-[#222];
+  }
 }
 
 .slider {
   @apply absolute top-0 bottom-0 z-0;
   @apply rounded-full bg-blue-500 transition-all;
+
+  .dark & {
+    @apply bg-blue-700;
+  }
 }
 
 .selection-text {
