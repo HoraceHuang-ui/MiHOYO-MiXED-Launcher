@@ -53,6 +53,17 @@ const offColor = computed(() => {
       return '#dddddd'
   }
 })
+
+const colorClass = computed(() => {
+  switch (props.gameStyle) {
+    case 'sr':
+      return 'text-color-sr'
+    case 'hi3':
+      return 'text-color-hi3'
+    default:
+      return 'text-color-normal'
+  }
+})
 </script>
 
 <template>
@@ -60,18 +71,15 @@ const offColor = computed(() => {
     <ScrollWrapper height="40vh" show-bar="always">
       <div v-html="updDialogContent"></div>
     </ScrollWrapper>
-    <div
-      :class="gameStyle === 'hi3' ? 'text-color-hi3' : 'text-color-normal'"
-      style="margin-top: 10px"
-    >
+    <div :class="colorClass" style="margin-top: 10px">
       {{ translate('updDialog_version') }}v{{ appVer }} 👉
       {{ updInfo.tag_name }}
     </div>
-    <div :class="gameStyle === 'hi3' ? 'text-color-hi3' : 'text-color-normal'">
+    <div :class="colorClass">
       {{ translate('updDialog_size')
       }}{{ (updInfo.assets[0].size / 1024 / 1024).toFixed(1) }}MB
     </div>
-    <div :class="gameStyle === 'hi3' ? 'text-color-hi3' : 'text-color-normal'">
+    <div :class="colorClass">
       {{ translate('updDialog_footerText') }}
     </div>
     <MyCheckbox
@@ -90,6 +98,14 @@ const offColor = computed(() => {
 }
 
 .text-color-normal {
+  @apply text-red-600;
+
+  .dark & {
+    @apply text-red-400;
+  }
+}
+
+.text-color-sr {
   @apply text-red-600;
 }
 

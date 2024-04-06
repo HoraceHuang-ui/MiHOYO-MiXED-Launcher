@@ -151,12 +151,11 @@ defineExpose({
 
           <div class="dialog-mid-wrapper">
             <img class="bg-img" src="../../../assets/gsDialog/gsDialogBg.png" />
-            <div
-              ref="mainArea"
-              class="main-contents font-gs"
-              style="z-index: 60"
-            >
-              <div :class="msgCenter ? 'text-center' : 'text-left'">
+            <div ref="mainArea" class="main-contents" style="z-index: 60">
+              <div
+                class="font-gs"
+                :class="msgCenter ? 'text-center' : 'text-left'"
+              >
                 {{ typeof msg === 'string' ? msg : msg() }}
               </div>
               <component :is="vnode" />

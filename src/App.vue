@@ -105,6 +105,7 @@ onMounted(() => {
                   'onUpdate:skipCurrent': (value: boolean) => {
                     skipCurrent.value = value
                   },
+                  gameStyle: dialogStyle.value,
                 }),
               },
             )

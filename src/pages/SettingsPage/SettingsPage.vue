@@ -132,6 +132,7 @@ const checkUpdates = () => {
               appVer: appVer.value,
               updInfo: updInfo.value,
               showSkipCurrent: false,
+              gameStyle: dialogStyle.value,
             }),
           },
         )
