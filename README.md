@@ -125,12 +125,14 @@ fetch('../../app.asar/package.json')
 
 ## Supported Languages
 
-- **English** @HoraceHuang-ui
-- **简体中文** @HoraceHuang-ui
-- **繁體中文** @HoraceHuang-ui $^1$
-- **日本語** @JonathanKwok $^2$
-- **Русский** @MCheping8108 $^{1,2}$
-- **Français** @MCheping8108 $^{1,2}$
+| Language | Contributor | Notes |
+|----------|-------------|-------|
+| English | @HoraceHuang-ui | |
+| 简体中文 | @HoraceHuang-ui | |
+| 繁體中文 | @HoraceHuang-ui | $^1$ |
+| 日本語 | @JonathanKwok | $^2$ |
+| Русский | @MCheping8108 @vanja-san | $^{1,2}$ |
+| Français | @MCheping8108 | $^{1,2}$ |
 
 $^1$ `Needs revision.` Certain words or phrases may be inappropriate in context. Further localization by native speakers
 is needed.
@@ -155,14 +157,16 @@ To add a new language,
     - `dialogStyle` The style of non-game UI dialogs
     - `gsLauncherPath` The directory of the official Genshin Impact launcher
     - `gsGamePath` The path of the Genshin Impact game executable
-    - `genshinUpd` Whether Genshin Impact is updated in the current version
-    - `genshinInfo` Genshin Impact player info
-    - `genshinConstels` JSON object containing Constellations bonuses of Genshin Impact
+    - `gsUpd` Whether Genshin Impact is updated in the current version
+    - `gsInfo` Genshin Impact player info
     - `srLauncherPath`
     - `srGamePath`
-    - `starRailUpd`
-    - `starRailInfo`
+    - `srUpd`
+    - `srInfo`
     - `hi3LauncherPath`
     - `hi3GamePath`
-    - `honkai3Upd`
+    - `hi3Upd`
     - `gsCostume` Display costume splash images in Genshin Impact
+- `localStorage` items backup:
+  - `lang` Language setting
+  - `colorTheme` Color theme setting

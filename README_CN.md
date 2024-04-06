@@ -118,12 +118,14 @@ fetch('../../app.asar/package.json')
 
 ## 支持的语言
 
-- **English** @HoraceHuang-ui
-- **简体中文** @HoraceHuang-ui
-- **繁體中文** @HoraceHuang-ui $^1$
-- **日本語** @JonathanKwok $^2$
-- **Русский** @MCheping8108 $^{1,2}$
-- **Français** @MCheping8108 $^{1,2}$
+| 语言       | 贡献者                      | 备注       |
+|----------|--------------------------|----------|
+| English  | @HoraceHuang-ui          |          |
+| 简体中文     | @HoraceHuang-ui          |          |
+| 繁體中文     | @HoraceHuang-ui          | $^1$     |
+| 日本語      | @JonathanKwok            | $^2$     |
+| Русский  | @MCheping8108 @vanja-san | $^{1,2}$ |
+| Français | @MCheping8108            | $^{1,2}$ |
 
 $^1$ `需要修改。` 部分用词或短语可能在上下文中不合适。需要母语人士进一步修改。
 
@@ -146,13 +148,16 @@ $^2$ `需要补全。` 标蓝的（即未被批准的）字符串是机翻的。
     - `dialogStyle` 非游戏界面的弹窗样式
     - `gsLauncherPath` 原神官方启动器所在目录
     - `gsGamePath` 原神游戏本体可执行文件的路径
-    - `genshinUpd` 原神当前版本已更新
-    - `genshinInfo` 原神账号信息
+    - `gsUpd` 原神当前版本已更新
+    - `gsInfo` 原神账号信息
     - `srLauncherPath`
     - `srGamePath`
-    - `starRailUpd`
-    - `starRailInfo`
+    - `srUpd`
+    - `srInfo`
     - `hi3LauncherPath`
     - `hi3GamePath`
-    - `honkai3Upd`
+    - `hi3Upd`
     - `gsCostume` 原神显示衣装立绘 ~~（国服会痛失原皮莫娜哦）~~
+- `localStorage` 存储条目备忘：
+  - `lang` 语言设置
+  - `colorTheme` 颜色主题设置
