@@ -94,6 +94,7 @@
   "settings_clearAllData": "Очистить все данные",
   "settings_clearAllDataText": "Этот параметр удалит ВСЕ данные, включая игровые пути, фоновое изображение приложения и информацию профиля. Продолжать?",
   "settings_appearance": "Внешний вид",
+  "settings_colorTheme": "Color theme",
   "settings_dialogStyle": "Отображение окна",
   "settings_dialogStyleTitle": "Предпросмотр диалогового окна для {game}",
   "settings_dialogStyleText": "Сейчас вы переключитесь на стилизованный диалог {game}. Продолжить?",
