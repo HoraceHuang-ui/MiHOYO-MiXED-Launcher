@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { h, onMounted, ref } from 'vue'
+import { h, onMounted, onUnmounted, provide, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { UpdInfo } from './types/github/ghUpdInfo'
 import { dialogComponent, DialogStyle } from './types/dialog/dialog'
@@ -32,6 +32,16 @@ const updInfo = ref<UpdInfo>({
   url: '',
   zipball_url: '',
 })
+
+const hScale = ref(window.innerWidth / 1200)
+const vScale = ref(window.innerHeight / 700)
+const cardResizeCb = () => {
+  hScale.value = window.innerWidth / 1200
+  vScale.value = window.innerHeight / 700
+}
+
+provide('hScale', hScale)
+provide('vScale', vScale)
 
 const skipCurrent = ref(false)
 const colorTheme = ref(2)
@@ -131,7 +141,11 @@ onMounted(() => {
       appVer = resp.version
     })
 
-  router.push('/')
+  window.visualViewport?.addEventListener('resize', cardResizeCb)
+})
+
+onUnmounted(() => {
+  window.visualViewport?.removeEventListener('resize', cardResizeCb)
 })
 
 const verCompare = (a: string, b: string) => {

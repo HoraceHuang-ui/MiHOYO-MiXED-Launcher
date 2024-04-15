@@ -22,7 +22,7 @@ defineEmits(['submit'])
 
 <style lang="scss" scoped>
 .wrapper {
-  @apply flex flex-row h-10;
+  @apply flex flex-row;
   @apply rounded-full border border-gray-400;
 
   .dark & {
@@ -30,14 +30,13 @@ defineEmits(['submit'])
   }
 
   input {
-    @apply px-2 w-[16vw] m-[1px];
+    @apply px-[1vw] m-[1px];
     @apply rounded-full;
   }
 
   button {
-    @apply px-3 rounded-full;
+    @apply w-[6vw] rounded-full;
     @apply bg-gray-100 hover:bg-gray-300 active:bg-gray-500 active:scale-90 transition-all;
-    min-width: 5rem;
 
     .dark & {
       @apply bg-[#444] hover:bg-gray-700 active:bg-gray-600;

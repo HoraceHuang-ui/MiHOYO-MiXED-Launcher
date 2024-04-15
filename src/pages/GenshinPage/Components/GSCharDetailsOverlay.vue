@@ -71,7 +71,7 @@ const closeDialog = () => {
       </div>
     </div>
 
-    <ScrollWrapper show-bar="always" :no-resize="false">
+    <ScrollWrapper show-bar="always">
       <div class="list-items-wrapper">
         <DialogListItem class="font-gs" :name="stats[1].fightPropName.text">
           <template #icon>
@@ -82,10 +82,9 @@ const closeDialog = () => {
             <span
               v-if="stats[37].value.toFixed(0) != stats[0].value.toFixed(0)"
               class="stat-addition"
-              >+{{
-                stats[37].value.toFixed(0) - stats[0].value.toFixed(0)
-              }}</span
             >
+              +{{ stats[37].value.toFixed(0) - stats[0].value.toFixed(0) }}
+            </span>
           </div>
         </DialogListItem>
         <DialogListItem class="font-gs" :name="stats[4].fightPropName.text">

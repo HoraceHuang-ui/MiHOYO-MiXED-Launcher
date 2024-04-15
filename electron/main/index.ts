@@ -81,10 +81,8 @@ async function createWindow() {
   win = new BrowserWindow({
     title: 'Main window',
     icon: iconPath,
-    width: 1200,
-    height: 700,
-    resizable: false,
-    maximizable: false,
+    minWidth: 1200,
+    minHeight: 700,
     // transparent: true,
     frame: false,
     webPreferences: {
@@ -107,6 +105,13 @@ async function createWindow() {
   ipcMain.on('win:tray', () => {
     win.hide()
     win.setSkipTaskbar(true)
+  })
+  ipcMain.on('win:max', (_event, toMax: boolean) => {
+    if (win.isMaximized()) {
+      win.unmaximize()
+    } else {
+      win.maximize()
+    }
   })
 
   // ---------- custom IPCs ----------

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, inject, onMounted, Ref, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { translate } from '../../../i18n'
 import StatIcon from '../../../components/StatIcon.vue'
@@ -16,6 +16,7 @@ import MyTag from '../../../components/MyTag.vue'
 import ScrollWrapper from '../../../components/ScrollWrapper.vue'
 import MyTooltip from '../../../components/MyTooltip.vue'
 import MyCarousel from '../../../components/MyCarousel.vue'
+import CustomUIDInput from '../../../components/CustomUIDInput.vue'
 
 // import rankMap from '../textMaps/character_ranks.json' with { type: 'json' }
 
@@ -44,6 +45,9 @@ const pages = computed(() =>
     ? Math.floor((playerInfo.value.characters.length - 10) / 6 - 0.1) + 1
     : 0,
 )
+const hScale = inject<Ref<number>>('hScale')
+const vScale = inject<Ref<number>>('vScale')
+
 const charsScrollbar = ref()
 const cardsCarouselRef = ref()
 const showcaseIdx = ref(0)
@@ -269,8 +273,7 @@ const showCharDetails = (index: number) => {
 <template>
   <div
     class="bg-white dark:bg-[#222]"
-    style="border-radius: 4.5vh; margin-bottom: 1rem"
-    :style="playerInfoReady ? 'height: 97vh;' : ''"
+    style="border-radius: 4.5vh 4.5vh 30px 30px; margin-bottom: 1rem"
   >
     <!-- HEADER -->
     <div
@@ -282,6 +285,7 @@ const showCharDetails = (index: number) => {
         v-if="playerInfoLoading"
         class="absolute top-0 right-0 bottom-0 z-0"
         style="margin-left: 1vw; right: 2vw; top: 3vh"
+        :style="`font-size: calc(max(14px * min(${hScale}, ${vScale}), 16px))`"
       >
         {{ $t('sr_loadingPlayerInfo') }}
       </div>
@@ -289,6 +293,7 @@ const showCharDetails = (index: number) => {
         v-if="playerInfoFailed"
         class="absolute bottom-0 z-0 text-red-500"
         style="margin-left: 1vw; right: 2vw; top: 3vh"
+        :style="`font-size: calc(max(14px * min(${hScale}, ${vScale}), 16px))`"
       >
         {{ $t('sr_playerInfoFailed') }}
       </div>
@@ -299,34 +304,47 @@ const showCharDetails = (index: number) => {
         style="width: 35vw"
       >
         <img
-          class="rounded-full h-12 border-2 bg-slate-200"
-          style="margin-left: 1vw"
+          class="rounded-full bg-slate-200"
+          :style="`height: 6vh; margin-left: 1.5vh`"
           :src="
             playerInfo.player.avatar
               ? apiUrl + playerInfo.player.avatar.icon
               : ''
           "
         />
-        <div class="font-sr" style="margin-left: 1vw; font-size: larger">
+        <div
+          class="font-sr"
+          style="margin-left: 1.5vh"
+          :style="`font-size: calc(max(16px * min(${hScale}, ${vScale}), 20px))`"
+        >
           {{ playerInfo.player.nickname }}
         </div>
       </div>
       <div v-else style="width: 35vw" />
-      <div class="flex flex-row mt-3">
-        <CustomUIDInput v-model="uidInput" @submit="requestInfo" />
+      <div class="flex flex-row">
+        <CustomUIDInput
+          v-model="uidInput"
+          @submit="requestInfo"
+          style="margin-top: 2vh; margin-bottom: 1.5vh; z-index: 10"
+          :style="`font-size: calc(max(14px * min(${hScale}, ${vScale}), 16px))`"
+        />
       </div>
       <!-- 右侧 WL AR -->
       <div
         v-if="playerInfoReady && !playerInfoLoading"
         style="width: 35vw; position: relative"
       >
-        <div class="h-full flex flex-row justify-end items-center">
+        <div
+          class="h-full flex flex-row justify-end items-center"
+          :style="`font-size: calc(16px * min(${hScale}, ${vScale}))`"
+        >
           <MyTag class="mx-2">
             <div class="flex flex-row">
               {{ $t('sr_eqLv') }}
               <span
                 class="font-sr-sans"
-                style="margin-left: 1ch; margin-top: 1px"
+                style="margin-left: 1ch"
+                :style="`margin-top: calc(1px * min(${hScale}, ${vScale}))`"
               >
                 {{ playerInfo.player.world_level }}
               </span>
@@ -337,7 +355,8 @@ const showCharDetails = (index: number) => {
               {{ $t('sr_playerLv') }}
               <span
                 class="font-sr-sans"
-                style="margin-left: 1ch; margin-top: 1px"
+                style="margin-left: 1ch"
+                :style="`margin-top: calc(1px * min(${hScale}, ${vScale}))`"
               >
                 {{ playerInfo.player.level }}
               </span>
@@ -354,12 +373,13 @@ const showCharDetails = (index: number) => {
     >
       <!-- 角色头像列表 10人一页 -->
       <div class="flex flex-row w-full justify-center absolute top-0">
-        <div class="flex flex-row justify-between" style="width: 70%">
+        <div class="flex flex-row justify-between" style="width: 72%">
           <div class="relative z-50" style="width: 15%">
             <div
-              class="absolute right-2 top-3 rounded-full w-9 h-9 pt-1 bg-white hover:bg-gray-200 active:-translate-x-1 transition-all bg-opacity-80 dark:bg-black dark:hover:bg-gray-700 dark:bg-opacity-80"
+              class="absolute right-2 top-[1vw] rounded-full w-[3vw] h-[3vw] pt-1 bg-white hover:bg-gray-200 active:-translate-x-1 transition-all bg-opacity-80 dark:bg-black dark:hover:bg-gray-700 dark:bg-opacity-80"
               @click="charsPagePrev"
               :class="charsPage == 0 ? 'disabled' : ''"
+              style="padding-top: calc((3vw - 28px) / 2)"
             >
               <i class="bi bi-chevron-left text-lg text-center" />
             </div>
@@ -375,11 +395,11 @@ const showCharDetails = (index: number) => {
               <div
                 v-for="(character, index) in playerInfo.characters"
                 :key="index"
-                class="relative w-12 h-12 z-50"
+                class="relative w-[4vw] h-[4vw] z-50"
                 @click="setShowcase(index)"
               >
                 <div
-                  class="absolute bottom-0 w-9 h-9 border-2 rounded-full bg-white transition-all dark:border-2 dark:border-gray-500 dark:bg-[#222]"
+                  class="absolute bottom-0 w-[3vw] h-[3vw] border-2 rounded-full bg-white transition-all dark:border-2 dark:border-gray-500 dark:bg-[#222]"
                   :class="{
                     'border-blue-600 border-3 dark:border-3 dark:border-blue-500 dark:bg-gray-500':
                       showcaseIdx == index,
@@ -387,7 +407,7 @@ const showCharDetails = (index: number) => {
                   style="left: 10px"
                 ></div>
                 <img
-                  class="absolute bottom-0 char-side-icon rounded-full ml-2 w-9 h-9 hover:transform hover:scale-110 hover:-translate-y-1 active:scale-100 active:translate-y-0 transition-all object-cover"
+                  class="absolute bottom-0 char-side-icon rounded-full ml-2 w-[3vw] h-[3vw] hover:transform hover:scale-110 hover:-translate-y-1 active:scale-100 active:translate-y-0 transition-all object-cover"
                   :src="apiUrl + character.icon"
                 />
               </div>
@@ -395,9 +415,10 @@ const showCharDetails = (index: number) => {
           </ScrollWrapper>
           <div class="relative z-50" style="width: 15%">
             <div
-              class="absolute left-2 top-3 rounded-full w-9 h-9 pt-1 bg-white hover:bg-gray-200 active:translate-x-1 transition-all bg-opacity-80"
+              class="absolute left-2 top-[1vw] rounded-full w-[3vw] h-[3vw] pt-1 bg-white hover:bg-gray-200 active:translate-x-1 transition-all bg-opacity-80"
               @click="charsPageNext"
               :class="charsPage == pages ? 'disabled' : ''"
+              style="padding-top: calc((3vw - 28px) / 2)"
             >
               <i class="bi bi-chevron-right text-lg text-center" />
             </div>
@@ -406,13 +427,15 @@ const showCharDetails = (index: number) => {
       </div>
 
       <!-- 角色详情卡片 -->
+      <div :style="`height: calc(616px * ${hScale})`" />
       <MyCarousel
         ref="cardsCarouselRef"
-        class="gacha-mask relative z-0"
+        class="gacha-mask absolute z-0 left-0 top-0"
         :autoplay="false"
         show-arrow="never"
         animation="fade-swipe"
-        style="width: 984px; height: 616px; border-radius: 0 0 4.5vh 4.5vh"
+        style="width: 984px; height: 616px; transform-origin: left top"
+        :style="`transform: scale(${hScale}); border-radius: calc(30px / ${hScale})`"
       >
         <div
           v-for="(character, index) in playerInfo.characters"
@@ -427,7 +450,7 @@ const showCharDetails = (index: number) => {
             <img
               class="relative z-0 w-full"
               src="../../../assets/srBg.jpg"
-              style="border-radius: 4.5vh"
+              :style="`border-radius: calc(30px / ${hScale}`"
             />
             <img
               class="h-1/4 absolute opacity-50"
@@ -1004,7 +1027,13 @@ const showCharDetails = (index: number) => {
         </div>
       </MyCarousel>
     </div>
-    <div v-else class="mt-4 mb-4">{{ $t('gs_emptyPlayerTip') }}</div>
+    <div
+      v-else
+      class="mt-4 mb-4"
+      :style="`font-size: calc(max(14px * min(${hScale}, ${vScale}), 16px))`"
+    >
+      {{ $t('gs_emptyPlayerTip') }}
+    </div>
   </div>
 </template>
 

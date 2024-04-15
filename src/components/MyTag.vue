@@ -8,8 +8,8 @@
 
 <style scoped>
 .wrapper {
-  @apply rounded-full py-1.5 px-2.5;
-  @apply text-sm backdrop-blur-sm;
+  @apply rounded-full py-[1vh] px-[1vw];
+  @apply backdrop-blur-sm;
   @apply bg-[#ecf5ff] text-[#409eff] bg-opacity-70;
 
   .dark & {
