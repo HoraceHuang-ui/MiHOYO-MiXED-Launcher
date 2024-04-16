@@ -47,8 +47,6 @@ const props = defineProps({
   },
 })
 
-// const vnode = props.vnode ? render(props.vnode as VNode, mainArea.value!!) : undefined
-
 const cShow = ref(false)
 
 const closeDialog = () => {

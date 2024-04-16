@@ -312,7 +312,7 @@ const showClearDialog = () => {
     <ScrollWrapper height="91vh" class="scroll-wrapper">
       <div class="scroll-content-wrapper">
         <!-- GENERAL -->
-        <div class="title">{{ $t('settings_general') }}</div>
+        <div class="title font-gs">{{ $t('settings_general') }}</div>
         <div class="form-item hover">
           <div class="form-item-text">{{ $t('settings_selectLang') }}</div>
           <MySelect
@@ -348,7 +348,7 @@ const showClearDialog = () => {
         </div>
 
         <!-- APPEARANCE -->
-        <div class="title">{{ $t('settings_appearance') }}</div>
+        <div class="title font-gs">{{ $t('settings_appearance') }}</div>
         <div class="form-item hover">
           <div class="form-item-text">{{ $t('settings_colorTheme') }}</div>
           <MyGroupButtons v-model="colorTheme" @change="colorThemeChange">
@@ -379,7 +379,7 @@ const showClearDialog = () => {
         </div>
 
         <!-- ABOUT -->
-        <div class="title">{{ $t('settings_about') }}</div>
+        <div class="title font-gs">{{ $t('settings_about') }}</div>
         <div class="form-item version-area-wrapper">
           miHoYo miXeD Launcher
           <div class="version">v{{ appVer }}</div>
@@ -429,8 +429,8 @@ const showClearDialog = () => {
 
 .bg-pic-wrapper {
   width: 98vw;
-  height: 92vh;
   border-radius: 24px 24px 0 0;
+  height: calc(100vh - 56px);
   -webkit-mask: linear-gradient(white, white);
 
   img {

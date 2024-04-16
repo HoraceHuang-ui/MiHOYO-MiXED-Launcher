@@ -272,8 +272,8 @@ const showCharDetails = (index: number) => {
 
 <template>
   <div
-    class="bg-white dark:bg-[#222]"
-    style="border-radius: 4.5vh 4.5vh 30px 30px; margin-bottom: 1rem"
+    class="bg-white dark:bg-[#222] mb-3"
+    style="border-radius: 4.5vh 4.5vh 30px 30px"
   >
     <!-- HEADER -->
     <div
@@ -372,14 +372,17 @@ const showCharDetails = (index: number) => {
       class="relative"
     >
       <!-- 角色头像列表 10人一页 -->
-      <div class="flex flex-row w-full justify-center absolute top-0">
-        <div class="flex flex-row justify-between" style="width: 72%">
+      <div class="flex flex-row w-full justify-center absolute z-10 top-0">
+        <div
+          class="flex flex-row justify-between"
+          style="width: 690px; transform-origin: center top"
+          :style="`transform: scale(${hScale})`"
+        >
           <div class="relative z-50" style="width: 15%">
             <div
-              class="absolute right-2 top-[1vw] rounded-full w-[3vw] h-[3vw] pt-1 bg-white hover:bg-gray-200 active:-translate-x-1 transition-all bg-opacity-80 dark:bg-black dark:hover:bg-gray-700 dark:bg-opacity-80"
+              class="absolute right-2 top-3 rounded-full w-9 h-9 pt-1 bg-white hover:bg-gray-200 active:-translate-x-1 transition-all bg-opacity-80 dark:bg-black dark:hover:bg-gray-700 dark:bg-opacity-80"
               @click="charsPagePrev"
               :class="charsPage == 0 ? 'disabled' : ''"
-              style="padding-top: calc((3vw - 28px) / 2)"
             >
               <i class="bi bi-chevron-left text-lg text-center" />
             </div>
@@ -395,11 +398,11 @@ const showCharDetails = (index: number) => {
               <div
                 v-for="(character, index) in playerInfo.characters"
                 :key="index"
-                class="relative w-[4vw] h-[4vw] z-50"
+                class="relative w-12 h-12 z-50"
                 @click="setShowcase(index)"
               >
                 <div
-                  class="absolute bottom-0 w-[3vw] h-[3vw] border-2 rounded-full bg-white transition-all dark:border-2 dark:border-gray-500 dark:bg-[#222]"
+                  class="absolute bottom-0 w-9 h-9 border-2 rounded-full bg-white transition-all dark:border-2 dark:border-gray-500 dark:bg-[#222]"
                   :class="{
                     'border-blue-600 border-3 dark:border-3 dark:border-blue-500 dark:bg-gray-500':
                       showcaseIdx == index,
@@ -407,7 +410,7 @@ const showCharDetails = (index: number) => {
                   style="left: 10px"
                 ></div>
                 <img
-                  class="absolute bottom-0 char-side-icon rounded-full ml-2 w-[3vw] h-[3vw] hover:transform hover:scale-110 hover:-translate-y-1 active:scale-100 active:translate-y-0 transition-all object-cover"
+                  class="absolute bottom-0 char-side-icon rounded-full ml-2 w-9 h-9 hover:transform hover:scale-110 hover:-translate-y-1 active:scale-100 active:translate-y-0 transition-all object-cover"
                   :src="apiUrl + character.icon"
                 />
               </div>
@@ -415,10 +418,9 @@ const showCharDetails = (index: number) => {
           </ScrollWrapper>
           <div class="relative z-50" style="width: 15%">
             <div
-              class="absolute left-2 top-[1vw] rounded-full w-[3vw] h-[3vw] pt-1 bg-white hover:bg-gray-200 active:translate-x-1 transition-all bg-opacity-80"
+              class="absolute left-2 top-3 rounded-full w-9 h-9 pt-1 bg-white hover:bg-gray-200 active:translate-x-1 transition-all bg-opacity-80"
               @click="charsPageNext"
               :class="charsPage == pages ? 'disabled' : ''"
-              style="padding-top: calc((3vw - 28px) / 2)"
             >
               <i class="bi bi-chevron-right text-lg text-center" />
             </div>

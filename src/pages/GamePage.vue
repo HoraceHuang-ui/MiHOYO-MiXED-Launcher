@@ -307,7 +307,10 @@ const refresh = () => {
   >
   </LoadFailedBlock>
   <div class="content-wrapper" :class="{ from: !launcherInfoReady }">
-    <div class="bg-pic-wrapper" :class="{ scrolled: hideElements }">
+    <div
+      class="bg-pic-wrapper"
+      :class="{ scrolled: hideElements, mask: gameNo != 2 }"
+    >
       <img
         class="bg-pic"
         :class="{ scrolled: hideElements }"
@@ -432,11 +435,14 @@ const refresh = () => {
   @apply rounded-3xl;
   width: 98vw;
   height: calc(100vh - 56px + 1.5rem);
-  -webkit-mask: linear-gradient(white 50%, transparent);
   transition-duration: 500ms;
 
   &.scrolled {
     @apply scale-x-95 translate-y-3;
+  }
+
+  &.mask {
+    -webkit-mask: linear-gradient(white 50%, transparent);
   }
 }
 

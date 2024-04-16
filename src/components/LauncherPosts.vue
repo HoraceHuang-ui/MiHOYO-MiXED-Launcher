@@ -22,9 +22,9 @@ const openLink = (url: string) => {
 </script>
 
 <template>
-  <MyTabs v-model="tabsModel" :tabs="tabs">
+  <MyTabs v-model="tabsModel" :tabs="tabs" class="text-sm">
     <div v-for="key in keys" :key="key" class="tab-wrapper">
-      <ScrollWrapper height="calc(16vh - 50px)">
+      <ScrollWrapper height="calc(16vh - 48px)">
         <div class="scroll-content-wrapper">
           <div
             v-for="post in postTypeMap.get(key)"
@@ -47,7 +47,7 @@ const openLink = (url: string) => {
 
 <style lang="scss" scoped>
 .tab-wrapper {
-  @apply w-full text-sm;
+  @apply w-full;
 }
 
 .scroll-content-wrapper {
