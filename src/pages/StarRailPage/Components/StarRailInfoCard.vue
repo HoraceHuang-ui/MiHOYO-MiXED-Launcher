@@ -265,6 +265,8 @@ const showCharDetails = (index: number) => {
         translate('sr_charDetails'),
       character: playerInfo.value.characters[index],
       showOk: false,
+      hScale: hScale,
+      vScale: vScale,
     },
   )
 }

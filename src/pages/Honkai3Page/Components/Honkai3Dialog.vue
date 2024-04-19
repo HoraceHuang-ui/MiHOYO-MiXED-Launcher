@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { onMounted, PropType, ref, VNode } from 'vue'
+import { onMounted, PropType, Ref, ref, VNode } from 'vue'
 import Honkai3Button from './Honkai3Button.vue'
 
 const props = defineProps({
   width: {
     type: String,
-    default: '50%',
+    default: '600px',
   },
   title: {
     type: Object as PropType<(() => string) | string>,
@@ -45,6 +45,14 @@ const props = defineProps({
     type: Object as PropType<() => VNode | undefined>,
     default: undefined,
   },
+  hScale: {
+    type: Object as PropType<Ref<number>>,
+    default: ref(1),
+  },
+  vScale: {
+    type: Object as PropType<Ref<number>>,
+    default: ref(1),
+  },
 })
 
 const cShow = ref(false)
@@ -82,7 +90,11 @@ defineExpose({
   <transition :duration="600">
     <div v-if="cShow">
       <div class="outer modal" @click="cancelClick" />
-      <div class="inner dialog-wrapper" :style="`width: ${width}`">
+      <div
+        class="inner dialog-wrapper"
+        :style="`width: calc(${width} + 48px); max-height: calc((80vh + 48px) / min(${hScale.value}, ${vScale.value}));
+          transform: scale(min(${hScale.value}, ${vScale.value})) translate(calc(-50% / min(${hScale.value}, ${vScale.value})), calc(-50% / min(${hScale.value}, ${vScale.value})))`"
+      >
         <div class="dialog-content-wrapper">
           <div class="close-wrapper" @click="cancelClick">
             <i class="bi bi-x" />
@@ -140,7 +152,7 @@ defineExpose({
 }
 
 .dialog-wrapper {
-  @apply absolute p-6 z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
+  @apply absolute p-6 z-50 top-1/2 left-1/2;
   @apply rounded-3xl border-2 flex justify-center;
   border-color: rgba(255, 255, 255, 0.1);
 }
@@ -182,12 +194,13 @@ defineExpose({
 }
 
 .title {
-  @apply text-center w-full font-bold text-2xl;
+  @apply text-center w-full font-bold;
+  font-size: larger;
   color: #51c3f9;
 }
 
 .title-deco-text {
-  @apply text-center w-full opacity-60 text-xs font-bold;
+  @apply text-center w-full opacity-60 font-bold text-xs;
   color: #51c3f9;
   font-family: 'Microsoft JhengHei', serif;
 }
@@ -201,7 +214,7 @@ defineExpose({
 
 .contents-wrapper {
   @apply w-full h-full flex flex-col;
-  @apply justify-center px-6 py-6 text-lg text-blue-100;
+  @apply justify-center px-6 py-6 text-blue-100;
 }
 
 .buttons-wrapper {

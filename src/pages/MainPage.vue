@@ -100,6 +100,8 @@ onMounted(async () => {
                 },
               }),
             ),
+          hScale: hScale,
+          vScale: vScale,
         },
       )
     }

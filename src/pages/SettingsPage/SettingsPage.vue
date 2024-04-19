@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { h, onMounted, ref } from 'vue'
+import { h, inject, onMounted, ref, Ref } from 'vue'
 import {
   availableLangCodes,
   availableLangNames,
@@ -60,6 +60,9 @@ const quitOnClose = ref(true)
 const trayOnLaunch = ref(true)
 const gsCostume = ref(false)
 const colorTheme = ref(2)
+
+const hScale = inject<Ref<number>>('hScale')
+const vScale = inject<Ref<number>>('vScale')
 
 onMounted(async () => {
   lang.value = localStorage.lang || 'en_US'
@@ -134,6 +137,8 @@ const checkUpdates = () => {
               showSkipCurrent: false,
               gameStyle: dialogStyle.value,
             }),
+            hScale: hScale,
+            vScale: vScale,
           },
         )
       } else {
@@ -240,7 +245,7 @@ const showLangDialog = (idx: number) => {
         switchLang(lang.value)
         window.store.delete('genshinInfo')
         window.store.delete('starRailInfo')
-        router.go(0)
+        window.win.relaunch()
         dispose()
       },
     },
@@ -248,9 +253,8 @@ const showLangDialog = (idx: number) => {
       title: translate('settings_langChangeTitle'),
       showCancel: true,
       msg: translateWithLocale('settings_langChangeText', lang.value),
-      // vnode: h(LangChangeDialogContent, {
-      //     lang: lang.value
-      // })
+      hScale: hScale,
+      vScale: vScale,
     },
   )
 }
@@ -280,6 +284,8 @@ const showDialogStyleChange = () => {
       msg: translate('settings_dialogStyleText', {
         game: translate('general_' + dialogStyle.value),
       }),
+      hScale: hScale,
+      vScale: vScale,
     },
   )
 }
@@ -291,7 +297,7 @@ const showClearDialog = () => {
       onOk(dispose: () => void) {
         window.store.clear()
         localStorage.clear()
-        router.go(0)
+        window.win.relaunch()
         dispose()
       },
     },
@@ -299,6 +305,8 @@ const showClearDialog = () => {
       title: translate('settings_clearAllData'),
       msg: translate('settings_clearAllDataText'),
       showCancel: true,
+      hScale: hScale,
+      vScale: vScale,
     },
   )
 }

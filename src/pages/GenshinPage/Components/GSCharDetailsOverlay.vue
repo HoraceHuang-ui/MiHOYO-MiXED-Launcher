@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PropType, ref } from 'vue'
+import { PropType, Ref, ref } from 'vue'
 import StatIcon from '../../../components/StatIcon.vue'
 import DialogListItem from '../../../components/DialogListItem.vue'
 import TemplateDialog from '../../../components/TemplateDialog.vue'
@@ -13,6 +13,14 @@ defineProps({
   stats: {
     type: Array as PropType<any[]>,
     required: true,
+  },
+  hScale: {
+    type: Object as PropType<Ref<number>>,
+    default: ref(1),
+  },
+  vScale: {
+    type: Object as PropType<Ref<number>>,
+    default: ref(1),
   },
 })
 
@@ -52,7 +60,12 @@ const closeDialog = () => {
 </script>
 
 <template>
-  <TemplateDialog width="50%" class="main-wrapper" ref="dialogRef">
+  <TemplateDialog
+    class="main-wrapper"
+    ref="dialogRef"
+    :h-scale="hScale"
+    :v-scale="vScale"
+  >
     <div class="title font-gs">{{ title }}</div>
     <div class="close-button" @click="closeDialog">
       <img src="../../../assets/gsDialog/gsDialogClose.png" />

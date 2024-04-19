@@ -12,7 +12,7 @@ import MyTooltip from '../../../components/MyTooltip.vue'
 import MyCarousel from '../../../components/MyCarousel.vue'
 
 const playerInfo = ref<any>()
-const cardsCarouselRef = ref<HTMLDivElement>()
+const cardsCarouselRef = ref()
 
 const uidInput = ref('')
 let uid = ''
@@ -324,6 +324,8 @@ const showCharDetails = (stats: any[], name: string) => {
     {
       title: name + ' ' + translate('gs_charDetails'),
       stats: stats,
+      hScale: hScale,
+      vScale: vScale,
     },
   )
 }

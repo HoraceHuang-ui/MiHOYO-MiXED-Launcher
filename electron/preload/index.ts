@@ -40,6 +40,9 @@ contextBridge.exposeInMainWorld('win', {
   max: () => {
     ipcRenderer.send('win:max')
   },
+  relaunch: () => {
+    ipcRenderer.send('win:relaunch')
+  },
 })
 contextBridge.exposeInMainWorld('path', {
   joinDirnameAsset: (arg: string) =>

@@ -227,17 +227,24 @@ const importButtonClick = () => {
       break
   }
 
-  useDialog(importDialogComponent, {
-    onOk(dispose: () => void) {
-      dispose()
-      refresh()
+  useDialog(
+    importDialogComponent,
+    {
+      onOk(dispose: () => void) {
+        dispose()
+        refresh()
+      },
+      onCancel(dispose: () => void) {
+        gamePath.value = ''
+        launcherPath.value = ''
+        dispose()
+      },
     },
-    onCancel(dispose: () => void) {
-      gamePath.value = ''
-      launcherPath.value = ''
-      dispose()
+    {
+      hScale: hScale,
+      vScale: vScale,
     },
-  })
+  )
 }
 
 const launchGame = async () => {
