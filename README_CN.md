@@ -159,6 +159,10 @@ $^2$ `需要补全。` 标蓝的（即未被批准的）字符串是机翻的。
     - `hi3GamePath`
     - `hi3Upd`
     - `gsCostume` 原神显示衣装立绘 ~~（国服会痛失原皮莫娜哦）~~
+    - `windowState` 上次关闭时的窗口状态
+      - `width` 窗口宽度
+      - `height` 窗口高度
+      - `isMax` 窗口是否最大化
 - `localStorage` 存储条目备忘：
   - `lang` 语言设置
   - `colorTheme` 颜色主题设置
