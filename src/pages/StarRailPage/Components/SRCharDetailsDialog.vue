@@ -3,6 +3,7 @@ import StarRailDialog from './StarRailDialog.vue'
 import StatIcon from '../../../components/StatIcon.vue'
 import DialogListItem from '../../../components/DialogListItem.vue'
 import { AttributeInfo } from '../../../types/starrail/srPlayerInfo'
+import { PropType, Ref, ref } from 'vue'
 
 defineProps({
   title: {
@@ -12,6 +13,14 @@ defineProps({
   character: {
     type: Object,
     required: true,
+  },
+  hScale: {
+    type: Object as PropType<Ref<number>>,
+    default: ref(1),
+  },
+  vScale: {
+    type: Object as PropType<Ref<number>>,
+    default: ref(1),
   },
 })
 
@@ -46,7 +55,7 @@ const trimAdditions = (additions: AttributeInfo[]) => {
 </script>
 
 <template>
-  <StarRailDialog :title="title">
+  <StarRailDialog :title="title" :h-scale="hScale" :v-scale="vScale">
     <div class="list-items-wrapper">
       <DialogListItem class="font-sr-sans" :name="character.attributes[0].name">
         <template #icon>
@@ -152,6 +161,7 @@ const trimAdditions = (additions: AttributeInfo[]) => {
 
 .icon {
   @apply w-4 h-4 mr-1 mt-[2px];
+  transform-origin: right top;
 }
 
 .stat-addition {

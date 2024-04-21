@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, PropType, Ref, ref } from 'vue'
 
 const props = defineProps({
   width: {
     type: String,
-    default: '50%',
+    default: '600px',
   },
   onClose: {
     type: Function,
@@ -14,6 +14,14 @@ const props = defineProps({
   },
   onOk: {
     type: Function,
+  },
+  hScale: {
+    type: Object as PropType<Ref<number>>,
+    default: ref(1),
+  },
+  vScale: {
+    type: Object as PropType<Ref<number>>,
+    default: ref(1),
   },
 })
 
@@ -44,7 +52,11 @@ defineExpose({
     <div v-if="cShow">
       <div class="outer modal" @click="cancelClick" />
       <div class="outer modal-mask" />
-      <div class="inner content" :style="`width: ${width}`">
+      <div
+        class="inner content"
+        :style="`width: ${width}; max-height: calc(80vh / min(${hScale.value}, ${vScale.value}));
+          transform: scale(min(${hScale.value}, ${vScale.value})) translate(calc(-50% / min(${hScale.value}, ${vScale.value})), calc(-50% / min(${hScale.value}, ${vScale.value})))`"
+      >
         <slot />
       </div>
     </div>
@@ -64,7 +76,6 @@ defineExpose({
 
 .content {
   @apply absolute z-50 top-1/2 left-1/2;
-  @apply -translate-x-1/2 -translate-y-1/2;
 }
 
 .v-enter-active .outer {

@@ -22,9 +22,9 @@ const openLink = (url: string) => {
 </script>
 
 <template>
-  <MyTabs class="text-sm" v-model="tabsModel" :tabs="tabs">
+  <MyTabs v-model="tabsModel" :tabs="tabs" class="text-sm">
     <div v-for="key in keys" :key="key" class="tab-wrapper">
-      <ScrollWrapper height="64px">
+      <ScrollWrapper height="calc(16vh - 48px)">
         <div class="scroll-content-wrapper">
           <div
             v-for="post in postTypeMap.get(key)"
@@ -65,12 +65,11 @@ const openLink = (url: string) => {
   }
 
   .left {
-    @apply mr-1 text-sm mt-0.5 truncate;
-    max-width: 320px;
+    @apply mr-1 mt-0.5 truncate;
   }
 
   .right {
-    @apply text-sm font-sans font-normal;
+    @apply font-sans font-normal;
   }
 }
 </style>

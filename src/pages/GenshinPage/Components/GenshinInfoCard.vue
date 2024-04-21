@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, inject, onMounted, Ref, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { translate } from '../../../i18n'
 import StatIcon from '../../../components/StatIcon.vue'
@@ -28,6 +28,9 @@ const pages = computed(() => {
       : 0
   }
 })
+const hScale = inject<Ref<number>>('hScale')
+const vScale = inject<Ref<number>>('vScale')
+
 const playerInfoReady = ref(false)
 const playerInfoLoading = ref(false)
 const playerInfoFailed = ref(false)
@@ -321,6 +324,8 @@ const showCharDetails = (stats: any[], name: string) => {
     {
       title: name + ' ' + translate('gs_charDetails'),
       stats: stats,
+      hScale: hScale,
+      vScale: vScale,
     },
   )
 }
@@ -341,12 +346,11 @@ const countRolledSubstat = (stats: any[], prop: string) => {
 
 <template>
   <div
-    class="bg-white dark:bg-[#222]"
-    style="border-radius: 4.5vh"
-    :style="playerInfoReady && playerInfo ? 'height: 86.5vh;' : ''"
+    class="bg-white dark:bg-[#222] mb-3"
+    style="border-radius: 4.5vh 4.5vh 30px 30px"
   >
     <div
-      class="flex flex-row w-full p-0 relative justify-between"
+      class="flex flex-row w-full relative justify-between"
       style="height: 9vh"
     >
       <!-- 右上角名片 -->
@@ -360,6 +364,7 @@ const countRolledSubstat = (stats: any[], prop: string) => {
         v-if="playerInfoLoading"
         class="absolute bottom-0 z-0"
         style="margin-left: 1vw; right: 2vw; top: 3vh"
+        :style="`font-size: calc(max(14px * min(${hScale}, ${vScale}), 16px))`"
       >
         {{ $t('gs_loadingPlayerInfo') }}
       </div>
@@ -367,6 +372,7 @@ const countRolledSubstat = (stats: any[], prop: string) => {
         v-if="playerInfoFailed"
         class="absolute bottom-0 z-0 text-red-500"
         style="margin-left: 1vw; right: 2vw; top: 3vh"
+        :style="`font-size: calc(max(14px * min(${hScale}, ${vScale}), 16px))`"
       >
         {{ $t('gs_playerInfoFailed') }}
       </div>
@@ -378,28 +384,41 @@ const countRolledSubstat = (stats: any[], prop: string) => {
         style="width: 35vw"
       >
         <img
-          class="rounded-full h-12 border-2 bg-slate-200"
-          style="margin-left: 1vw"
+          class="rounded-full bg-slate-200"
+          :style="`height: 6vh; margin-left: 1.5vh; border-width: calc(2px * min(${hScale}, ${vScale}))`"
           :src="playerInfo.profilePicture.icon.url"
         />
-        <div class="font-gs" style="margin-left: 1vw; font-size: larger">
+        <div
+          class="font-gs"
+          style="margin-left: 1.5vh"
+          :style="`font-size: calc(max(16px * min(${hScale}, ${vScale}), 20px))`"
+        >
           {{ playerInfo.nickname }}
         </div>
       </div>
       <div v-else style="width: 35vw" />
-      <div class="relative flex flex-row mt-3 z-10">
-        <CustomUIDInput v-model="uidInput" @submit="requestInfo" />
+      <div class="flex flex-row">
+        <CustomUIDInput
+          v-model="uidInput"
+          @submit="requestInfo"
+          style="margin-top: 2vh; margin-bottom: 1.5vh; z-index: 10"
+          :style="`font-size: calc(max(14px * min(${hScale}, ${vScale}), 16px))`"
+        />
       </div>
       <!-- 右侧 WL AR -->
-      <div
-        v-if="playerInfoReady && playerInfo"
-        style="width: 35vw; position: relative"
-      >
-        <div class="h-full flex flex-row justify-end items-center">
+      <div v-if="playerInfoReady && playerInfo" style="width: 35vw">
+        <div
+          class="h-full flex flex-row justify-end items-center"
+          :style="`font-size: calc(16px * min(${hScale}, ${vScale}))`"
+        >
           <MyTag class="mx-2">
             <div class="flex flex-row">
               {{ $t('gs_worldLv') }}
-              <span class="font-gs" style="margin-left: 1ch; margin-top: 1px">
+              <span
+                class="font-gs"
+                style="margin-left: 1ch"
+                :style="`margin-top: calc(2px * min(${hScale}, ${vScale}))`"
+              >
                 {{ playerInfo.worldLevel }}
               </span>
             </div>
@@ -407,7 +426,11 @@ const countRolledSubstat = (stats: any[], prop: string) => {
           <MyTag class="mr-4">
             <div class="flex flex-row">
               {{ $t('gs_playerLv') }}
-              <span class="font-gs" style="margin-left: 1ch; margin-top: 1px">
+              <span
+                class="font-gs"
+                style="margin-left: 1ch"
+                :style="`margin-top: calc(2px * min(${hScale}, ${vScale}))`"
+              >
                 {{ playerInfo.level }}
               </span>
             </div>
@@ -419,8 +442,12 @@ const countRolledSubstat = (stats: any[], prop: string) => {
     <!-- BODY -->
     <div v-if="playerInfoReady && playerInfo" class="relative">
       <!-- 角色头像列表 10人一页 -->
-      <div class="flex flex-row w-full justify-center absolute top-0">
-        <div class="flex flex-row justify-between" style="width: 72%">
+      <div class="flex flex-row w-full justify-center absolute top-0 z-10">
+        <div
+          class="flex flex-row justify-between"
+          style="width: 690px; transform-origin: center top"
+          :style="`transform: scale(${hScale})`"
+        >
           <div class="relative z-50" style="width: 15%">
             <div
               class="absolute right-2 top-3 rounded-full w-9 h-9 pt-1 bg-white hover:bg-gray-200 bg-opacity-80 active:-translate-x-1 transition-all dark:bg-black dark:hover:bg-gray-700 dark:bg-opacity-80"
@@ -463,7 +490,7 @@ const countRolledSubstat = (stats: any[], prop: string) => {
 
           <div class="relative z-50" style="width: 15%">
             <div
-              class="absolute left-2 top-3 rounded-full w-9 h-9 pt-1 bg-white hover:bg-gray-200 active:translate-x-1 transition-all bg-opacity-80"
+              class="absolute left-2 top-3 rounded-full w-9 h-9 pt-1 bg-white hover:bg-gray-200 bg-opacity-80 active:-translate-x-1 transition-all dark:bg-black dark:hover:bg-gray-700 dark:bg-opacity-80"
               @click="charsPageNext"
               :class="charsPage == pages ? 'disabled' : ''"
             >
@@ -473,28 +500,30 @@ const countRolledSubstat = (stats: any[], prop: string) => {
         </div>
       </div>
       <!-- 角色详情卡片 -->
+      <div :style="`height: calc(556px * ${hScale})`" />
       <MyCarousel
         ref="cardsCarouselRef"
-        class="gacha-mask relative z-0"
+        class="gacha-mask absolute z-0 left-0 top-0"
+        style="width: 984px; height: 556px; transform-origin: left top"
+        :style="`transform: scale(${hScale}); border-radius: calc(30px / ${hScale})`"
         :autoplay="false"
         show-arrow="never"
         animation="fade-swipe"
-        style="width: 82vw; height: 82vh; border-radius: 0 0 4.5vh 4.5vh"
       >
         <div
           v-for="(character, index) in playerInfo.characters"
           :key="index"
-          class="z-0 relative w-full mt-12"
+          class="z-0 relative w-full h-full mt-12"
         >
           <div
-            class="mt-4 w-full absolute top-0 left-0 right-0 transition-all"
+            class="w-full absolute top-4 left-0 right-0 transition-all"
             style="transition-duration: 300ms"
           >
             <!-- absolute： 卡片元素背景、元素图标 -->
             <img
               class="relative z-0"
               :src="getCharElementAssets(index)!!.bg"
-              style="border-radius: 4.5vh"
+              :style="`border-radius: calc(30px / ${hScale}`"
             />
             <img
               class="h-1/4 absolute opacity-50"
@@ -560,7 +589,7 @@ const countRolledSubstat = (stats: any[], prop: string) => {
                         />
                         <div
                           class="text-center w-full mr-1 h-full align-middle text-base font-gs"
-                          style="margin-top: 3px"
+                          style="margin-top: 5px"
                         >
                           <span
                             v-if="skill.level.extra > 0"
@@ -1017,10 +1046,20 @@ const countRolledSubstat = (stats: any[], prop: string) => {
         </div>
       </MyCarousel>
     </div>
-    <div v-else-if="!playerInfoReady" class="mt-4 mb-4">
+    <div
+      v-else-if="!playerInfoReady"
+      class="mt-4 mb-4"
+      :style="`font-size: calc(max(14px * min(${hScale}, ${vScale}), 16px))`"
+    >
       {{ $t('gs_emptyPlayerTip') }}
     </div>
-    <div v-else class="mt-4 mb-4">{{ $t('gs_showcaseTip') }}</div>
+    <div
+      v-else
+      class="mt-4 mb-4"
+      :style="`font-size: calc(max(14px * min(${hScale}, ${vScale}), 16px))`"
+    >
+      {{ $t('gs_showcaseTip') }}
+    </div>
   </div>
 </template>
 

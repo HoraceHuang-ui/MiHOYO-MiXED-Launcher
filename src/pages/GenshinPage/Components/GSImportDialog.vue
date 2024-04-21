@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { translate } from '../../../i18n'
-import { ref } from 'vue'
+import { PropType, Ref, ref } from 'vue'
 import GenshinDialog from './GenshinDialog.vue'
 import MyCheckbox from '../../../components/MyCheckbox.vue'
 import MyTooltip from '../../../components/MyTooltip.vue'
@@ -11,6 +11,14 @@ const props = defineProps({
   },
   onCancel: {
     type: Function,
+  },
+  hScale: {
+    type: Object as PropType<Ref<number>>,
+    default: ref(1),
+  },
+  vScale: {
+    type: Object as PropType<Ref<number>>,
+    default: ref(1),
   },
 })
 
@@ -78,13 +86,14 @@ const onDialogOk = () => {
 <template>
   <GenshinDialog
     :title="`${translate('general_gs')} ${translate('general_import')}`"
-    width="50%"
     :on-ok="onDialogOk"
     :on-cancel="onCancel"
     show-ok
     show-cancel
     :close-on-ok="false"
     ref="dialogRef"
+    :h-scale="hScale"
+    :v-scale="vScale"
   >
     <div class="content-wrapper">
       <button @click="gsLauncherImport" class="import-button enabled font-gs">

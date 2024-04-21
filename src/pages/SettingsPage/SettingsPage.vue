@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { h, onMounted, ref } from 'vue'
+import { h, inject, onMounted, ref, Ref } from 'vue'
 import {
   availableLangCodes,
   availableLangNames,
@@ -60,6 +60,9 @@ const quitOnClose = ref(true)
 const trayOnLaunch = ref(true)
 const gsCostume = ref(false)
 const colorTheme = ref(2)
+
+const hScale = inject<Ref<number>>('hScale')
+const vScale = inject<Ref<number>>('vScale')
 
 onMounted(async () => {
   lang.value = localStorage.lang || 'en_US'
@@ -134,6 +137,8 @@ const checkUpdates = () => {
               showSkipCurrent: false,
               gameStyle: dialogStyle.value,
             }),
+            hScale: hScale,
+            vScale: vScale,
           },
         )
       } else {
@@ -240,7 +245,7 @@ const showLangDialog = (idx: number) => {
         switchLang(lang.value)
         window.store.delete('genshinInfo')
         window.store.delete('starRailInfo')
-        router.go(0)
+        window.win.relaunch()
         dispose()
       },
     },
@@ -248,9 +253,8 @@ const showLangDialog = (idx: number) => {
       title: translate('settings_langChangeTitle'),
       showCancel: true,
       msg: translateWithLocale('settings_langChangeText', lang.value),
-      // vnode: h(LangChangeDialogContent, {
-      //     lang: lang.value
-      // })
+      hScale: hScale,
+      vScale: vScale,
     },
   )
 }
@@ -280,6 +284,8 @@ const showDialogStyleChange = () => {
       msg: translate('settings_dialogStyleText', {
         game: translate('general_' + dialogStyle.value),
       }),
+      hScale: hScale,
+      vScale: vScale,
     },
   )
 }
@@ -291,7 +297,7 @@ const showClearDialog = () => {
       onOk(dispose: () => void) {
         window.store.clear()
         localStorage.clear()
-        router.go(0)
+        window.win.relaunch()
         dispose()
       },
     },
@@ -299,6 +305,8 @@ const showClearDialog = () => {
       title: translate('settings_clearAllData'),
       msg: translate('settings_clearAllDataText'),
       showCancel: true,
+      hScale: hScale,
+      vScale: vScale,
     },
   )
 }
@@ -312,7 +320,7 @@ const showClearDialog = () => {
     <ScrollWrapper height="91vh" class="scroll-wrapper">
       <div class="scroll-content-wrapper">
         <!-- GENERAL -->
-        <div class="title">{{ $t('settings_general') }}</div>
+        <div class="title font-gs">{{ $t('settings_general') }}</div>
         <div class="form-item hover">
           <div class="form-item-text">{{ $t('settings_selectLang') }}</div>
           <MySelect
@@ -348,7 +356,7 @@ const showClearDialog = () => {
         </div>
 
         <!-- APPEARANCE -->
-        <div class="title">{{ $t('settings_appearance') }}</div>
+        <div class="title font-gs">{{ $t('settings_appearance') }}</div>
         <div class="form-item hover">
           <div class="form-item-text">{{ $t('settings_colorTheme') }}</div>
           <MyGroupButtons v-model="colorTheme" @change="colorThemeChange">
@@ -379,7 +387,7 @@ const showClearDialog = () => {
         </div>
 
         <!-- ABOUT -->
-        <div class="title">{{ $t('settings_about') }}</div>
+        <div class="title font-gs">{{ $t('settings_about') }}</div>
         <div class="form-item version-area-wrapper">
           miHoYo miXeD Launcher
           <div class="version">v{{ appVer }}</div>
@@ -429,8 +437,8 @@ const showClearDialog = () => {
 
 .bg-pic-wrapper {
   width: 98vw;
-  height: 92vh;
   border-radius: 24px 24px 0 0;
+  height: calc(100vh - 56px);
   -webkit-mask: linear-gradient(white, white);
 
   img {

@@ -10,16 +10,11 @@ import {
 } from 'electron'
 import axios from 'axios'
 import { release } from 'node:os'
-// const Store = require('electron-store')
 import Store from 'electron-store'
-// const child = require('child_process')
 import child from 'child_process'
-// const {EnkaClient, TextAssets, DynamicTextAssets} = require("enka-network-api");
 import { DynamicTextAssets, EnkaClient, TextAssets } from 'enka-network-api'
 import { promises as fs } from 'fs'
-
-// const fs = require('fs').promises
-// var path = require('path')
+import { Octokit } from '@octokit/core'
 import path from 'path'
 
 const enka = new EnkaClient({
@@ -78,13 +73,18 @@ const assetsPath = process.env.VITE_DEV_SERVER_URL
   : path.join(__dirname, '../../../src/assets')
 
 async function createWindow() {
-  win = new BrowserWindow({
-    title: 'Main window',
-    icon: iconPath,
+  const windowState: any = store.get('windowState', {
     width: 1200,
     height: 700,
-    resizable: false,
-    maximizable: false,
+    isMax: false,
+  })
+  win = new BrowserWindow({
+    title: 'miXeD',
+    icon: iconPath,
+    width: windowState.width,
+    height: windowState.height,
+    minWidth: 1200,
+    minHeight: 700,
     // transparent: true,
     frame: false,
     webPreferences: {
@@ -97,6 +97,26 @@ async function createWindow() {
     },
   })
 
+  if (windowState.isMax) {
+    win.maximize()
+  }
+
+  win.on('resize', () => {
+    if (win.isMaximized()) {
+      store.set('windowState', {
+        width: windowState.width,
+        height: windowState.height,
+        isMax: true,
+      })
+      return
+    }
+    if (win.isMinimized()) {
+      return
+    }
+    const [width, height] = win.getSize()
+    store.set('windowState', { width, height, isMax: false })
+  })
+
   // ---------- Window actions ----------
   ipcMain.on('win:close', () => {
     win.close()
@@ -107,6 +127,17 @@ async function createWindow() {
   ipcMain.on('win:tray', () => {
     win.hide()
     win.setSkipTaskbar(true)
+  })
+  ipcMain.on('win:max', (_event, toMax: boolean) => {
+    if (win.isMaximized()) {
+      win.unmaximize()
+    } else {
+      win.maximize()
+    }
+  })
+  ipcMain.on('win:relaunch', () => {
+    app.relaunch()
+    app.quit()
   })
 
   // ---------- custom IPCs ----------
@@ -222,7 +253,6 @@ async function createWindow() {
     shell.openExternal(url)
   })
 
-  const { Octokit } = require('@octokit/core')
   const octokit = new Octokit({
     auth: '<YOUR TOKEN HERE>',
   })

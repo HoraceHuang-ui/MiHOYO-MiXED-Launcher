@@ -26,13 +26,15 @@ const openLink = (url: string) => {
       @click="openLink(banner.url)"
       :src="banner.img"
       :key="banner.banner_id"
+      height="100%"
+      width="100%"
     />
   </MyCarousel>
 </template>
 
 <style lang="scss" scoped>
 img {
-  @apply object-scale-down cursor-pointer;
+  @apply object-cover cursor-pointer;
 
   .dark & {
     @apply brightness-75;

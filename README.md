@@ -168,6 +168,10 @@ To add a new language,
     - `hi3GamePath`
     - `hi3Upd`
     - `gsCostume` Display costume splash images in Genshin Impact
+    - `windowState` The state of the window on last close
+      - `width`
+      - `height`
+      - `isMax` Whether the window was maximized
 - `localStorage` items backup:
   - `lang` Language setting
   - `colorTheme` Color theme setting

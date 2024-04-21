@@ -63,6 +63,9 @@ const winClose = async () => {
 const winMin = () => {
   window.win.min()
 }
+const winMax = () => {
+  window.win.max()
+}
 </script>
 
 <template>
@@ -103,7 +106,7 @@ const winMin = () => {
     </div>
     <div class="drag focus" style="width: 35vw">
       <div class="traffic-lights no-drag mt-2 py-3">
-        <div class="traffic-light traffic-light-maximize"></div>
+        <div class="traffic-light traffic-light-maximize" @click="winMax"></div>
         <div class="traffic-light traffic-light-minimize" @click="winMin"></div>
         <div class="traffic-light traffic-light-close" @click="winClose"></div>
       </div>
@@ -115,7 +118,7 @@ const winMin = () => {
 .main-wrapper {
   @apply sticky z-50 top-0 left-0;
   @apply flex flex-row justify-between w-full;
-  height: 8vh;
+  height: 56px;
 }
 
 .title-wrapper {
@@ -152,7 +155,7 @@ const winMin = () => {
 
     &.selected {
       @apply hover:scale-100;
-      height: 6vh;
+      height: 42px;
       background-color: rgb(135, 182, 249, 0.3);
       border: 5px solid rgb(121, 184, 255);
     }

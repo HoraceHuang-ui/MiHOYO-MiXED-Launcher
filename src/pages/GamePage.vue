@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Component, computed, onMounted, ref } from 'vue'
+import { Component, computed, inject, onMounted, Ref, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { translate } from '../i18n'
 import { LauncherInfo, PostInfo } from '../types/launcher/launcherInfo'
@@ -17,6 +17,9 @@ import StarRailInfoCard from './StarRailPage/Components/StarRailInfoCard.vue'
 
 const game = useRoute().query.game
 const gameName = translate(`general_${game}`)
+
+const hScale = inject<Ref<number>>('hScale')
+const vScale = inject<Ref<number>>('vScale')
 
 const launcherPath = ref('')
 const gamePath = ref('')
@@ -224,17 +227,24 @@ const importButtonClick = () => {
       break
   }
 
-  useDialog(importDialogComponent, {
-    onOk(dispose: () => void) {
-      dispose()
-      refresh()
+  useDialog(
+    importDialogComponent,
+    {
+      onOk(dispose: () => void) {
+        dispose()
+        refresh()
+      },
+      onCancel(dispose: () => void) {
+        gamePath.value = ''
+        launcherPath.value = ''
+        dispose()
+      },
     },
-    onCancel(dispose: () => void) {
-      gamePath.value = ''
-      launcherPath.value = ''
-      dispose()
+    {
+      hScale: hScale,
+      vScale: vScale,
     },
-  })
+  )
 }
 
 const launchGame = async () => {
@@ -304,7 +314,10 @@ const refresh = () => {
   >
   </LoadFailedBlock>
   <div class="content-wrapper" :class="{ from: !launcherInfoReady }">
-    <div class="bg-pic-wrapper" :class="{ scrolled: hideElements }">
+    <div
+      class="bg-pic-wrapper"
+      :class="{ scrolled: hideElements, mask: gameNo != 2 }"
+    >
       <img
         class="bg-pic"
         :class="{ scrolled: hideElements }"
@@ -344,27 +357,30 @@ const refresh = () => {
     </Transition>
     <ScrollWrapper
       ref="scrollBarRef"
-      height="91vh"
+      height="calc(98vh - 56px)"
       class="scroll-wrapper"
       @scroll="handleScroll"
       show-bar="never"
     >
       <div class="items-scroll">
         <div class="launch-area-wrapper">
-          <div class="h-16 my-3" />
+          <div class="h-[9vh] my-[2vh]" />
           <div
             v-if="gamePath"
             class="launch-button-wrapper"
             :class="[{ scrolled: hideElements }, prefFont]"
           >
-            <button @click="launchGame" class="launch-button">
+            <button
+              @click="launchGame"
+              class="launch-button"
+              :style="`font-size: calc(min(60px, 25px * min(${hScale}, ${vScale})))`"
+            >
               {{ $t('general_launchGame') }}
             </button>
             <MyDropdown
               class="launch-dropdown"
               @command="handleCommand"
               placement="top"
-              width="200px"
               :items="[
                 $t('general_openOfficialLauncher'),
                 $t('general_clearGamePath'),
@@ -372,7 +388,12 @@ const refresh = () => {
               ]"
               middle
             >
-              <button class="font-gs">…</button>
+              <button
+                class="font-gs dropdown-trigger"
+                :style="`font-size: calc(min(60px, 25px * min(${hScale}, ${vScale})));`"
+              >
+                …
+              </button>
             </MyDropdown>
           </div>
           <button
@@ -380,6 +401,7 @@ const refresh = () => {
             @click="importButtonClick"
             class="import-button"
             :class="[{ scrolled: hideElements }, prefFont]"
+            :style="`font-size: calc(min(60px, 25px * min(${hScale}, ${vScale})));`"
           >
             {{ $t('general_importGame') }}
           </button>
@@ -407,7 +429,7 @@ const refresh = () => {
 }
 
 .content-wrapper {
-  @apply relative w-[98vw] h-[92vh];
+  @apply relative w-[98vw];
   @apply transition-all;
   transition-duration: 400ms;
 
@@ -419,12 +441,15 @@ const refresh = () => {
 .bg-pic-wrapper {
   @apply rounded-3xl;
   width: 98vw;
-  height: 96.5vh;
-  -webkit-mask: linear-gradient(white 50%, transparent);
+  height: calc(100vh - 56px + 1.5rem);
   transition-duration: 500ms;
 
   &.scrolled {
     @apply scale-x-95 translate-y-3;
+  }
+
+  &.mask {
+    -webkit-mask: linear-gradient(white 50%, transparent);
   }
 }
 
@@ -446,16 +471,16 @@ const refresh = () => {
 }
 
 .launcher-banner {
-  @apply absolute left-16 top-48 z-50 rounded-xl;
-  height: 182px;
-  width: 396px;
+  @apply absolute left-[5.3vw] top-[27.4vh] z-50 rounded-xl;
+  height: 26vh;
+  width: 56.5vh;
 }
 
 .launcher-posts {
-  @apply absolute left-16 top-96 z-50 rounded-xl pl-3 pr-1;
+  @apply absolute left-[5.3vw] top-[54.8vh] z-50 rounded-xl pl-3 pr-1;
   @apply backdrop-blur-md bg-white bg-opacity-70;
-  height: 112px;
-  width: 396px;
+  height: 16vh;
+  width: 56.5vh;
 
   .dark & {
     @apply bg-black bg-opacity-60;
@@ -469,8 +494,7 @@ const refresh = () => {
 }
 
 .items-scroll {
-  @apply flex flex-col;
-  margin-top: 67vh;
+  margin-top: calc(76vh - 68px);
   width: 82vw;
 }
 
@@ -480,7 +504,7 @@ const refresh = () => {
 
 .launch-button-wrapper {
   @apply absolute right-0 transition-all;
-  @apply flex flex-row mx-2 my-3 rounded-full bg-yellow-400;
+  @apply flex flex-row mx-[0.67vw] mt-[2vh] rounded-full bg-yellow-400;
   transition-duration: 500ms;
 
   .dark & {
@@ -493,8 +517,7 @@ const refresh = () => {
 }
 
 .launch-button {
-  @apply pl-4 px-4 h-16 rounded-full;
-  @apply text-2xl font-bold;
+  @apply px-[1.3vw] py-[2vh] font-bold rounded-full;
   @apply hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all;
 
   @apply dark:bg-yellow-700 dark:hover:bg-yellow-600 dark:active:bg-yellow-500;
@@ -505,10 +528,10 @@ const refresh = () => {
 }
 
 .launch-dropdown {
-  @apply h-full px-1 text-sm;
+  @apply h-full text-sm;
 
-  button {
-    @apply text-xl px-2 h-14 mt-1;
+  .dropdown-trigger {
+    @apply h-[9vh] mr-[0.8vw];
     @apply rounded-full hover:bg-yellow-500 transition-all;
 
     .dark & {
@@ -518,8 +541,8 @@ const refresh = () => {
 }
 
 .import-button {
-  @apply text-2xl cursor-default;
-  @apply absolute right-0 mx-2 my-3 px-4 h-16 rounded-full;
+  @apply cursor-default;
+  @apply absolute right-0 px-[1.3vw] py-[2vh] rounded-full;
   @apply bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all;
   min-width: 160px;
   transition-duration: 500ms;
@@ -534,7 +557,7 @@ const refresh = () => {
 }
 
 .game-info-card {
-  @apply my-2 w-full mb-4 shadow-md;
+  @apply my-2 w-full shadow-md;
 }
 
 .banner-enter-from,

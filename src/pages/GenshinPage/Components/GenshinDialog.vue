@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { onMounted, PropType, ref, VNode } from 'vue'
+import { onMounted, PropType, Ref, ref, VNode } from 'vue'
 import GenshinButton from './GenshinButton.vue'
 
 const props = defineProps({
   width: {
     type: String,
-    default: '50%',
+    default: '600px',
   },
   title: {
     type: Object as PropType<(() => string) | string>,
@@ -45,9 +45,15 @@ const props = defineProps({
     type: Object as PropType<() => VNode | undefined>,
     default: undefined,
   },
+  hScale: {
+    type: Object as PropType<Ref<number>>,
+    default: ref(1),
+  },
+  vScale: {
+    type: Object as PropType<Ref<number>>,
+    default: ref(1),
+  },
 })
-
-// const vnode = props.vnode ? render(props.vnode as VNode, mainArea.value!!) : undefined
 
 const cShow = ref(false)
 
@@ -84,7 +90,11 @@ defineExpose({
   <transition :duration="600">
     <div v-if="cShow">
       <div class="outer modal" @click="cancelClick" />
-      <div class="inner dialog-wrapper" :style="`width: ${width}`">
+      <div
+        class="inner dialog-wrapper"
+        :style="`width: ${width}; max-height: calc(80vh / min(${hScale.value}, ${vScale.value}));
+          transform: scale(min(${hScale.value}, ${vScale.value})) translate(calc(-50% / min(${hScale.value}, ${vScale.value})), calc(-50% / min(${hScale.value}, ${vScale.value})))`"
+      >
         <div
           v-if="!showCancel && !showOk"
           class="close-button"
@@ -210,7 +220,7 @@ defineExpose({
 
 .dialog-wrapper {
   @apply absolute z-50 top-1/2 left-1/2;
-  @apply -translate-x-1/2 -translate-y-1/2 flex justify-center;
+  @apply flex justify-center;
 }
 
 .close-button {
@@ -248,7 +258,8 @@ defineExpose({
   @apply pt-4 mx-6;
 
   & > .text {
-    @apply text-center w-full text-xl text-black;
+    @apply text-center w-full text-black;
+    font-size: larger;
 
     .dark & {
       @apply text-[#CCBE87];

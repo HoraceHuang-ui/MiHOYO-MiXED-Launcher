@@ -28,6 +28,8 @@ export interface IWin {
   close: () => Promise<void>
   min: () => Promise<void>
   tray: () => Promise<void>
+  max: () => Promise<void>
+  relaunch: () => Promise<void>
 }
 
 export interface IPath {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { h, onMounted, ref } from 'vue'
+import { h, inject, onMounted, Ref, ref } from 'vue'
 import {
   availableLangCodes,
   availableLangNames,
@@ -13,6 +13,8 @@ import { useRouter } from 'vue-router'
 import MySelect from '../components/MySelect.vue'
 
 const router = useRouter()
+const hScale = inject<Ref<number>>('hScale')
+const vScale = inject<Ref<number>>('vScale')
 
 const gsGamePath = ref('')
 const srGamePath = ref('')
@@ -98,6 +100,8 @@ onMounted(async () => {
                 },
               }),
             ),
+          hScale: hScale,
+          vScale: vScale,
         },
       )
     }
@@ -164,7 +168,11 @@ const resetPic = () => {
       :src="bgPath ? bgPath : '../../src/assets/gsbanner.png'"
       alt="Background image of Home page"
     />
-    <div class="bottom-area">
+    <div
+      class="bottom-area"
+      style="transform-origin: center bottom"
+      :style="`transform: scale(min(${hScale}, ${vScale}, 1.5))`"
+    >
       <h1 class="title-text font-gs" style="margin-bottom: 10px">
         {{ translate('mainpage_title') }}
       </h1>
@@ -203,7 +211,7 @@ const resetPic = () => {
 .bg-pic {
   @apply object-cover;
   width: 98vw;
-  height: 92vh;
+  height: calc(100vh - 56px);
   border-radius: 24px 24px 0 0;
   -webkit-mask: linear-gradient(white 30%, rgb(255 255 255 / 0.1));
 }
@@ -214,7 +222,7 @@ const resetPic = () => {
 
 .bottom-area {
   @apply absolute bottom-0 w-full justify-center;
-  height: 20vh;
+  height: 140px;
 }
 
 .game-button {
