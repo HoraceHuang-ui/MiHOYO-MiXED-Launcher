@@ -8,7 +8,6 @@ import {
   translate,
   translateWithLocale,
 } from '../../i18n'
-import { useRouter } from 'vue-router'
 import CustomSwitch from '../../components/CustomSwitch.vue'
 import { UpdInfo } from '../../types/github/ghUpdInfo'
 import {
@@ -99,8 +98,6 @@ onMounted(async () => {
       appVer.value = resp.version
     })
 })
-
-const router = useRouter()
 
 const openLink = (url: string) => {
   window.electron.openExtLink(url)
@@ -246,8 +243,8 @@ const showLangDialog = (idx: number) => {
       },
       onOk(dispose: () => void) {
         switchLang(lang.value)
-        window.store.delete('genshinInfo')
-        window.store.delete('starRailInfo')
+        window.store.delete('gsInfo')
+        window.store.delete('srInfo')
         window.win.relaunch()
         dispose()
       },

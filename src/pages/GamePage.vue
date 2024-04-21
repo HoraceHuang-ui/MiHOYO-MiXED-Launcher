@@ -357,7 +357,7 @@ const refresh = () => {
     </Transition>
     <ScrollWrapper
       ref="scrollBarRef"
-      height="calc(98vh - 56px)"
+      height="calc(100vh - 56px - 1rem)"
       class="scroll-wrapper"
       @scroll="handleScroll"
       show-bar="never"
@@ -489,12 +489,12 @@ const refresh = () => {
 
 .scroll-wrapper {
   @apply absolute z-40;
-  top: 2vh;
+  top: 1rem;
   left: 8vw;
 }
 
 .items-scroll {
-  margin-top: calc(76vh - 68px);
+  margin-top: calc(78vh - 68px - 1rem);
   width: 82vw;
 }
 
