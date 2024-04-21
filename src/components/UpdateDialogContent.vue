@@ -68,7 +68,7 @@ const colorClass = computed(() => {
 
 <template>
   <div class="main-wrapper">
-    <ScrollWrapper height="40vh" show-bar="always">
+    <ScrollWrapper style="height: calc(100% - 70px)" show-bar="always">
       <div v-html="updDialogContent"></div>
     </ScrollWrapper>
     <div :class="colorClass" style="margin-top: 10px">
