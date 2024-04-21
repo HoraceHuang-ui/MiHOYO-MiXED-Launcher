@@ -136,6 +136,9 @@ const checkUpdates = () => {
               updInfo: updInfo.value,
               showSkipCurrent: false,
               gameStyle: dialogStyle.value,
+              style: {
+                height: `calc(50vh / min(${hScale?.value}, ${vScale?.value}))`,
+              },
             }),
             hScale: hScale,
             vScale: vScale,
