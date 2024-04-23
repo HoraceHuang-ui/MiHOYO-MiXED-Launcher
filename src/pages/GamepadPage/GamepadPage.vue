@@ -191,6 +191,17 @@ const gameLoop = () => {
     }
   }
 
+  // [SETTINGS] B: Return to Main
+  if (mode.value === 'settings' && gp.buttons[1].pressed) {
+    if (!inThrottle) {
+      mode.value = 'main'
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 300)
+    }
+  }
+
   rAF(gameLoop)
 }
 
