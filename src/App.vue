@@ -32,6 +32,14 @@ const updInfo = ref<UpdInfo>({
   url: '',
   zipball_url: '',
 })
+const rAF =
+  window.mozRequestAnimationFrame ||
+  window.webkitRequestAnimationFrame ||
+  window.requestAnimationFrame
+const rAFStop =
+  window.mozCancelAnimationFrame ||
+  window.webkitCancelAnimationFrame ||
+  window.cancelAnimationFrame
 
 const hScale = ref(window.innerWidth / 1200)
 const vScale = ref(window.innerHeight / 700)
@@ -45,8 +53,56 @@ provide('vScale', vScale)
 
 const skipCurrent = ref(false)
 const colorTheme = ref(2)
+const gamepad = ref(false)
 const darkModePreference = window.matchMedia('(prefers-color-scheme: dark)')
 const router = useRouter()
+
+let inThrottle = false
+const waitMapInput = () => {
+  var gamepads = navigator.getGamepads()
+  if (!gamepads) return
+
+  const gp = gamepads[0]
+
+  if (!gp) {
+    return
+  }
+
+  // Map: Enter Gamepad Mode
+  if (gp.buttons[8].pressed) {
+    if (!inThrottle) {
+      inThrottle = true
+      setTimeout(() => {
+        enterGamepad()
+        inThrottle = false
+      }, 300)
+    }
+  }
+
+  rAF(waitMapInput)
+}
+
+const enterGamepad = () => {
+  gamepad.value = true
+  rAFStop(waitMapInput)
+  router.push('/gamepadPage')
+}
+
+const leaveGamepad = () => {
+  gamepad.value = false
+  router.push('/')
+
+  const gamepads = navigator.getGamepads()
+  for (let i = 0; i < gamepads.length; i++) {
+    const gp = gamepads[i]
+    if (gp) {
+      rAF(waitMapInput)
+      break
+    }
+  }
+}
+
+provide('leaveGamepad', leaveGamepad)
 
 onMounted(() => {
   window.store.get('colorTheme').then((theme: number) => {
@@ -142,6 +198,18 @@ onMounted(() => {
     })
 
   window.visualViewport?.addEventListener('resize', cardResizeCb)
+
+  const gamepads = navigator.getGamepads()
+  for (let i = 0; i < gamepads.length; i++) {
+    const gp = gamepads[i]
+    if (gp) {
+      enterGamepad()
+      break
+    }
+  }
+
+  window.addEventListener('gamepadconnected', enterGamepad)
+  window.addEventListener('gamepaddisconnected', leaveGamepad)
 })
 
 onUnmounted(() => {
@@ -177,7 +245,9 @@ const needsUpdate = (latestStr: string) => {
 </script>
 
 <template id="app">
-  <TopHeader />
+  <Transition name="swipe-top">
+    <TopHeader v-if="!gamepad" />
+  </Transition>
   <router-view></router-view>
 </template>
 
@@ -185,4 +255,13 @@ const needsUpdate = (latestStr: string) => {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.swipe-top-enter-from,
+.swipe-top-leave-to {
+  transform: translateY(-100%);
+}
+
+.swipe-top-enter-active {
+  transition: transform 0.3s;
+}
 </style>
