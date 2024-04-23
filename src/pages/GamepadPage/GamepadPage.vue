@@ -1,37 +1,52 @@
 <script setup lang="ts">
 import { inject, onMounted, Ref, ref } from 'vue'
+import GamepadIcon from '../../components/GamepadIcon.vue'
 
-type Mode = 'main' | 'settings' | 'out'
+type Mode = 'main' | 'settings' | 'window-action' | 'out'
+type GamePath = {
+  game: string
+  path: string
+}
 const mode = ref<Mode>('main')
+const games = ['gs', 'sr', 'hi3']
+const importedGames = ref<GamePath[]>([])
 
 const bgPath = ref('')
-const showSettings = ref(false)
-const gsGamePath = ref('')
-const srGamePath = ref('')
-const hi3GamePath = ref('')
+
+const selectedGameIndex = ref(0)
 
 const hScale = inject<Ref<number>>('hScale')
 const vScale = inject<Ref<number>>('vScale')
 const leaveGamepad = inject<() => void>('leaveGamepad')
 
-const genshin = async () => {
-  await window.child.exec(gsGamePath.value)
+const leaveGamepadClick = () => {
+  mode.value = 'out'
+  leaveGamepad()
 }
 
-const starRail = async () => {
-  await window.child.exec(srGamePath.value)
+const launch = async (path: string) => {
+  await window.child.exec(path)
 }
 
-const honkai3 = async () => {
-  await window.child.exec(hi3GamePath.value)
+const winClose = async () => {
+  const quitOnClose = await window.store.get('quitOnClose')
+  if (quitOnClose) {
+    await window.win.close()
+  } else {
+    await window.win.tray()
+  }
+}
+const winMin = () => {
+  window.win.min()
+}
+const winMax = () => {
+  window.win.max()
 }
 
 const rAF =
   window.mozRequestAnimationFrame ||
   window.webkitRequestAnimationFrame ||
   window.requestAnimationFrame
-
-let requestedAFNumber = -1
 
 const rAFStop =
   window.mozCancelAnimationFrame ||
@@ -40,9 +55,7 @@ const rAFStop =
 
 let inThrottle = false
 const gameLoop = () => {
-  var gamepads = navigator.getGamepads()
-  if (!gamepads) return
-
+  const gamepads = navigator.getGamepads()
   const gp = gamepads[0]
 
   if (!gp || mode.value === 'out') {
@@ -71,10 +84,14 @@ const gameLoop = () => {
   //   }
   // }
 
-  // Pause: Settings
+  // Menu: Settings
   if (gp.buttons[9].pressed) {
     if (!inThrottle) {
-      showSettings.value = !showSettings.value
+      if (mode.value !== 'settings') {
+        mode.value = 'settings'
+      } else if (mode.value === 'settings') {
+        mode.value = 'main'
+      }
       inThrottle = true
       setTimeout(() => {
         inThrottle = false
@@ -82,8 +99,8 @@ const gameLoop = () => {
     }
   }
 
-  // Map: Quit Gamepad Mode
-  if (gp.buttons[8].pressed) {
+  // [MAIN] Map: Quit Gamepad Mode
+  if (mode.value === 'main' && gp.buttons[8].pressed) {
     if (!inThrottle) {
       mode.value = 'out'
       inThrottle = true
@@ -94,20 +111,106 @@ const gameLoop = () => {
     }
   }
 
+  // [MAIN] L Axis / ARROW: Select Game
+  if (mode.value === 'main' && (gp.axes[0] < -0.5 || gp.buttons[14].pressed)) {
+    if (!inThrottle) {
+      selectedGameIndex.value =
+        selectedGameIndex.value === 0
+          ? importedGames.value.length - 1
+          : selectedGameIndex.value - 1
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 300)
+    }
+  }
+  if (mode.value === 'main' && (gp.axes[0] > 0.5 || gp.buttons[15].pressed)) {
+    if (!inThrottle) {
+      selectedGameIndex.value =
+        selectedGameIndex.value === importedGames.value.length - 1
+          ? 0
+          : selectedGameIndex.value + 1
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 300)
+    }
+  }
+
+  // [MAIN] A: Launch Game
+  if (mode.value === 'main' && gp.buttons[0].pressed) {
+    if (!inThrottle) {
+      launch(importedGames.value[selectedGameIndex.value].path)
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 300)
+    }
+  }
+
+  // [MAIN] LT: Window Actions
+  // [WINDOW-ACTIONS] X/Y/B: Maximize / Minimize / Close
+  if (
+    mode.value === 'main' &&
+    gp.buttons[6].pressed &&
+    gp.buttons[6].value > 0.5
+  ) {
+    mode.value = 'window-action'
+  }
+  if (mode.value === 'window-action' && gp.buttons[6].value <= 0.5) {
+    mode.value = 'main'
+  }
+  if (mode.value === 'window-action') {
+    if (gp.buttons[2].pressed) {
+      if (!inThrottle) {
+        inThrottle = true
+        winMax()
+        setTimeout(() => {
+          console.log('max')
+          inThrottle = false
+        }, 300)
+      }
+    }
+    if (gp.buttons[3].pressed) {
+      if (!inThrottle) {
+        inThrottle = true
+        winMin()
+        setTimeout(() => {
+          inThrottle = false
+        }, 300)
+      }
+    }
+    if (gp.buttons[1].pressed) {
+      if (!inThrottle) {
+        inThrottle = true
+        setTimeout(async () => {
+          await winClose()
+          inThrottle = false
+        }, 300)
+      }
+    }
+  }
+
   rAF(gameLoop)
 }
 
 onMounted(async () => {
   bgPath.value = await window.store.get('mainBgPath')
-  gsGamePath.value = await window.store.get('gsGamePath')
-  srGamePath.value = await window.store.get('srGamePath')
-  hi3GamePath.value = await window.store.get('hi3GamePath')
+  for (const game of games) {
+    const path = await window.store.get(`${game}GamePath`)
+    if (path) {
+      importedGames.value.push({
+        game,
+        path,
+      })
+    }
+  }
 
   gameLoop()
 
-  window.addEventListener('gamepaddisconnected', function () {
-    rAFStop(requestedAFNumber)
-  })
+  // window.addEventListener('gamepaddisconnected', function () {
+  //   rAFStop(requestedAFNumber)
+  // })
 })
 </script>
 
@@ -118,30 +221,144 @@ onMounted(async () => {
       :src="bgPath ? bgPath : '../../src/assets/gsbanner.png'"
       alt="Background image of Home page"
     />
-    <div class="bottom-bar">
-      <div class="left">aaa</div>
-      <div class="right">bbb</div>
-    </div>
+    <Transition name="fade">
+      <div class="bottom-bar" v-if="mode === 'main'">
+        <div class="left no-drag">
+          <div class="bar-item hoverable" @click="leaveGamepad">
+            <GamepadIcon icon="Map" />
+            <span>退出手柄模式</span>
+          </div>
+          <div class="bar-item">
+            <GamepadIcon icon="LS_h" />
+            <span>选择游戏</span>
+          </div>
+          <div class="bar-item hoverable">
+            <GamepadIcon icon="A" />
+            <span>启动游戏</span>
+          </div>
+        </div>
+        <div class="right no-drag">
+          <div class="bar-item hoverable" @click="mode = 'settings'">
+            <GamepadIcon icon="Menu" />
+            <i class="bi bi-gear" />
+          </div>
+          <div class="bar-item">
+            <GamepadIcon icon="LT" />
+            <div style="width: 90px" />
+          </div>
+          <div class="drag focus">
+            <div class="traffic-lights no-drag window-actions normal py-2">
+              <div
+                class="traffic-light traffic-light-maximize"
+                @click="winMax"
+              ></div>
+              <div
+                class="traffic-light traffic-light-minimize"
+                @click="winMin"
+              ></div>
+              <div
+                class="traffic-light traffic-light-close"
+                @click="winClose"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Transition>
+
+    <Transition name="fade">
+      <div class="bottom-bar" v-if="mode === 'window-action'">
+        <div class="left">
+          <div class="bar-item">
+            <GamepadIcon icon="LT" />
+            <span>按住并选择窗口操作</span>
+          </div>
+        </div>
+        <div class="right no-drag">
+          <div class="drag focus">
+            <div class="traffic-lights no-drag window-actions py-1">
+              <GamepadIcon icon="X" style="height: 24px" />
+              <div
+                class="traffic-light traffic-light-maximize"
+                style="margin-top: 4px"
+                @click="winMax"
+              ></div>
+              <GamepadIcon icon="Y" class="ml-2" style="height: 24px" />
+              <div
+                class="traffic-light traffic-light-minimize"
+                style="margin-top: 4px"
+                @click="winMin"
+              ></div>
+              <GamepadIcon icon="B" class="ml-2" style="height: 24px" />
+              <div
+                class="traffic-light traffic-light-close"
+                style="margin-top: 4px"
+                @click="winClose"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Transition>
+
+    <Transition name="fade">
+      <div class="bottom-bar" v-if="mode === 'settings'">
+        <div class="left">
+          <div class="bar-item">
+            <GamepadIcon icon="B" />
+            <span>返回</span>
+          </div>
+        </div>
+        <div class="right no-drag">
+          <div class="bar-item hoverable" @click="mode = 'settings'">
+            <GamepadIcon icon="Menu" />
+            <i class="bi bi-gear" />
+          </div>
+          <div class="bar-item">
+            <GamepadIcon icon="LT" />
+            <div style="width: 90px" />
+          </div>
+          <div class="drag focus">
+            <div class="traffic-lights no-drag window-actions normal py-2">
+              <div
+                class="traffic-light traffic-light-maximize"
+                @click="winMax"
+              ></div>
+              <div
+                class="traffic-light traffic-light-minimize"
+                @click="winMin"
+              ></div>
+              <div
+                class="traffic-light traffic-light-close"
+                @click="winClose"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Transition>
 
     <div class="launch-area-wrapper">
       <h1 class="title-text font-gs" style="margin-bottom: 10px">
         {{ $t('mainpage_title') }}
       </h1>
-      <button v-if="gsGamePath" @click="genshin" class="game-button">
-        {{ $t('mainpage_buttonText', { game: $t('general_gsShort') }) }}
-      </button>
-      <button v-if="srGamePath" @click="starRail" class="game-button">
-        {{ $t('mainpage_buttonText', { game: $t('general_srShort') }) }}
-      </button>
-      <button v-if="hi3GamePath" @click="honkai3" class="game-button">
-        {{ $t('mainpage_buttonText', { game: $t('general_hi3Short') }) }}
+      <button
+        v-for="(game, idx) in importedGames"
+        @click="launch(game.path)"
+        class="game-button"
+        :class="{ focus: selectedGameIndex == idx }"
+        :key="idx"
+      >
+        {{
+          $t('mainpage_buttonText', { game: $t(`general_${game.game}Short`) })
+        }}
       </button>
     </div>
   </div>
 
   <Transition name="settings" :duration="600">
-    <div v-if="showSettings">
-      <div class="outer settings-wrapper" @click="showSettings = false" />
+    <div v-if="mode === 'settings'">
+      <div class="outer settings-wrapper" @click="mode = 'main'" />
       <div class="inner settings-content">
         <div
           class="settings-title"
@@ -184,18 +401,27 @@ onMounted(async () => {
 }
 
 .game-button {
-  @apply p-3 mx-2 mt-2 rounded-lg;
-  @apply font-bold text-xl bg-yellow-400 cursor-default;
+  @apply p-3 mx-2 mt-2 rounded-lg border-4;
+  @apply font-bold text-xl bg-yellow-400 border-yellow-400 cursor-default;
   @apply hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all;
 
+  &.focus {
+    @apply border-4 border-amber-600 shadow-xl;
+
+    .dark & {
+      @apply border-amber-500;
+    }
+  }
+
   .dark & {
-    @apply bg-yellow-700 hover:bg-yellow-600 active:bg-yellow-500;
+    @apply bg-yellow-700 border-yellow-700 hover:bg-yellow-600 active:bg-yellow-500;
   }
 }
 
 .bottom-bar {
+  @apply absolute bottom-0 z-[100] bg-white;
   @apply flex flex-row justify-between align-middle;
-  @apply w-[96vw] ml-[1vw] py-[6px];
+  @apply w-[97vw] ml-[1vw] py-[6px];
   height: 64px;
 
   & .left {
@@ -205,12 +431,50 @@ onMounted(async () => {
   & .right {
     @apply flex flex-row justify-end;
   }
+
+  .dark & {
+    @apply bg-[#222];
+  }
+
+  & .bar-item {
+    @apply flex flex-row rounded-full my-[4px] py-[1px] px-[6px] mr-1;
+
+    &.hoverable {
+      @apply hover:bg-gray-800 hover:text-gray-200 cursor-pointer transition-all;
+
+      .dark & {
+        @apply hover:bg-gray-200 hover:text-gray-900;
+      }
+    }
+
+    > img {
+      margin-top: 6px;
+      height: 30px;
+    }
+
+    span {
+      @apply py-[7px] ml-1.5;
+    }
+    i {
+      @apply py-[4px] ml-1.5 text-2xl;
+    }
+  }
+}
+
+.window-actions {
+  @apply mt-2.5 px-1;
+  @apply rounded-full transition-all;
+
+  &.normal {
+    @apply mt-2 border-2 border-yellow-500;
+  }
 }
 
 .settings-wrapper {
-  @apply absolute z-40 size-full right-0;
+  @apply absolute top-0 z-40 w-full right-0;
   @apply backdrop-blur-3xl;
   background: rgb(255 255 255 / 50%);
+  height: calc(100vh - 64px);
 
   .dark & {
     background: rgb(0 0 0 / 50%);
@@ -271,5 +535,15 @@ onMounted(async () => {
 .settings-leave-to .inner {
   opacity: 0;
   transform: translateX(100%);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

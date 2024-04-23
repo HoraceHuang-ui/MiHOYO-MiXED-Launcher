@@ -10,6 +10,7 @@ declare module 'vue' {
     CustomSwitch: typeof import('./src/components/CustomSwitch.vue')['default']
     CustomUIDInput: typeof import('./src/components/CustomUIDInput.vue')['default']
     DialogListItem: typeof import('./src/components/DialogListItem.vue')['default']
+    GamepadIcon: typeof import('./src/components/GamepadIcon.vue')['default']
     LauncherBanner: typeof import('./src/components/LauncherBanner.vue')['default']
     LauncherPosts: typeof import('./src/components/LauncherPosts.vue')['default']
     LoadFailedBlock: typeof import('./src/components/LoadFailedBlock.vue')['default']

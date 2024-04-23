@@ -105,7 +105,7 @@ const winMax = () => {
       </div>
     </div>
     <div class="drag focus" style="width: 35vw">
-      <div class="traffic-lights no-drag mt-2 py-3">
+      <div class="traffic-lights no-drag py-3">
         <div class="traffic-light traffic-light-maximize" @click="winMax"></div>
         <div class="traffic-light traffic-light-minimize" @click="winMin"></div>
         <div class="traffic-light traffic-light-close" @click="winClose"></div>

@@ -40,6 +40,8 @@ const rAFStop =
   window.mozCancelAnimationFrame ||
   window.webkitCancelAnimationFrame ||
   window.cancelAnimationFrame
+const gpType = ref('Xbox')
+provide('gpType', gpType)
 
 const hScale = ref(window.innerWidth / 1200)
 const vScale = ref(window.innerHeight / 700)
@@ -82,8 +84,9 @@ const waitMapInput = () => {
   rAF(waitMapInput)
 }
 
-const enterGamepad = () => {
+const enterGamepad = (gampadType: string) => {
   gamepad.value = true
+  gpType.value = gampadType
   rAFStop(waitMapInput)
   router.push('/gamepadPage')
 }
@@ -203,12 +206,15 @@ onMounted(() => {
   for (let i = 0; i < gamepads.length; i++) {
     const gp = gamepads[i]
     if (gp) {
-      enterGamepad()
+      enterGamepad(gp.id.startsWith('DualSense') ? 'PS' : 'Xbox')
       break
     }
   }
 
-  window.addEventListener('gamepadconnected', enterGamepad)
+  window.addEventListener('gamepadconnected', e => {
+    const gp = (e as GamepadEvent).gamepad
+    enterGamepad(gp.id.startsWith('DualSense') ? 'PS' : 'Xbox')
+  })
   window.addEventListener('gamepaddisconnected', leaveGamepad)
 })
 
