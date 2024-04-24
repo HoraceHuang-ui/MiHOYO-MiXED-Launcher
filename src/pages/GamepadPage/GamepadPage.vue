@@ -29,8 +29,6 @@ const importedGames = ref<GamePath[]>([])
 const showTooltip = ref(false)
 
 const bgPath = ref('')
-// const autoEnterGamepad = ref(true)
-// const showToolbar = ref(true)
 
 const selectedGameIndex = ref(0)
 const selectedSettingsCardIndex = ref(0)
@@ -39,6 +37,7 @@ const selectedSettingsItemIndex = ref(0)
 const hScale = inject<Ref<number>>('hScale')
 const vScale = inject<Ref<number>>('vScale')
 const leaveGamepad = inject<() => void>('leaveGamepad')
+const autoEnterGamepad = inject<Ref<boolean>>('autoEnterGamepad')
 
 const settingsItems: Ref<SettingsCard[]> = ref([
   {
@@ -58,7 +57,7 @@ const settingsItems: Ref<SettingsCard[]> = ref([
               display: 'inline',
             },
           }),
-          h('span', '键进入手柄模式。'),
+          h('span', '键进入手柄模式。若开启后没反应，请按一下手柄任意键。'),
         ]),
       },
       {
@@ -129,6 +128,10 @@ const onSettingsChange = (cardIdx: number, itemIdx: number) => {
   const item = settingsItems.value[cardIdx].items[itemIdx]
   window.store.set(item.key, !item.value, false)
   item.value = !item.value
+
+  if (item.key === 'autoEnterGamepad') {
+    autoEnterGamepad!.value = item.value
+  }
 }
 
 const onSettingsHover = (cardIdx: number, itemIdx: number) => {
@@ -424,6 +427,8 @@ onMounted(async () => {
     }
   }
 
+  autoEnterGamepad!.value = settingsItems.value[0].items[0].value
+
   for (const game of games) {
     const path = await window.store.get(`${game}GamePath`)
     const launcherPath = await window.store.get(`${game}LauncherPath`)
@@ -705,7 +710,7 @@ onMounted(async () => {
               <div class="settings-item-text mr-2">{{ item.text }}</div>
               <MyTooltip
                 v-if="item.tip"
-                max-width="200px"
+                max-width="300px"
                 middle
                 placement="bottom"
                 v-model="showTooltip"
