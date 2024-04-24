@@ -460,11 +460,17 @@ onMounted(async () => {
   >
     <img
       class="bg-pic no-drag"
+      :class="{ toolbar: searchSettingByKey('showGamepadToolbar')?.value }"
       :src="bgPath ? bgPath : '../../src/assets/gsbanner.png'"
       alt="Background image of Home page"
     />
-    <Transition name="fade">
-      <div class="bottom-bar" v-if="mode === 'main'">
+    <Transition name="swipe-bottom">
+      <div
+        class="bottom-bar"
+        v-if="
+          mode === 'main' && searchSettingByKey('showGamepadToolbar')?.value
+        "
+      >
         <div class="left no-drag">
           <div class="bar-item">
             <GamepadIcon icon="LS_h" />
@@ -511,8 +517,14 @@ onMounted(async () => {
       </div>
     </Transition>
 
-    <Transition name="fade">
-      <div class="bottom-bar" v-if="mode === 'window-action'">
+    <Transition name="swipe-bottom">
+      <div
+        class="bottom-bar"
+        v-if="
+          mode === 'window-action' &&
+          searchSettingByKey('showGamepadToolbar')?.value
+        "
+      >
         <div class="left">
           <div class="bar-item">
             <GamepadIcon icon="LT" />
@@ -546,8 +558,13 @@ onMounted(async () => {
       </div>
     </Transition>
 
-    <Transition name="fade">
-      <div class="bottom-bar" v-if="mode === 'settings'">
+    <Transition name="swipe-bottom">
+      <div
+        class="bottom-bar"
+        v-if="
+          mode === 'settings' && searchSettingByKey('showGamepadToolbar')?.value
+        "
+      >
         <div class="left no-drag">
           <div class="bar-item hoverable" @click="mode = 'main'">
             <GamepadIcon icon="B" />
@@ -603,7 +620,10 @@ onMounted(async () => {
       </div>
     </Transition>
 
-    <div class="launch-area-wrapper">
+    <div
+      class="launch-area-wrapper"
+      :class="{ toolbar: searchSettingByKey('showGamepadToolbar')?.value }"
+    >
       <h1 class="title-text font-gs" style="margin-bottom: 10px">
         {{ $t('mainpage_title') }}
       </h1>
@@ -641,8 +661,15 @@ onMounted(async () => {
         'pointer-events-none': searchSettingByKey('gamepadDisableMouse')?.value,
       }"
     >
-      <div class="outer settings-wrapper" @click="mode = 'main'" />
-      <div class="inner settings-content">
+      <div
+        class="outer settings-wrapper"
+        @click="mode = 'main'"
+        :class="{ toolbar: searchSettingByKey('showGamepadToolbar')?.value }"
+      />
+      <div
+        class="inner settings-content"
+        :class="{ toolbar: searchSettingByKey('showGamepadToolbar')?.value }"
+      >
         <div
           class="settings-title"
           :style="`font-size: calc(36px * min(${hScale}, ${vScale}))`"
@@ -750,18 +777,29 @@ onMounted(async () => {
 }
 
 .bg-pic {
-  @apply object-cover;
-  margin-top: 1vw;
-  width: 98vw;
-  height: calc(100vh - 1vw - 64px);
-  border-radius: 24px;
+  @apply object-cover transition-all;
+  width: 100vw;
+  margin-left: -1vw;
+  height: 100vh;
+
+  &.toolbar {
+    border-radius: 24px;
+    margin-top: 1vw;
+    width: 98vw;
+    height: calc(100vh - 1vw - 64px);
+  }
 }
 
 .launch-area-wrapper {
-  @apply absolute z-10 bottom-[70px] left-1/2 -translate-x-1/2;
+  @apply absolute z-10 left-1/2 -translate-x-1/2;
   @apply backdrop-blur-xl p-6 rounded-2xl;
   @apply text-nowrap;
   background: rgb(255 255 255 / 0.6);
+  bottom: 16px;
+
+  &.toolbar {
+    bottom: 70px;
+  }
 
   .dark & {
     background: rgb(0 0 0 / 0.4);
@@ -844,9 +882,14 @@ onMounted(async () => {
 
 .settings-wrapper {
   @apply absolute top-0 z-40 w-full right-0;
-  @apply backdrop-blur-3xl;
+  @apply backdrop-blur-3xl transition-all;
   background: rgb(255 255 255 / 0.5);
-  height: calc(100vh - 64px);
+  height: 100vh;
+
+  &.toolbar {
+    @apply transition-all;
+    height: calc(100vh - 64px);
+  }
 
   .dark & {
     background: rgb(0 0 0 / 50%);
@@ -854,9 +897,13 @@ onMounted(async () => {
 }
 
 .settings-content {
-  @apply absolute z-50 top-[3vh] right-[3vw] rounded-lg;
+  @apply absolute z-50 top-[3vh] right-[3vw] rounded-lg transition-all;
   width: 40vw;
-  height: calc(100vh - 70px);
+  height: 100vh;
+
+  &.toolbar {
+    height: calc(100vh - 70px);
+  }
 }
 
 .settings-title {
@@ -943,12 +990,19 @@ onMounted(async () => {
 }
 
 .fade-enter-active,
-.fade-leave-active {
+.fade-leave-active,
+.swipe-bottom-enter-active,
+.swipe-bottom-leave-active {
   transition: all 0.2s ease;
 }
 
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+.swipe-bottom-enter-from,
+.swipe-bottom-leave-to {
+  transform: translateY(100%);
 }
 </style>
