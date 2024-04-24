@@ -33,6 +33,7 @@
   "general_clearGamePath": "Очистить путь к игре",
   "general_clearProfileInfo": "Очистить информацию о профиле",
   "general_loadingFailed": "Ошибка загрузки страницы",
+  "general_back": "Назад",
   "general_refresh": "Обновить",
   "POST_TYPE_INFO": "Инфо",
   "POST_TYPE_ANNOUNCE": "Объявления",
@@ -102,5 +103,17 @@
   "settings_about": "О нас",
   "settings_checkUpdates": "Проверить обновления",
   "settings_latestVersion": "У вас последняя версия",
-  "settings_checkUpdFailed": "Не удалось проверить обновление"
+  "settings_checkUpdFailed": "Не удалось проверить обновление",
+  "gamepad_init": "Режим геймпада",
+  "gamepad_selectGame": "Выберите игру",
+  "gamepad_officialLauncher": "Официальный лаунчер",
+  "gamepad_selectSettingItem": "Выбрать карточку",
+  "gamepad_selectSettingCard": "Выберите категорию",
+  "gamepad_autoEnterGamepad": "Автовход при подключении",
+  "gamepad_autoEnterTip1": "Если этот режим отключен, вы все равно можете войти в режим контроллера, нажав клавишу",
+  "gamepad_autoEnterTip2": ". Если после включения нет ответа, нажмите любую клавишу на контроллере.",
+  "gamepad_quitOnClose": "Выйти из приложения при закрытии окна",
+  "gamepad_disableMouse": "Отключить ввод мыши",
+  "gamepad_showToolbar": "Показать панель инструментов",
+  "gamepad_windowActions": "Удерживайте для действий окна"
 }
