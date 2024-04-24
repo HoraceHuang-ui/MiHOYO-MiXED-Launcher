@@ -2,6 +2,7 @@ import * as VueRouter from 'vue-router'
 import MainPage from '../pages/MainPage.vue'
 import GamePage from '../pages/GamePage.vue'
 import SettingsPage from '../pages/SettingsPage/SettingsPage.vue'
+import GamepadPage from '../pages/GamepadPage/GamepadPage.vue'
 import tmpPage from '../pages/tmpPage.vue'
 
 const router = VueRouter.createRouter({
@@ -21,6 +22,11 @@ const router = VueRouter.createRouter({
       name: 'settingsPage',
       path: '/settingsPage',
       component: SettingsPage,
+    },
+    {
+      name: 'gamepadPage',
+      path: '/gamepadPage',
+      component: GamepadPage,
     },
     {
       name: 'tempPage',

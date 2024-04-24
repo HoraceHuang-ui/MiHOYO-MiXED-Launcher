@@ -33,6 +33,7 @@
   "general_clearGamePath": "清除游戏路径",
   "general_clearProfileInfo": "清除账号数据",
   "general_loadingFailed": "加载失败",
+  "general_back": "返回",
   "general_refresh": "刷新",
   "POST_TYPE_INFO": "资讯",
   "POST_TYPE_ANNOUNCE": "公告",
@@ -102,5 +103,17 @@
   "settings_about": "关于",
   "settings_checkUpdates": "检查更新",
   "settings_latestVersion": "当前已是最新",
-  "settings_checkUpdFailed": "检查更新失败"
+  "settings_checkUpdFailed": "检查更新失败",
+  "gamepad_init": "手柄模式",
+  "gamepad_selectGame": "选择游戏",
+  "gamepad_officialLauncher": "官方启动器",
+  "gamepad_selectSettingItem": "选择项",
+  "gamepad_selectSettingCard": "选择分类",
+  "gamepad_autoEnterGamepad": "连接手柄时自动进入手柄模式",
+  "gamepad_autoEnterTip1": "关闭后，您仍能通过按下",
+  "gamepad_autoEnterTip2": "键进入手柄模式。若开启后没反应，请按一下手柄任意键。",
+  "gamepad_quitOnClose": "关闭窗口时退出应用",
+  "gamepad_disableMouse": "禁用鼠标操作",
+  "gamepad_showToolbar": "显示底栏",
+  "gamepad_windowActions": "按住以选择窗口操作"
 }

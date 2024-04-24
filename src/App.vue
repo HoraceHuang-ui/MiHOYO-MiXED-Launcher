@@ -32,6 +32,12 @@ const updInfo = ref<UpdInfo>({
   url: '',
   zipball_url: '',
 })
+const rAF = window.requestAnimationFrame
+// const rAFStop = window.cancelAnimationFrame
+const gpType = ref('Xbox')
+const autoEnterGamepad = ref(true)
+provide('gpType', gpType)
+provide('autoEnterGamepad', autoEnterGamepad)
 
 const hScale = ref(window.innerWidth / 1200)
 const vScale = ref(window.innerHeight / 700)
@@ -45,36 +51,89 @@ provide('vScale', vScale)
 
 const skipCurrent = ref(false)
 const colorTheme = ref(2)
+const gamepad = ref(false)
 const darkModePreference = window.matchMedia('(prefers-color-scheme: dark)')
 const router = useRouter()
 
-onMounted(() => {
-  window.store.get('colorTheme').then((theme: number) => {
-    if (!theme) {
-      window.store.set('colorTheme', 2, false)
-    } else {
-      colorTheme.value = theme
-    }
+let inThrottle = false
+const waitMapInput = () => {
+  var gamepads = navigator.getGamepads()
+  if (!gamepads) return
 
-    if (
-      colorTheme.value == 3 ||
-      (colorTheme.value == 2 && darkModePreference.matches)
-    ) {
-      document.body.classList.add('dark')
-    } else {
-      document.body.classList.remove('dark')
-    }
+  const gp = gamepads[0]
 
-    if (colorTheme.value == 2) {
-      darkModePreference.addEventListener('change', e => {
-        if (e.matches) {
-          document.body.classList.add('dark')
-        } else {
-          document.body.classList.remove('dark')
-        }
-      })
+  if (!gp) {
+    rAF(waitMapInput)
+    return
+  }
+
+  // Map: Enter Gamepad Mode
+  if (gp.buttons[8].pressed) {
+    if (!inThrottle) {
+      inThrottle = true
+      setTimeout(() => {
+        enterGamepad(
+          gp.id.startsWith('DualSense') || gp.id.startsWith('DualShock')
+            ? 'PS'
+            : 'Xbox',
+        )
+        inThrottle = false
+      }, 300)
     }
-  })
+  }
+
+  rAF(waitMapInput)
+}
+
+const enterGamepad = (gampadType: string) => {
+  gamepad.value = true
+  gpType.value = gampadType
+  // rAFStop(waitMapInput)
+  router.push('/gamepadPage')
+}
+
+const leaveGamepad = () => {
+  gamepad.value = false
+  router.push('/')
+
+  const gamepads = navigator.getGamepads()
+  for (let i = 0; i < gamepads.length; i++) {
+    const gp = gamepads[i]
+    if (gp) {
+      rAF(waitMapInput)
+      break
+    }
+  }
+}
+
+provide('leaveGamepad', leaveGamepad)
+
+onMounted(async () => {
+  let theme = await window.store.get('colorTheme')
+  if (!theme) {
+    window.store.set('colorTheme', 2, false)
+  } else {
+    colorTheme.value = theme
+  }
+
+  if (
+    colorTheme.value == 3 ||
+    (colorTheme.value == 2 && darkModePreference.matches)
+  ) {
+    document.body.classList.add('dark')
+  } else {
+    document.body.classList.remove('dark')
+  }
+
+  if (colorTheme.value == 2) {
+    darkModePreference.addEventListener('change', e => {
+      if (e.matches) {
+        document.body.classList.add('dark')
+      } else {
+        document.body.classList.remove('dark')
+      }
+    })
+  }
 
   window.github
     .getLatestRelease()
@@ -128,12 +187,35 @@ onMounted(() => {
       console.error(err)
     })
 
-  window.store.get('dialogStyle').then((style: DialogStyle) => {
-    if (!style) {
-      window.store.set('dialogStyle', 'gs', false)
+  let style = await window.store.get('dialogStyle')
+  if (!style) {
+    window.store.set('dialogStyle', 'gs', false)
+  }
+  dialogStyle.value = style
+
+  let autoEnter = await window.store.get('autoEnterGamepad')
+  console.log(autoEnter)
+  if (autoEnter == undefined || autoEnter) {
+    autoEnterGamepad.value = true
+    const gamepads = navigator.getGamepads()
+    for (let i = 0; i < gamepads.length; i++) {
+      const gp = gamepads[i]
+      if (gp) {
+        console.log(gp.id)
+        enterGamepad(
+          gp.id.startsWith('DualSense') || gp.id.startsWith('DualShock')
+            ? 'PS'
+            : 'Xbox',
+        )
+        break
+      }
     }
-    dialogStyle.value = style
-  })
+    window.store.set('autoEnterGamepad', true, false)
+  } else {
+    autoEnterGamepad.value = false
+    console.log('raf')
+    rAF(waitMapInput)
+  }
 
   fetch('../package.json')
     .then(response => response.json())
@@ -142,6 +224,18 @@ onMounted(() => {
     })
 
   window.visualViewport?.addEventListener('resize', cardResizeCb)
+
+  window.addEventListener('gamepadconnected', e => {
+    if (!autoEnterGamepad.value) return
+    console.log('connected')
+    const gp = (e as GamepadEvent).gamepad
+    enterGamepad(
+      gp.id.startsWith('DualSense') || gp.id.startsWith('DualShock')
+        ? 'PS'
+        : 'Xbox',
+    )
+  })
+  window.addEventListener('gamepaddisconnected', leaveGamepad)
 })
 
 onUnmounted(() => {
@@ -177,7 +271,9 @@ const needsUpdate = (latestStr: string) => {
 </script>
 
 <template id="app">
-  <TopHeader />
+  <Transition name="swipe-top">
+    <TopHeader v-if="!gamepad" />
+  </Transition>
   <router-view></router-view>
 </template>
 
@@ -185,4 +281,13 @@ const needsUpdate = (latestStr: string) => {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.swipe-top-enter-from,
+.swipe-top-leave-to {
+  transform: translateY(-100%);
+}
+
+.swipe-top-enter-active {
+  transition: transform 0.3s;
+}
 </style>
