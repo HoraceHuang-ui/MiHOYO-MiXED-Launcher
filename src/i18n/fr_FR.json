@@ -33,6 +33,7 @@
   "general_clearGamePath": "Effacer le chemin de jeu",
   "general_clearProfileInfo": "Effacer les informations du profil",
   "general_loadingFailed": "Erreur lors du chargement de la page",
+  "general_back": "Back",
   "general_refresh": "Rafraîchir",
   "POST_TYPE_INFO": "Infos",
   "POST_TYPE_ANNOUNCE": "Annonce",
@@ -102,5 +103,17 @@
   "settings_about": "A propos",
   "settings_checkUpdates": "Recherche de mises à jour",
   "settings_latestVersion": "Déjà Dernier",
-  "settings_checkUpdFailed": "Échec de la vérification de la mise à jour"
+  "settings_checkUpdFailed": "Échec de la vérification de la mise à jour",
+  "gamepad_init": "Gamepad Mode",
+  "gamepad_selectGame": "Select Game",
+  "gamepad_officialLauncher": "Official Launcher",
+  "gamepad_selectSettingItem": "Select Item",
+  "gamepad_selectSettingCard": "Select Category",
+  "gamepad_autoEnterGamepad": "Auto enter when connected",
+  "gamepad_autoEnterTip1": "When disabled, you can still enter gamepad mode by pressing",
+  "gamepad_autoEnterTip2": ". If nothing happens when enabled, try pressing any button on the gamepad.",
+  "gamepad_quitOnClose": "Quit app when closing window",
+  "gamepad_disableMouse": "Disable mouse input",
+  "gamepad_showToolbar": "Show toolbar",
+  "gamepad_windowActions": "Hold for window actions"
 }
