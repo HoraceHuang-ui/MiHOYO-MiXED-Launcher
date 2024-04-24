@@ -33,6 +33,7 @@
   "general_clearGamePath": "Очистить путь к игре",
   "general_clearProfileInfo": "Очистить информацию о профиле",
   "general_loadingFailed": "Ошибка загрузки страницы",
+  "general_back": "Back",
   "general_refresh": "Обновить",
   "POST_TYPE_INFO": "Инфо",
   "POST_TYPE_ANNOUNCE": "Объявления",
@@ -102,5 +103,17 @@
   "settings_about": "О нас",
   "settings_checkUpdates": "Проверить обновления",
   "settings_latestVersion": "У вас последняя версия",
-  "settings_checkUpdFailed": "Не удалось проверить обновление"
+  "settings_checkUpdFailed": "Не удалось проверить обновление",
+  "gamepad_init": "Gamepad Mode",
+  "gamepad_selectGame": "Select Game",
+  "gamepad_officialLauncher": "Official Launcher",
+  "gamepad_selectSettingItem": "Select Item",
+  "gamepad_selectSettingCard": "Select Category",
+  "gamepad_autoEnterGamepad": "Auto enter when connected",
+  "gamepad_autoEnterTip1": "When disabled, you can still enter gamepad mode by pressing",
+  "gamepad_autoEnterTip2": ". If nothing happens when enabled, try pressing any button on the gamepad.",
+  "gamepad_quitOnClose": "Quit app when closing window",
+  "gamepad_disableMouse": "Disable mouse input",
+  "gamepad_showToolbar": "Show toolbar",
+  "gamepad_windowActions": "Hold for window actions"
 }
