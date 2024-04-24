@@ -172,6 +172,9 @@ To add a new language,
       - `width`
       - `height`
       - `isMax` Whether the window was maximized
+    - `autoEnterGamepad` Whether to automatically enter Gamepad Mode when connected to a gamepad
+    - `gamepadDisableMouse` Whether to disable mouse input when in Gamepad Mode
+    - `showGamepadToolbar` Whether to show the bottom toolbar in Gamepad Mode
 - `localStorage` items backup:
   - `lang` Language setting
   - `colorTheme` Color theme setting

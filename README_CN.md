@@ -163,6 +163,9 @@ $^2$ `需要补全。` 标蓝的（即未被批准的）字符串是机翻的。
       - `width` 窗口宽度
       - `height` 窗口高度
       - `isMax` 窗口是否最大化
+    - `autoEnterGamepad` 连接到手柄时自动进入手柄模式
+    - `gamepadDisableMouse` 手柄模式禁用鼠标操作
+    - `showGamepadToolbar` 在手柄模式中显示底部键位操作栏
 - `localStorage` 存储条目备忘：
   - `lang` 语言设置
   - `colorTheme` 颜色主题设置
