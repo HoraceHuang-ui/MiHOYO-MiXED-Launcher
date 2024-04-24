@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, PropType, ref } from 'vue'
+import { computed, defineModel, PropType, ref } from 'vue'
 
 const props = defineProps({
   content: {
@@ -18,6 +18,14 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+})
+
+const showTooltip = defineModel({
+  default: false,
 })
 
 const wrapperStyles: Record<string, any> = {
@@ -44,7 +52,6 @@ const wrapperStyles: Record<string, any> = {
   },
 }
 
-const showTooltip = ref(false)
 const wrapperRef = ref<HTMLElement>()
 const dropdownRef = ref<HTMLElement>()
 let timer: NodeJS.Timeout | number | undefined = undefined
@@ -96,7 +103,7 @@ const onMouseLeave = () => {
       <div
         class="tooltip-wrapper"
         :style="{ ...wrapperStyles[placement], maxWidth: maxWidth }"
-        v-if="showTooltip"
+        v-if="!disabled && showTooltip"
       >
         <div
           class="tooltip"
@@ -116,7 +123,7 @@ const onMouseLeave = () => {
 <style scoped>
 .tooltip-wrapper {
   @apply absolute w-max flex flex-row z-50;
-  @apply min-w-full min-h-full overflow-visible;
+  @apply min-w-full min-h-full overflow-visible cursor-default;
 }
 
 .tooltip {
