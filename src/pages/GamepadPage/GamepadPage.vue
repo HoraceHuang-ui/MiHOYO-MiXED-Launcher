@@ -207,7 +207,7 @@ const gameLoop = () => {
   }
 
   // [MAIN] L Axis / ARROW: Select Game
-  if (mode.value === 'main' && (gp.axes[0] < -0.5 || gp.buttons[14].pressed)) {
+  if (mode.value === 'main' && (gp.axes[0] < -0.9 || gp.buttons[14].pressed)) {
     if (!inThrottle) {
       selectedGameIndex.value =
         selectedGameIndex.value === 0
@@ -216,10 +216,10 @@ const gameLoop = () => {
       inThrottle = true
       setTimeout(() => {
         inThrottle = false
-      }, 300)
+      }, 150)
     }
   }
-  if (mode.value === 'main' && (gp.axes[0] > 0.5 || gp.buttons[15].pressed)) {
+  if (mode.value === 'main' && (gp.axes[0] > 0.9 || gp.buttons[15].pressed)) {
     if (!inThrottle) {
       selectedGameIndex.value =
         selectedGameIndex.value === importedGames.value.length - 1
@@ -228,7 +228,7 @@ const gameLoop = () => {
       inThrottle = true
       setTimeout(() => {
         inThrottle = false
-      }, 300)
+      }, 150)
     }
   }
 
@@ -259,11 +259,11 @@ const gameLoop = () => {
   if (
     (mode.value === 'main' || mode.value === 'settings') &&
     gp.buttons[6].pressed &&
-    gp.buttons[6].value > 0.5
+    gp.buttons[6].value > 0.7
   ) {
     mode.value = 'window-action'
   }
-  if (mode.value === 'window-action' && gp.buttons[6].value <= 0.5) {
+  if (mode.value === 'window-action' && gp.buttons[6].value <= 0.7) {
     mode.value = 'main'
   }
   if (mode.value === 'window-action') {
@@ -309,8 +309,11 @@ const gameLoop = () => {
     }
   }
 
-  // [SETTINGS] LS: Select Settings Item
-  if (mode.value === 'settings' && gp.axes[1] < -0.5) {
+  // [SETTINGS] LS / DIR_v: Select Settings Item
+  if (
+    (mode.value === 'settings' && gp.axes[1] < -0.9) ||
+    gp.buttons[12].pressed
+  ) {
     if (!inThrottle) {
       if (selectedSettingsItemIndex.value === 0) {
         const targetCardIdx =
@@ -329,7 +332,10 @@ const gameLoop = () => {
       }, 150)
     }
   }
-  if (mode.value === 'settings' && gp.axes[1] > 0.5) {
+  if (
+    (mode.value === 'settings' && gp.axes[1] > 0.9) ||
+    gp.buttons[13].pressed
+  ) {
     if (!inThrottle) {
       if (
         selectedSettingsItemIndex.value ===
@@ -351,7 +357,7 @@ const gameLoop = () => {
   }
 
   // [SETTINGS] RS: Select Settings Card
-  if (mode.value === 'settings' && gp.axes[3] < -0.5) {
+  if (mode.value === 'settings' && gp.axes[3] < -0.9) {
     if (!inThrottle) {
       selectedSettingsItemIndex.value = 0
       selectedSettingsCardIndex.value =
@@ -364,7 +370,7 @@ const gameLoop = () => {
       }, 150)
     }
   }
-  if (mode.value === 'settings' && gp.axes[3] > 0.5) {
+  if (mode.value === 'settings' && gp.axes[3] > 0.9) {
     if (!inThrottle) {
       selectedSettingsItemIndex.value = 0
       selectedSettingsCardIndex.value =
@@ -785,6 +791,7 @@ onMounted(async () => {
   &.toolbar {
     border-radius: 24px;
     margin-top: 1vw;
+    margin-left: 0;
     width: 98vw;
     height: calc(100vh - 1vw - 64px);
   }
