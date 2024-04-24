@@ -61,7 +61,7 @@ const quitOnClose = ref(true)
 const trayOnLaunch = ref(true)
 const gsCostume = ref(false)
 const colorTheme = ref(2)
-const autoEnterGamepad = inject<Ref<boolean>>('autoEnterGamepad', ref(false))
+const autoEnterGamepad = inject<Ref<boolean>>('autoEnterGamepad', ref(true))
 const gamepadDisableMouse = ref(false)
 const showGamepadToolbar = ref(true)
 

@@ -194,14 +194,12 @@ onMounted(async () => {
   dialogStyle.value = style
 
   let autoEnter = await window.store.get('autoEnterGamepad')
-  console.log(autoEnter)
   if (autoEnter == undefined || autoEnter) {
     autoEnterGamepad.value = true
     const gamepads = navigator.getGamepads()
     for (let i = 0; i < gamepads.length; i++) {
       const gp = gamepads[i]
       if (gp) {
-        console.log(gp.id)
         enterGamepad(
           gp.id.startsWith('DualSense') || gp.id.startsWith('DualShock')
             ? 'PS'
@@ -215,6 +213,11 @@ onMounted(async () => {
     autoEnterGamepad.value = false
     console.log('raf')
     rAF(waitMapInput)
+  }
+
+  let toolbar = await window.store.get('showGamepadToolbar')
+  if (toolbar == undefined) {
+    window.store.set('showGamepadToolbar', true, false)
   }
 
   fetch('../package.json')
