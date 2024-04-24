@@ -32,14 +32,8 @@ const updInfo = ref<UpdInfo>({
   url: '',
   zipball_url: '',
 })
-const rAF =
-  window.mozRequestAnimationFrame ||
-  window.webkitRequestAnimationFrame ||
-  window.requestAnimationFrame
-const rAFStop =
-  window.mozCancelAnimationFrame ||
-  window.webkitCancelAnimationFrame ||
-  window.cancelAnimationFrame
+const rAF = window.requestAnimationFrame
+// const rAFStop = window.cancelAnimationFrame
 const gpType = ref('Xbox')
 const autoEnterGamepad = ref(true)
 provide('gpType', gpType)
@@ -94,7 +88,7 @@ const waitMapInput = () => {
 const enterGamepad = (gampadType: string) => {
   gamepad.value = true
   gpType.value = gampadType
-  rAFStop(waitMapInput)
+  // rAFStop(waitMapInput)
   router.push('/gamepadPage')
 }
 

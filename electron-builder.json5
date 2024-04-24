@@ -43,5 +43,8 @@
     "src/assets/failedEmojis/*",
     "src/assets/gsbanner.png",
     "src/assets/srbanner.jpg",
+    "src/assets/hi3banner.webp",
+    "src/assets/gpIcons/Xbox/*",
+    "src/assets/gpIcons/PS/*",
   ],
 }

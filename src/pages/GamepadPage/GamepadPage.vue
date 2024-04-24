@@ -98,7 +98,7 @@ const searchSettingByKey = (key: string) => {
 const leaveGamepadClick = () => {
   mode.value = 'out'
   showTooltip.value = false
-  leaveGamepad()
+  leaveGamepad!()
 }
 
 const launch = async (path: string) => {
@@ -140,15 +140,9 @@ const onSettingsHover = (cardIdx: number, itemIdx: number) => {
   selectedSettingsItemIndex.value = itemIdx
 }
 
-const rAF =
-  window.mozRequestAnimationFrame ||
-  window.webkitRequestAnimationFrame ||
-  window.requestAnimationFrame
+const rAF = window.requestAnimationFrame
 
-const rAFStop =
-  window.mozCancelAnimationFrame ||
-  window.webkitCancelAnimationFrame ||
-  window.cancelAnimationFrame
+// const rAFStop = window.cancelAnimationFrame
 
 let inThrottle = false
 const gameLoop = () => {
@@ -203,7 +197,7 @@ const gameLoop = () => {
       mode.value = 'out'
       inThrottle = true
       setTimeout(() => {
-        leaveGamepad()
+        leaveGamepad!()
         inThrottle = false
       }, 300)
     }
