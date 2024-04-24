@@ -48,18 +48,31 @@ const settingsItems: Ref<SettingsCard[]> = ref([
         text: translate('gamepad_autoEnterGamepad'),
         value: true,
         key: 'autoEnterGamepad',
-        tip: h('div', [
-          h('span', translate('gamepad_autoEnterTip1')),
-          h(GamepadIcon, {
-            icon: 'Map',
+        tip: h(
+          'ul',
+          {
             style: {
-              height: '20px',
-              padding: '0 4px 0 4px',
-              display: 'inline',
+              'padding-left': '20px',
+              'list-style-type': 'disc',
             },
-          }),
-          h('span', translate('gamepad_autoEnterTip2')),
-        ]),
+          },
+          [
+            h('li', [
+              h('span', translate('gamepad_autoEnterTip1_1')),
+              h(GamepadIcon, {
+                icon: 'Map',
+                style: {
+                  height: '20px',
+                  padding: '0 4px 0 4px',
+                  display: 'inline',
+                },
+              }),
+              h('span', translate('gamepad_autoEnterTip1_2')),
+            ]),
+            h('li', translate('gamepad_autoEnterTip2')),
+            h('li', translate('gamepad_autoEnterTip3')),
+          ],
+        ),
       },
       {
         text: translate('gamepad_quitOnClose'),

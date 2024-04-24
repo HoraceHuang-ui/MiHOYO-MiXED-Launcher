@@ -24,6 +24,8 @@ import MySelect from '../../components/MySelect.vue'
 import MyTextSwitch from '../../components/MyTextSwitch.vue'
 import MyLink from '../../components/MyLink.vue'
 import MyGroupButtons from '../../components/MyGroupButtons.vue'
+import GamepadIcon from '../../components/GamepadIcon.vue'
+import MyTooltip from '../../components/MyTooltip.vue'
 
 const lang = ref<Lang>('en_US')
 const selectedLangIdx = ref(0)
@@ -59,6 +61,9 @@ const quitOnClose = ref(true)
 const trayOnLaunch = ref(true)
 const gsCostume = ref(false)
 const colorTheme = ref(2)
+const autoEnterGamepad = inject<Ref<boolean>>('autoEnterGamepad', ref(false))
+const gamepadDisableMouse = ref(false)
+const showGamepadToolbar = ref(true)
 
 const hScale = inject<Ref<number>>('hScale')
 const vScale = inject<Ref<number>>('vScale')
@@ -89,6 +94,8 @@ onMounted(async () => {
   transitionShow.value = true
 
   gsCostume.value = await window.store.get('gsCostume')
+  gamepadDisableMouse.value = await window.store.get('gamepadDisableMouse')
+  showGamepadToolbar.value = await window.store.get('showGamepadToolbar')
 
   // BUILD: '../../app.asar/package.json'
   // DEV: '../../package.json'
@@ -190,6 +197,18 @@ const switchLaunchTray = () => {
 
 const switchGsCostume = () => {
   window.store.set('gsCostume', gsCostume.value, false)
+}
+
+const switchAutoEnterGamepad = () => {
+  window.store.set('autoEnterGamepad', autoEnterGamepad.value, false)
+}
+
+const switchDisableMouse = () => {
+  window.store.set('gamepadDisableMouse', gamepadDisableMouse.value, false)
+}
+
+const switchShowToolbar = () => {
+  window.store.set('showGamepadToolbar', showGamepadToolbar.value, false)
 }
 
 const colorThemeChange = () => {
@@ -386,6 +405,57 @@ const showClearDialog = () => {
           <CustomSwitch v-model="gsCostume" @change="switchGsCostume" />
         </div>
 
+        <!-- GAMEPAD -->
+        <div class="title font-gs">{{ $t('gamepad_init') }}</div>
+        <div class="form-item hover">
+          <div class="flex flex-row">
+            <div class="form-item-text mr-2">
+              {{ $t('gamepad_autoEnterGamepad') }}
+            </div>
+            <MyTooltip max-width="300px" middle placement="bottom">
+              <template #content>
+                <ul style="list-style-type: disc; padding-left: 20px">
+                  <li>
+                    <span>{{ $t('gamepad_autoEnterTip1_1') }}</span>
+                    <GamepadIcon
+                      icon="Map"
+                      style="
+                        height: 20px;
+                        padding: 0 4px 0 4px;
+                        display: inline;
+                      "
+                    />
+                    <span>{{ $t('gamepad_autoEnterTip1_2') }}</span>
+                  </li>
+                  <li>{{ $t('gamepad_autoEnterTip2') }}</li>
+                  <li>{{ $t('gamepad_autoEnterTip3') }}</li>
+                </ul>
+              </template>
+              <div class="flex flex-row">
+                <div class="help">?</div>
+              </div>
+            </MyTooltip>
+          </div>
+          <CustomSwitch
+            v-model="autoEnterGamepad"
+            @change="switchAutoEnterGamepad"
+          />
+        </div>
+        <div class="form-item hover">
+          <div class="form-item-text">{{ $t('gamepad_disableMouse') }}</div>
+          <CustomSwitch
+            v-model="gamepadDisableMouse"
+            @change="switchDisableMouse"
+          />
+        </div>
+        <div class="form-item hover">
+          <div class="form-item-text">{{ $t('gamepad_showToolbar') }}</div>
+          <CustomSwitch
+            v-model="showGamepadToolbar"
+            @change="switchShowToolbar"
+          />
+        </div>
+
         <!-- ABOUT -->
         <div class="title font-gs">{{ $t('settings_about') }}</div>
         <div class="form-item version-area-wrapper">
@@ -489,6 +559,12 @@ const showClearDialog = () => {
   .dark & {
     @apply text-[#eee];
   }
+}
+
+.help {
+  @apply mt-[6px] w-5 h-5 rounded-full;
+  @apply text-center font-bold text-sm;
+  @apply bg-gray-400 text-white cursor-help;
 }
 
 .version-area-wrapper {
