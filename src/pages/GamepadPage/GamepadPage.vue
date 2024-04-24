@@ -3,6 +3,7 @@ import { h, inject, onMounted, ref, Ref, VNode } from 'vue'
 import GamepadIcon from '../../components/GamepadIcon.vue'
 import CustomSwitch from '../../components/CustomSwitch.vue'
 import MyTooltip from '../../components/MyTooltip.vue'
+import { translate } from '../../i18n'
 
 type Mode = 'main' | 'settings' | 'window-action' | 'out'
 type GamePath = {
@@ -41,14 +42,14 @@ const autoEnterGamepad = inject<Ref<boolean>>('autoEnterGamepad')
 
 const settingsItems: Ref<SettingsCard[]> = ref([
   {
-    title: '通用',
+    title: translate('settings_general'),
     items: [
       {
-        text: '连接手柄时自动进入手柄模式',
+        text: translate('gamepad_autoEnterGamepad'),
         value: true,
         key: 'autoEnterGamepad',
         tip: h('div', [
-          h('span', '关闭后，您仍能通过按下'),
+          h('span', translate('gamepad_autoEnterTip1')),
           h(GamepadIcon, {
             icon: 'Map',
             style: {
@@ -57,26 +58,26 @@ const settingsItems: Ref<SettingsCard[]> = ref([
               display: 'inline',
             },
           }),
-          h('span', '键进入手柄模式。若开启后没反应，请按一下手柄任意键。'),
+          h('span', translate('gamepad_autoEnterTip2')),
         ]),
       },
       {
-        text: '关闭窗口时退出应用',
+        text: translate('gamepad_quitOnClose'),
         value: false,
         key: 'quitOnClose',
       },
       {
-        text: '禁用鼠标操作',
+        text: translate('gamepad_disableMouse'),
         value: false,
         key: 'gamepadDisableMouse',
       },
     ],
   },
   {
-    title: '外观',
+    title: translate('settings_appearance'),
     items: [
       {
-        text: '显示底部工具栏',
+        text: translate('gamepad_showToolbar'),
         value: true,
         key: 'showGamepadToolbar',
       },
@@ -452,7 +453,7 @@ onMounted(async () => {
     <div class="loading-wrapper" v-if="!contentReady">
       <div class="loading-content">
         <GamepadIcon icon="Whole" />
-        <div class="w-full text-xl font-gs">Gamepad Mode</div>
+        <div class="w-full text-xl font-gs">{{ $t('gamepad_init') }}</div>
       </div>
     </div>
   </Transition>
@@ -479,14 +480,14 @@ onMounted(async () => {
         <div class="left no-drag">
           <div class="bar-item">
             <GamepadIcon icon="LS_h" />
-            <span>选择游戏</span>
+            <span>{{ $t('gamepad_selectGame') }}</span>
           </div>
           <div
             class="bar-item hoverable"
             @click="launch(importedGames[selectedGameIndex].launcherPath)"
           >
             <GamepadIcon icon="X" />
-            <span>官方启动器</span>
+            <span>{{ $t('gamepad_officialLauncher') }}</span>
           </div>
         </div>
         <div class="right no-drag">
@@ -533,7 +534,7 @@ onMounted(async () => {
         <div class="left">
           <div class="bar-item">
             <GamepadIcon icon="LT" />
-            <span>按住并选择窗口操作</span>
+            <span>{{ $t('gamepad_windowActions') }}</span>
           </div>
         </div>
         <div class="right no-drag">
@@ -573,15 +574,15 @@ onMounted(async () => {
         <div class="left no-drag">
           <div class="bar-item hoverable" @click="mode = 'main'">
             <GamepadIcon icon="B" />
-            <span>返回</span>
+            <span>{{ $t('general_back') }}</span>
           </div>
           <div class="bar-item">
             <GamepadIcon icon="LS_v" />
-            <span>选择设置项</span>
+            <span>{{ $t('gamepad_selectSettingItem') }}</span>
           </div>
           <div class="bar-item">
             <GamepadIcon icon="RS_v" />
-            <span>选择设置卡片</span>
+            <span>{{ $t('gamepad_selectSettingCard') }}</span>
           </div>
           <div
             class="bar-item hoverable"
@@ -593,7 +594,7 @@ onMounted(async () => {
             "
           >
             <GamepadIcon icon="A" />
-            <span>选定</span>
+            <span>{{ $t('general_confirm') }}</span>
           </div>
         </div>
         <div class="right no-drag">
