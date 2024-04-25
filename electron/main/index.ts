@@ -101,6 +101,7 @@ async function createWindow() {
     win.maximize()
   }
 
+  let inThrottle = false
   win.on('resize', () => {
     if (win.isMaximized()) {
       store.set('windowState', {
@@ -110,9 +111,13 @@ async function createWindow() {
       })
       return
     }
-    if (win.isMinimized()) {
+    if (win.isMinimized() || inThrottle) {
       return
     }
+    inThrottle = true
+    setTimeout(() => {
+      inThrottle = false
+    }, 1000)
     const [width, height] = win.getSize()
     store.set('windowState', { width, height, isMax: false })
   })
