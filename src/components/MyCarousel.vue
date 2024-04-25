@@ -36,6 +36,7 @@ const props = defineProps({
 const curIdx = ref(0)
 const hoverShowArrow = ref(false)
 const hoverShowIndicator = ref(false)
+const panesDisplay = ref<string[]>([])
 
 let autoplayTimer: NodeJS.Timer | number | undefined = undefined
 
@@ -54,11 +55,15 @@ const panes = computed(() => {
 
 const refreshState = () => {
   if (panes.value) {
+    panesDisplay.value = []
     for (let i = 0; i < panes.value.length; i++) {
       ;(panes.value.item(i) as HTMLElement)!.style.position = 'absolute'
       ;(panes.value.item(i) as HTMLElement)!.style.top = '0'
       ;(panes.value.item(i) as HTMLElement)!.style.left = '0'
       ;(panes.value.item(i) as HTMLElement)!.style.transition = 'all 0.4s ease'
+      panesDisplay.value.push(
+        (panes.value.item(i) as HTMLElement)!.style.display,
+      )
       // (panes.value.item(i) as HTMLElement)!!.style.width = `${panesWrapper.value!!.clientWidth}px`;
       if (i == curIdx.value) {
         continue
@@ -118,7 +123,7 @@ watch(curIdx, (newId: number, oldId: number) => {
 
   if (panes.value) {
     newItem.style.transition = 'none'
-    newItem.style.display = 'flex'
+    newItem.style.display = panesDisplay.value[newId]
 
     if (props.animation === 'swipe') {
       if (newId > oldId) {
