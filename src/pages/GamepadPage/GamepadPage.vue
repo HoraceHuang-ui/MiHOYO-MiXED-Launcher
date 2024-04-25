@@ -170,14 +170,15 @@ const rAF = window.requestAnimationFrame
 // const rAFStop = window.cancelAnimationFrame
 
 let inThrottle = false
-let oldMode: Mode = 'out'
+let settingsOldMode: Mode = 'out'
+let windowOldMode: Mode = 'out'
 
 const barSettingsClick = () => {
   if (mode.value !== 'settings') {
-    oldMode = mode.value
+    settingsOldMode = mode.value
     mode.value = 'settings'
   } else {
-    mode.value = oldMode
+    mode.value = settingsOldMode
   }
 }
 
@@ -218,7 +219,7 @@ const gameLoop = () => {
     gp.buttons[9].pressed
   ) {
     if (!inThrottle) {
-      oldMode = mode.value
+      settingsOldMode = mode.value
       mode.value = 'settings'
       inThrottle = true
       setTimeout(() => {
@@ -310,10 +311,11 @@ const gameLoop = () => {
     gp.buttons[6].pressed &&
     gp.buttons[6].value > 0.7
   ) {
+    windowOldMode = mode.value
     mode.value = 'window-action'
   }
   if (mode.value === 'window-action' && gp.buttons[6].value <= 0.7) {
-    mode.value = 'main'
+    mode.value = windowOldMode
   }
   if (mode.value === 'window-action') {
     if (gp.buttons[2].pressed) {
@@ -353,7 +355,7 @@ const gameLoop = () => {
   ) {
     if (!inThrottle) {
       showTooltip.value = false
-      mode.value = oldMode
+      mode.value = settingsOldMode
       inThrottle = true
       setTimeout(() => {
         inThrottle = false
@@ -736,14 +738,17 @@ onMounted(async () => {
 
   <Transition name="settings" :duration="600">
     <div
-      v-if="mode === 'settings'"
+      v-if="
+        mode === 'settings' ||
+        (mode === 'window-action' && windowOldMode === 'settings')
+      "
       :class="{
         'pointer-events-none': searchSettingByKey('gamepadDisableMouse')?.value,
       }"
     >
       <div
         class="outer settings-wrapper"
-        @click="mode = oldMode"
+        @click="mode = settingsOldMode"
         :class="{ toolbar: searchSettingByKey('showGamepadToolbar')?.value }"
       />
       <div
@@ -820,7 +825,14 @@ onMounted(async () => {
         mode === 'sr-player' ||
         mode === 'dialog' ||
         (mode === 'settings' &&
-          (oldMode === 'gs-player' || oldMode === 'sr-player'))
+          (settingsOldMode === 'gs-player' ||
+            settingsOldMode === 'sr-player')) ||
+        (mode === 'window-action' &&
+          (windowOldMode === 'gs-player' ||
+            windowOldMode === 'sr-player' ||
+            (windowOldMode === 'settings' &&
+              (settingsOldMode === 'gs-player' ||
+                settingsOldMode === 'sr-player'))))
       "
       :class="{
         'pointer-events-none': searchSettingByKey('gamepadDisableMouse')?.value,
