@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { computed, inject, onMounted, Ref, ref } from 'vue'
+import {
+  computed,
+  defineModel,
+  inject,
+  onBeforeUnmount,
+  onMounted,
+  PropType,
+  Ref,
+  ref,
+} from 'vue'
 import { useRouter } from 'vue-router'
 import { translate } from '../../../i18n'
 import StatIcon from '../../../components/StatIcon.vue'
@@ -17,8 +26,22 @@ import ScrollWrapper from '../../../components/ScrollWrapper.vue'
 import MyTooltip from '../../../components/MyTooltip.vue'
 import MyCarousel from '../../../components/MyCarousel.vue'
 import CustomUIDInput from '../../../components/CustomUIDInput.vue'
+import GamepadIcon from '../../../components/GamepadIcon.vue'
 
 // import rankMap from '../textMaps/character_ranks.json' with { type: 'json' }
+
+const gamepadMode = defineModel({
+  type: String as PropType<
+    | 'main'
+    | 'settings'
+    | 'window-action'
+    | 'gs-player'
+    | 'sr-player'
+    | 'dialog'
+    | 'out'
+  >,
+  required: false,
+})
 
 const apiUrl = 'https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/'
 
@@ -38,6 +61,7 @@ const playerInfoReady = ref(false)
 const playerInfoLoading = ref(false)
 const playerInfoFailed = ref(false)
 const uidInput = ref('')
+const uidInputDom = ref()
 let uid = ''
 const charsPage = ref(0)
 const pages = computed(() =>
@@ -51,9 +75,118 @@ const vScale = inject<Ref<number>>('vScale')
 const charsScrollbar = ref()
 const cardsCarouselRef = ref()
 const showcaseIdx = ref(0)
+const relicIdx = ref(0)
 const ascLevelMap = [20, 30, 40, 50, 60, 70, 80]
 let rankMap: Record<string, RankInfo> = {}
 const ranksReady = ref(false)
+const initReady = ref(false)
+
+const rAF = window.requestAnimationFrame
+let rAFId: number | null = null
+
+let inThrottle = false
+const gameLoop = () => {
+  const gamepads = navigator.getGamepads()
+  const gp = gamepads[0]
+
+  if (!gp) {
+    return
+  }
+
+  // A: Request user info
+  if (gamepadMode.value === 'sr-player' && gp.buttons[0].pressed) {
+    if (!inThrottle) {
+      inThrottle = true
+      requestInfo()
+      setTimeout(() => {
+        inThrottle = false
+      }, 300)
+    }
+  }
+
+  // Y: Focus on CustomUIDInput's input
+  if (gamepadMode.value === 'sr-player' && gp.buttons[3].pressed) {
+    if (!inThrottle) {
+      inThrottle = true
+      uidInputDom.value?.focusInput()
+      setTimeout(() => {
+        inThrottle = false
+      }, 300)
+    }
+  }
+
+  // X: Open details dialog
+  if (gamepadMode.value === 'sr-player' && gp.buttons[2].pressed) {
+    if (!inThrottle) {
+      inThrottle = true
+      showCharDetails(showcaseIdx.value)
+      setTimeout(() => {
+        inThrottle = false
+      }, 300)
+    }
+  }
+
+  // LS: Select character
+  if (gamepadMode.value === 'sr-player' && gp.axes[0] < -0.9) {
+    if (!inThrottle) {
+      inThrottle = true
+      if (showcaseIdx.value > 0) {
+        setShowcase(showcaseIdx.value - 1)
+      }
+      setTimeout(() => {
+        inThrottle = false
+      }, 150)
+    }
+  }
+  if (gamepadMode.value === 'sr-player' && gp.axes[0] > 0.9) {
+    if (!inThrottle) {
+      inThrottle = true
+      if (showcaseIdx.value < playerInfo.value.characters.length - 1) {
+        setShowcase(showcaseIdx.value + 1)
+      }
+      setTimeout(() => {
+        inThrottle = false
+      }, 150)
+    }
+  }
+
+  // RS: Select Relics
+  if (gamepadMode.value === 'sr-player' && gp.axes[2] < -0.9) {
+    if (!inThrottle) {
+      inThrottle = true
+      console.log(relicIdx.value)
+      if (relicIdx.value == 0) {
+        relicIdx.value =
+          playerInfo.value.characters[showcaseIdx.value].relics.length - 1
+      } else {
+        relicIdx.value--
+      }
+      setTimeout(() => {
+        inThrottle = false
+      }, 150)
+    }
+  }
+  if (gamepadMode.value === 'sr-player' && gp.axes[2] > 0.9) {
+    if (!inThrottle) {
+      inThrottle = true
+      if (
+        relicIdx.value ==
+        playerInfo.value.characters[showcaseIdx.value].relics.length - 1
+      ) {
+        relicIdx.value = 0
+      } else {
+        relicIdx.value++
+      }
+      setTimeout(() => {
+        inThrottle = false
+      }, 150)
+    }
+  }
+
+  if (rAFId) {
+    rAFId = rAF(gameLoop)
+  }
+}
 
 onMounted(() => {
   fetch(translate('sr_charRanksJsonUrl'))
@@ -75,10 +208,15 @@ onMounted(() => {
         playerInfo.value = value
       }
       console.log(playerInfo.value)
+      initReady.value = true
     })
     .catch(err => {
       console.error(err)
     })
+
+  if (gamepadMode.value) {
+    rAFId = rAF(gameLoop)
+  }
 })
 
 const mergeToPlayerinfo = (newArr: CharacterInfo[]) => {
@@ -100,6 +238,10 @@ const mergeToPlayerinfo = (newArr: CharacterInfo[]) => {
   }
   console.log(playerInfo.value)
 }
+
+onBeforeUnmount(() => {
+  rAFId = null
+})
 
 const router = useRouter()
 const requestInfo = () => {
@@ -157,12 +299,13 @@ const requestInfo = () => {
       })
       window.store.set('srInfo', JSON.stringify(playerInfo.value), true)
       playerInfoLoading.value = false
-      router.push({
-        name: 'tempPage',
-        query: {
-          from: 'sr',
-        },
-      })
+      playerInfoReady.value = true
+      // router.push({
+      //   name: 'tempPage',
+      //   query: {
+      //     from: 'sr',
+      //   },
+      // })
     })
     .catch(err => {
       console.error(err)
@@ -182,6 +325,13 @@ const totalSkillLvs = (c: CharacterInfo) => {
 }
 
 const setShowcase = (index: number) => {
+  relicIdx.value = 0
+  charsPage.value = Math.floor(index / 10)
+  charsScrollbar.value.scrollTo({
+    left: charsPage.value * 48 * 6,
+    top: 0,
+    behavior: 'smooth',
+  })
   cardsCarouselRef.value?.setPane?.(index)
   showcaseIdx.value = index
 }
@@ -255,9 +405,21 @@ const getInnerSet = (sets: RelicSetInfo[]) => {
 }
 
 const showCharDetails = (index: number) => {
+  if (gamepadMode.value) {
+    gamepadMode.value = 'dialog'
+    rAFId = null
+  }
   useDialog(
     SRCharDetailsDialog,
-    {},
+    {
+      onCancel: gamepadMode.value
+        ? (dispose: () => void) => {
+            gamepadMode.value = 'sr-player'
+            rAFId = rAF(gameLoop)
+            dispose()
+          }
+        : undefined,
+    },
     {
       title:
         playerInfo.value.characters[index].name +
@@ -267,6 +429,7 @@ const showCharDetails = (index: number) => {
       showOk: false,
       hScale: hScale,
       vScale: vScale,
+      gamepadMode: !!gamepadMode.value,
     },
   )
 }
@@ -274,7 +437,8 @@ const showCharDetails = (index: number) => {
 
 <template>
   <div
-    class="bg-white dark:bg-[#222] mb-3"
+    class="bg-white dark:bg-[#222] mb-3 transition-all"
+    :class="{ loading: !initReady }"
     style="border-radius: 4.5vh 4.5vh 30px 30px"
   >
     <!-- HEADER -->
@@ -325,8 +489,10 @@ const showCharDetails = (index: number) => {
       <div v-else style="width: 35vw" />
       <div class="flex flex-row">
         <CustomUIDInput
+          ref="uidInputDom"
           v-model="uidInput"
           @submit="requestInfo"
+          :gamepad-mode="!!gamepadMode"
           style="margin-top: 2vh; margin-bottom: 1.5vh; z-index: 10"
           :style="`font-size: calc(max(14px * min(${hScale}, ${vScale}), 16px))`"
         />
@@ -378,7 +544,7 @@ const showCharDetails = (index: number) => {
         <div
           class="flex flex-row justify-between"
           style="width: 690px; transform-origin: center top"
-          :style="`transform: scale(${hScale})`"
+          :style="`transform: scale(${gamepadMode ? `min(${hScale}, ${vScale})` : hScale})`"
         >
           <div class="relative z-50" style="width: 15%">
             <div
@@ -431,7 +597,9 @@ const showCharDetails = (index: number) => {
       </div>
 
       <!-- 角色详情卡片 -->
-      <div :style="`height: calc(616px * ${hScale})`" />
+      <div
+        :style="`height: calc(616px * ${gamepadMode ? `calc(min(${hScale}, ${vScale}) / 616 * 556)` : hScale})`"
+      />
       <MyCarousel
         ref="cardsCarouselRef"
         class="gacha-mask absolute z-0 left-0 top-0"
@@ -439,7 +607,8 @@ const showCharDetails = (index: number) => {
         show-arrow="never"
         animation="fade-swipe"
         style="width: 984px; height: 616px; transform-origin: left top"
-        :style="`transform: scale(${hScale}); border-radius: calc(30px / ${hScale})`"
+        :style="`transform: scale(${gamepadMode ? `calc(min(${hScale}, ${vScale}) / 616 * 556)` : hScale});
+          border-radius: calc(30px / ${gamepadMode ? `calc(min(${hScale}, ${vScale}) / 616 * 556)` : hScale})`"
       >
         <div
           v-for="(character, index) in playerInfo.characters"
@@ -454,7 +623,7 @@ const showCharDetails = (index: number) => {
             <img
               class="relative z-0 w-full"
               src="../../../assets/srBg.jpg"
-              :style="`border-radius: calc(30px / ${hScale}`"
+              :style="`border-radius: calc(30px / ${gamepadMode ? `min(${hScale}, ${vScale})` : hScale}`"
             />
             <img
               class="h-1/4 absolute opacity-50"
@@ -673,8 +842,13 @@ const showCharDetails = (index: number) => {
                     class="mr-2 rounded-full text-sm bg-white bg-opacity-20 text-center hover:bg-opacity-30 active:scale-95 active:bg-opacity-40 cursor-default transition-all"
                     @click="showCharDetails(index)"
                   >
-                    <div class="font-sr-sans" style="margin-top: 6px">
-                      {{ $t('sr_details') }}
+                    <div class="font-sr-sans flex flex-row justify-center">
+                      <GamepadIcon
+                        icon="X"
+                        v-if="gamepadMode"
+                        class="h-[20px] mt-1 bg-gray-900 rounded-full mr-1"
+                      />
+                      <div class="mt-[5px]">{{ $t('sr_details') }}</div>
                     </div>
                   </div>
                 </div>
@@ -856,6 +1030,7 @@ const showCharDetails = (index: number) => {
                 </div>
                 <!-- 右侧第四块：遗器 -->
                 <MyCarousel
+                  v-model="relicIdx"
                   v-if="character.relics && character.relics.length > 0"
                   class="mt-2 w-full h-40 rounded-xl bg-black bg-opacity-20 backdrop-blur-md relative z-20"
                   show-arrow="never"
@@ -1048,6 +1223,10 @@ const showCharDetails = (index: number) => {
 
 .font-sr-sans {
   font-family: sr-sans-font, sans-serif;
+}
+
+.loading {
+  @apply translate-y-[300px] opacity-0;
 }
 
 .char-side-icon {

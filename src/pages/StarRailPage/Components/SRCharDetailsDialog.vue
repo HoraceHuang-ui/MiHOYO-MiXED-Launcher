@@ -3,9 +3,9 @@ import StarRailDialog from './StarRailDialog.vue'
 import StatIcon from '../../../components/StatIcon.vue'
 import DialogListItem from '../../../components/DialogListItem.vue'
 import { AttributeInfo } from '../../../types/starrail/srPlayerInfo'
-import { PropType, Ref, ref } from 'vue'
+import { onMounted, PropType, Ref, ref } from 'vue'
 
-defineProps({
+const props = defineProps({
   title: {
     type: String,
     default: 'Character Details',
@@ -13,6 +13,10 @@ defineProps({
   character: {
     type: Object,
     required: true,
+  },
+  gamepadMode: {
+    type: Boolean,
+    default: false,
   },
   hScale: {
     type: Object as PropType<Ref<number>>,
@@ -23,6 +27,11 @@ defineProps({
     default: ref(1),
   },
 })
+
+const dialogRef = ref(null)
+
+const rAF = window.requestAnimationFrame
+let rAFId: number | null = null
 
 const findField = (range: AttributeInfo[], field: string) => {
   for (let i = 0; i < range.length; i++) {
@@ -52,10 +61,50 @@ const trimAdditions = (additions: AttributeInfo[]) => {
   }
   return tmp
 }
+
+let inThrottle = false
+const gameLoop = () => {
+  const gamepads = navigator.getGamepads()
+  const gp = gamepads[0]
+
+  if (!gp) {
+    return
+  }
+
+  // B: dispose dialog
+  if (gp.buttons[1].pressed) {
+    if (!inThrottle) {
+      inThrottle = true
+      setTimeout(() => {
+        rAFId = null
+        dialogRef.value?.cancelClick?.()
+        inThrottle = false
+      }, 150)
+    }
+  }
+
+  if (rAFId) {
+    rAFId = rAF(gameLoop)
+  }
+}
+
+onMounted(() => {
+  if (props.gamepadMode) {
+    rAFId = rAF(gameLoop)
+  }
+})
 </script>
 
 <template>
-  <StarRailDialog :title="title" :h-scale="hScale" :v-scale="vScale">
+  <StarRailDialog
+    ref="dialogRef"
+    :title="title"
+    :h-scale="hScale"
+    :v-scale="vScale"
+    :show-cancel="false"
+    :show-ok="false"
+    :gamepad-mode="gamepadMode"
+  >
     <div class="list-items-wrapper">
       <DialogListItem class="font-sr-sans" :name="character.attributes[0].name">
         <template #icon>

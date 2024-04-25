@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { computed, inject, onMounted, Ref, ref } from 'vue'
+import {
+  computed,
+  defineModel,
+  inject,
+  onBeforeUnmount,
+  onMounted,
+  PropType,
+  ref,
+  Ref,
+} from 'vue'
 import { useRouter } from 'vue-router'
 import { translate } from '../../../i18n'
 import StatIcon from '../../../components/StatIcon.vue'
@@ -10,11 +19,27 @@ import MyTag from '../../../components/MyTag.vue'
 import ScrollWrapper from '../../../components/ScrollWrapper.vue'
 import MyTooltip from '../../../components/MyTooltip.vue'
 import MyCarousel from '../../../components/MyCarousel.vue'
+import GamepadIcon from '../../../components/GamepadIcon.vue'
+
+const gamepadMode = defineModel({
+  type: String as PropType<
+    | 'main'
+    | 'settings'
+    | 'window-action'
+    | 'gs-player'
+    | 'sr-player'
+    | 'dialog'
+    | 'out'
+  >,
+  required: false,
+})
 
 const playerInfo = ref<any>()
 const cardsCarouselRef = ref()
+const initReady = ref(false)
 
 const uidInput = ref('')
+const uidInputDom = ref()
 let uid = ''
 const charsPage = ref(0)
 const pages = computed(() => {
@@ -36,6 +61,7 @@ const playerInfoLoading = ref(false)
 const playerInfoFailed = ref(false)
 const charsScrollbar = ref()
 const showcaseIdx = ref(0)
+const artifactIdx = ref(0)
 const showCostume = ref(false)
 const retriedCache = ref(false)
 const retriedCompleteCache = ref(false)
@@ -70,6 +96,116 @@ const elementAssets = {
   },
 }
 
+const rAF = window.requestAnimationFrame
+let rAFId: number | null = null
+
+let inThrottle = false
+const gameLoop = () => {
+  const gamepads = navigator.getGamepads()
+  const gp = gamepads[0]
+
+  if (!gp) {
+    return
+  }
+
+  // A: Request user info
+  if (gamepadMode.value === 'gs-player' && gp.buttons[0].pressed) {
+    if (!inThrottle) {
+      inThrottle = true
+      requestInfo()
+      setTimeout(() => {
+        inThrottle = false
+      }, 300)
+    }
+  }
+
+  // Y: Focus on CustomUIDInput's input
+  if (gamepadMode.value === 'gs-player' && gp.buttons[3].pressed) {
+    if (!inThrottle) {
+      inThrottle = true
+      uidInputDom.value?.focusInput()
+      setTimeout(() => {
+        inThrottle = false
+      }, 300)
+    }
+  }
+
+  // X: Open details dialog
+  if (gamepadMode.value === 'gs-player' && gp.buttons[2].pressed) {
+    if (!inThrottle) {
+      inThrottle = true
+      showCharDetails(
+        playerInfo.value.characters[showcaseIdx.value].stats.statProperties,
+        playerInfo.value.characters[showcaseIdx.value].characterData.name.text,
+      )
+      setTimeout(() => {
+        inThrottle = false
+      }, 300)
+    }
+  }
+
+  // LS: Select character
+  if (gamepadMode.value === 'gs-player' && gp.axes[0] < -0.9) {
+    if (!inThrottle) {
+      inThrottle = true
+      if (showcaseIdx.value > 0) {
+        setShowcase(showcaseIdx.value - 1)
+      }
+      setTimeout(() => {
+        inThrottle = false
+      }, 150)
+    }
+  }
+  if (gamepadMode.value === 'gs-player' && gp.axes[0] > 0.9) {
+    if (!inThrottle) {
+      inThrottle = true
+      if (showcaseIdx.value < playerInfo.value.characters.length - 1) {
+        setShowcase(showcaseIdx.value + 1)
+      }
+      setTimeout(() => {
+        inThrottle = false
+      }, 150)
+    }
+  }
+
+  // RS: Select Artifact
+  if (gamepadMode.value === 'gs-player' && gp.axes[2] < -0.9) {
+    if (!inThrottle) {
+      inThrottle = true
+      console.log(artifactIdx.value)
+      if (artifactIdx.value == 0) {
+        artifactIdx.value =
+          playerInfo.value.characters[showcaseIdx.value].artifacts.length - 1
+      } else {
+        artifactIdx.value--
+      }
+      setTimeout(() => {
+        inThrottle = false
+      }, 150)
+    }
+  }
+  if (gamepadMode.value === 'gs-player' && gp.axes[2] > 0.9) {
+    if (!inThrottle) {
+      inThrottle = true
+      if (
+        artifactIdx.value ==
+        playerInfo.value.characters[showcaseIdx.value].artifacts.length - 1
+      ) {
+        artifactIdx.value = 0
+      } else {
+        artifactIdx.value++
+      }
+      setTimeout(() => {
+        inThrottle = false
+      }, 150)
+    }
+  }
+
+  if (rAFId) {
+    rAFId = rAF(gameLoop)
+  }
+}
+
 const mergeToPlayerinfo = (newArr: any[]) => {
   for (let i = newArr.length - 1; i >= 0; i--) {
     let newChar = newArr[i]
@@ -99,12 +235,21 @@ onMounted(async () => {
         uidInput.value = uid
         playerInfo.value = value
       }
+      initReady.value = true
       console.log(playerInfo.value)
     })
     .catch(err => {
       console.error(err)
     })
   showCostume.value = await window.store.get('gsCostume')
+
+  if (gamepadMode.value) {
+    rAFId = rAF(gameLoop)
+  }
+})
+
+onBeforeUnmount(() => {
+  rAFId = null
 })
 
 const router = useRouter()
@@ -153,12 +298,13 @@ const requestInfo = () => {
       })
       window.store.set('gsInfo', JSON.stringify(playerInfo.value), true)
       playerInfoLoading.value = false
-      router.push({
-        name: 'tempPage',
-        query: {
-          from: 'gs',
-        },
-      })
+      playerInfoReady.value = true
+      // router.push({
+      //   name: 'tempPage',
+      //   query: {
+      //     from: 'gs',
+      //   },
+      // })
     })
     .catch(err => {
       console.error(err)
@@ -200,6 +346,13 @@ const totalSkillLvs = (c: any) => {
 }
 
 const setShowcase = (index: number) => {
+  artifactIdx.value = 0
+  charsPage.value = Math.floor(index / 10)
+  charsScrollbar.value.scrollTo({
+    left: charsPage.value * 48 * 6,
+    top: 0,
+    behavior: 'smooth',
+  })
   cardsCarouselRef.value?.setPane?.(index)
   showcaseIdx.value = index
 }
@@ -318,14 +471,27 @@ const charsPagePrev = () => {
 }
 
 const showCharDetails = (stats: any[], name: string) => {
+  if (gamepadMode.value) {
+    gamepadMode.value = 'dialog'
+    rAFId = null
+  }
   useDialog(
     GSCharDetailsOverlay,
-    {},
+    {
+      onCancel: gamepadMode.value
+        ? (dispose: () => void) => {
+            gamepadMode.value = 'gs-player'
+            rAFId = rAF(gameLoop)
+            dispose()
+          }
+        : undefined,
+    },
     {
       title: name + ' ' + translate('gs_charDetails'),
       stats: stats,
       hScale: hScale,
       vScale: vScale,
+      gamepadMode: !!gamepadMode.value,
     },
   )
 }
@@ -346,7 +512,8 @@ const countRolledSubstat = (stats: any[], prop: string) => {
 
 <template>
   <div
-    class="bg-white dark:bg-[#222] mb-3"
+    class="bg-white dark:bg-[#222] mb-3 transition-all"
+    :class="{ loading: !initReady }"
     style="border-radius: 4.5vh 4.5vh 30px 30px"
   >
     <div
@@ -399,8 +566,10 @@ const countRolledSubstat = (stats: any[], prop: string) => {
       <div v-else style="width: 35vw" />
       <div class="flex flex-row">
         <CustomUIDInput
+          ref="uidInputDom"
           v-model="uidInput"
           @submit="requestInfo"
+          :gamepad-mode="!!gamepadMode"
           style="margin-top: 2vh; margin-bottom: 1.5vh; z-index: 10"
           :style="`font-size: calc(max(14px * min(${hScale}, ${vScale}), 16px))`"
         />
@@ -446,7 +615,7 @@ const countRolledSubstat = (stats: any[], prop: string) => {
         <div
           class="flex flex-row justify-between"
           style="width: 690px; transform-origin: center top"
-          :style="`transform: scale(${hScale})`"
+          :style="`transform: scale(${gamepadMode ? `min(${hScale}, ${vScale})` : hScale})`"
         >
           <div class="relative z-50" style="width: 15%">
             <div
@@ -500,12 +669,15 @@ const countRolledSubstat = (stats: any[], prop: string) => {
         </div>
       </div>
       <!-- 角色详情卡片 -->
-      <div :style="`height: calc(556px * ${hScale})`" />
+      <div
+        :style="`height: calc(556px * ${gamepadMode ? `min(${hScale}, ${vScale})` : hScale})`"
+      />
       <MyCarousel
         ref="cardsCarouselRef"
         class="gacha-mask absolute z-0 left-0 top-0"
         style="width: 984px; height: 556px; transform-origin: left top"
-        :style="`transform: scale(${hScale}); border-radius: calc(30px / ${hScale})`"
+        :style="`transform: scale(${gamepadMode ? `min(${hScale}, ${vScale})` : hScale});
+          border-radius: calc(30px / ${gamepadMode ? `min(${hScale}, ${vScale})` : hScale})`"
         :autoplay="false"
         show-arrow="never"
         animation="fade-swipe"
@@ -523,7 +695,7 @@ const countRolledSubstat = (stats: any[], prop: string) => {
             <img
               class="relative z-0"
               :src="getCharElementAssets(index)!!.bg"
-              :style="`border-radius: calc(30px / ${hScale}`"
+              :style="`border-radius: calc(30px / ${gamepadMode ? `min(${hScale}, ${vScale})` : hScale}`"
             />
             <img
               class="h-1/4 absolute opacity-50"
@@ -811,17 +983,23 @@ const countRolledSubstat = (stats: any[], prop: string) => {
                     >
                   </div>
                   <div
-                    class="mx-2 rounded-full text-sm bg-white bg-opacity-20 text-center hover:bg-opacity-30 active:scale-95 active:bg-opacity-40 cursor-default transition-all px-1"
+                    class="mx-2 rounded-full text-sm bg-white bg-opacity-20 text-center hover:bg-opacity-30 active:scale-95 active:bg-opacity-40 cursor-default transition-all"
                     @click="
                       showCharDetails(
                         character.stats.statProperties,
                         character.characterData.name.text,
                       )
                     "
+                    :class="{ 'px-1': !gamepadMode }"
                     style="grid-column: 3; grid-row: 3"
                   >
-                    <div class="font-gs" style="margin-top: 5px">
-                      {{ $t('gs_details') }}
+                    <div class="font-gs flex flex-row justify-center">
+                      <GamepadIcon
+                        icon="X"
+                        v-if="gamepadMode"
+                        class="h-[20px] mt-1 bg-gray-900 rounded-full mr-1"
+                      />
+                      <div class="mt-[5px]">{{ $t('gs_details') }}</div>
                     </div>
                   </div>
                 </div>
@@ -903,6 +1081,7 @@ const countRolledSubstat = (stats: any[], prop: string) => {
                 </div>
                 <!-- 详情第三块：圣遗物 -->
                 <MyCarousel
+                  v-model="artifactIdx"
                   v-if="character.artifacts && character.artifacts.length > 0"
                   class="relative mt-2 w-full h-40 rounded-xl bg-opacity-20 bg-black backdrop-blur-lg"
                   show-arrow="never"
@@ -1066,6 +1245,10 @@ const countRolledSubstat = (stats: any[], prop: string) => {
 <style lang="scss" scoped>
 .font-gs {
   font-family: genshin-font, serif;
+}
+
+.loading {
+  @apply translate-y-[300px] opacity-0;
 }
 
 .namecard-mask {

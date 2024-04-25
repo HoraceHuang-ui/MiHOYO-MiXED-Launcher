@@ -214,19 +214,22 @@ defineExpose({
 
 <style lang="scss" scoped>
 .modal {
-  @apply absolute top-0 bottom-0 left-0 right-0 z-50;
+  @apply absolute top-0 bottom-0 left-0 right-0;
   @apply opacity-40 bg-black;
+  z-index: 1999;
 }
 
 .dialog-wrapper {
-  @apply absolute z-50 top-1/2 left-1/2;
+  @apply absolute top-1/2 left-1/2;
   @apply flex justify-center;
+  z-index: 2000;
 }
 
 .close-button {
-  @apply absolute z-50 w-6 h-6 p-1 right-6 top-5;
+  @apply absolute w-6 h-6 p-1 right-6 top-5;
   @apply rounded-full transition-all cursor-pointer;
   @apply hover:opacity-70 hover:scale-125 active:opacity-50 active:scale-90;
+  z-index: 2000;
 
   img {
     @apply invert opacity-60;
@@ -234,7 +237,8 @@ defineExpose({
 }
 
 .dialog-corner {
-  @apply absolute z-50 w-6 h-6;
+  @apply absolute w-6 h-6;
+  z-index: 2001;
 
   img {
     filter: drop-shadow(1px 1px 2px #aaaaaa);

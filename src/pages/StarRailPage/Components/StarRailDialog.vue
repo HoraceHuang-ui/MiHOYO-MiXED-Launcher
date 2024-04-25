@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, PropType, Ref, ref, VNode } from 'vue'
 import StarRailButton from './StarRailButton.vue'
+import GamepadIcon from '../../../components/GamepadIcon.vue'
 
 const props = defineProps({
   width: {
@@ -12,6 +13,10 @@ const props = defineProps({
     default: () => {
       return 'Template GS Dialog'
     },
+  },
+  gamepadMode: {
+    type: Boolean,
+    default: false,
   },
   showCancel: {
     type: Boolean,
@@ -83,6 +88,7 @@ onMounted(() => {
 
 defineExpose({
   closeDialog,
+  cancelClick,
 })
 </script>
 
@@ -96,12 +102,11 @@ defineExpose({
         :style="`width: ${width}; max-height: calc(80vh / min(${hScale.value}, ${vScale.value}));
           transform: scale(min(${hScale.value}, ${vScale.value})) translate(calc(-50% / min(${hScale.value}, ${vScale.value})), calc(-50% / min(${hScale.value}, ${vScale.value})))`"
       >
-        <div
-          v-if="!showCancel && !showOk"
-          class="close-button"
-          @click="cancelClick"
-        >
-          <img src="../../../assets/srCloseButton.png" />
+        <div class="close-area-wrapper" v-if="!showCancel && !showOk">
+          <GamepadIcon icon="B" class="gamepad-icon" />
+          <div class="close-button" @click="cancelClick">
+            <img class="my-1" src="../../../assets/srCloseButton.png" />
+          </div>
         </div>
         <div class="dialog-content-wrapper">
           <div class="title-wrapper">
@@ -197,22 +202,35 @@ div {
 }
 
 .modal {
-  @apply absolute top-0 bottom-0 left-0 right-0 z-50;
+  @apply absolute top-0 bottom-0 left-0 right-0;
   @apply backdrop-blur-2xl;
+  z-index: 1999;
 }
 
 .modal-mask {
-  @apply absolute top-0 bottom-0 left-0 right-0 z-40;
+  @apply absolute top-0 bottom-0 left-0 right-0;
   @apply bg-black bg-opacity-20;
+  z-index: 1998;
 }
 
 .dialog-wrapper {
-  @apply absolute z-50 top-1/2 left-1/2 border;
+  @apply absolute top-1/2 left-1/2 border;
   border-radius: 5px 20px 0 0;
+  z-index: 2000;
+}
+
+.close-area-wrapper {
+  @apply absolute w-12 h-6 right-4 top-3;
+  @apply flex flex-row justify-end;
+  z-index: 2001;
+}
+
+.gamepad-icon {
+  @apply rounded-full bg-gray-100 mr-2;
+  @apply h-[24px];
 }
 
 .close-button {
-  @apply absolute z-50 w-6 h-6 p-1 right-4 top-3;
   @apply rounded-full transition-all cursor-pointer;
   @apply hover:opacity-70 hover:scale-125 active:opacity-50 active:scale-90;
 }

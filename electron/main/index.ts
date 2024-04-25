@@ -117,7 +117,7 @@ async function createWindow() {
     inThrottle = true
     setTimeout(() => {
       inThrottle = false
-    }, 1000)
+    }, 300)
     const [width, height] = win.getSize()
     store.set('windowState', { width, height, isMax: false })
   })

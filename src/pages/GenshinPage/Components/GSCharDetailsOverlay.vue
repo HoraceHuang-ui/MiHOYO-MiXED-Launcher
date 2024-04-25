@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { PropType, Ref, ref } from 'vue'
+import { onMounted, PropType, Ref, ref } from 'vue'
 import StatIcon from '../../../components/StatIcon.vue'
 import DialogListItem from '../../../components/DialogListItem.vue'
 import TemplateDialog from '../../../components/TemplateDialog.vue'
 import ScrollWrapper from '../../../components/ScrollWrapper.vue'
+import GamepadIcon from '../../../components/GamepadIcon.vue'
 
-defineProps({
+const props = defineProps({
   title: {
     type: String,
     default: 'Character Details',
@@ -13,6 +14,10 @@ defineProps({
   stats: {
     type: Array as PropType<any[]>,
     required: true,
+  },
+  gamepadMode: {
+    type: Boolean,
+    default: false,
   },
   hScale: {
     type: Object as PropType<Ref<number>>,
@@ -25,6 +30,8 @@ defineProps({
 })
 
 const dialogRef = ref<any>(null)
+const rAF = window.requestAnimationFrame
+let rAFId: number | null = null
 
 const trimStats = (stats: any[]) => {
   const trim = ['HP', 'PERCENT', 'ATTACK', 'DEFENSE', 'BASE_SPEED', 'MASTERY']
@@ -55,8 +62,42 @@ const displayStat = (stat: any) => {
 }
 
 const closeDialog = () => {
+  if (props.gamepadMode) {
+    rAFId = null
+  }
   dialogRef.value?.cancelClick?.()
 }
+
+let inThrottle = false
+const gameLoop = () => {
+  const gamepads = navigator.getGamepads()
+  const gp = gamepads[0]
+
+  if (!gp) {
+    return
+  }
+
+  // B: dispose dialog
+  if (gp.buttons[1].pressed) {
+    if (!inThrottle) {
+      inThrottle = true
+      setTimeout(() => {
+        closeDialog()
+        inThrottle = false
+      }, 150)
+    }
+  }
+
+  if (rAFId) {
+    rAFId = rAF(gameLoop)
+  }
+}
+
+onMounted(() => {
+  if (props.gamepadMode) {
+    rAFId = rAF(gameLoop)
+  }
+})
 </script>
 
 <template>
@@ -166,6 +207,24 @@ const closeDialog = () => {
         </DialogListItem>
       </div>
     </ScrollWrapper>
+    <div
+      class="gamepad-op-wrapper"
+      :style="`margin-top: calc(40px * ${hScale.value})`"
+      v-if="gamepadMode"
+    >
+      <GamepadIcon
+        icon="B"
+        class="gamepad-icon"
+        :style="`height: calc(30px * min(${hScale.value}, ${vScale.value}))`"
+      />
+      <div
+        class="font-gs ml-2"
+        :style="`font-size: calc(18px * min(${hScale.value}, ${vScale.value}));
+        margin-top: calc(2px * min(${hScale.value}, ${vScale.value}))`"
+      >
+        关闭
+      </div>
+    </div>
   </TemplateDialog>
 </template>
 
@@ -212,5 +271,13 @@ const closeDialog = () => {
 
 .stat-addition {
   @apply ml-1 text-blue-400;
+}
+
+.gamepad-op-wrapper {
+  @apply flex flex-row justify-center align-middle;
+}
+
+.gamepad-icon {
+  @apply rounded-full bg-gray-100;
 }
 </style>

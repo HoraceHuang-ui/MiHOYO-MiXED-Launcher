@@ -4,8 +4,18 @@ import GamepadIcon from '../../components/GamepadIcon.vue'
 import CustomSwitch from '../../components/CustomSwitch.vue'
 import MyTooltip from '../../components/MyTooltip.vue'
 import { translate } from '../../i18n'
+import GenshinInfoCard from '../GenshinPage/Components/GenshinInfoCard.vue'
+import MyCarousel from '../../components/MyCarousel.vue'
+import StarRailInfoCard from '../StarRailPage/Components/StarRailInfoCard.vue'
 
-type Mode = 'main' | 'settings' | 'window-action' | 'out'
+type Mode =
+  | 'main'
+  | 'settings'
+  | 'window-action'
+  | 'gs-player'
+  | 'sr-player'
+  | 'dialog'
+  | 'out'
 type GamePath = {
   game: string
   path: string
@@ -23,6 +33,7 @@ type SettingsItem = {
 }
 
 const contentReady = ref(false)
+const playerCardCarousel = ref()
 
 const mode = ref<Mode>('main')
 const games = ['gs', 'sr', 'hi3']
@@ -159,6 +170,17 @@ const rAF = window.requestAnimationFrame
 // const rAFStop = window.cancelAnimationFrame
 
 let inThrottle = false
+let oldMode: Mode = 'out'
+
+const barSettingsClick = () => {
+  if (mode.value !== 'settings') {
+    oldMode = mode.value
+    mode.value = 'settings'
+  } else {
+    mode.value = oldMode
+  }
+}
+
 const gameLoop = () => {
   const gamepads = navigator.getGamepads()
   const gp = gamepads[0]
@@ -189,15 +211,15 @@ const gameLoop = () => {
   //   }
   // }
 
-  // Menu: Settings
-  if (gp.buttons[9].pressed) {
+  // [!SETTINGS] Menu: Settings
+  if (
+    mode.value !== 'settings' &&
+    mode.value !== 'dialog' &&
+    gp.buttons[9].pressed
+  ) {
     if (!inThrottle) {
-      if (mode.value !== 'settings') {
-        mode.value = 'settings'
-      } else if (mode.value === 'settings') {
-        showTooltip.value = false
-        mode.value = 'main'
-      }
+      oldMode = mode.value
+      mode.value = 'settings'
       inThrottle = true
       setTimeout(() => {
         inThrottle = false
@@ -205,8 +227,12 @@ const gameLoop = () => {
     }
   }
 
-  // [MAIN] Map: Quit Gamepad Mode
-  if (mode.value === 'main' && gp.buttons[8].pressed) {
+  // [!WINDOW-ACTION] Map: Quit Gamepad Mode
+  if (
+    mode.value !== 'window-action' &&
+    mode.value !== 'dialog' &&
+    gp.buttons[8].pressed
+  ) {
     if (!inThrottle) {
       mode.value = 'out'
       inThrottle = true
@@ -265,10 +291,22 @@ const gameLoop = () => {
     }
   }
 
-  // [MAIN / SETTINGS] LT: Window Actions
-  // [WINDOW-ACTIONS] X/Y/B: Maximize / Minimize / Close
+  // [MAIN] LS Press: Player Info
+  if (mode.value === 'main' && gp.buttons[10].pressed) {
+    if (!inThrottle) {
+      mode.value = 'gs-player'
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 300)
+    }
+  }
+
+  // [!WINDOW-ACTION] LT: Window Actions
+  // [WINDOW-ACTION] X/Y/B: Maximize / Minimize / Close
   if (
-    (mode.value === 'main' || mode.value === 'settings') &&
+    mode.value !== 'window-action' &&
+    mode.value !== 'dialog' &&
     gp.buttons[6].pressed &&
     gp.buttons[6].value > 0.7
   ) {
@@ -308,11 +346,14 @@ const gameLoop = () => {
     }
   }
 
-  // [SETTINGS] B: Return to Main
-  if (mode.value === 'settings' && gp.buttons[1].pressed) {
+  // [SETTINGS / PLAYER] B / Menu: Return to Old
+  if (
+    mode.value === 'settings' &&
+    (gp.buttons[1].pressed || gp.buttons[9].pressed)
+  ) {
     if (!inThrottle) {
       showTooltip.value = false
-      mode.value = 'main'
+      mode.value = oldMode
       inThrottle = true
       setTimeout(() => {
         inThrottle = false
@@ -420,6 +461,46 @@ const gameLoop = () => {
     }
   }
 
+  // [PLAYER] B / LS Press: Back
+  if (
+    (mode.value === 'gs-player' || mode.value === 'sr-player') &&
+    (gp.buttons[10].pressed || gp.buttons[1].pressed)
+  ) {
+    if (!inThrottle) {
+      mode.value = 'main'
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 300)
+    }
+  }
+
+  // [PLAYER] DIR_h: Switch Game
+  if (
+    (mode.value === 'gs-player' || mode.value === 'sr-player') &&
+    gp.buttons[14].pressed
+  ) {
+    if (!inThrottle) {
+      playerCardCarousel.value?.prevPane()
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 420)
+    }
+  }
+  if (
+    (mode.value === 'gs-player' || mode.value === 'sr-player') &&
+    gp.buttons[15].pressed
+  ) {
+    if (!inThrottle) {
+      playerCardCarousel.value?.nextPane()
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 420)
+    }
+  }
+
   rAF(gameLoop)
 }
 
@@ -486,156 +567,136 @@ onMounted(async () => {
     <Transition name="swipe-bottom">
       <div
         class="bottom-bar"
-        v-if="
-          mode === 'main' && searchSettingByKey('showGamepadToolbar')?.value
-        "
+        v-if="searchSettingByKey('showGamepadToolbar')?.value"
       >
-        <div class="left no-drag">
-          <div class="bar-item">
-            <GamepadIcon icon="LS_h" />
-            <span>{{ $t('gamepad_selectGame') }}</span>
+        <div class="left" />
+        <Transition name="swipe-bottom">
+          <div class="absolute left-0 left no-drag" v-if="mode === 'main'">
+            <div class="bar-item">
+              <GamepadIcon icon="LS_h" />
+              <span>{{ $t('gamepad_selectGame') }}</span>
+            </div>
+            <div
+              class="bar-item hoverable"
+              @click="launch(importedGames[selectedGameIndex].launcherPath)"
+            >
+              <GamepadIcon icon="X" />
+              <span>{{ $t('gamepad_officialLauncher') }}</span>
+            </div>
+            <div class="bar-item hoverable" @click="mode = 'gs-player'">
+              <GamepadIcon icon="LS" />
+              <span>玩家信息</span>
+            </div>
           </div>
           <div
-            class="bar-item hoverable"
-            @click="launch(importedGames[selectedGameIndex].launcherPath)"
+            class="absolute left-0 left"
+            v-else-if="mode === 'window-action'"
           >
-            <GamepadIcon icon="X" />
-            <span>{{ $t('gamepad_officialLauncher') }}</span>
-          </div>
-        </div>
-        <div class="right no-drag">
-          <div class="bar-item hoverable" @click="leaveGamepadClick">
-            <GamepadIcon icon="Map" />
-            <i class="bi bi-box-arrow-left" />
-          </div>
-          <div class="bar-item hoverable" @click="mode = 'settings'">
-            <GamepadIcon icon="Menu" />
-            <i class="bi bi-gear" />
-          </div>
-          <div class="bar-item">
-            <GamepadIcon icon="LT" />
-            <div style="width: 90px" />
-          </div>
-          <div class="drag focus">
-            <div class="traffic-lights no-drag window-actions normal py-2">
-              <div
-                class="traffic-light traffic-light-maximize"
-                @click="winMax"
-              ></div>
-              <div
-                class="traffic-light traffic-light-minimize"
-                @click="winMin"
-              ></div>
-              <div
-                class="traffic-light traffic-light-close"
-                @click="winClose"
-              ></div>
+            <div class="bar-item">
+              <GamepadIcon icon="LT" />
+              <span>{{ $t('gamepad_windowActions') }}</span>
             </div>
-          </div>
-        </div>
-      </div>
-    </Transition>
-
-    <Transition name="swipe-bottom">
-      <div
-        class="bottom-bar"
-        v-if="
-          mode === 'window-action' &&
-          searchSettingByKey('showGamepadToolbar')?.value
-        "
-      >
-        <div class="left">
-          <div class="bar-item">
-            <GamepadIcon icon="LT" />
-            <span>{{ $t('gamepad_windowActions') }}</span>
-          </div>
-        </div>
-        <div class="right no-drag">
-          <div class="drag focus">
-            <div class="traffic-lights no-drag window-actions py-1">
-              <GamepadIcon icon="X" style="height: 24px" />
-              <div
-                class="traffic-light traffic-light-maximize"
-                style="margin-top: 4px"
-                @click="winMax"
-              ></div>
-              <GamepadIcon icon="Y" class="ml-2" style="height: 24px" />
-              <div
-                class="traffic-light traffic-light-minimize"
-                style="margin-top: 4px"
-                @click="winMin"
-              ></div>
-              <GamepadIcon icon="B" class="ml-2" style="height: 24px" />
-              <div
-                class="traffic-light traffic-light-close"
-                style="margin-top: 4px"
-                @click="winClose"
-              ></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Transition>
-
-    <Transition name="swipe-bottom">
-      <div
-        class="bottom-bar"
-        v-if="
-          mode === 'settings' && searchSettingByKey('showGamepadToolbar')?.value
-        "
-      >
-        <div class="left no-drag">
-          <div class="bar-item hoverable" @click="mode = 'main'">
-            <GamepadIcon icon="B" />
-            <span>{{ $t('general_back') }}</span>
-          </div>
-          <div class="bar-item">
-            <GamepadIcon icon="LS_v" />
-            <span>{{ $t('gamepad_selectSettingItem') }}</span>
-          </div>
-          <div class="bar-item">
-            <GamepadIcon icon="RS_v" />
-            <span>{{ $t('gamepad_selectSettingCard') }}</span>
           </div>
           <div
-            class="bar-item hoverable"
-            @click="
-              onSettingsChange(
-                selectedSettingsCardIndex,
-                selectedSettingsItemIndex,
-              )
-            "
+            class="absolute left-0 left no-drag"
+            v-else-if="mode === 'settings'"
           >
-            <GamepadIcon icon="A" />
-            <span>{{ $t('general_confirm') }}</span>
-          </div>
-        </div>
-        <div class="right no-drag">
-          <div class="bar-item hoverable" @click="mode = 'main'">
-            <GamepadIcon icon="Menu" />
-            <i class="bi bi-gear" />
-          </div>
-          <div class="bar-item">
-            <GamepadIcon icon="LT" />
-            <div style="width: 90px" />
-          </div>
-          <div class="drag focus">
-            <div class="traffic-lights no-drag window-actions normal py-2">
-              <div
-                class="traffic-light traffic-light-maximize"
-                @click="winMax"
-              ></div>
-              <div
-                class="traffic-light traffic-light-minimize"
-                @click="winMin"
-              ></div>
-              <div
-                class="traffic-light traffic-light-close"
-                @click="winClose"
-              ></div>
+            <div class="bar-item hoverable" @click="mode = 'main'">
+              <GamepadIcon icon="B" />
+              <span>{{ $t('general_back') }}</span>
+            </div>
+            <div class="bar-item">
+              <GamepadIcon icon="LS_v" />
+              <span>{{ $t('gamepad_selectSettingItem') }}</span>
+            </div>
+            <div class="bar-item">
+              <GamepadIcon icon="RS_v" />
+              <span>{{ $t('gamepad_selectSettingCard') }}</span>
+            </div>
+            <div
+              class="bar-item hoverable"
+              @click="
+                onSettingsChange(
+                  selectedSettingsCardIndex,
+                  selectedSettingsItemIndex,
+                )
+              "
+            >
+              <GamepadIcon icon="A" />
+              <span>{{ $t('general_confirm') }}</span>
             </div>
           </div>
-        </div>
+          <div
+            class="absolute left-0 left no-drag"
+            v-else-if="mode === 'gs-player' || mode === 'sr-player'"
+          >
+            <div class="bar-item hoverable" @click="mode = 'main'">
+              <GamepadIcon icon="B" />
+              <span>{{ $t('general_back') }}</span>
+            </div>
+            <div class="bar-item">
+              <GamepadIcon icon="DIR_h" />
+              <span>游戏</span>
+            </div>
+            <div class="bar-item">
+              <GamepadIcon icon="LS_h" />
+              <span>角色</span>
+            </div>
+            <div class="bar-item">
+              <GamepadIcon icon="RS_h" />
+              <span>{{ mode === 'gs-player' ? '圣遗物' : '遗器' }}</span>
+            </div>
+          </div>
+        </Transition>
+        <Transition name="swipe-bottom">
+          <div
+            class="absolute right-0 right no-drag"
+            v-if="mode !== 'out' && mode !== 'window-action'"
+          >
+            <div class="bar-item hoverable" @click="leaveGamepadClick">
+              <GamepadIcon icon="Map" />
+              <i class="bi bi-box-arrow-left" />
+            </div>
+            <div class="bar-item hoverable" @click="barSettingsClick">
+              <GamepadIcon icon="Menu" />
+              <i class="bi bi-gear" />
+            </div>
+            <div class="bar-item">
+              <GamepadIcon icon="LT" />
+              <div style="width: 90px" />
+            </div>
+            <div class="drag focus">
+              <div class="traffic-lights no-drag window-actions normal py-2">
+                <div
+                  class="traffic-light traffic-light-maximize"
+                  @click="winMax"
+                ></div>
+                <div
+                  class="traffic-light traffic-light-minimize"
+                  @click="winMin"
+                ></div>
+                <div
+                  class="traffic-light traffic-light-close"
+                  @click="winClose"
+                ></div>
+              </div>
+            </div>
+          </div>
+          <div class="right no-drag" v-else-if="mode === 'window-action'">
+            <div class="bar-item hoverable" @click="winMax">
+              <GamepadIcon icon="X" />
+              <div class="h-4 w-4 ml-2 mt-3 rounded-full bg-[#28c941]" />
+            </div>
+            <div class="bar-item hoverable" @click="winMin">
+              <GamepadIcon icon="Y" />
+              <div class="h-4 w-4 ml-2 mt-3 rounded-full bg-[#ffbd2e]" />
+            </div>
+            <div class="bar-item hoverable" @click="winClose">
+              <GamepadIcon icon="B" />
+              <div class="h-4 w-4 ml-2 mt-3 rounded-full bg-[#ff6159]" />
+            </div>
+          </div>
+        </Transition>
       </div>
     </Transition>
 
@@ -682,7 +743,7 @@ onMounted(async () => {
     >
       <div
         class="outer settings-wrapper"
-        @click="mode = 'main'"
+        @click="mode = oldMode"
         :class="{ toolbar: searchSettingByKey('showGamepadToolbar')?.value }"
       />
       <div
@@ -749,6 +810,61 @@ onMounted(async () => {
             />
           </div>
         </div>
+      </div>
+    </div>
+  </Transition>
+  <Transition name="player" :duration="600">
+    <div
+      v-if="
+        mode === 'gs-player' ||
+        mode === 'sr-player' ||
+        mode === 'dialog' ||
+        (mode === 'settings' &&
+          (oldMode === 'gs-player' || oldMode === 'sr-player'))
+      "
+      :class="{
+        'pointer-events-none': searchSettingByKey('gamepadDisableMouse')?.value,
+      }"
+    >
+      <div
+        class="outer player-wrapper"
+        :class="{ toolbar: searchSettingByKey('showGamepadToolbar')?.value }"
+      />
+      <div
+        class="inner player-content"
+        :class="{ toolbar: searchSettingByKey('showGamepadToolbar')?.value }"
+      >
+        <MyCarousel
+          ref="playerCardCarousel"
+          class="size-full relative"
+          :autoplay="false"
+          show-arrow="never"
+          show-indicator="always"
+          indicator-style="circle"
+          indicator-placement="left"
+          animation="fade-swipe"
+          @update:model-value="
+            value => {
+              mode = value == 0 ? 'gs-player' : 'sr-player'
+            }
+          "
+        >
+          <div class="game-info-card-wrapper">
+            <GenshinInfoCard
+              class="game-info-card"
+              :style="`width: calc(984px * min(${hScale}, ${vScale}))`"
+              v-model="mode"
+            />
+          </div>
+
+          <div class="game-info-card-wrapper">
+            <StarRailInfoCard
+              class="game-info-card"
+              :style="`width: calc(888px * min(${hScale}, ${vScale}))`"
+              v-model="mode"
+            />
+          </div>
+        </MyCarousel>
       </div>
     </div>
   </Transition>
@@ -883,7 +999,7 @@ onMounted(async () => {
     }
 
     span {
-      @apply py-[7px] ml-1.5;
+      @apply py-[8px] ml-1.5;
     }
     i {
       @apply py-[4px] ml-1.5 text-2xl;
@@ -896,15 +1012,16 @@ onMounted(async () => {
   @apply rounded-full transition-all;
 
   &.normal {
-    @apply mt-2 border-2 border-yellow-500;
+    @apply mt-0.5 border-2 border-yellow-500;
   }
 }
 
 .settings-wrapper {
-  @apply absolute top-0 z-40 w-full right-0;
+  @apply absolute top-0 w-full right-0;
   @apply backdrop-blur-3xl transition-all;
   background: rgb(255 255 255 / 0.5);
   height: 100vh;
+  z-index: 1999;
 
   &.toolbar {
     @apply transition-all;
@@ -917,13 +1034,50 @@ onMounted(async () => {
 }
 
 .settings-content {
-  @apply absolute z-50 top-[3vh] right-[3vw] rounded-lg transition-all;
+  @apply absolute top-[3vh] right-[3vw] rounded-lg transition-all;
   width: 40vw;
   height: 100vh;
+  z-index: 2000;
 
   &.toolbar {
     height: calc(100vh - 70px);
   }
+}
+
+.player-wrapper {
+  @apply absolute top-0 w-full right-0;
+  @apply backdrop-blur-3xl transition-all;
+  background: rgb(255 255 255 / 0.5);
+  height: 100vh;
+  z-index: 49;
+
+  &.toolbar {
+    @apply transition-all;
+    height: calc(100vh - 64px);
+  }
+
+  .dark & {
+    background: rgb(0 0 0 / 50%);
+  }
+}
+
+.player-content {
+  @apply absolute top-0 left-0 transition-all;
+  width: 100vw;
+  height: 100vh;
+  z-index: 50;
+
+  &.toolbar {
+    height: calc(100vh - 64px);
+  }
+}
+
+.game-info-card-wrapper {
+  @apply relative size-full;
+}
+
+.game-info-card {
+  @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
 }
 
 .settings-title {
@@ -980,26 +1134,32 @@ onMounted(async () => {
   -webkit-app-region: no-drag;
 }
 
-.settings-enter-active .outer {
+.settings-enter-active .outer,
+.player-enter-active .outer {
   transition: opacity 0.5s ease;
 }
 
-.settings-leave-active .outer {
+.settings-leave-active .outer,
+.player-leave-active .outer {
   transition: opacity 0.5s ease;
   transition-delay: 0.1s;
 }
 
 .settings-enter-from .outer,
-.settings-leave-to .outer {
+.settings-leave-to .outer,
+.player-enter-from .outer,
+.player-leave-to .outer {
   opacity: 0;
 }
 
-.settings-enter-active .inner {
+.settings-enter-active .inner,
+.player-enter-active .inner {
   transition: all 0.3s ease;
   transition-delay: 0.2s;
 }
 
-.settings-leave-active .inner {
+.settings-leave-active .inner,
+.player-leave-active .inner {
   transition: all 0.3s ease;
 }
 
@@ -1007,6 +1167,12 @@ onMounted(async () => {
 .settings-leave-to .inner {
   opacity: 0;
   transform: translateX(100%);
+}
+
+.player-enter-from .inner,
+.player-leave-to .inner {
+  opacity: 0;
+  transform: translateY(100px);
 }
 
 .fade-enter-active,
