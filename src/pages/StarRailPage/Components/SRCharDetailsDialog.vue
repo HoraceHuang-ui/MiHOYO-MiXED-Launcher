@@ -28,7 +28,7 @@ const props = defineProps({
   },
 })
 
-const dialogRef = ref(null)
+const dialogRef = ref<typeof StarRailDialog>()
 
 const rAF = window.requestAnimationFrame
 let rAFId: number | null = null

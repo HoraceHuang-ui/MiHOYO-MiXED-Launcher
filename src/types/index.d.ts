@@ -3,13 +3,6 @@ export {}
 // export * from './starrail/srPlayerInfo'
 // export * from './starrail/srRankMap'
 
-export interface IStore {
-  set: (key: string, value: any, json: boolean) => Promise<void>
-  get: (key: string) => Promise<any>
-  delete: (key: string) => Promise<void>
-  clear: () => Promise<void>
-}
-
 export interface IChild {
   exec: (path: string) => Promise<void>
 }
@@ -51,7 +44,6 @@ export interface IGithub {
 
 declare global {
   interface Window {
-    store: IStore
     child: IChild
     dialog: IDialog
     enka: IEnka

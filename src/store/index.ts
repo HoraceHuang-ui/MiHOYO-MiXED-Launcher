@@ -8,11 +8,12 @@ export const useStore = defineStore('userStore', {
     general: {
       targetVersion: undefined as string | undefined,
       mainBgPath: undefined as string | undefined,
-      windowState: {
+      windowSize: {
         width: 1200,
         height: 700,
         isMax: false,
       },
+      windowPos: undefined as { x: number; y: number } | undefined,
     },
     settings: {
       general: {

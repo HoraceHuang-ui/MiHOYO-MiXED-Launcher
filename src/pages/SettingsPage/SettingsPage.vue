@@ -258,7 +258,7 @@ const showClearDialog = () => {
     dialogComponent(store.settings.appearance.dialogStyle),
     {
       onOk(dispose: () => void) {
-        window.store.clear()
+        store.clear()
         localStorage.clear()
         window.win.relaunch()
         dispose()
@@ -400,12 +400,14 @@ const showClearDialog = () => {
         </div>
         <div class="form-item hover">
           <div class="flex flex-row">
-            <div class="form-item-text mr-2">默认键位</div>
+            <div class="form-item-text mr-2">
+              {{ $t('gamepad_defaultType') }}
+            </div>
             <MyTooltip
               max-width="300px"
               middle
               placement="bottom"
-              content="当检测到手柄为 Xbox / PS 时将覆盖此设置。"
+              :content="$t('gamepad_defaultTypeTip')"
             >
               <div class="flex flex-row">
                 <div class="help">?</div>

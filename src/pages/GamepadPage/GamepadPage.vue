@@ -100,11 +100,11 @@ const settingsItems: Ref<SettingsCard[]> = ref([
         key: 'disableMouse',
       },
       {
-        text: '默认键位',
+        text: translate('gamepad_defaultType'),
         parent: store.settings.gamepad,
         key: 'defaultPS',
         switchTexts: ['Xbox', 'PS'],
-        tip: h('div', '当检测到手柄为 Xbox / PS 时将覆盖此设置。'),
+        tip: h('div', translate('gamepad_defaultTypeTip')),
       },
     ],
   },
@@ -596,7 +596,7 @@ onMounted(async () => {
             </div>
             <div class="bar-item hoverable" @click="mode = 'gs-player'">
               <GamepadIcon icon="LS" />
-              <span>玩家信息</span>
+              <span>{{ $t('gamepad_playerInfo') }}</span>
             </div>
           </div>
           <div
@@ -647,15 +647,17 @@ onMounted(async () => {
             </div>
             <div class="bar-item">
               <GamepadIcon icon="DIR_h" />
-              <span>游戏</span>
+              <span>{{ $t('general_game') }}</span>
             </div>
             <div class="bar-item">
               <GamepadIcon icon="LS_h" />
-              <span>角色</span>
+              <span>{{ $t('gamepad_character') }}</span>
             </div>
             <div class="bar-item">
               <GamepadIcon icon="RS_h" />
-              <span>{{ mode === 'gs-player' ? '圣遗物' : '遗器' }}</span>
+              <span>{{
+                mode === 'gs-player' ? $t('gs_artifact') : $t('sr_relic')
+              }}</span>
             </div>
           </div>
         </Transition>
@@ -1134,7 +1136,7 @@ onMounted(async () => {
 }
 
 .settings-item {
-  @apply text-base flex flex-row justify-between transition-all;
+  @apply text-base text-left flex flex-row justify-between transition-all;
   @apply p-1 pl-3 border-2 border-white rounded-full cursor-pointer;
 
   .dark & {
@@ -1148,6 +1150,7 @@ onMounted(async () => {
 
 .settings-item-text {
   @apply pt-1;
+  max-width: 30vw;
 }
 
 .help {

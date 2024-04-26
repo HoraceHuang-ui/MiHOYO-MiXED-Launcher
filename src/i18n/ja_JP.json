@@ -49,6 +49,7 @@
   "mainBgDialog_filter": "画像",
   "mainpage_title": "miHoYo miXeD ランチャー",
   "mainpage_buttonText": "{game}を起動！",
+  "gs_artifact": "聖遺物",
   "gs_launcherContentsUrl": "https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=false&key=gcStgarh&language=ja-jp&launcher_id=10",
   "gs_enkaLangCode": "ja",
   "gs_emptyPlayerTip": "キャラの詳細がここに表示されます",
@@ -65,6 +66,7 @@
   "gs_noArtifactSets": "セット効果なし",
   "gs_charDetails": "ステータス",
   "gs_refinement": "精煉",
+  "sr_relic": "遺物",
   "sr_launcherContentsUrl": "https://hkrpg-launcher-static.hoyoverse.com/hkrpg_global/mdk/launcher/api/content?filter_adv=false&key=vplOVX8Vn7cwG8yb&language=ja-jp&launcher_id=35",
   "sr_playerInfoUrl": "https://api.mihomo.me/sr_info_parsed/{uid}?lang=jp",
   "sr_charRanksJsonUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/index_new/jp/character_ranks.json",
@@ -109,6 +111,8 @@
   "gamepad_officialLauncher": "公式ランチャー",
   "gamepad_selectSettingItem": "項目",
   "gamepad_selectSettingCard": "カテゴリ",
+  "gamepad_playerInfo": "プレーヤー情報",
+  "gamepad_character": "キャラクター",
   "gamepad_autoEnterGamepad": "接続時に自動入力",
   "gamepad_autoEnterTip1_1": "無効になっていても、",
   "gamepad_autoEnterTip1_2": "キーを押すことでコントローラー モードに入ることができます。",
@@ -116,6 +120,8 @@
   "gamepad_autoEnterTip3": "コントローラモードがオンのときに手動で終了する場合は、再度手動でコントローラモードに入る必要があります。",
   "gamepad_quitOnClose": "ウィンドウを閉じたときにアプリを終了する",
   "gamepad_disableMouse": "マウス入力を無効化",
+  "gamepad_defaultType": "デフォルトのハンドルタイプ",
+  "gamepad_defaultTypeTip": "Xbox/PS コントローラーを使用する場合、この設定は有効になりません。",
   "gamepad_showToolbar": "ツールバーを表示",
   "gamepad_windowActions": "ウインドウアクションを長押しする"
 }

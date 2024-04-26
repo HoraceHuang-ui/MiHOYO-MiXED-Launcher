@@ -5,6 +5,7 @@ import DialogListItem from '../../../components/DialogListItem.vue'
 import TemplateDialog from '../../../components/TemplateDialog.vue'
 import ScrollWrapper from '../../../components/ScrollWrapper.vue'
 import GamepadIcon from '../../../components/GamepadIcon.vue'
+import { translate } from '../../../i18n'
 
 const props = defineProps({
   title: {
@@ -214,7 +215,7 @@ onMounted(() => {
     >
       <GamepadIcon icon="B" class="gamepad-icon h-[30px]" />
       <div class="font-gs ml-2" style="font-size: 18px; margin-top: 2px">
-        关闭
+        {{ translate('general_back') }}
       </div>
     </div>
   </TemplateDialog>

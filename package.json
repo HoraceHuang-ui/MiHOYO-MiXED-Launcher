@@ -52,7 +52,6 @@
     "@octokit/core": "5.1.0",
     "axios": "^1.6.7",
     "bootstrap-icons": "^1.11.3",
-    "electron-store": "^8.2.0",
     "enka-network-api": "^4.3.0",
     "marked": "^12.0.1",
     "path": "^0.12.7",
