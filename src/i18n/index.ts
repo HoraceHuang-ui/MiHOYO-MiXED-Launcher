@@ -8,7 +8,6 @@ import frFR from './fr_FR.json'
 
 type MessageSchema = typeof enUS
 export type Lang = 'en_US' | 'zh_CN' | 'zh_TW' | 'ru_RU' | 'ja_JP' | 'fr_FR'
-
 const i18n = createI18n<[MessageSchema], Lang>({
   // default locale
   locale: localStorage.lang ? localStorage.lang : 'en_US',
@@ -83,6 +82,7 @@ export const translateWithLocale = (
 
 export const switchLang = (language: Lang) => {
   localStorage.lang = language
+  // store.settings.general.lang = language
   i18n.global.locale = language
 }
 

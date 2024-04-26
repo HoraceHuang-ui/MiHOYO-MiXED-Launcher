@@ -9,7 +9,6 @@ import {
   ref,
   Ref,
 } from 'vue'
-import { useRouter } from 'vue-router'
 import { translate } from '../../../i18n'
 import StatIcon from '../../../components/StatIcon.vue'
 import CustomUIDInput from '../../../components/CustomUIDInput.vue'
@@ -20,6 +19,7 @@ import ScrollWrapper from '../../../components/ScrollWrapper.vue'
 import MyTooltip from '../../../components/MyTooltip.vue'
 import MyCarousel from '../../../components/MyCarousel.vue'
 import GamepadIcon from '../../../components/GamepadIcon.vue'
+import { useStore } from '../../../store'
 
 const gamepadMode = defineModel({
   type: String as PropType<
@@ -34,35 +34,30 @@ const gamepadMode = defineModel({
   required: false,
 })
 
-const playerInfo = ref<any>()
 const cardsCarouselRef = ref()
 const initReady = ref(false)
+const store = useStore()
 
+const playerInfo = ref(store.game.gs.playerInfo)
 const uidInput = ref('')
 const uidInputDom = ref()
 let uid = ''
 const charsPage = ref(0)
-const pages = computed(() => {
-  if (!playerInfo.value) {
-    return 0
-  } else {
-    return playerInfo.value &&
-      playerInfo.value.characters &&
-      playerInfo.value.characters.length > 10
-      ? Math.floor((playerInfo.value.characters.length - 10) / 6 - 0.1) + 1
-      : 0
-  }
-})
+const pages = computed(() =>
+  playerInfo.value &&
+  playerInfo.value.characters &&
+  playerInfo.value.characters.length > 10
+    ? Math.floor((playerInfo.value.characters.length - 10) / 6 - 0.1) + 1
+    : 0,
+)
 const hScale = inject<Ref<number>>('hScale')
 const vScale = inject<Ref<number>>('vScale')
 
-const playerInfoReady = ref(false)
 const playerInfoLoading = ref(false)
 const playerInfoFailed = ref(false)
 const charsScrollbar = ref()
 const showcaseIdx = ref(0)
 const artifactIdx = ref(0)
-const showCostume = ref(false)
 const retriedCache = ref(false)
 const retriedCompleteCache = ref(false)
 const elementAssets = {
@@ -131,7 +126,11 @@ const gameLoop = () => {
   }
 
   // X: Open details dialog
-  if (gamepadMode.value === 'gs-player' && gp.buttons[2].pressed) {
+  if (
+    gamepadMode.value === 'gs-player' &&
+    gp.buttons[2].pressed &&
+    playerInfo.value
+  ) {
     if (!inThrottle) {
       inThrottle = true
       showCharDetails(
@@ -145,7 +144,11 @@ const gameLoop = () => {
   }
 
   // LS: Select character
-  if (gamepadMode.value === 'gs-player' && gp.axes[0] < -0.9) {
+  if (
+    gamepadMode.value === 'gs-player' &&
+    gp.axes[0] < -0.9 &&
+    playerInfo.value
+  ) {
     if (!inThrottle) {
       inThrottle = true
       if (showcaseIdx.value > 0) {
@@ -156,7 +159,11 @@ const gameLoop = () => {
       }, 150)
     }
   }
-  if (gamepadMode.value === 'gs-player' && gp.axes[0] > 0.9) {
+  if (
+    gamepadMode.value === 'gs-player' &&
+    gp.axes[0] > 0.9 &&
+    playerInfo.value
+  ) {
     if (!inThrottle) {
       inThrottle = true
       if (showcaseIdx.value < playerInfo.value.characters.length - 1) {
@@ -169,7 +176,11 @@ const gameLoop = () => {
   }
 
   // RS: Select Artifact
-  if (gamepadMode.value === 'gs-player' && gp.axes[2] < -0.9) {
+  if (
+    gamepadMode.value === 'gs-player' &&
+    gp.axes[2] < -0.9 &&
+    playerInfo.value
+  ) {
     if (!inThrottle) {
       inThrottle = true
       console.log(artifactIdx.value)
@@ -184,7 +195,11 @@ const gameLoop = () => {
       }, 150)
     }
   }
-  if (gamepadMode.value === 'gs-player' && gp.axes[2] > 0.9) {
+  if (
+    gamepadMode.value === 'gs-player' &&
+    gp.axes[2] > 0.9 &&
+    playerInfo.value
+  ) {
     if (!inThrottle) {
       inThrottle = true
       if (
@@ -207,41 +222,34 @@ const gameLoop = () => {
 }
 
 const mergeToPlayerinfo = (newArr: any[]) => {
+  if (!playerInfo.value) {
+    return
+  }
+
   for (let i = newArr.length - 1; i >= 0; i--) {
     let newChar = newArr[i]
     let exists = false
     // for (let j = playerInfo.value.characters.length - 1; j >= 0; j--) {
-    for (let j = 0; j < playerInfo.value?.characters.length; j++) {
-      let oldChar = playerInfo.value?.characters[j]
+    for (let j = 0; j < playerInfo.value.characters.length; j++) {
+      let oldChar = playerInfo.value.characters[j]
       if (oldChar.characterData.id == newChar.characterData.id) {
-        playerInfo.value!.characters[j] = newChar
+        playerInfo.value.characters[j] = newChar
         exists = true
         break
       }
     }
     if (!exists) {
-      playerInfo.value?.characters.push(newChar)
+      playerInfo.value.characters.push(newChar)
     }
   }
 }
 
 onMounted(async () => {
-  window.store
-    .get('gsInfo')
-    .then(value => {
-      if (value) {
-        playerInfoReady.value = true
-        uid = value.uid.toString()
-        uidInput.value = uid
-        playerInfo.value = value
-      }
-      initReady.value = true
-      console.log(playerInfo.value)
-    })
-    .catch(err => {
-      console.error(err)
-    })
-  showCostume.value = await window.store.get('gsCostume')
+  if (playerInfo.value) {
+    uid = playerInfo.value.uid.toString()
+    uidInput.value = uid
+  }
+  initReady.value = true
 
   if (gamepadMode.value) {
     rAFId = rAF(gameLoop)
@@ -252,10 +260,8 @@ onBeforeUnmount(() => {
   rAFId = null
 })
 
-const router = useRouter()
 const requestInfo = () => {
   uid = uidInput.value
-  playerInfoReady.value = false
   console.log(uidInput.value)
   playerInfoLoading.value = true
   playerInfoFailed.value = false
@@ -296,15 +302,8 @@ const requestInfo = () => {
           }
         }
       })
-      window.store.set('gsInfo', JSON.stringify(playerInfo.value), true)
+      store.game.gs.playerInfo = playerInfo.value
       playerInfoLoading.value = false
-      playerInfoReady.value = true
-      // router.push({
-      //   name: 'tempPage',
-      //   query: {
-      //     from: 'gs',
-      //   },
-      // })
     })
     .catch(err => {
       console.error(err)
@@ -358,14 +357,14 @@ const setShowcase = (index: number) => {
 }
 
 const getCharElementAssets = (id: number) => {
-  if (!playerInfo.value?.characters[id].characterData.element) {
+  if (
+    !playerInfo.value ||
+    !playerInfo.value?.characters[id].characterData.element
+  ) {
     return elementAssets.hydro
   }
 
-  const charElementId =
-    playerInfo.value?.characters[id].characterData.element!.id
-
-  switch (charElementId) {
+  switch (playerInfo.value.characters[id].characterData.element.id) {
     case 'Water':
       return elementAssets.hydro
     case 'Ice':
@@ -522,7 +521,7 @@ const countRolledSubstat = (stats: any[], prop: string) => {
     >
       <!-- 右上角名片 -->
       <img
-        v-if="playerInfoReady && playerInfo"
+        v-if="playerInfo && !playerInfoLoading && !playerInfoFailed"
         class="namecard-mask absolute top-0 right-0 bottom-0 z-0 w-1/3 object-cover"
         style="height: 9vh; border-radius: 0 4.5vh 4.5vh 0"
         :src="playerInfo.profileCard.pictures[1].url"
@@ -546,7 +545,7 @@ const countRolledSubstat = (stats: any[], prop: string) => {
       <!-- 左上角头像、昵称 -->
       <!-- playerInfo.player.profilePicture.assets.icon -->
       <div
-        v-if="playerInfoReady && playerInfo"
+        v-if="playerInfo"
         class="flex flex-row content-start items-center"
         style="width: 35vw"
       >
@@ -575,7 +574,10 @@ const countRolledSubstat = (stats: any[], prop: string) => {
         />
       </div>
       <!-- 右侧 WL AR -->
-      <div v-if="playerInfoReady && playerInfo" style="width: 35vw">
+      <div
+        v-if="playerInfo && !playerInfoLoading && !playerInfoFailed"
+        style="width: 35vw"
+      >
         <div
           class="h-full flex flex-row justify-end items-center"
           :style="`font-size: calc(16px * min(${hScale}, ${vScale}))`"
@@ -609,7 +611,7 @@ const countRolledSubstat = (stats: any[], prop: string) => {
       <div v-else style="width: 35vw" />
     </div>
     <!-- BODY -->
-    <div v-if="playerInfoReady && playerInfo" class="relative">
+    <div v-if="playerInfo && playerInfo.showCharacterDetails" class="relative">
       <!-- 角色头像列表 10人一页 -->
       <div class="flex flex-row w-full justify-center absolute top-0 z-10">
         <div
@@ -714,7 +716,7 @@ const countRolledSubstat = (stats: any[], prop: string) => {
                 <img
                   class="inline-block object-cover bottom-0 left-0 absolute z-10 h-full pointer-events-none"
                   :src="
-                    showCostume
+                    store.settings.appearance.gsCostume
                       ? character.costume.splashImage.url
                       : character.characterData.splashImage.url
                   "
@@ -1226,7 +1228,7 @@ const countRolledSubstat = (stats: any[], prop: string) => {
       </MyCarousel>
     </div>
     <div
-      v-else-if="!playerInfoReady"
+      v-else-if="playerInfo && !playerInfo.showCharacterDetails"
       class="mt-4 mb-4"
       :style="`font-size: calc(max(14px * min(${hScale}, ${vScale}), 16px))`"
     >

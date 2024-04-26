@@ -103,9 +103,12 @@ defineExpose({
           transform: scale(min(${hScale.value}, ${vScale.value})) translate(calc(-50% / min(${hScale.value}, ${vScale.value})), calc(-50% / min(${hScale.value}, ${vScale.value})))`"
       >
         <div class="close-area-wrapper" v-if="!showCancel && !showOk">
-          <GamepadIcon icon="B" class="gamepad-icon" />
+          <GamepadIcon icon="B" class="gamepad-icon" v-if="gamepadMode" />
           <div class="close-button" @click="cancelClick">
-            <img class="my-1" src="../../../assets/srCloseButton.png" />
+            <img
+              class="my-0.5 h-[20px] object-contain"
+              src="../../../assets/srCloseButton.png"
+            />
           </div>
         </div>
         <div class="dialog-content-wrapper">

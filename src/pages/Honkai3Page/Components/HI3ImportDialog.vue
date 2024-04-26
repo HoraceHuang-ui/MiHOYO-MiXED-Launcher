@@ -4,6 +4,7 @@ import { PropType, Ref, ref } from 'vue'
 import Honkai3Dialog from './Honkai3Dialog.vue'
 import MyCheckbox from '../../../components/MyCheckbox.vue'
 import MyTooltip from '../../../components/MyTooltip.vue'
+import { useStore } from '../../../store'
 
 const props = defineProps({
   onOk: {
@@ -26,6 +27,7 @@ const combinePaths = ref(true)
 const dialogRef = ref()
 const launcherPath = ref('')
 const gamePath = ref('')
+const store = useStore()
 
 const hiLauncherImport = async () => {
   window.dialog
@@ -68,8 +70,8 @@ const confirmPaths = async () => {
     gamePath.value = launcherPath.value + '\\Games\\BH3.exe'
   }
   launcherPath.value += '\\launcher.exe'
-  await window.store.set('hi3LauncherPath', launcherPath.value, false)
-  await window.store.set('hi3GamePath', gamePath.value, false)
+  store.game.hi3.launcherPath = launcherPath.value
+  store.game.hi3.gamePath = gamePath.value
 }
 
 const onDialogOk = () => {

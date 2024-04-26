@@ -9,14 +9,12 @@ import {
   Ref,
   ref,
 } from 'vue'
-import { useRouter } from 'vue-router'
 import { translate } from '../../../i18n'
 import StatIcon from '../../../components/StatIcon.vue'
 import { RankInfo } from '../../../types/starrail/srRankMap'
 import {
   AttributeInfo,
   CharacterInfo,
-  FormattedApiInfo,
   RelicSetInfo,
 } from '../../../types/starrail/srPlayerInfo'
 import { useDialog } from '../../../utils/template-dialog'
@@ -27,6 +25,7 @@ import MyTooltip from '../../../components/MyTooltip.vue'
 import MyCarousel from '../../../components/MyCarousel.vue'
 import CustomUIDInput from '../../../components/CustomUIDInput.vue'
 import GamepadIcon from '../../../components/GamepadIcon.vue'
+import { useStore } from '../../../store'
 
 // import rankMap from '../textMaps/character_ranks.json' with { type: 'json' }
 
@@ -44,20 +43,9 @@ const gamepadMode = defineModel({
 })
 
 const apiUrl = 'https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/'
+const store = useStore()
 
-const playerInfo = ref<FormattedApiInfo>({
-  characters: [],
-  player: {
-    uid: '',
-    nickname: '',
-    level: 0,
-    world_level: 0,
-    friend_count: 0,
-    signature: '',
-    is_display: false,
-  },
-})
-const playerInfoReady = ref(false)
+const playerInfo = ref(store.game.sr.playerInfo)
 const playerInfoLoading = ref(false)
 const playerInfoFailed = ref(false)
 const uidInput = ref('')
@@ -65,7 +53,9 @@ const uidInputDom = ref()
 let uid = ''
 const charsPage = ref(0)
 const pages = computed(() =>
-  playerInfo.value.characters && playerInfo.value.characters.length > 10
+  playerInfo.value &&
+  playerInfo.value.characters &&
+  playerInfo.value.characters.length > 10
     ? Math.floor((playerInfo.value.characters.length - 10) / 6 - 0.1) + 1
     : 0,
 )
@@ -116,7 +106,11 @@ const gameLoop = () => {
   }
 
   // X: Open details dialog
-  if (gamepadMode.value === 'sr-player' && gp.buttons[2].pressed) {
+  if (
+    gamepadMode.value === 'sr-player' &&
+    gp.buttons[2].pressed &&
+    playerInfo
+  ) {
     if (!inThrottle) {
       inThrottle = true
       showCharDetails(showcaseIdx.value)
@@ -127,7 +121,7 @@ const gameLoop = () => {
   }
 
   // LS: Select character
-  if (gamepadMode.value === 'sr-player' && gp.axes[0] < -0.9) {
+  if (gamepadMode.value === 'sr-player' && gp.axes[0] < -0.9 && playerInfo) {
     if (!inThrottle) {
       inThrottle = true
       if (showcaseIdx.value > 0) {
@@ -138,7 +132,7 @@ const gameLoop = () => {
       }, 150)
     }
   }
-  if (gamepadMode.value === 'sr-player' && gp.axes[0] > 0.9) {
+  if (gamepadMode.value === 'sr-player' && gp.axes[0] > 0.9 && playerInfo) {
     if (!inThrottle) {
       inThrottle = true
       if (showcaseIdx.value < playerInfo.value.characters.length - 1) {
@@ -151,10 +145,9 @@ const gameLoop = () => {
   }
 
   // RS: Select Relics
-  if (gamepadMode.value === 'sr-player' && gp.axes[2] < -0.9) {
+  if (gamepadMode.value === 'sr-player' && gp.axes[2] < -0.9 && playerInfo) {
     if (!inThrottle) {
       inThrottle = true
-      console.log(relicIdx.value)
       if (relicIdx.value == 0) {
         relicIdx.value =
           playerInfo.value.characters[showcaseIdx.value].relics.length - 1
@@ -166,7 +159,7 @@ const gameLoop = () => {
       }, 150)
     }
   }
-  if (gamepadMode.value === 'sr-player' && gp.axes[2] > 0.9) {
+  if (gamepadMode.value === 'sr-player' && gp.axes[2] > 0.9 && playerInfo) {
     if (!inThrottle) {
       inThrottle = true
       if (
@@ -198,21 +191,12 @@ onMounted(() => {
     .catch(error => {
       console.error('Error loading JSON:', error)
     })
-  window.store
-    .get('srInfo')
-    .then(value => {
-      if (value) {
-        playerInfoReady.value = true
-        uid = value.player.uid
-        uidInput.value = uid
-        playerInfo.value = value
-      }
-      console.log(playerInfo.value)
-      initReady.value = true
-    })
-    .catch(err => {
-      console.error(err)
-    })
+
+  if (playerInfo.value) {
+    uid = playerInfo.value.player.uid
+    uidInput.value = uid
+  }
+  initReady.value = true
 
   if (gamepadMode.value) {
     rAFId = rAF(gameLoop)
@@ -220,6 +204,10 @@ onMounted(() => {
 })
 
 const mergeToPlayerinfo = (newArr: CharacterInfo[]) => {
+  if (!playerInfo.value) {
+    return
+  }
+
   for (let i = newArr.length - 1; i >= 0; i--) {
     let newChar = newArr[i]
     let exists = false
@@ -236,24 +224,21 @@ const mergeToPlayerinfo = (newArr: CharacterInfo[]) => {
       playerInfo.value.characters.push(newChar)
     }
   }
-  console.log(playerInfo.value)
 }
 
 onBeforeUnmount(() => {
   rAFId = null
 })
 
-const router = useRouter()
 const requestInfo = () => {
   uid = uidInput.value
   playerInfoFailed.value = false
   window.axios
     .get(translate('sr_playerInfoUrl', { uid: uid }))
     .then(resp => {
-      if (
-        playerInfoReady.value &&
-        playerInfo.value.player.uid == resp.player.uid
-      ) {
+      console.log(playerInfo)
+      console.log(resp.player.uid)
+      if (playerInfo.value && playerInfo.value.player.uid == resp.player.uid) {
         console.log('uid equal')
         mergeToPlayerinfo(resp.characters)
         playerInfo.value.player = resp.player
@@ -261,7 +246,11 @@ const requestInfo = () => {
         console.log('uid not equal')
         playerInfo.value = resp
       }
-      playerInfoReady.value = false
+
+      if (!playerInfo.value) {
+        playerInfoLoading.value = false
+        return
+      }
 
       playerInfo.value.characters.sort(function (
         a: CharacterInfo,
@@ -297,15 +286,9 @@ const requestInfo = () => {
           // }
         }
       })
-      window.store.set('srInfo', JSON.stringify(playerInfo.value), true)
+
+      store.game.sr.playerInfo = playerInfo.value
       playerInfoLoading.value = false
-      playerInfoReady.value = true
-      // router.push({
-      //   name: 'tempPage',
-      //   query: {
-      //     from: 'sr',
-      //   },
-      // })
     })
     .catch(err => {
       console.error(err)
@@ -409,6 +392,10 @@ const showCharDetails = (index: number) => {
     gamepadMode.value = 'dialog'
     rAFId = null
   }
+  if (!playerInfo.value) {
+    return
+  }
+
   useDialog(
     SRCharDetailsDialog,
     {
@@ -446,7 +433,7 @@ const showCharDetails = (index: number) => {
       class="flex flex-row w-full p-0 relative justify-between z-50"
       style="height: 9vh"
     >
-      <!-- 右上角名片 -->
+      <!-- 右上角加载提示 / 报错提示 -->
       <div
         v-if="playerInfoLoading"
         class="absolute top-0 right-0 bottom-0 z-0"
@@ -465,7 +452,7 @@ const showCharDetails = (index: number) => {
       </div>
       <!-- 左上角头像、昵称 -->
       <div
-        v-if="playerInfoReady"
+        v-if="playerInfo"
         class="flex flex-row content-start items-center"
         style="width: 35vw"
       >
@@ -499,7 +486,7 @@ const showCharDetails = (index: number) => {
       </div>
       <!-- 右侧 WL AR -->
       <div
-        v-if="playerInfoReady && !playerInfoLoading"
+        v-if="playerInfo && !playerInfoLoading && !playerInfoFailed"
         style="width: 35vw; position: relative"
       >
         <div
@@ -535,10 +522,7 @@ const showCharDetails = (index: number) => {
       <div v-else style="width: 35vw" />
     </div>
     <!-- BODY -->
-    <div
-      v-if="playerInfoReady && playerInfo.characters.length > 0"
-      class="relative"
-    >
+    <div v-if="playerInfo && playerInfo.characters.length > 0" class="relative">
       <!-- 角色头像列表 10人一页 -->
       <div class="flex flex-row w-full justify-center absolute z-10 top-0">
         <div

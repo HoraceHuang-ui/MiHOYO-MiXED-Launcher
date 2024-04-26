@@ -14,7 +14,6 @@ import {
   availableDialogStyleDescs,
   availableDialogStyles,
   dialogComponent,
-  DialogStyle,
 } from '../../types/dialog/dialog'
 import { useDialog } from '../../utils/template-dialog'
 import UpdateDialogContent from '../../components/UpdateDialogContent.vue'
@@ -26,13 +25,13 @@ import MyLink from '../../components/MyLink.vue'
 import MyGroupButtons from '../../components/MyGroupButtons.vue'
 import GamepadIcon from '../../components/GamepadIcon.vue'
 import MyTooltip from '../../components/MyTooltip.vue'
+import { useStore } from '../../store'
 
+const store = useStore()
 const lang = ref<Lang>('en_US')
 const selectedLangIdx = ref(0)
-const dialogStyle = ref<DialogStyle>('gs')
 const selectedDialogStyleIdx = ref(0)
 const transitionShow = ref(false)
-const bgPath = ref('')
 const appVer = ref('')
 const latest = ref(false)
 const updInfo = ref<UpdInfo>({
@@ -57,45 +56,17 @@ const updInfo = ref<UpdInfo>({
 })
 const checkUpdFailed = ref(false)
 const updChecking = ref(false)
-const quitOnClose = ref(true)
-const trayOnLaunch = ref(true)
-const gsCostume = ref(false)
-const colorTheme = ref(2)
-const autoEnterGamepad = inject<Ref<boolean>>('autoEnterGamepad', ref(true))
-const gamepadDisableMouse = ref(false)
-const showGamepadToolbar = ref(true)
 
 const hScale = inject<Ref<number>>('hScale')
 const vScale = inject<Ref<number>>('vScale')
 
-onMounted(async () => {
+onMounted(() => {
   lang.value = localStorage.lang || 'en_US'
-  colorTheme.value = await window.store.get('colorTheme')
   selectedLangIdx.value = availableLangCodes.indexOf(lang.value)
-  let a = await window.store.get('quitOnClose')
-  if (a === undefined) {
-    await window.store.set('quitOnClose', true, false)
-    quitOnClose.value = true
-  } else {
-    quitOnClose.value = a
-  }
-  a = await window.store.get('trayOnLaunch')
-  if (a === undefined) {
-    await window.store.set('trayOnLaunch', true, false)
-    trayOnLaunch.value = true
-  } else {
-    trayOnLaunch.value = a
-  }
-  bgPath.value = await window.store.get('mainBgPath')
-  dialogStyle.value = await window.store.get('dialogStyle')
   selectedDialogStyleIdx.value = availableDialogStyles.indexOf(
-    dialogStyle.value,
+    store.settings.appearance.dialogStyle,
   )
   transitionShow.value = true
-
-  gsCostume.value = await window.store.get('gsCostume')
-  gamepadDisableMouse.value = await window.store.get('gamepadDisableMouse')
-  showGamepadToolbar.value = await window.store.get('showGamepadToolbar')
 
   // BUILD: '../../app.asar/package.json'
   // DEV: '../../package.json'
@@ -119,7 +90,7 @@ const checkUpdates = () => {
       if (needsUpdate(resp.data.tag_name)) {
         updInfo.value = resp.data
         useDialog(
-          dialogComponent(dialogStyle.value),
+          dialogComponent(store.settings.appearance.dialogStyle),
           {
             onCancel(dispose: () => void) {
               dispose()
@@ -139,7 +110,7 @@ const checkUpdates = () => {
               appVer: appVer.value,
               updInfo: updInfo.value,
               showSkipCurrent: false,
-              gameStyle: dialogStyle.value,
+              gameStyle: store.settings.appearance.dialogStyle,
               style: {
                 height: `calc(50vh / min(${hScale?.value}, ${vScale?.value}))`,
               },
@@ -187,35 +158,10 @@ const needsUpdate = (latestStr: string) => {
   return verCompare(latest, curr) > 0
 }
 
-const switchQuitAction = () => {
-  window.store.set('quitOnClose', quitOnClose.value, false)
-}
-
-const switchLaunchTray = () => {
-  window.store.set('trayOnLaunch', trayOnLaunch.value, false)
-}
-
-const switchGsCostume = () => {
-  window.store.set('gsCostume', gsCostume.value, false)
-}
-
-const switchAutoEnterGamepad = () => {
-  window.store.set('autoEnterGamepad', autoEnterGamepad.value, false)
-}
-
-const switchDisableMouse = () => {
-  window.store.set('gamepadDisableMouse', gamepadDisableMouse.value, false)
-}
-
-const switchShowToolbar = () => {
-  window.store.set('showGamepadToolbar', showGamepadToolbar.value, false)
-}
-
 const colorThemeChange = () => {
   const darkModePreference = window.matchMedia('(prefers-color-scheme: dark)')
 
-  window.store.set('colorTheme', colorTheme.value, false)
-  if (colorTheme.value == 1) {
+  if (store.settings.appearance.colorTheme == 1) {
     document.body.classList.remove('dark')
 
     darkModePreference.removeEventListener('change', e => {
@@ -225,7 +171,7 @@ const colorThemeChange = () => {
         document.body.classList.remove('dark')
       }
     })
-  } else if (colorTheme.value == 3) {
+  } else if (store.settings.appearance.colorTheme == 3) {
     document.body.classList.add('dark')
 
     darkModePreference.removeEventListener('change', e => {
@@ -253,17 +199,17 @@ const colorThemeChange = () => {
 const showLangDialog = (idx: number) => {
   lang.value = availableLangCodes[idx]
   useDialog(
-    dialogComponent(dialogStyle.value),
+    dialogComponent(store.settings.appearance.dialogStyle),
     {
       onCancel(dispose: () => void) {
-        lang.value = localStorage.lang
+        lang.value = store.settings.general.lang!
         selectedLangIdx.value = availableLangCodes.indexOf(lang.value)
         dispose()
       },
       onOk(dispose: () => void) {
         switchLang(lang.value)
-        window.store.delete('gsInfo')
-        window.store.delete('srInfo')
+        store.game.gs.playerInfo = undefined
+        store.game.sr.playerInfo = undefined
         window.win.relaunch()
         dispose()
       },
@@ -279,29 +225,27 @@ const showLangDialog = (idx: number) => {
 }
 
 const showDialogStyleChange = () => {
-  dialogStyle.value = availableDialogStyles[selectedDialogStyleIdx.value]
+  let dialogStyle = availableDialogStyles[selectedDialogStyleIdx.value]
   useDialog(
-    dialogComponent(dialogStyle.value),
+    dialogComponent(dialogStyle),
     {
       async onCancel(dispose: () => void) {
-        dialogStyle.value = await window.store.get('dialogStyle')
-        selectedDialogStyleIdx.value = availableDialogStyles.indexOf(
-          dialogStyle.value,
-        )
+        selectedDialogStyleIdx.value =
+          availableDialogStyles.indexOf(dialogStyle)
         dispose()
       },
       onOk(dispose: () => void) {
-        window.store.set('dialogStyle', dialogStyle.value, false)
+        store.settings.appearance.dialogStyle = dialogStyle
         dispose()
       },
     },
     {
       title: translate('settings_dialogStyleTitle', {
-        game: translate('general_' + dialogStyle.value + 'Short'),
+        game: translate('general_' + dialogStyle + 'Short'),
       }),
       showCancel: true,
       msg: translate('settings_dialogStyleText', {
-        game: translate('general_' + dialogStyle.value),
+        game: translate('general_' + dialogStyle),
       }),
       hScale: hScale,
       vScale: vScale,
@@ -311,7 +255,7 @@ const showDialogStyleChange = () => {
 
 const showClearDialog = () => {
   useDialog(
-    dialogComponent(dialogStyle.value),
+    dialogComponent(store.settings.appearance.dialogStyle),
     {
       onOk(dispose: () => void) {
         window.store.clear()
@@ -334,7 +278,13 @@ const showClearDialog = () => {
 <template>
   <div class="page-wrapper" :class="{ from: !transitionShow }">
     <div class="bg-pic-wrapper">
-      <img :src="bgPath ? bgPath : '../../src/assets/gsbanner.png'" />
+      <img
+        :src="
+          store.general.mainBgPath
+            ? store.general.mainBgPath
+            : '../../src/assets/gsbanner.png'
+        "
+      />
     </div>
     <ScrollWrapper height="91vh" class="scroll-wrapper">
       <div class="scroll-content-wrapper">
@@ -355,18 +305,16 @@ const showClearDialog = () => {
             {{ $t('settings_whenClosingWindow') }}
           </div>
           <MyTextSwitch
-            v-model="quitOnClose"
-            class="border-2 bg-white dark:bg-[#222] dark:border-[#333]"
-            :right-text="$t('settings_trayOnClose')"
-            :left-text="$t('settings_quitOnClose')"
-            @change="switchQuitAction"
+            v-model="store.settings.general.quitOnClose"
+            class="bg-white my-[1px] dark:bg-[#222]"
+            :left-text="$t('settings_trayOnClose')"
+            :right-text="$t('settings_quitOnClose')"
           />
         </div>
         <div class="form-item hover">
           <div class="form-item-text">{{ $t('settings_trayOnLaunch') }}</div>
           <CustomSwitch
-            v-model="trayOnLaunch"
-            @change="switchLaunchTray"
+            v-model="store.settings.general.trayOnLaunch"
           ></CustomSwitch>
         </div>
         <div class="form-item">
@@ -379,7 +327,10 @@ const showClearDialog = () => {
         <div class="title font-gs">{{ $t('settings_appearance') }}</div>
         <div class="form-item hover">
           <div class="form-item-text">{{ $t('settings_colorTheme') }}</div>
-          <MyGroupButtons v-model="colorTheme" @change="colorThemeChange">
+          <MyGroupButtons
+            v-model="store.settings.appearance.colorTheme"
+            @change="colorThemeChange"
+          >
             <template #left>
               <i class="bi bi-sun" />
             </template>
@@ -396,14 +347,14 @@ const showClearDialog = () => {
           <MySelect
             v-model="selectedDialogStyleIdx"
             :items="availableDialogStyleDescs"
-            @change="showDialogStyleChange"
             middle
             selector-class="border-2 bg-white py-1 px-2 hover:bg-gray-100 dark:border-[#333] dark:bg-[#222] dark:hover:bg-[#333] transition-all"
+            @change="showDialogStyleChange"
           />
         </div>
         <div class="form-item hover">
           <div class="form-item-text">{{ $t('settings_gsCostume') }}</div>
-          <CustomSwitch v-model="gsCostume" @change="switchGsCostume" />
+          <CustomSwitch v-model="store.settings.appearance.gsCostume" />
         </div>
 
         <!-- GAMEPAD -->
@@ -437,23 +388,35 @@ const showClearDialog = () => {
               </div>
             </MyTooltip>
           </div>
-          <CustomSwitch
-            v-model="autoEnterGamepad"
-            @change="switchAutoEnterGamepad"
-          />
+          <CustomSwitch v-model="store.settings.gamepad.autoEnter" />
         </div>
         <div class="form-item hover">
           <div class="form-item-text">{{ $t('gamepad_disableMouse') }}</div>
-          <CustomSwitch
-            v-model="gamepadDisableMouse"
-            @change="switchDisableMouse"
-          />
+          <CustomSwitch v-model="store.settings.gamepad.disableMouse" />
         </div>
         <div class="form-item hover">
           <div class="form-item-text">{{ $t('gamepad_showToolbar') }}</div>
-          <CustomSwitch
-            v-model="showGamepadToolbar"
-            @change="switchShowToolbar"
+          <CustomSwitch v-model="store.settings.gamepad.showToolbar" />
+        </div>
+        <div class="form-item hover">
+          <div class="flex flex-row">
+            <div class="form-item-text mr-2">默认键位</div>
+            <MyTooltip
+              max-width="300px"
+              middle
+              placement="bottom"
+              content="当检测到手柄为 Xbox / PS 时将覆盖此设置。"
+            >
+              <div class="flex flex-row">
+                <div class="help">?</div>
+              </div>
+            </MyTooltip>
+          </div>
+          <MyTextSwitch
+            class="bg-white my-[2px] dark:bg-[#222]"
+            right-text="PS"
+            left-text="Xbox"
+            v-model="store.settings.gamepad.defaultPS"
           />
         </div>
 

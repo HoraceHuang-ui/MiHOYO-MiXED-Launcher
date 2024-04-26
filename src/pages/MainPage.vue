@@ -3,131 +3,100 @@ import { h, inject, onMounted, Ref, ref } from 'vue'
 import {
   availableLangCodes,
   availableLangNames,
-  str2Lang,
   translate,
   translateWithLocale,
 } from '../i18n'
-import { dialogComponent, DialogStyle } from '../types/dialog/dialog'
+import { dialogComponent } from '../types/dialog/dialog'
 import { useDialog } from '../utils/template-dialog'
 import { useRouter } from 'vue-router'
 import MySelect from '../components/MySelect.vue'
+import { useStore } from '../store'
+
+const store = useStore()
 
 const router = useRouter()
 const hScale = inject<Ref<number>>('hScale')
 const vScale = inject<Ref<number>>('vScale')
 
-const gsGamePath = ref('')
-const srGamePath = ref('')
-const hi3GamePath = ref('')
 const transitionShow = ref(false)
-const bgPath = ref('')
-
-const dialogStyle = ref<DialogStyle>('gs')
 
 const DEFAULT_BG = '../../src/assets/gsbanner.png'
 const lang = ref(0)
 
 onMounted(async () => {
-  gsGamePath.value = await window.store.get('gsGamePath')
-  srGamePath.value = await window.store.get('srGamePath')
-  hi3GamePath.value = await window.store.get('hi3GamePath')
-  bgPath.value = await window.store.get('mainBgPath')
-  transitionShow.value = true
-
-  window.store.get('dialogStyle').then((style: DialogStyle) => {
-    if (!style) {
-      window.store.set('dialogStyle', 'gs', false)
-    }
-    dialogStyle.value = style
-
-    const langCode = str2Lang(localStorage.getItem('lang'))
-    if (!langCode) {
-      localStorage.setItem('lang', 'en_US')
-      lang.value = 0
-      useDialog(
-        dialogComponent(dialogStyle.value),
-        {
-          onOk(dispose: () => void) {
-            if (lang.value !== 0) {
-              localStorage.setItem('lang', availableLangCodes[lang.value])
-              router.go(0)
-            }
-            dispose()
-          },
-          onCancel(dispose: () => void) {
-            lang.value = 0
-            dispose()
-          },
+  if (!localStorage.lang) {
+    localStorage.lang = 'en_US'
+    lang.value = 0
+    useDialog(
+      dialogComponent(store.settings.appearance.dialogStyle),
+      {
+        onOk(dispose: () => void) {
+          if (lang.value !== 0) {
+            localStorage.lang = availableLangCodes[lang.value]
+            router.go(0)
+          }
+          dispose()
         },
-        {
-          title: () =>
-            translateWithLocale(
-              'general_welcomeTitle',
-              availableLangCodes[lang.value],
-            ),
-          msg: () =>
-            translateWithLocale(
-              'general_langText',
-              availableLangCodes[lang.value],
-            ),
-          vnode: () =>
-            h(
-              'div',
-              {
-                style: {
-                  display: 'flex',
-                  'flex-direction': 'row',
-                  'justify-content': 'center',
-                  width: '100%',
-                },
+        onCancel(dispose: () => void) {
+          lang.value = 0
+          dispose()
+        },
+      },
+      {
+        title: () =>
+          translateWithLocale(
+            'general_welcomeTitle',
+            availableLangCodes[lang.value],
+          ),
+        msg: () =>
+          translateWithLocale(
+            'general_langText',
+            availableLangCodes[lang.value],
+          ),
+        vnode: () =>
+          h(
+            'div',
+            {
+              style: {
+                display: 'flex',
+                'flex-direction': 'row',
+                'justify-content': 'center',
+                width: '100%',
               },
-              h(MySelect, {
-                selectorStyle: {
-                  'border-width': '1px',
-                  'border-color': '#CEA652',
-                  'border-radius': '9999px',
-                  'margin-top': '0.5rem',
-                  padding: '0.25rem 0.5rem',
-                  transition: 'all 0.2s',
-                  color: '#886a32',
-                  'background-color': '#ECE5D8',
-                },
-                items: availableLangNames,
-                modelValue: lang.value,
-                middle: true,
-                onChange: (idx: number) => {
-                  lang.value = idx
-                },
-              }),
-            ),
-          hScale: hScale,
-          vScale: vScale,
-        },
-      )
-    }
-  })
+            },
+            h(MySelect, {
+              selectorStyle: {
+                'border-width': '1px',
+                'border-color': '#CEA652',
+                'border-radius': '9999px',
+                'margin-top': '0.5rem',
+                padding: '0.25rem 0.5rem',
+                transition: 'all 0.2s',
+                color: '#886a32',
+                'background-color': '#ECE5D8',
+              },
+              items: availableLangNames,
+              modelValue: lang.value,
+              middle: true,
+              onChange: (idx: number) => {
+                lang.value = idx
+              },
+            }),
+          ),
+        hScale: hScale,
+        vScale: vScale,
+      },
+    )
+  }
+
+  setTimeout(() => {
+    transitionShow.value = true
+  }, 50)
 })
 
-const genshin = async () => {
-  await window.child.exec(gsGamePath.value)
-  const trayOnLaunch = await window.store.get('trayOnLaunch')
-  if (trayOnLaunch) {
-    await window.win.tray()
-  }
-}
-
-const starRail = async () => {
-  await window.child.exec(srGamePath.value)
-  const trayOnLaunch = await window.store.get('trayOnLaunch')
-  if (trayOnLaunch) {
-    await window.win.tray()
-  }
-}
-
-const honkai3 = async () => {
-  await window.child.exec(hi3GamePath.value)
-  const trayOnLaunch = await window.store.get('trayOnLaunch')
-  if (trayOnLaunch) {
+const launch = async (path: string) => {
+  await window.child.exec(path)
+  if (store.settings.general.trayOnLaunch) {
     await window.win.tray()
   }
 }
@@ -146,8 +115,7 @@ const setPic = () => {
     })
     .then(resp => {
       if (resp) {
-        bgPath.value = resp
-        window.store.set('mainBgPath', bgPath.value, false)
+        store.general.mainBgPath = resp
       }
     })
     .catch(error => {
@@ -156,8 +124,7 @@ const setPic = () => {
 }
 
 const resetPic = () => {
-  bgPath.value = DEFAULT_BG
-  window.store.delete('mainBgPath')
+  store.general.mainBgPath = undefined
 }
 </script>
 
@@ -165,7 +132,11 @@ const resetPic = () => {
   <div class="content-wrapper" :class="{ from: !transitionShow }">
     <img
       class="bg-pic"
-      :src="bgPath ? bgPath : '../../src/assets/gsbanner.png'"
+      :src="
+        store.general.mainBgPath
+          ? store.general.mainBgPath
+          : '../../src/assets/gsbanner.png'
+      "
       alt="Background image of Home page"
     />
     <div
@@ -176,13 +147,25 @@ const resetPic = () => {
       <h1 class="title-text font-gs" style="margin-bottom: 10px">
         {{ translate('mainpage_title') }}
       </h1>
-      <button v-if="gsGamePath" @click="genshin" class="game-button">
+      <button
+        v-if="store.game.gs.gamePath"
+        @click="launch(store.game.gs.gamePath)"
+        class="game-button"
+      >
         {{ translate('mainpage_buttonText', { game: $t('general_gsShort') }) }}
       </button>
-      <button v-if="srGamePath" @click="starRail" class="game-button">
+      <button
+        v-if="store.game.sr.gamePath"
+        @click="launch(store.game.sr.gamePath)"
+        class="game-button"
+      >
         {{ translate('mainpage_buttonText', { game: $t('general_srShort') }) }}
       </button>
-      <button v-if="hi3GamePath" @click="honkai3" class="game-button">
+      <button
+        v-if="store.game.hi3.gamePath"
+        @click="launch(store.game.hi3.gamePath)"
+        class="game-button"
+      >
         {{ translate('mainpage_buttonText', { game: $t('general_hi3Short') }) }}
       </button>
     </div>
@@ -190,7 +173,7 @@ const resetPic = () => {
       <i class="bi bi-image size-full" />
     </div>
     <div
-      v-if="bgPath && bgPath !== DEFAULT_BG"
+      v-if="store.general.mainBgPath && store.general.mainBgPath !== DEFAULT_BG"
       class="icon-button pt-1.5 left-20"
       @click="resetPic"
     >

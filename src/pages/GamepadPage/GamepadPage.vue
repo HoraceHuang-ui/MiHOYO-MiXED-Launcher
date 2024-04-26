@@ -8,6 +8,7 @@ import GenshinInfoCard from '../GenshinPage/Components/GenshinInfoCard.vue'
 import MyCarousel from '../../components/MyCarousel.vue'
 import StarRailInfoCard from '../StarRailPage/Components/StarRailInfoCard.vue'
 import MyTextSwitch from '../../components/MyTextSwitch.vue'
+import { useStore } from '../../store'
 
 type Mode =
   | 'main'
@@ -28,11 +29,13 @@ type SettingsCard = {
 }
 type SettingsItem = {
   text: string
-  value: boolean
+  parent: any
   key: string
   switchTexts?: string[]
   tip?: VNode
 }
+
+const store = useStore()
 
 const contentReady = ref(false)
 const playerCardCarousel = ref()
@@ -44,8 +47,6 @@ const showTooltip = ref(false)
 const gpType = inject<Ref<string>>('gpType')
 let gp: Gamepad | null = null
 
-const bgPath = ref('')
-
 const selectedGameIndex = ref(0)
 const selectedSettingsCardIndex = ref(0)
 const selectedSettingsItemIndex = ref(0)
@@ -53,7 +54,6 @@ const selectedSettingsItemIndex = ref(0)
 const hScale = inject<Ref<number>>('hScale')
 const vScale = inject<Ref<number>>('vScale')
 const leaveGamepad = inject<() => void>('leaveGamepad')
-const autoEnterGamepad = inject<Ref<boolean>>('autoEnterGamepad')
 
 const settingsItems: Ref<SettingsCard[]> = ref([
   {
@@ -61,8 +61,8 @@ const settingsItems: Ref<SettingsCard[]> = ref([
     items: [
       {
         text: translate('gamepad_autoEnterGamepad'),
-        value: true,
-        key: 'autoEnterGamepad',
+        parent: store.settings.gamepad,
+        key: 'autoEnter',
         tip: h(
           'ul',
           {
@@ -91,18 +91,18 @@ const settingsItems: Ref<SettingsCard[]> = ref([
       },
       {
         text: translate('gamepad_quitOnClose'),
-        value: false,
+        parent: store.settings.general,
         key: 'quitOnClose',
       },
       {
         text: translate('gamepad_disableMouse'),
-        value: false,
-        key: 'gamepadDisableMouse',
+        parent: store.settings.gamepad,
+        key: 'disableMouse',
       },
       {
         text: '默认键位',
-        value: false,
-        key: 'gamepadDefaultType',
+        parent: store.settings.gamepad,
+        key: 'defaultPS',
         switchTexts: ['Xbox', 'PS'],
         tip: h('div', '当检测到手柄为 Xbox / PS 时将覆盖此设置。'),
       },
@@ -113,12 +113,12 @@ const settingsItems: Ref<SettingsCard[]> = ref([
     items: [
       {
         text: translate('gamepad_showToolbar'),
-        value: true,
-        key: 'showGamepadToolbar',
+        parent: store.settings.gamepad,
+        key: 'showToolbar',
       },
       {
         text: translate('settings_gsCostume'),
-        value: false,
+        parent: store.settings.appearance,
         key: 'gsCostume',
       },
     ],
@@ -148,8 +148,7 @@ const launch = async (path: string) => {
 
 const winClose = async () => {
   showTooltip.value = false
-  const quitOnClose = await window.store.get('quitOnClose')
-  if (quitOnClose) {
+  if (store.settings.general.quitOnClose) {
     await window.win.close()
   } else {
     await window.win.tray()
@@ -167,12 +166,9 @@ const winMax = () => {
 const onSettingsChange = (cardIdx: number, itemIdx: number) => {
   showTooltip.value = false
   const item = settingsItems.value[cardIdx].items[itemIdx]
-  window.store.set(item.key, !item.value, false)
-  item.value = !item.value
+  item.parent[item.key] = !item.parent[item.key]
 
-  if (item.key === 'autoEnterGamepad') {
-    autoEnterGamepad!.value = item.value
-  } else if (item.key === 'defaultGamepadType') {
+  if (item.key === 'defaultPS') {
     if (
       gp!.id.startsWith('DualSense') ||
       gp!.id.startsWith('DualShock') ||
@@ -180,7 +176,7 @@ const onSettingsChange = (cardIdx: number, itemIdx: number) => {
     ) {
       return
     }
-    gpType!.value = item.value ? 'PS' : 'Xbox'
+    gpType!.value = item.parent[item.key] ? 'PS' : 'Xbox'
   }
 }
 
@@ -532,22 +528,9 @@ const gameLoop = () => {
 }
 
 onMounted(async () => {
-  bgPath.value = await window.store.get('mainBgPath')
-
-  for (const card of settingsItems.value) {
-    for (const item of card.items) {
-      const value = await window.store.get(item.key)
-      if (value !== undefined) {
-        item.value = value
-      }
-    }
-  }
-
-  autoEnterGamepad!.value = settingsItems.value[0].items[0].value
-
   for (const game of games) {
-    const path = await window.store.get(`${game}GamePath`)
-    const launcherPath = await window.store.get(`${game}LauncherPath`)
+    const path = store.game[game].gamePath
+    const launcherPath = store.game[game].launcherPath
     if (path) {
       importedGames.value.push({
         game,
@@ -557,7 +540,7 @@ onMounted(async () => {
     }
   }
 
-  gameLoop()
+  rAF(gameLoop)
 
   setInterval(() => {
     contentReady.value = true
@@ -582,20 +565,21 @@ onMounted(async () => {
     class="bg-wrapper drag"
     :class="{
       from: !contentReady,
-      'pointer-events-none': searchSettingByKey('gamepadDisableMouse')?.value,
+      'pointer-events-none': store.settings.gamepad.disableMouse,
     }"
   >
     <img
       class="bg-pic no-drag"
-      :class="{ toolbar: searchSettingByKey('showGamepadToolbar')?.value }"
-      :src="bgPath ? bgPath : '../../src/assets/gsbanner.png'"
+      :class="{ toolbar: store.settings.gamepad.showToolbar }"
+      :src="
+        store.general.mainBgPath
+          ? store.general.mainBgPath
+          : '../../src/assets/gsbanner.png'
+      "
       alt="Background image of Home page"
     />
     <Transition name="swipe-bottom">
-      <div
-        class="bottom-bar"
-        v-if="searchSettingByKey('showGamepadToolbar')?.value"
-      >
+      <div class="bottom-bar" v-if="store.settings.gamepad.showToolbar">
         <div class="left" />
         <Transition name="swipe-bottom">
           <div class="absolute left-0 left no-drag" v-if="mode === 'main'">
@@ -729,7 +713,7 @@ onMounted(async () => {
 
     <div
       class="launch-area-wrapper"
-      :class="{ toolbar: searchSettingByKey('showGamepadToolbar')?.value }"
+      :class="{ toolbar: store.settings.gamepad.showToolbar }"
     >
       <h1 class="title-text font-gs" style="margin-bottom: 10px">
         {{ $t('mainpage_title') }}
@@ -768,17 +752,17 @@ onMounted(async () => {
         (mode === 'window-action' && windowOldMode === 'settings')
       "
       :class="{
-        'pointer-events-none': searchSettingByKey('gamepadDisableMouse')?.value,
+        'pointer-events-none': store.settings.gamepad.disableMouse,
       }"
     >
       <div
         class="outer settings-wrapper"
         @click="mode = settingsOldMode"
-        :class="{ toolbar: searchSettingByKey('showGamepadToolbar')?.value }"
+        :class="{ toolbar: store.settings.gamepad.showToolbar }"
       />
       <div
         class="inner settings-content"
-        :class="{ toolbar: searchSettingByKey('showGamepadToolbar')?.value }"
+        :class="{ toolbar: store.settings.gamepad.showToolbar }"
       >
         <div
           class="settings-title"
@@ -839,12 +823,12 @@ onMounted(async () => {
               class="bg-gray-100 dark:bg-gray-800"
               :right-text="item.switchTexts[1]"
               :left-text="item.switchTexts[0]"
-              v-model="item.value"
+              v-model="item.parent[item.key]"
               @change="onSettingsChange(cardIdx, itemIdx)"
             />
             <CustomSwitch
               v-else
-              v-model="item.value"
+              v-model="item.parent[item.key]"
               @change="onSettingsChange(cardIdx, itemIdx)"
             />
           </div>
@@ -869,16 +853,16 @@ onMounted(async () => {
                 settingsOldMode === 'sr-player'))))
       "
       :class="{
-        'pointer-events-none': searchSettingByKey('gamepadDisableMouse')?.value,
+        'pointer-events-none': store.settings.gamepad.disableMouse,
       }"
     >
       <div
         class="outer player-wrapper"
-        :class="{ toolbar: searchSettingByKey('showGamepadToolbar')?.value }"
+        :class="{ toolbar: store.settings.gamepad.showToolbar }"
       />
       <div
         class="inner player-content"
-        :class="{ toolbar: searchSettingByKey('showGamepadToolbar')?.value }"
+        :class="{ toolbar: store.settings.gamepad.showToolbar }"
       >
         <MyCarousel
           ref="playerCardCarousel"

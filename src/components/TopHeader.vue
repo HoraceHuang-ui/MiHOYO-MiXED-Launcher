@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { translate } from '../i18n'
+import { useStore } from '../store'
 // const props = defineProps({
 //     selection: Number
 // })
@@ -14,6 +15,8 @@ const pageNames = [
   translate('general_settings'),
 ]
 const selection = ref(0)
+
+const store = useStore()
 
 const router = useRouter()
 const home = () => {
@@ -53,8 +56,7 @@ const settings = () => {
 }
 
 const winClose = async () => {
-  const quitOnClose = await window.store.get('quitOnClose')
-  if (quitOnClose) {
+  if (store.settings.general.quitOnClose) {
     await window.win.close()
   } else {
     await window.win.tray()
