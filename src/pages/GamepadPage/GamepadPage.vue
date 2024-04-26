@@ -7,6 +7,7 @@ import { translate } from '../../i18n'
 import GenshinInfoCard from '../GenshinPage/Components/GenshinInfoCard.vue'
 import MyCarousel from '../../components/MyCarousel.vue'
 import StarRailInfoCard from '../StarRailPage/Components/StarRailInfoCard.vue'
+import MyTextSwitch from '../../components/MyTextSwitch.vue'
 
 type Mode =
   | 'main'
@@ -29,7 +30,8 @@ type SettingsItem = {
   text: string
   value: boolean
   key: string
-  tip?: string | VNode
+  switchTexts?: string[]
+  tip?: VNode
 }
 
 const contentReady = ref(false)
@@ -39,6 +41,8 @@ const mode = ref<Mode>('main')
 const games = ['gs', 'sr', 'hi3']
 const importedGames = ref<GamePath[]>([])
 const showTooltip = ref(false)
+const gpType = inject<Ref<string>>('gpType')
+let gp: Gamepad | null = null
 
 const bgPath = ref('')
 
@@ -95,6 +99,13 @@ const settingsItems: Ref<SettingsCard[]> = ref([
         value: false,
         key: 'gamepadDisableMouse',
       },
+      {
+        text: '默认键位',
+        value: false,
+        key: 'gamepadDefaultType',
+        switchTexts: ['Xbox', 'PS'],
+        tip: h('div', '当检测到手柄为 Xbox / PS 时将覆盖此设置。'),
+      },
     ],
   },
   {
@@ -104,6 +115,11 @@ const settingsItems: Ref<SettingsCard[]> = ref([
         text: translate('gamepad_showToolbar'),
         value: true,
         key: 'showGamepadToolbar',
+      },
+      {
+        text: translate('settings_gsCostume'),
+        value: false,
+        key: 'gsCostume',
       },
     ],
   },
@@ -156,6 +172,15 @@ const onSettingsChange = (cardIdx: number, itemIdx: number) => {
 
   if (item.key === 'autoEnterGamepad') {
     autoEnterGamepad!.value = item.value
+  } else if (item.key === 'defaultGamepadType') {
+    if (
+      gp!.id.startsWith('DualSense') ||
+      gp!.id.startsWith('DualShock') ||
+      gp!.id.startsWith('Xbox')
+    ) {
+      return
+    }
+    gpType!.value = item.value ? 'PS' : 'Xbox'
   }
 }
 
@@ -184,7 +209,7 @@ const barSettingsClick = () => {
 
 const gameLoop = () => {
   const gamepads = navigator.getGamepads()
-  const gp = gamepads[0]
+  gp = gamepads[0]
 
   if (!gp || mode.value === 'out') {
     return
@@ -809,7 +834,16 @@ onMounted(async () => {
                 </div>
               </MyTooltip>
             </div>
+            <MyTextSwitch
+              v-if="item.switchTexts"
+              class="bg-gray-100 dark:bg-gray-800"
+              :right-text="item.switchTexts[1]"
+              :left-text="item.switchTexts[0]"
+              v-model="item.value"
+              @change="onSettingsChange(cardIdx, itemIdx)"
+            />
             <CustomSwitch
+              v-else
               v-model="item.value"
               @change="onSettingsChange(cardIdx, itemIdx)"
             />

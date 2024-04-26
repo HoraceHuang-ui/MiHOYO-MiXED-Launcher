@@ -228,6 +228,11 @@ onMounted(async () => {
 
   window.visualViewport?.addEventListener('resize', cardResizeCb)
 
+  let defaultGp = await window.store.get('defaultGamepadType')
+  if (defaultGp === undefined) {
+    window.store.set('defaultGamepadType', false, false)
+  }
+
   window.addEventListener('gamepadconnected', e => {
     if (!autoEnterGamepad.value) return
     console.log('connected')

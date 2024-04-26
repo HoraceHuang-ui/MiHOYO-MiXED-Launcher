@@ -356,6 +356,7 @@ const showClearDialog = () => {
           </div>
           <MyTextSwitch
             v-model="quitOnClose"
+            class="border-2 bg-white dark:bg-[#222] dark:border-[#333]"
             :right-text="$t('settings_trayOnClose')"
             :left-text="$t('settings_quitOnClose')"
             @change="switchQuitAction"

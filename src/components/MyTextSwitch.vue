@@ -74,12 +74,9 @@ const switchState = () => {
 
 <style lang="scss" scoped>
 .main-wrapper {
-  @apply flex flex-row py-1 ml-3 relative;
-  @apply rounded-full bg-white cursor-pointer;
-
-  .dark & {
-    @apply bg-[#222];
-  }
+  @apply flex flex-row ml-3 relative;
+  @apply rounded-full cursor-pointer;
+  padding: 2px 0;
 }
 
 .slider {

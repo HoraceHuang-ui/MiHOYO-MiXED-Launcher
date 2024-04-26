@@ -212,16 +212,8 @@ onMounted(() => {
       :style="`margin-top: calc(40px * ${hScale.value})`"
       v-if="gamepadMode"
     >
-      <GamepadIcon
-        icon="B"
-        class="gamepad-icon"
-        :style="`height: calc(30px * min(${hScale.value}, ${vScale.value}))`"
-      />
-      <div
-        class="font-gs ml-2"
-        :style="`font-size: calc(18px * min(${hScale.value}, ${vScale.value}));
-        margin-top: calc(2px * min(${hScale.value}, ${vScale.value}))`"
-      >
+      <GamepadIcon icon="B" class="gamepad-icon h-[30px]" />
+      <div class="font-gs ml-2" style="font-size: 18px; margin-top: 2px">
         关闭
       </div>
     </div>
