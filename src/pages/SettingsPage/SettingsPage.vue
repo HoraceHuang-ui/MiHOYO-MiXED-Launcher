@@ -14,6 +14,7 @@ import {
   availableDialogStyleDescs,
   availableDialogStyles,
   dialogComponent,
+  DialogStyle,
 } from '../../types/dialog/dialog'
 import { useDialog } from '../../utils/template-dialog'
 import UpdateDialogContent from '../../components/UpdateDialogContent.vue'
@@ -29,6 +30,7 @@ import { useStore } from '../../store'
 
 const store = useStore()
 const lang = ref<Lang>('en_US')
+const dialogStyle = ref<DialogStyle>('gs')
 const selectedLangIdx = ref(0)
 const selectedDialogStyleIdx = ref(0)
 const transitionShow = ref(false)
@@ -62,6 +64,7 @@ const vScale = inject<Ref<number>>('vScale')
 
 onMounted(() => {
   lang.value = localStorage.lang || 'en_US'
+  dialogStyle.value = store.settings.appearance.dialogStyle
   selectedLangIdx.value = availableLangCodes.indexOf(lang.value)
   selectedDialogStyleIdx.value = availableDialogStyles.indexOf(
     store.settings.appearance.dialogStyle,
@@ -202,7 +205,7 @@ const showLangDialog = (idx: number) => {
     dialogComponent(store.settings.appearance.dialogStyle),
     {
       onCancel(dispose: () => void) {
-        lang.value = store.settings.general.lang!
+        lang.value = localStorage.lang
         selectedLangIdx.value = availableLangCodes.indexOf(lang.value)
         dispose()
       },
@@ -225,27 +228,28 @@ const showLangDialog = (idx: number) => {
 }
 
 const showDialogStyleChange = () => {
-  let dialogStyle = availableDialogStyles[selectedDialogStyleIdx.value]
+  dialogStyle.value = availableDialogStyles[selectedDialogStyleIdx.value]
+  const original = store.settings.appearance.dialogStyle
   useDialog(
-    dialogComponent(dialogStyle),
+    dialogComponent(dialogStyle.value),
     {
-      async onCancel(dispose: () => void) {
-        selectedDialogStyleIdx.value =
-          availableDialogStyles.indexOf(dialogStyle)
+      onCancel(dispose: () => void) {
+        selectedDialogStyleIdx.value = availableDialogStyles.indexOf(original)
+        dialogStyle.value = original
         dispose()
       },
       onOk(dispose: () => void) {
-        store.settings.appearance.dialogStyle = dialogStyle
+        store.settings.appearance.dialogStyle = dialogStyle.value
         dispose()
       },
     },
     {
       title: translate('settings_dialogStyleTitle', {
-        game: translate('general_' + dialogStyle + 'Short'),
+        game: translate('general_' + dialogStyle.value + 'Short'),
       }),
       showCancel: true,
       msg: translate('settings_dialogStyleText', {
-        game: translate('general_' + dialogStyle),
+        game: translate('general_' + dialogStyle.value),
       }),
       hScale: hScale,
       vScale: vScale,

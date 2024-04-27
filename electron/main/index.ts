@@ -102,13 +102,21 @@ async function createWindow() {
     .executeJavaScript('localStorage.getItem("windowSize");', true)
     .then(result => {
       windowSize = JSON.parse(result)
-      console.log(windowSize)
 
       if (windowSize) {
         win.setSize(windowSize.width, windowSize.height, true)
         if (windowSize.isMax) {
           win.maximize()
         }
+      } else {
+        windowSize = {
+          width: 1200,
+          height: 700,
+          isMax: false,
+        }
+        win.webContents.executeJavaScript(
+          `localStorage.setItem("windowSize", '${JSON.stringify(windowSize)}');`,
+        )
       }
     })
 
@@ -118,6 +126,12 @@ async function createWindow() {
       windowPos = JSON.parse(result)
       if (windowPos) {
         win.setPosition(windowPos.x, windowPos.y, true)
+      } else {
+        const [x, y] = win.getPosition()
+        windowPos = { x, y }
+        win.webContents.executeJavaScript(
+          `localStorage.setItem("windowPos", '${JSON.stringify(windowPos)}');`,
+        )
       }
     })
 
@@ -127,12 +141,13 @@ async function createWindow() {
     }
     const [width, height] = win.getSize()
     // store.set('windowState', { width, height, isMax: false })
+    windowSize = {
+      width,
+      height,
+      isMax: false,
+    }
     win.webContents.executeJavaScript(
-      `localStorage.setItem("windowSize", '${JSON.stringify({
-        width,
-        height,
-        isMax: false,
-      })}');`,
+      `localStorage.setItem("windowSize", '${JSON.stringify(windowSize)}');`,
     )
   })
   win.on('moved', () => {
@@ -140,8 +155,9 @@ async function createWindow() {
       return
     }
     const [x, y] = win.getPosition()
+    windowPos = { x, y }
     win.webContents.executeJavaScript(
-      `localStorage.setItem("windowPos", '${JSON.stringify({ x, y })}');`,
+      `localStorage.setItem("windowPos", '${JSON.stringify(windowPos)}');`,
     )
   })
   win.on('maximize', () => {
