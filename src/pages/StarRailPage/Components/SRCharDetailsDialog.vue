@@ -26,6 +26,10 @@ const props = defineProps({
     type: Object as PropType<Ref<number>>,
     default: ref(1),
   },
+  gpType: {
+    type: String as PropType<'Xbox' | 'PS'>,
+    required: false,
+  },
 })
 
 const dialogRef = ref<typeof StarRailDialog>()
@@ -115,6 +119,7 @@ onMounted(() => {
     :show-cancel="false"
     :show-ok="false"
     :gamepad-mode="gamepadMode"
+    :gp-type="gpType"
   >
     <div class="list-items-wrapper">
       <DialogListItem class="font-sr-sans" :name="character.attributes[0].name">

@@ -28,6 +28,10 @@ const props = defineProps({
     type: Object as PropType<Ref<number>>,
     default: ref(1),
   },
+  gpType: {
+    type: String as PropType<'Xbox' | 'PS'>,
+    required: false,
+  },
 })
 
 const dialogRef = ref<any>(null)
@@ -224,7 +228,7 @@ onMounted(() => {
       :style="`margin-top: calc(40px * ${hScale.value})`"
       v-if="gamepadMode"
     >
-      <GamepadIcon icon="B" class="gamepad-icon h-[30px]" />
+      <GamepadIcon icon="B" class="gamepad-icon h-[30px]" :gp-type="gpType" />
       <div class="font-gs ml-2" style="font-size: 18px; margin-top: 2px">
         {{ translate('general_back') }}
       </div>

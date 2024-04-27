@@ -52,6 +52,7 @@ const pages = computed(() =>
 )
 const hScale = inject<Ref<number>>('hScale')
 const vScale = inject<Ref<number>>('vScale')
+const gpType = inject<Ref<string>>('gpType')
 
 const playerInfoLoading = ref(false)
 const playerInfoFailed = ref(false)
@@ -502,6 +503,7 @@ const showCharDetails = (stats: any[], name: string) => {
       hScale: hScale,
       vScale: vScale,
       gamepadMode: !!gamepadMode.value,
+      gpType: gpType?.value,
     },
   )
 }

@@ -58,6 +58,10 @@ const props = defineProps({
     type: Object as PropType<Ref<number>>,
     default: ref(1),
   },
+  gpType: {
+    type: String as PropType<'Xbox' | 'PS'>,
+    required: false,
+  },
 })
 
 const cShow = ref(false)
@@ -103,7 +107,12 @@ defineExpose({
           transform: scale(min(${hScale.value}, ${vScale.value})) translate(calc(-50% / min(${hScale.value}, ${vScale.value})), calc(-50% / min(${hScale.value}, ${vScale.value})))`"
       >
         <div class="close-area-wrapper" v-if="!showCancel && !showOk">
-          <GamepadIcon icon="B" class="gamepad-icon" v-if="gamepadMode" />
+          <GamepadIcon
+            icon="B"
+            class="gamepad-icon"
+            v-if="gamepadMode"
+            :gp-type="gpType"
+          />
           <div class="close-button" @click="cancelClick">
             <img
               class="my-0.5 h-[20px] object-contain"

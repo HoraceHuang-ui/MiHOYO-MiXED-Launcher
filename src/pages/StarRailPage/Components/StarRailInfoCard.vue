@@ -61,6 +61,7 @@ const pages = computed(() =>
 )
 const hScale = inject<Ref<number>>('hScale')
 const vScale = inject<Ref<number>>('vScale')
+const gpType = inject<Ref<string>>('gpType')
 
 const charsScrollbar = ref()
 const cardsCarouselRef = ref()
@@ -428,6 +429,7 @@ const showCharDetails = (index: number) => {
       hScale: hScale,
       vScale: vScale,
       gamepadMode: !!gamepadMode.value,
+      gpType: gpType?.value,
     },
   )
 }
