@@ -22,6 +22,7 @@ the following slow updates!
 - [x] Analyze detailed player info for `Genshin Impact` and `Honkai: Star Rail` in a special card layout.
 - [x] Keeps all UI elements of official launchers.
 - [x] Automatically calculate and notify about major game updates.
+- [x] Gamepad support, with a standalone UI optimized for gamepad operations.
 - [x] System or manual dark theme support.
 
 # Screenshots
