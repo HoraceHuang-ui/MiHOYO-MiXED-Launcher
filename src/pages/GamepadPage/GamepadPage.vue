@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { h, inject, onMounted, ref, Ref, VNode } from 'vue'
+import { h, inject, onMounted, ref, Ref, VNode, watch } from 'vue'
 import GamepadIcon from '../../components/GamepadIcon.vue'
 import CustomSwitch from '../../components/CustomSwitch.vue'
 import MyTooltip from '../../components/MyTooltip.vue'
@@ -9,6 +9,7 @@ import MyCarousel from '../../components/MyCarousel.vue'
 import StarRailInfoCard from '../StarRailPage/Components/StarRailInfoCard.vue'
 import MyTextSwitch from '../../components/MyTextSwitch.vue'
 import { useStore } from '../../store'
+import LoadingIcon from '../../components/LoadingIcon.vue'
 
 type Mode =
   | 'main'
@@ -50,10 +51,19 @@ let gp: Gamepad | null = null
 const selectedGameIndex = ref(0)
 const selectedSettingsCardIndex = ref(0)
 const selectedSettingsItemIndex = ref(0)
+const launchingGame = ref(-1)
 
 const hScale = inject<Ref<number>>('hScale')
 const vScale = inject<Ref<number>>('vScale')
 const leaveGamepad = inject<() => void>('leaveGamepad')
+
+watch(launchingGame, newValue => {
+  if (newValue != -1) {
+    setTimeout(() => {
+      launchingGame.value = -1
+    }, 3000)
+  }
+})
 
 const settingsItems: Ref<SettingsCard[]> = ref([
   {
@@ -125,17 +135,6 @@ const settingsItems: Ref<SettingsCard[]> = ref([
   },
 ])
 
-const searchSettingByKey = (key: string) => {
-  for (const card of settingsItems.value) {
-    for (const item of card.items) {
-      if (item.key === key) {
-        return item
-      }
-    }
-  }
-  return undefined
-}
-
 const leaveGamepadClick = () => {
   mode.value = 'out'
   showTooltip.value = false
@@ -143,6 +142,7 @@ const leaveGamepadClick = () => {
 }
 
 const launch = async (path: string) => {
+  launchingGame.value = selectedGameIndex.value
   await window.child.exec(path)
 }
 
@@ -205,9 +205,19 @@ const barSettingsClick = () => {
 
 const gameLoop = () => {
   const gamepads = navigator.getGamepads()
-  gp = gamepads[0]
+
+  for (let i = 0; i < gamepads.length; i++) {
+    if (gamepads[i]) {
+      gp = gamepads[i]
+      break
+    }
+  }
 
   if (!gp || mode.value === 'out') {
+    return
+  }
+  if (!document.hasFocus()) {
+    rAF(gameLoop)
     return
   }
 
@@ -730,7 +740,7 @@ onMounted(async () => {
         <div class="flex flex-row transition-all">
           <GamepadIcon
             icon="A"
-            v-if="selectedGameIndex == idx"
+            v-if="selectedGameIndex == idx && launchingGame != idx"
             style="
               height: 24px;
               border-radius: 999px;
@@ -739,9 +749,14 @@ onMounted(async () => {
               margin-right: 4px;
             "
           />
-          {{
-            $t('mainpage_buttonText', { game: $t(`general_${game.game}Short`) })
-          }}
+          <span v-if="launchingGame != idx">
+            {{
+              $t('mainpage_buttonText', {
+                game: $t(`general_${game.game}Short`),
+              })
+            }}
+          </span>
+          <LoadingIcon v-if="launchingGame == idx" />
         </div>
       </button>
     </div>

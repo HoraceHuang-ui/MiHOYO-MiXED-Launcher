@@ -55,14 +55,25 @@ const darkModePreference = window.matchMedia('(prefers-color-scheme: dark)')
 const router = useRouter()
 
 let inThrottle = false
+let rAFId: number | null = null
 const waitMapInput = () => {
   var gamepads = navigator.getGamepads()
   if (!gamepads) return
 
-  const gp = gamepads[0]
+  let gp: Gamepad | null = null
+
+  for (let i = 0; i < gamepads.length; i++) {
+    if (gamepads[i]) {
+      gp = gamepads[i]
+      break
+    }
+  }
 
   if (!gp) {
-    rAF(waitMapInput)
+    return
+  }
+  if (!document.hasFocus()) {
+    rAFId = rAF(waitMapInput)
     return
   }
 
@@ -84,10 +95,13 @@ const waitMapInput = () => {
     }
   }
 
-  rAF(waitMapInput)
+  if (rAFId) {
+    rAFId = rAF(waitMapInput)
+  }
 }
 
 const enterGamepad = (gamepadType: string) => {
+  rAFId = null
   gamepad.value = true
   gpType.value = gamepadType
   router.push('/gamepadPage')
@@ -95,13 +109,14 @@ const enterGamepad = (gamepadType: string) => {
 
 const leaveGamepad = () => {
   gamepad.value = false
+  rAFId = null
   router.push('/')
 
   const gamepads = navigator.getGamepads()
   for (let i = 0; i < gamepads.length; i++) {
     const gp = gamepads[i]
     if (gp) {
-      rAF(waitMapInput)
+      rAFId = rAF(waitMapInput)
       break
     }
   }
@@ -193,7 +208,7 @@ onMounted(async () => {
       }
     }
   } else {
-    rAF(waitMapInput)
+    rAFId = rAF(waitMapInput)
   }
 
   fetch('../package.json')
@@ -206,6 +221,7 @@ onMounted(async () => {
 
   window.addEventListener('gamepadconnected', e => {
     if (!store.settings.gamepad.autoEnter) {
+      rAFId = rAF(waitMapInput)
       return
     }
     console.log('connected')

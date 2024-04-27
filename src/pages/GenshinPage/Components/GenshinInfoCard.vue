@@ -97,9 +97,20 @@ let rAFId: number | null = null
 let inThrottle = false
 const gameLoop = () => {
   const gamepads = navigator.getGamepads()
-  const gp = gamepads[0]
+  let gp: Gamepad | null = null
+
+  for (let i = 0; i < gamepads.length; i++) {
+    if (gamepads[i]) {
+      gp = gamepads[i]
+      break
+    }
+  }
 
   if (!gp) {
+    return
+  }
+  if (!document.hasFocus()) {
+    rAF(gameLoop)
     return
   }
 
@@ -1228,7 +1239,7 @@ const countRolledSubstat = (stats: any[], prop: string) => {
       </MyCarousel>
     </div>
     <div
-      v-else-if="playerInfo && !playerInfo.showCharacterDetails"
+      v-else-if="!playerInfo"
       class="mt-4 mb-4"
       :style="`font-size: calc(max(14px * min(${hScale}, ${vScale}), 16px))`"
     >

@@ -77,9 +77,20 @@ let rAFId: number | null = null
 let inThrottle = false
 const gameLoop = () => {
   const gamepads = navigator.getGamepads()
-  const gp = gamepads[0]
+  let gp: Gamepad | null = null
+
+  for (let i = 0; i < gamepads.length; i++) {
+    if (gamepads[i]) {
+      gp = gamepads[i]
+      break
+    }
+  }
 
   if (!gp) {
+    return
+  }
+  if (!document.hasFocus()) {
+    rAF(gameLoop)
     return
   }
 
