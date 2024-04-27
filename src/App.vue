@@ -2,14 +2,16 @@
 import { h, onMounted, onUnmounted, provide, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { UpdInfo } from './types/github/ghUpdInfo'
-import { dialogComponent, DialogStyle } from './types/dialog/dialog'
+import { dialogComponent } from './types/dialog/dialog'
 import { useDialog } from './utils/template-dialog'
 import UpdateDialogContent from './components/UpdateDialogContent.vue'
 import { translate } from './i18n'
 import TopHeader from './components/TopHeader.vue'
+import { useStore } from './store'
+
+const store = useStore()
 
 let appVer = ''
-const dialogStyle = ref<DialogStyle>('gs')
 const updCheck = ref(false)
 const updInfo = ref<UpdInfo>({
   assets: [],
@@ -35,9 +37,7 @@ const updInfo = ref<UpdInfo>({
 const rAF = window.requestAnimationFrame
 // const rAFStop = window.cancelAnimationFrame
 const gpType = ref('Xbox')
-const autoEnterGamepad = ref(true)
 provide('gpType', gpType)
-provide('autoEnterGamepad', autoEnterGamepad)
 
 const hScale = ref(window.innerWidth / 1200)
 const vScale = ref(window.innerHeight / 700)
@@ -50,20 +50,30 @@ provide('hScale', hScale)
 provide('vScale', vScale)
 
 const skipCurrent = ref(false)
-const colorTheme = ref(2)
 const gamepad = ref(false)
 const darkModePreference = window.matchMedia('(prefers-color-scheme: dark)')
 const router = useRouter()
 
 let inThrottle = false
+let rAFId: number | null = null
 const waitMapInput = () => {
   var gamepads = navigator.getGamepads()
   if (!gamepads) return
 
-  const gp = gamepads[0]
+  let gp: Gamepad | null = null
+
+  for (let i = 0; i < gamepads.length; i++) {
+    if (gamepads[i]) {
+      gp = gamepads[i]
+      break
+    }
+  }
 
   if (!gp) {
-    rAF(waitMapInput)
+    return
+  }
+  if (!document.hasFocus()) {
+    rAFId = rAF(waitMapInput)
     return
   }
 
@@ -72,35 +82,41 @@ const waitMapInput = () => {
     if (!inThrottle) {
       inThrottle = true
       setTimeout(() => {
-        enterGamepad(
-          gp.id.startsWith('DualSense') || gp.id.startsWith('DualShock')
-            ? 'PS'
-            : 'Xbox',
-        )
+        let targetMode = store.settings.gamepad.defaultPS ? 'PS' : 'Xbox'
+        console.log(store.settings.gamepad.defaultPS)
+        if (gp.id.startsWith('DualSense') || gp.id.startsWith('DualShock')) {
+          targetMode = 'PS'
+        } else if (gp.id.startsWith('Xbox')) {
+          targetMode = 'Xbox'
+        }
+        enterGamepad(targetMode)
         inThrottle = false
       }, 300)
     }
   }
 
-  rAF(waitMapInput)
+  if (rAFId) {
+    rAFId = rAF(waitMapInput)
+  }
 }
 
-const enterGamepad = (gampadType: string) => {
+const enterGamepad = (gamepadType: string) => {
+  rAFId = null
   gamepad.value = true
-  gpType.value = gampadType
-  // rAFStop(waitMapInput)
+  gpType.value = gamepadType
   router.push('/gamepadPage')
 }
 
 const leaveGamepad = () => {
   gamepad.value = false
+  rAFId = null
   router.push('/')
 
   const gamepads = navigator.getGamepads()
   for (let i = 0; i < gamepads.length; i++) {
     const gp = gamepads[i]
     if (gp) {
-      rAF(waitMapInput)
+      rAFId = rAF(waitMapInput)
       break
     }
   }
@@ -109,23 +125,16 @@ const leaveGamepad = () => {
 provide('leaveGamepad', leaveGamepad)
 
 onMounted(async () => {
-  let theme = await window.store.get('colorTheme')
-  if (!theme) {
-    window.store.set('colorTheme', 2, false)
-  } else {
-    colorTheme.value = theme
-  }
-
   if (
-    colorTheme.value == 3 ||
-    (colorTheme.value == 2 && darkModePreference.matches)
+    store.settings.appearance.colorTheme == 3 ||
+    (store.settings.appearance.colorTheme == 2 && darkModePreference.matches)
   ) {
     document.body.classList.add('dark')
   } else {
     document.body.classList.remove('dark')
   }
 
-  if (colorTheme.value == 2) {
+  if (store.settings.appearance.colorTheme == 2) {
     darkModePreference.addEventListener('change', e => {
       if (e.matches) {
         document.body.classList.add('dark')
@@ -139,47 +148,41 @@ onMounted(async () => {
     .getLatestRelease()
     .then((resp: any) => {
       if (needsUpdate(resp.data.tag_name)) {
-        window.store.get('targetVersion').then((target: any) => {
-          console.log(target)
-          if (!target || target < resp.data.tag_name) {
-            updInfo.value = resp.data
-            useDialog(
-              dialogComponent(dialogStyle.value),
-              {
-                onCancel(dispose: () => void) {
-                  if (skipCurrent.value) {
-                    window.store.set(
-                      'targetVersion',
-                      updInfo.value.tag_name,
-                      false,
-                    )
-                  }
-                  dispose()
-                },
-                onOk(dispose: () => void) {
-                  window.electron.openExtLink(
-                    updInfo.value.assets[0].browser_download_url,
-                  )
-                  window.win.close()
-                  dispose()
-                },
+        const target = store.general.targetVersion
+        if (!target || target < resp.data.tag_name) {
+          updInfo.value = resp.data
+          useDialog(
+            dialogComponent(store.settings.appearance.dialogStyle),
+            {
+              onCancel(dispose: () => void) {
+                if (skipCurrent.value) {
+                  store.general.targetVersion = updInfo.value.tag_name
+                }
+                dispose()
               },
-              {
-                title: translate('updDialog_title'),
-                showCancel: true,
-                vnode: h(UpdateDialogContent, {
-                  appVer: appVer,
-                  updInfo: updInfo.value,
-                  skipCurrent: skipCurrent.value,
-                  'onUpdate:skipCurrent': (value: boolean) => {
-                    skipCurrent.value = value
-                  },
-                  gameStyle: dialogStyle.value,
-                }),
+              onOk(dispose: () => void) {
+                window.electron.openExtLink(
+                  updInfo.value.assets[0].browser_download_url,
+                )
+                window.win.close()
+                dispose()
               },
-            )
-          }
-        })
+            },
+            {
+              title: translate('updDialog_title'),
+              showCancel: true,
+              vnode: h(UpdateDialogContent, {
+                appVer: appVer,
+                updInfo: updInfo.value,
+                skipCurrent: skipCurrent.value,
+                'onUpdate:skipCurrent': (value: boolean) => {
+                  skipCurrent.value = value
+                },
+                gameStyle: store.settings.appearance.dialogStyle,
+              }),
+            },
+          )
+        }
       }
       updCheck.value = true
     })
@@ -187,34 +190,25 @@ onMounted(async () => {
       console.error(err)
     })
 
-  let style = await window.store.get('dialogStyle')
-  if (!style) {
-    window.store.set('dialogStyle', 'gs', false)
-  }
-  dialogStyle.value = style
-
-  let autoEnter = await window.store.get('autoEnterGamepad')
-  console.log(autoEnter)
-  if (autoEnter == undefined || autoEnter) {
-    autoEnterGamepad.value = true
+  const autoEnter = store.settings.gamepad.autoEnter
+  if (autoEnter) {
     const gamepads = navigator.getGamepads()
     for (let i = 0; i < gamepads.length; i++) {
       const gp = gamepads[i]
       if (gp) {
-        console.log(gp.id)
-        enterGamepad(
-          gp.id.startsWith('DualSense') || gp.id.startsWith('DualShock')
-            ? 'PS'
-            : 'Xbox',
-        )
+        let targetMode = store.settings.gamepad.defaultPS ? 'PS' : 'Xbox'
+        console.log(store.settings.gamepad.defaultPS)
+        if (gp.id.startsWith('DualSense') || gp.id.startsWith('DualShock')) {
+          targetMode = 'PS'
+        } else if (gp.id.startsWith('Xbox')) {
+          targetMode = 'Xbox'
+        }
+        enterGamepad(targetMode)
         break
       }
     }
-    window.store.set('autoEnterGamepad', true, false)
   } else {
-    autoEnterGamepad.value = false
-    console.log('raf')
-    rAF(waitMapInput)
+    rAFId = rAF(waitMapInput)
   }
 
   fetch('../package.json')
@@ -226,14 +220,20 @@ onMounted(async () => {
   window.visualViewport?.addEventListener('resize', cardResizeCb)
 
   window.addEventListener('gamepadconnected', e => {
-    if (!autoEnterGamepad.value) return
+    if (!store.settings.gamepad.autoEnter) {
+      rAFId = rAF(waitMapInput)
+      return
+    }
     console.log('connected')
     const gp = (e as GamepadEvent).gamepad
-    enterGamepad(
-      gp.id.startsWith('DualSense') || gp.id.startsWith('DualShock')
-        ? 'PS'
-        : 'Xbox',
-    )
+    let targetMode = store.settings.gamepad.defaultPS ? 'PS' : 'Xbox'
+    console.log(store.settings.gamepad.defaultPS)
+    if (gp.id.startsWith('DualSense') || gp.id.startsWith('DualShock')) {
+      targetMode = 'PS'
+    } else if (gp.id.startsWith('Xbox')) {
+      targetMode = 'Xbox'
+    }
+    enterGamepad(targetMode)
   })
   window.addEventListener('gamepaddisconnected', leaveGamepad)
 })

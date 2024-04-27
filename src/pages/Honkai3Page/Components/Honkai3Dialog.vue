@@ -147,14 +147,16 @@ defineExpose({
 
 <style lang="scss" scoped>
 .modal {
-  @apply absolute top-0 bottom-0 left-0 right-0 z-50;
+  @apply absolute top-0 bottom-0 left-0 right-0;
   background: rgba(10, 17, 33, 0.95);
+  z-index: 1999;
 }
 
 .dialog-wrapper {
-  @apply absolute p-6 z-50 top-1/2 left-1/2;
+  @apply absolute p-6 top-1/2 left-1/2;
   @apply rounded-3xl border-2 flex justify-center;
   border-color: rgba(255, 255, 255, 0.1);
+  z-index: 2000;
 }
 
 .dialog-content-wrapper {
@@ -167,10 +169,11 @@ defineExpose({
 }
 
 .close-wrapper {
-  @apply absolute right-0 top-0 z-50 pt-0.5 h-12 w-16;
+  @apply absolute right-0 top-0 pt-0.5 h-12 w-16;
   @apply text-center transition-all cursor-pointer;
   background: rgb(72, 107, 161, 0.5);
   border-radius: 0 15px 0 15px;
+  z-index: 2001;
 
   &:hover {
     background: rgb(72, 107, 161, 0.8);

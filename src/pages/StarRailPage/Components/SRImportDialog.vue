@@ -4,6 +4,7 @@ import { translate } from '../../../i18n'
 import { PropType, Ref, ref } from 'vue'
 import MyCheckbox from '../../../components/MyCheckbox.vue'
 import MyTooltip from '../../../components/MyTooltip.vue'
+import { useStore } from '../../../store'
 
 const props = defineProps({
   onOk: {
@@ -26,6 +27,7 @@ const combinePaths = ref(true)
 const dialogRef = ref()
 const launcherPath = ref('')
 const gamePath = ref('')
+const store = useStore()
 
 const srLauncherImport = async () => {
   window.dialog
@@ -63,13 +65,14 @@ const srGameImport = async () => {
     })
 }
 
-const confirmPaths = async () => {
+const confirmPaths = () => {
   if (combinePaths.value) {
     gamePath.value = launcherPath.value + '\\Game\\StarRail.exe'
   }
   launcherPath.value += '\\launcher.exe'
-  await window.store.set('srLauncherPath', launcherPath.value, false)
-  await window.store.set('srGamePath', gamePath.value, false)
+
+  store.game.sr.launcherPath = launcherPath.value
+  store.game.sr.gamePath = gamePath.value
 }
 
 const onDialogOk = () => {

@@ -1,13 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron'
 
-contextBridge.exposeInMainWorld('store', {
-  set: (key: string, value: any, json: boolean) =>
-    ipcRenderer.send('store:set', key, value, json),
-  // window.storeAPI.set('genshinPath', 'd:\\...')
-  get: (key: string) => ipcRenderer.invoke('store:get', key),
-  delete: (key: string) => ipcRenderer.send('store:delete', key),
-  clear: () => ipcRenderer.send('store:clear'),
-})
 contextBridge.exposeInMainWorld('child', {
   exec: (path: string) => ipcRenderer.send('child:exec', path),
 })

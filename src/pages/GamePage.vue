@@ -14,6 +14,9 @@ import Honkai3Dialog from './Honkai3Page/Components/Honkai3Dialog.vue'
 import SRImportDialog from './StarRailPage/Components/SRImportDialog.vue'
 import HI3ImportDialog from './Honkai3Page/Components/HI3ImportDialog.vue'
 import StarRailInfoCard from './StarRailPage/Components/StarRailInfoCard.vue'
+import { useStore } from '../store'
+
+const store = useStore()
 
 const game = useRoute().query.game
 const gameName = translate(`general_${game}`)
@@ -21,8 +24,6 @@ const gameName = translate(`general_${game}`)
 const hScale = inject<Ref<number>>('hScale')
 const vScale = inject<Ref<number>>('vScale')
 
-const launcherPath = ref('')
-const gamePath = ref('')
 const timeNow = Date.now()
 const timeDelta = computed(() => {
   let timeUpd = 0
@@ -50,6 +51,7 @@ const gameNo = computed(() => {
   }
   return -1
 })
+const gameStore = computed(() => store.game[game as string])
 const defaultBG = computed(() => {
   switch (game) {
     case 'gs':
@@ -123,94 +125,86 @@ onMounted(async () => {
       launcherInfoFailed.value = true
       errMsg.value = err.toString()
     })
-  launcherPath.value = await window.store.get(`${game}LauncherPath`)
-  gamePath.value = await window.store.get(`${game}GamePath`)
-  window.store
-    .get(`${game}Upd`)
-    .then(resp => {
-      if (launcherPath.value && !resp) {
-        if (timeDelta.value > 40) {
-          useDialog(
-            dialogComponent,
-            {
-              onCancel(dispose: () => void) {
-                dispose()
-              },
-              onOk(dispose: () => void) {
-                window.child.exec(launcherPath.value)
-                window.store.set(`${game}Upd`, true, false)
-                dispose()
-              },
-            },
-            {
-              title: translate('general_gameUpdBoxTitle'),
-              msg: translate('general_gameUpdBoxText1', {
-                game: gameName,
-                beDays: translate('general_beDays', {
-                  n: 42 - timeDelta.value,
-                }),
-              }),
-              msgCenter: false,
-              showCancel: true,
-            },
-          )
-        } else if (timeDelta.value > 0 && timeDelta.value < 3) {
-          useDialog(
-            dialogComponent,
-            {
-              onCancel(dispose: () => void) {
-                dispose()
-              },
-              onOk(dispose: () => void) {
-                window.child.exec(launcherPath.value)
-                window.store.set(`${game}Upd`, true, false)
-                dispose()
-              },
-            },
-            {
-              title: translate('general_gameUpdBoxTitle'),
-              msg: translate('general_gameUpdBoxText2', {
-                game: gameName,
-                days: translate('general_days', { n: timeDelta.value }),
-              }),
-              msgCenter: false,
-              showCancel: true,
-            },
-          )
-        } else if (timeDelta.value == 0) {
-          useDialog(
-            dialogComponent,
-            {
-              onCancel(dispose: () => void) {
-                dispose()
-              },
-              onOk(dispose: () => void) {
-                window.child.exec(launcherPath.value)
-                window.store.set(`${game}Upd`, true, false)
-                dispose()
-              },
-            },
-            {
-              title: translate('general_gameUpdBoxTitle'),
-              msg: translate('general_gameUpdBoxText3', {
-                game: gameName,
-              }),
-              msgCenter: false,
-              showCancel: true,
-            },
-          )
-        }
-      } else if (
-        launcherPath.value &&
-        timeDelta.value > 2 &&
-        timeDelta.value < 37
-      ) {
-        window.store.set(`${game}Upd`, false, false)
-      }
-    })
-    .catch(err => {
-      console.error(err)
-    })
+
+  if (gameStore.value.launcherPath && !gameStore.value.upd) {
+    if (timeDelta.value > 40) {
+      useDialog(
+        dialogComponent,
+        {
+          onCancel(dispose: () => void) {
+            dispose()
+          },
+          onOk(dispose: () => void) {
+            window.child.exec(gameStore.value.launcherPath!)
+            gameStore.value.upd = true
+            dispose()
+          },
+        },
+        {
+          title: translate('general_gameUpdBoxTitle'),
+          msg: translate('general_gameUpdBoxText1', {
+            game: gameName,
+            beDays: translate('general_beDays', {
+              n: 42 - timeDelta.value,
+            }),
+          }),
+          msgCenter: false,
+          showCancel: true,
+        },
+      )
+    } else if (timeDelta.value > 0 && timeDelta.value < 3) {
+      useDialog(
+        dialogComponent,
+        {
+          onCancel(dispose: () => void) {
+            dispose()
+          },
+          onOk(dispose: () => void) {
+            window.child.exec(gameStore.value.launcherPath!)
+            gameStore.value.upd = true
+            dispose()
+          },
+        },
+        {
+          title: translate('general_gameUpdBoxTitle'),
+          msg: translate('general_gameUpdBoxText2', {
+            game: gameName,
+            days: translate('general_days', { n: timeDelta.value }),
+          }),
+          msgCenter: false,
+          showCancel: true,
+        },
+      )
+    } else if (timeDelta.value == 0) {
+      useDialog(
+        dialogComponent,
+        {
+          onCancel(dispose: () => void) {
+            dispose()
+          },
+          onOk(dispose: () => void) {
+            window.child.exec(gameStore.value.launcherPath!)
+            gameStore.value.upd = true
+            dispose()
+          },
+        },
+        {
+          title: translate('general_gameUpdBoxTitle'),
+          msg: translate('general_gameUpdBoxText3', {
+            game: gameName,
+          }),
+          msgCenter: false,
+          showCancel: true,
+        },
+      )
+    }
+  } else if (
+    gameStore.value.launcherPath &&
+    timeDelta.value > 2 &&
+    timeDelta.value < 37
+  ) {
+    gameStore.value.upd = true
+  }
 })
 
 const importButtonClick = () => {
@@ -235,8 +229,6 @@ const importButtonClick = () => {
         refresh()
       },
       onCancel(dispose: () => void) {
-        gamePath.value = ''
-        launcherPath.value = ''
         dispose()
       },
     },
@@ -248,9 +240,8 @@ const importButtonClick = () => {
 }
 
 const launchGame = async () => {
-  await window.child.exec(gamePath.value)
-  const trayOnLaunch = await window.store.get('trayOnLaunch')
-  if (trayOnLaunch) {
+  await window.child.exec(gameStore.value.gamePath!)
+  if (store.settings.general.trayOnLaunch) {
     window.win.tray()
   }
 }
@@ -260,17 +251,14 @@ const handleCommand = (idx: number) => {
 
   switch (commands[idx]) {
     case 'openLauncher':
-      window.child.exec(launcherPath.value)
+      window.child.exec(gameStore.value.launcherPath!)
       break
     case 'clearPath':
-      window.store.delete(`${game}LauncherPath`)
-      window.store.delete(`${game}GamePath`)
-      window.store.delete(`${game}Upd`)
-      launcherPath.value = ''
-      gamePath.value = ''
+      gameStore.value.launcherPath = undefined
+      gameStore.value.gamePath = undefined
       break
     case 'clearPlayerinfo':
-      window.store.delete(`${game}Info`)
+      gameStore.value.playerInfo = undefined
       refresh()
       break
   }
@@ -366,7 +354,7 @@ const refresh = () => {
         <div class="launch-area-wrapper">
           <div class="h-[9vh] my-[2vh]" />
           <div
-            v-if="gamePath"
+            v-if="gameStore.gamePath"
             class="launch-button-wrapper"
             :class="[{ scrolled: hideElements }, prefFont]"
           >

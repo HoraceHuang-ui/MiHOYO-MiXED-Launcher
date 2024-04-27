@@ -3,9 +3,9 @@ import StarRailDialog from './StarRailDialog.vue'
 import StatIcon from '../../../components/StatIcon.vue'
 import DialogListItem from '../../../components/DialogListItem.vue'
 import { AttributeInfo } from '../../../types/starrail/srPlayerInfo'
-import { PropType, Ref, ref } from 'vue'
+import { onMounted, PropType, Ref, ref } from 'vue'
 
-defineProps({
+const props = defineProps({
   title: {
     type: String,
     default: 'Character Details',
@@ -13,6 +13,10 @@ defineProps({
   character: {
     type: Object,
     required: true,
+  },
+  gamepadMode: {
+    type: Boolean,
+    default: false,
   },
   hScale: {
     type: Object as PropType<Ref<number>>,
@@ -22,7 +26,16 @@ defineProps({
     type: Object as PropType<Ref<number>>,
     default: ref(1),
   },
+  gpType: {
+    type: String as PropType<'Xbox' | 'PS'>,
+    required: false,
+  },
 })
+
+const dialogRef = ref<typeof StarRailDialog>()
+
+const rAF = window.requestAnimationFrame
+let rAFId: number | null = null
 
 const findField = (range: AttributeInfo[], field: string) => {
   for (let i = 0; i < range.length; i++) {
@@ -52,10 +65,62 @@ const trimAdditions = (additions: AttributeInfo[]) => {
   }
   return tmp
 }
+
+let inThrottle = false
+const gameLoop = () => {
+  const gamepads = navigator.getGamepads()
+  let gp: Gamepad | null = null
+
+  for (let i = 0; i < gamepads.length; i++) {
+    if (gamepads[i]) {
+      gp = gamepads[i]
+      break
+    }
+  }
+
+  if (!gp) {
+    return
+  }
+  if (!document.hasFocus()) {
+    rAF(gameLoop)
+    return
+  }
+
+  // B: dispose dialog
+  if (gp.buttons[1].pressed) {
+    if (!inThrottle) {
+      inThrottle = true
+      setTimeout(() => {
+        rAFId = null
+        dialogRef.value?.cancelClick?.()
+        inThrottle = false
+      }, 150)
+    }
+  }
+
+  if (rAFId) {
+    rAFId = rAF(gameLoop)
+  }
+}
+
+onMounted(() => {
+  if (props.gamepadMode) {
+    rAFId = rAF(gameLoop)
+  }
+})
 </script>
 
 <template>
-  <StarRailDialog :title="title" :h-scale="hScale" :v-scale="vScale">
+  <StarRailDialog
+    ref="dialogRef"
+    :title="title"
+    :h-scale="hScale"
+    :v-scale="vScale"
+    :show-cancel="false"
+    :show-ok="false"
+    :gamepad-mode="gamepadMode"
+    :gp-type="gpType"
+  >
     <div class="list-items-wrapper">
       <DialogListItem class="font-sr-sans" :name="character.attributes[0].name">
         <template #icon>

@@ -65,17 +65,20 @@ defineExpose({
 
 <style scoped>
 .modal {
-  @apply absolute top-0 bottom-0 left-0 right-0 z-50;
+  @apply absolute top-0 bottom-0 left-0 right-0;
   @apply backdrop-blur-2xl;
+  z-index: 1999;
 }
 
 .modal-mask {
-  @apply absolute top-0 bottom-0 left-0 right-0 z-40;
+  @apply absolute top-0 bottom-0 left-0 right-0;
   @apply bg-black bg-opacity-50;
+  z-index: 1998;
 }
 
 .content {
-  @apply absolute z-50 top-1/2 left-1/2;
+  @apply absolute top-1/2 left-1/2;
+  z-index: 2000;
 }
 
 .v-enter-active .outer {

@@ -10,18 +10,22 @@ import {
 } from 'electron'
 import axios from 'axios'
 import { release } from 'node:os'
-import Store from 'electron-store'
 import child from 'child_process'
 import { DynamicTextAssets, EnkaClient, TextAssets } from 'enka-network-api'
 import { promises as fs } from 'fs'
 import { Octokit } from '@octokit/core'
 import path from 'path'
+import { useStore } from '../../src/store'
+import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
+
+const store = useStore(pinia)
 const enka = new EnkaClient({
   requestTimeout: 10000,
 })
-
-const store = new Store()
 
 // The built directory structure
 //
@@ -73,16 +77,13 @@ const assetsPath = process.env.VITE_DEV_SERVER_URL
   : path.join(__dirname, '../../../src/assets')
 
 async function createWindow() {
-  const windowState: any = store.get('windowState', {
-    width: 1200,
-    height: 700,
-    isMax: false,
-  })
+  let windowSize: any = undefined
+  let windowPos: any = undefined
   win = new BrowserWindow({
     title: 'miXeD',
     icon: iconPath,
-    width: windowState.width,
-    height: windowState.height,
+    width: 1200,
+    height: 700,
     minWidth: 1200,
     minHeight: 700,
     // transparent: true,
@@ -97,24 +98,86 @@ async function createWindow() {
     },
   })
 
-  if (windowState.isMax) {
-    win.maximize()
-  }
+  win.webContents
+    .executeJavaScript('localStorage.getItem("windowSize");', true)
+    .then(result => {
+      windowSize = JSON.parse(result)
 
-  win.on('resize', () => {
-    if (win.isMaximized()) {
-      store.set('windowState', {
-        width: windowState.width,
-        height: windowState.height,
-        isMax: true,
-      })
-      return
-    }
+      if (windowSize) {
+        win.setSize(windowSize.width, windowSize.height, true)
+        if (windowSize.isMax) {
+          win.maximize()
+        }
+      } else {
+        windowSize = {
+          width: 1200,
+          height: 700,
+          isMax: false,
+        }
+        win.webContents.executeJavaScript(
+          `localStorage.setItem("windowSize", '${JSON.stringify(windowSize)}');`,
+        )
+      }
+    })
+
+  win.webContents
+    .executeJavaScript('localStorage.getItem("windowPos");', true)
+    .then(result => {
+      windowPos = JSON.parse(result)
+      if (windowPos) {
+        win.setPosition(windowPos.x, windowPos.y, true)
+      } else {
+        const [x, y] = win.getPosition()
+        windowPos = { x, y }
+        win.webContents.executeJavaScript(
+          `localStorage.setItem("windowPos", '${JSON.stringify(windowPos)}');`,
+        )
+      }
+    })
+
+  win.on('resized', () => {
     if (win.isMinimized()) {
       return
     }
     const [width, height] = win.getSize()
-    store.set('windowState', { width, height, isMax: false })
+    // store.set('windowState', { width, height, isMax: false })
+    windowSize = {
+      width,
+      height,
+      isMax: false,
+    }
+    win.webContents.executeJavaScript(
+      `localStorage.setItem("windowSize", '${JSON.stringify(windowSize)}');`,
+    )
+  })
+  win.on('moved', () => {
+    if (win.isMaximized() || win.isMinimized()) {
+      return
+    }
+    const [x, y] = win.getPosition()
+    windowPos = { x, y }
+    win.webContents.executeJavaScript(
+      `localStorage.setItem("windowPos", '${JSON.stringify(windowPos)}');`,
+    )
+  })
+  win.on('maximize', () => {
+    win.webContents.executeJavaScript(
+      `localStorage.setItem("windowSize", '${JSON.stringify({
+        width: windowSize.width,
+        height: windowSize.height,
+        isMax: true,
+      })}');`,
+    )
+  })
+  win.on('unmaximize', () => {
+    console.log('unmaximize')
+    win.webContents.executeJavaScript(
+      `localStorage.setItem("windowSize", '${JSON.stringify({
+        width: windowSize.width,
+        height: windowSize.height,
+        isMax: false,
+      })}');`,
+    )
   })
 
   // ---------- Window actions ----------
@@ -141,20 +204,6 @@ async function createWindow() {
   })
 
   // ---------- custom IPCs ----------
-
-  ipcMain.handle('store:get', (_event, key) => {
-    return store.get(key)
-  })
-  ipcMain.on('store:set', (_event, key, value, json) => {
-    store.set(key, json ? JSON.parse(value) : value)
-  })
-  ipcMain.on('store:delete', (_event, key) => {
-    store.delete(key)
-  })
-  ipcMain.on('store:clear', () => {
-    store.clear()
-  })
-
   ipcMain.on('child:exec', (_event, path) => {
     child.execFile(path, function (err, data) {
       if (err) {

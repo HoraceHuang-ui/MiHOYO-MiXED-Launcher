@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { PropType, Ref, ref } from 'vue'
+import { onMounted, PropType, Ref, ref } from 'vue'
 import StatIcon from '../../../components/StatIcon.vue'
 import DialogListItem from '../../../components/DialogListItem.vue'
 import TemplateDialog from '../../../components/TemplateDialog.vue'
 import ScrollWrapper from '../../../components/ScrollWrapper.vue'
+import GamepadIcon from '../../../components/GamepadIcon.vue'
+import { translate } from '../../../i18n'
 
-defineProps({
+const props = defineProps({
   title: {
     type: String,
     default: 'Character Details',
@@ -13,6 +15,10 @@ defineProps({
   stats: {
     type: Array as PropType<any[]>,
     required: true,
+  },
+  gamepadMode: {
+    type: Boolean,
+    default: false,
   },
   hScale: {
     type: Object as PropType<Ref<number>>,
@@ -22,9 +28,15 @@ defineProps({
     type: Object as PropType<Ref<number>>,
     default: ref(1),
   },
+  gpType: {
+    type: String as PropType<'Xbox' | 'PS'>,
+    required: false,
+  },
 })
 
 const dialogRef = ref<any>(null)
+const rAF = window.requestAnimationFrame
+let rAFId: number | null = null
 
 const trimStats = (stats: any[]) => {
   const trim = ['HP', 'PERCENT', 'ATTACK', 'DEFENSE', 'BASE_SPEED', 'MASTERY']
@@ -55,8 +67,53 @@ const displayStat = (stat: any) => {
 }
 
 const closeDialog = () => {
+  if (props.gamepadMode) {
+    rAFId = null
+  }
   dialogRef.value?.cancelClick?.()
 }
+
+let inThrottle = false
+const gameLoop = () => {
+  const gamepads = navigator.getGamepads()
+  let gp: Gamepad | null = null
+
+  for (let i = 0; i < gamepads.length; i++) {
+    if (gamepads[i]) {
+      gp = gamepads[i]
+      break
+    }
+  }
+
+  if (!gp) {
+    return
+  }
+  if (!document.hasFocus()) {
+    rAF(gameLoop)
+    return
+  }
+
+  // B: dispose dialog
+  if (gp.buttons[1].pressed) {
+    if (!inThrottle) {
+      inThrottle = true
+      setTimeout(() => {
+        closeDialog()
+        inThrottle = false
+      }, 150)
+    }
+  }
+
+  if (rAFId) {
+    rAFId = rAF(gameLoop)
+  }
+}
+
+onMounted(() => {
+  if (props.gamepadMode) {
+    rAFId = rAF(gameLoop)
+  }
+})
 </script>
 
 <template>
@@ -166,6 +223,16 @@ const closeDialog = () => {
         </DialogListItem>
       </div>
     </ScrollWrapper>
+    <div
+      class="gamepad-op-wrapper"
+      :style="`margin-top: calc(40px * ${hScale.value})`"
+      v-if="gamepadMode"
+    >
+      <GamepadIcon icon="B" class="gamepad-icon h-[30px]" :gp-type="gpType" />
+      <div class="font-gs ml-2" style="font-size: 18px; margin-top: 2px">
+        {{ translate('general_back') }}
+      </div>
+    </div>
   </TemplateDialog>
 </template>
 
@@ -212,5 +279,13 @@ const closeDialog = () => {
 
 .stat-addition {
   @apply ml-1 text-blue-400;
+}
+
+.gamepad-op-wrapper {
+  @apply flex flex-row justify-center align-middle;
+}
+
+.gamepad-icon {
+  @apply rounded-full bg-gray-100;
 }
 </style>

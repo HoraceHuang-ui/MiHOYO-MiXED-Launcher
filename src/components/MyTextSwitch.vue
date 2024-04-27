@@ -26,14 +26,14 @@ const rightRef = ref<HTMLElement>()
 
 const unitWidth = computed(() => {
   if (!leftRef.value || !rightRef.value) return 0
-  return max(leftRef.value.scrollWidth, rightRef.value.scrollWidth) + 10
+  return max(leftRef.value.scrollWidth, rightRef.value.scrollWidth) + 20
 })
 
 const sliderTransform = computed(() => {
   return {
     transform: state.value
-      ? 'translateX(0)'
-      : `translateX(calc(${unitWidth.value}px + 5px))`,
+      ? `translateX(${unitWidth.value}px)`
+      : 'translateX(0)',
   }
 })
 
@@ -46,17 +46,17 @@ const switchState = () => {
 <template>
   <div
     class="main-wrapper"
-    :style="{ width: `calc(${unitWidth}px * 2 + 10px)` }"
+    :style="{ width: `calc(${unitWidth}px * 2)` }"
     @click="switchState"
   >
     <div
       class="slider"
-      :style="{ width: `calc(${unitWidth}px + 5px)`, ...sliderTransform }"
+      :style="{ width: `${unitWidth}px`, ...sliderTransform }"
     ></div>
     <div
       ref="leftRef"
       class="selection-text left"
-      :class="{ selected: state }"
+      :class="{ selected: !state }"
       :style="{ width: `${unitWidth}px` }"
     >
       {{ leftText }}
@@ -64,7 +64,7 @@ const switchState = () => {
     <div
       ref="rightRef"
       class="selection-text right"
-      :class="{ selected: !state }"
+      :class="{ selected: state }"
       :style="{ width: `${unitWidth}px` }"
     >
       {{ rightText }}
@@ -74,12 +74,9 @@ const switchState = () => {
 
 <style lang="scss" scoped>
 .main-wrapper {
-  @apply flex flex-row py-1 ml-3 relative;
-  @apply rounded-full bg-white cursor-pointer;
-
-  .dark & {
-    @apply bg-[#222];
-  }
+  @apply flex flex-row ml-3 relative;
+  @apply rounded-full cursor-pointer;
+  padding: 2px 0;
 }
 
 .slider {

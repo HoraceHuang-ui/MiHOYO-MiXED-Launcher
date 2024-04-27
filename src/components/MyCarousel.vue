@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, PropType, ref, watch } from 'vue'
+import { computed, defineModel, onMounted, PropType, ref, watch } from 'vue'
 import { useTimeout } from '../utils/timeout'
 
 const props = defineProps({
@@ -27,15 +27,24 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  indicatorPlacement: {
+    type: String as PropType<'left' | 'mid' | 'right'>,
+    default: 'mid',
+  },
   animation: {
     type: String as PropType<'swipe' | 'fade-swipe'>,
     default: 'swipe',
   },
 })
 
-const curIdx = ref(0)
+const curIdx = defineModel({
+  type: Number,
+  default: 0,
+})
+
 const hoverShowArrow = ref(false)
 const hoverShowIndicator = ref(false)
+const panesDisplay = ref<string[]>([])
 
 let autoplayTimer: NodeJS.Timer | number | undefined = undefined
 
@@ -54,11 +63,15 @@ const panes = computed(() => {
 
 const refreshState = () => {
   if (panes.value) {
+    panesDisplay.value = []
     for (let i = 0; i < panes.value.length; i++) {
       ;(panes.value.item(i) as HTMLElement)!.style.position = 'absolute'
       ;(panes.value.item(i) as HTMLElement)!.style.top = '0'
       ;(panes.value.item(i) as HTMLElement)!.style.left = '0'
       ;(panes.value.item(i) as HTMLElement)!.style.transition = 'all 0.4s ease'
+      panesDisplay.value.push(
+        (panes.value.item(i) as HTMLElement)!.style.display,
+      )
       // (panes.value.item(i) as HTMLElement)!!.style.width = `${panesWrapper.value!!.clientWidth}px`;
       if (i == curIdx.value) {
         continue
@@ -116,9 +129,17 @@ watch(curIdx, (newId: number, oldId: number) => {
   const newItem = panes.value?.item(newId) as HTMLElement
   const oldItem = panes.value?.item(oldId) as HTMLElement
 
+  if (!panes.value || curIdx.value < 0 || curIdx.value >= panes.value?.length) {
+    if (oldItem) {
+      oldItem.style.display = 'none'
+      oldItem.style.transform = `translateX(-${panesWrapper.value?.clientWidth}px)`
+    }
+    return
+  }
+
   if (panes.value) {
     newItem.style.transition = 'none'
-    newItem.style.display = 'flex'
+    newItem.style.display = panesDisplay.value[newId]
 
     if (props.animation === 'swipe') {
       if (newId > oldId) {
@@ -129,9 +150,13 @@ watch(curIdx, (newId: number, oldId: number) => {
 
       setTimeout(() => {
         if (newId > oldId) {
-          oldItem.style.transform = `translateX(-${panesWrapper.value?.clientWidth}px)`
+          if (oldItem) {
+            oldItem.style.transform = `translateX(-${panesWrapper.value?.clientWidth}px)`
+          }
         } else {
-          oldItem.style.transform = `translateX(${panesWrapper.value?.clientWidth}px)`
+          if (oldItem) {
+            oldItem.style.transform = `translateX(${panesWrapper.value?.clientWidth}px)`
+          }
         }
 
         newItem.style.transition = 'all 0.4s ease'
@@ -139,7 +164,9 @@ watch(curIdx, (newId: number, oldId: number) => {
       }, 10)
 
       useTimeout(() => {
-        oldItem.style.display = 'none'
+        if (oldItem) {
+          oldItem.style.display = 'none'
+        }
       }, 410).start()
     } else if (props.animation === 'fade-swipe') {
       if (newId > oldId) {
@@ -202,6 +229,10 @@ defineExpose({
           (showIndicator === 'always' || hoverShowIndicator)
         "
         class="indicator-area-wrapper"
+        :class="{
+          left: indicatorPlacement === 'left',
+          right: indicatorPlacement === 'right',
+        }"
       >
         <div class="indicator-area" :class="{ bg: indicatorBg }">
           <div
@@ -267,6 +298,13 @@ defineExpose({
 .indicator-area-wrapper {
   @apply absolute bottom-1 left-0 right-0 w-full;
   @apply flex flex-row justify-center;
+
+  &.left {
+    @apply left-2 justify-start;
+  }
+  &.right {
+    @apply right-2 justify-end;
+  }
 }
 
 .indicator-area {

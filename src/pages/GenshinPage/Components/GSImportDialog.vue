@@ -4,6 +4,7 @@ import { PropType, Ref, ref } from 'vue'
 import GenshinDialog from './GenshinDialog.vue'
 import MyCheckbox from '../../../components/MyCheckbox.vue'
 import MyTooltip from '../../../components/MyTooltip.vue'
+import { useStore } from '../../../store'
 
 const props = defineProps({
   onOk: {
@@ -26,6 +27,8 @@ const combinePaths = ref(true)
 const dialogRef = ref()
 const launcherPath = ref('')
 const gamePath = ref('')
+
+const store = useStore()
 
 const gsLauncherImport = async () => {
   window.dialog
@@ -68,8 +71,8 @@ const confirmPaths = async () => {
     gamePath.value = launcherPath.value + '\\Genshin Impact Game\\YuanShen.exe'
   }
   launcherPath.value += '\\launcher.exe'
-  await window.store.set('gsLauncherPath', launcherPath.value, false)
-  await window.store.set('gsGamePath', gamePath.value, false)
+  store.game.gs.launcherPath = launcherPath.value
+  store.game.gs.gamePath = gamePath.value
 }
 
 const onDialogOk = () => {

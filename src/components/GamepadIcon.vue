@@ -1,18 +1,24 @@
 <script setup lang="ts">
-import { inject, Ref, ref } from 'vue'
+import { inject, PropType, Ref, ref } from 'vue'
 
 defineProps({
   icon: {
     type: String,
     required: true,
   },
+  gpType: {
+    typeType: String as PropType<'Xbox' | 'PS'>,
+    required: false,
+  },
 })
 
-const gpType = inject<Ref<string>>('gpType', ref('Xbox'))
+const injectGpType = inject<Ref<string>>('gpType', ref('Xbox'))
 </script>
 
 <template>
-  <img :src="`../../src/assets/gpIcons/${gpType || 'Xbox'}/${icon}.png`" />
+  <img
+    :src="`../../src/assets/gpIcons/${gpType || injectGpType}/${icon}.png`"
+  />
 </template>
 
 <style scoped lang="scss"></style>
