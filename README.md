@@ -151,30 +151,13 @@ To add a new language,
 [![Crowdin](https://badges.crowdin.net/mihoyo-mixed-launcher/localized.svg)](https://crowdin.com/project/mihoyo-mixed-launcher)
 
 # Other Notes
-
-- `electron-store` items backup:
-    - `targetVersion` The seemingly "current" version taking `ignore current version` into account
-    - `mainBgPath` The main page background image in `base64` format
-    - `dialogStyle` The style of non-game UI dialogs
-    - `gsLauncherPath` The directory of the official Genshin Impact launcher
-    - `gsGamePath` The path of the Genshin Impact game executable
-    - `gsUpd` Whether Genshin Impact is updated in the current version
-    - `gsInfo` Genshin Impact player info
-    - `srLauncherPath`
-    - `srGamePath`
-    - `srUpd`
-    - `srInfo`
-    - `hi3LauncherPath`
-    - `hi3GamePath`
-    - `hi3Upd`
-    - `gsCostume` Display costume splash images in Genshin Impact
-    - `windowState` The state of the window on last close
-      - `width`
-      - `height`
-      - `isMax` Whether the window was maximized
-    - `autoEnterGamepad` Whether to automatically enter Gamepad Mode when connected to a gamepad
-    - `gamepadDisableMouse` Whether to disable mouse input when in Gamepad Mode
-    - `showGamepadToolbar` Whether to show the bottom toolbar in Gamepad Mode
 - `localStorage` items backup:
   - `lang` Language setting
   - `colorTheme` Color theme setting
+  - `windowSize` The size of the window on last close
+    - `width`
+    - `height`
+    - `isMax` Whether the window was maximized
+  - `windowPos` The position of the window on last close
+    - `x`
+    - `y`

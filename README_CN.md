@@ -142,30 +142,13 @@ $^2$ `需要补全。` 标蓝的（即未被批准的）字符串是机翻的。
 [![Crowdin](https://badges.crowdin.net/mihoyo-mixed-launcher/localized.svg)](https://crowdin.com/project/mihoyo-mixed-launcher)
 
 # 其他
-
-- `electron-store` 存储条目备忘：
-    - `targetVersion` 算上忽略更新后的（伪）当前版本
-    - `mainBgPath` 主页背景图片的 `base64`
-    - `dialogStyle` 非游戏界面的弹窗样式
-    - `gsLauncherPath` 原神官方启动器所在目录
-    - `gsGamePath` 原神游戏本体可执行文件的路径
-    - `gsUpd` 原神当前版本已更新
-    - `gsInfo` 原神账号信息
-    - `srLauncherPath`
-    - `srGamePath`
-    - `srUpd`
-    - `srInfo`
-    - `hi3LauncherPath`
-    - `hi3GamePath`
-    - `hi3Upd`
-    - `gsCostume` 原神显示衣装立绘 ~~（国服会痛失原皮莫娜哦）~~
-    - `windowState` 上次关闭时的窗口状态
-      - `width` 窗口宽度
-      - `height` 窗口高度
-      - `isMax` 窗口是否最大化
-    - `autoEnterGamepad` 连接到手柄时自动进入手柄模式
-    - `gamepadDisableMouse` 手柄模式禁用鼠标操作
-    - `showGamepadToolbar` 在手柄模式中显示底部键位操作栏
 - `localStorage` 存储条目备忘：
   - `lang` 语言设置
   - `colorTheme` 颜色主题设置
+  - `windowSize` 上次关闭时的窗口大小
+    - `width` 窗口宽度
+    - `height` 窗口高度
+    - `isMax` 窗口是否最大化
+  - `windowPos` 上次关闭时的窗口位置
+    - `x`
+    - `y`
