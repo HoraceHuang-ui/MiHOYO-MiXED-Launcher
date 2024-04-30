@@ -2,6 +2,8 @@ import { defineStore } from 'pinia'
 import { DialogStyle } from '../types/dialog/dialog'
 import { Lang } from '../i18n'
 import { FormattedApiInfo } from '../types/starrail/srPlayerInfo'
+import { GsRegInfo } from '../types/genshin/gsRegInfo'
+import { SrRegInfo } from '../types/starrail/srRegInfo'
 
 export const useStore = defineStore('userStore', {
   state: () => ({
@@ -35,18 +37,18 @@ export const useStore = defineStore('userStore', {
     },
     game: {
       gs: {
-        // gs
         launcherPath: undefined as string | undefined,
         gamePath: undefined as string | undefined,
         upd: false,
         playerInfo: undefined as any,
+        accounts: [] as GsRegInfo[],
       },
       sr: {
-        // sr
         launcherPath: undefined as string | undefined,
         gamePath: undefined as string | undefined,
         upd: false,
         playerInfo: undefined as FormattedApiInfo | undefined,
+        accounts: [] as SrRegInfo[],
       },
       hi3: {
         // hi3

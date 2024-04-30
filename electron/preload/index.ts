@@ -58,6 +58,20 @@ contextBridge.exposeInMainWorld('github', {
     return await ipcRenderer.invoke('github:getLatestRelease')
   },
 })
+contextBridge.exposeInMainWorld('reg', {
+  gsGet: async () => {
+    return await ipcRenderer.invoke('reg:gsGet')
+  },
+  srGet: async () => {
+    return await ipcRenderer.invoke('reg:srGet')
+  },
+  gsSet: (account: string) => {
+    ipcRenderer.send('reg:gsSet', account)
+  },
+  srSet: (account: string) => {
+    ipcRenderer.send('reg:srSet', account)
+  },
+})
 
 function domReady(
   condition: DocumentReadyState[] = ['complete', 'interactive'],

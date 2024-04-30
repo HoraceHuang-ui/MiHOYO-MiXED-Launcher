@@ -1,3 +1,6 @@
+import { GsRegInfo } from './genshin/gsRegInfo'
+import { SrRegInfo } from './starrail/srRegInfo'
+
 export {}
 
 // export * from './starrail/srPlayerInfo'
@@ -42,6 +45,13 @@ export interface IGithub {
   getLatestRelease: () => Promise<any>
 }
 
+export interface IReg {
+  gsGet: () => Promise<GsRegInfo | undefined>
+  gsSet: (data: string) => Promise<void>
+  srGet: () => Promise<SrRegInfo | undefined>
+  srSet: (data: string) => Promise<void>
+}
+
 declare global {
   interface Window {
     child: IChild
@@ -52,5 +62,6 @@ declare global {
     axios: IAxios
     electron: IElectron
     github: IGithub
+    reg: IReg
   }
 }
