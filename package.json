@@ -49,7 +49,7 @@
     "vue-tsc": "^2.0.7"
   },
   "dependencies": {
-    "@octokit/core": "5.1.0",
+    "@octokit/core": "6.1.2",
     "axios": "^1.6.7",
     "bootstrap-icons": "^1.11.3",
     "enka-network-api": "^4.3.0",
