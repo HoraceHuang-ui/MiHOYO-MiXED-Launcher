@@ -99,12 +99,16 @@ const launch = async (game: 'gs' | 'sr' | 'hi3') => {
   if (game === 'gs') {
     gameStore = store.game.gs
     if (gameStore.curAccountId != -1) {
-      await window.reg.gsSet(gameStore.accounts[gameStore.curAccountId])
+      await window.reg.gsSet(
+        JSON.stringify(gameStore.accounts[gameStore.curAccountId]),
+      )
     }
   } else if (game === 'sr') {
     gameStore = store.game.sr
     if (gameStore.curAccountId != -1) {
-      await window.reg.srSet(gameStore.accounts[gameStore.curAccountId])
+      await window.reg.srSet(
+        JSON.stringify(gameStore.accounts[gameStore.curAccountId]),
+      )
     }
   } else {
     gameStore = store.game.hi3

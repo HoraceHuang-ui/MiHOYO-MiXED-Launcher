@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, PropType, ref } from 'vue'
+import { computed, defineModel, PropType, ref } from 'vue'
 
 const props = defineProps({
   items: {
@@ -29,6 +29,10 @@ const props = defineProps({
     type: String as PropType<'hover' | 'click'>,
     default: 'hover',
   },
+})
+
+const showDropdown = defineModel({
+  default: false,
 })
 
 const emit = defineEmits(['command'])
@@ -80,6 +84,7 @@ const transform = computed(() => {
 })
 
 const hideMenu = () => {
+  showDropdown.value = false
   showMenu.value = false
   clearTimeout(timer)
   timer = undefined
@@ -130,7 +135,7 @@ const sendCommand = (idx: number) => {
       <div
         class="dropdown-wrapper"
         :style="{ ...wrapperStyles[placement], width: width }"
-        v-if="showMenu"
+        v-if="showMenu || showDropdown"
         ref="dropdownRef"
       >
         <div
