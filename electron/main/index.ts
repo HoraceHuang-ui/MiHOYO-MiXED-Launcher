@@ -340,11 +340,11 @@ async function createWindow() {
 
     reg.putValue({
       'HKCU\\Software\\miHoYo\\崩坏：星穹铁道': {
-        MIHOYOSDK_ADL_PROD_CN_h3123247166: {
+        MIHOYOSDK_ADL_PROD_CN_h3123967166: {
           value: account.mihoyoSdk,
           type: 'REG_BINARY',
         },
-        App_LastUserID_h2841324341: {
+        App_LastUserID_h2841727341: {
           value: account.lastUserId,
           type: 'REG_DWORD',
         },
@@ -370,11 +370,12 @@ async function createWindow() {
     const result = (await reg.list(['HKCU\\Software\\miHoYo\\崩坏：星穹铁道']))[
       'HKCU\\Software\\miHoYo\\崩坏：星穹铁道'
     ]
+    console.log(result)
     return result.exists && result.values
       ? {
           name: '',
-          lastUserId: result.values.App_LastUserID_h2841324341.value as number,
-          mihoyoSdk: result.values.MIHOYOSDK_ADL_PROD_CN_h3123247166
+          lastUserId: result.values.App_LastUserID_h2841727341.value as number,
+          mihoyoSdk: result.values.MIHOYOSDK_ADL_PROD_CN_h3123967166
             .value as number[],
         }
       : undefined

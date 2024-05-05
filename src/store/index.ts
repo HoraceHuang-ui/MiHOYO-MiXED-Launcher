@@ -42,6 +42,7 @@ export const useStore = defineStore('userStore', {
         upd: false,
         playerInfo: undefined as any,
         accounts: [] as GsRegInfo[],
+        curAccountId: -1,
       },
       sr: {
         launcherPath: undefined as string | undefined,
@@ -49,6 +50,7 @@ export const useStore = defineStore('userStore', {
         upd: false,
         playerInfo: undefined as FormattedApiInfo | undefined,
         accounts: [] as SrRegInfo[],
+        curAccountId: -1,
       },
       hi3: {
         // hi3
