@@ -18,12 +18,13 @@ const props = defineProps({
     type: String as PropType<'gs' | 'sr' | 'hi3'>,
     default: 'gs',
   },
+  skipCurrent: {
+    type: Boolean,
+    required: true,
+  },
 })
 
-const skipCurrent = defineModel({
-  type: Boolean,
-  required: true,
-})
+defineEmits(['update:skipCurrent'])
 
 const updDialogContent = marked(props.updInfo.body)
 
@@ -77,7 +78,8 @@ const colorClass = computed(() => {
       {{ translate('updDialog_footerText') }}
     </div>
     <MyCheckbox
-      v-model="skipCurrent"
+      :model-value="skipCurrent"
+      @update:model-value="(nv: boolean) => $emit('update:skipCurrent', nv)"
       :text="translate('updDialog_skipCurrent')"
       :on-color="onColor"
       :off-color="offColor"

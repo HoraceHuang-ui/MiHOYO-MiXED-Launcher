@@ -171,15 +171,16 @@ onMounted(async () => {
             {
               title: translate('updDialog_title'),
               showCancel: true,
-              vnode: h(UpdateDialogContent, {
-                appVer: appVer,
-                updInfo: updInfo.value,
-                skipCurrent: skipCurrent.value,
-                'onUpdate:skipCurrent': (value: boolean) => {
-                  skipCurrent.value = value
-                },
-                gameStyle: store.settings.appearance.dialogStyle,
-              }),
+              vnode: () =>
+                h(UpdateDialogContent, {
+                  appVer: appVer,
+                  updInfo: updInfo.value,
+                  skipCurrent: skipCurrent.value,
+                  'onUpdate:skipCurrent': (value: boolean) => {
+                    skipCurrent.value = value
+                  },
+                  gameStyle: store.settings.appearance.dialogStyle,
+                }),
             },
           )
         }

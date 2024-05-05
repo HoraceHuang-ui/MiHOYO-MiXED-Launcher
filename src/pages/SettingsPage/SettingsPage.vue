@@ -109,15 +109,15 @@ const checkUpdates = () => {
           {
             title: translate('updDialog_title'),
             showCancel: true,
-            vnode: h(UpdateDialogContent, {
-              appVer: appVer.value,
-              updInfo: updInfo.value,
-              showSkipCurrent: false,
-              gameStyle: store.settings.appearance.dialogStyle,
-              style: {
-                height: `calc(50vh / min(${hScale?.value}, ${vScale?.value}))`,
-              },
-            }),
+            vnode: () =>
+              h('UpdateDialogContent', {
+                appVer: appVer.value,
+                updInfo: updInfo.value,
+                gameStyle: store.settings.appearance.dialogStyle,
+                style: {
+                  height: `calc(50vh / min(${hScale?.value}, ${vScale?.value}))`,
+                },
+              }),
             hScale: hScale,
             vScale: vScale,
           },
