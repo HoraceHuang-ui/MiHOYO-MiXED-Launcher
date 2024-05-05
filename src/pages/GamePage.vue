@@ -313,8 +313,8 @@ const retrieveAccount = async () => {
       },
     },
     {
-      title: '添加游戏账号',
-      msg: `点击确定后将从系统注册表中读取游戏中当前登录的账号信息，后续可快速从此账号启动。请注意甄别是否有重复命名。`,
+      title: translate('general_addAccountTitle'),
+      msg: translate('general_addAccountMsg'),
       showCancel: true,
       closeOnOk: false,
       hScale: hScale,
@@ -324,14 +324,24 @@ const retrieveAccount = async () => {
           h(
             'div',
             {
-              class: 'flex flex-row justify-center w-full mt-3',
+              class: 'w-full text-center mt-3 ' + prefFont.value,
+              style: {
+                fontSize: 'larger',
+              },
+            },
+            translate('general_addAccountWarning'),
+          ),
+          h(
+            'div',
+            {
+              class: 'flex flex-row justify-center w-full mt-1',
             },
             [
               h('input', {
                 type: 'text',
                 class: 'rounded-full w-[80%] px-2 py-1 text-center',
                 value: newAccountName.value,
-                placeholder: '请命名当前账号',
+                placeholder: translate('general_addAccountPlaceholder'),
                 onInput: (e: Event) => {
                   newAccountName.value = (e.target as HTMLInputElement).value
                 },
@@ -492,7 +502,7 @@ const refresh = () => {
               </div>
               <MyDropdown
                 :items="[
-                  '不作修改',
+                  $t('general_doNotModify'),
                   ...gameStore.accounts.map(
                     (acc: GsRegInfo | SrRegInfo) => acc.name,
                   ),
@@ -543,7 +553,7 @@ const refresh = () => {
                         $t('general_openOfficialLauncher'),
                         $t('general_clearGamePath'),
                         $t('general_clearProfileInfo'),
-                        '清除游戏账号',
+                        $t('general_clearAccounts'),
                       ]
                 "
                 middle
