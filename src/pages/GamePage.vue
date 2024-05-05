@@ -153,6 +153,8 @@ onMounted(async () => {
           }),
           msgCenter: false,
           showCancel: true,
+          hScale: hScale,
+          vScale: vScale,
         },
       )
     } else if (timeDelta.value > 0 && timeDelta.value < 3) {
@@ -176,6 +178,8 @@ onMounted(async () => {
           }),
           msgCenter: false,
           showCancel: true,
+          hScale: hScale,
+          vScale: vScale,
         },
       )
     } else if (timeDelta.value == 0) {
@@ -198,6 +202,8 @@ onMounted(async () => {
           }),
           msgCenter: false,
           showCancel: true,
+          hScale: hScale,
+          vScale: vScale,
         },
       )
     }
@@ -304,8 +310,9 @@ const retrieveAccount = async () => {
     },
     {
       title: '添加游戏账号',
-      msg: '请命名当前账号',
+      msg: `请命名当前账号`,
       showCancel: true,
+      closeOnOk: false,
       vnode: () =>
         h(
           'div',
@@ -314,6 +321,8 @@ const retrieveAccount = async () => {
           },
           [
             h('input', {
+              hScale: hScale,
+              vScale: vScale,
               type: 'text',
               class: 'rounded-full w-[80%] px-2 py-1 text-center',
               value: newAccountName.value,
@@ -476,7 +485,7 @@ const refresh = () => {
               </div>
               <MyDropdown
                 :items="[
-                  '维持当前',
+                  '不作修改',
                   ...gameStore.accounts.map(
                     (acc: GsRegInfo | SrRegInfo) => acc.name,
                   ),
@@ -495,7 +504,7 @@ const refresh = () => {
                     gameStore.accounts.length > 0 &&
                     gameStore.curAccountId != -1
                       ? gameStore.accounts[gameStore.curAccountId].name
-                      : '维持当前'
+                      : '不作修改'
                   }}
                 </span>
               </MyDropdown>
