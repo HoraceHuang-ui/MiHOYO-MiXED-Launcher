@@ -272,6 +272,10 @@ const retrieveAccount = async () => {
     dialogComponent,
     {
       async onOk(dispose: () => void) {
+        if (newAccountName.value === '') {
+          return
+        }
+
         if (gameNo.value == 0) {
           const res = await window.reg.gsGet()
           console.log(res)
@@ -310,35 +314,38 @@ const retrieveAccount = async () => {
     },
     {
       title: '添加游戏账号',
-      msg: `请命名当前账号`,
+      msg: `点击确定后将从系统注册表中读取游戏中当前登录的账号信息，后续可快速从此账号启动。请注意甄别是否有重复命名。`,
       showCancel: true,
       closeOnOk: false,
+      hScale: hScale,
+      vScale: vScale,
       vnode: () =>
-        h(
-          'div',
-          {
-            class: 'flex flex-row justify-center w-full mt-2',
-          },
-          [
-            h('input', {
-              hScale: hScale,
-              vScale: vScale,
-              type: 'text',
-              class: 'rounded-full w-[80%] px-2 py-1 text-center',
-              value: newAccountName.value,
-              onInput: (e: Event) => {
-                newAccountName.value = (e.target as HTMLInputElement).value
-              },
-              style:
-                gameNo.value == 1
-                  ? {
-                      background: 'white',
-                      border: '1px solid gray',
-                    }
-                  : undefined,
-            }),
-          ],
-        ),
+        h('div', [
+          h(
+            'div',
+            {
+              class: 'flex flex-row justify-center w-full mt-3',
+            },
+            [
+              h('input', {
+                type: 'text',
+                class: 'rounded-full w-[80%] px-2 py-1 text-center',
+                value: newAccountName.value,
+                placeholder: '请命名当前账号',
+                onInput: (e: Event) => {
+                  newAccountName.value = (e.target as HTMLInputElement).value
+                },
+                style:
+                  gameNo.value == 1
+                    ? {
+                        background: 'white',
+                        border: '1px solid gray',
+                      }
+                    : undefined,
+              }),
+            ],
+          ),
+        ]),
     },
   )
 }
@@ -492,19 +499,24 @@ const refresh = () => {
                 ]"
                 class="account-info"
                 :class="prefFont"
-                item-class="text-black px-2 dark:text-white"
-                :style="`padding: calc(4px * min(${hScale}, ${vScale})) calc(8px * min(${hScale}, ${vScale}))`"
+                item-class="text-gray-800 px-2 dark:text-gray-200"
+                :style="`padding: calc(4px * min(${hScale}, ${vScale})) calc(9px * min(${hScale}, ${vScale})) calc(1px * min(${hScale}, ${vScale})) calc(9px * min(${hScale}, ${vScale}))`"
                 middle
                 placement="top"
                 @command="switchAccount"
               >
-                <i class="bi bi-person-circle" />
-                <span>
+                <i
+                  class="bi bi-person-circle"
+                  :style="`font-size: calc(22px * min(${hScale}, ${vScale}))`"
+                />
+                <span
+                  v-if="gameStore.curAccountId != -1"
+                  :style="`margin-left: calc(6px * min(${hScale}, ${vScale}))`"
+                >
                   {{
-                    gameStore.accounts.length > 0 &&
-                    gameStore.curAccountId != -1
+                    gameStore.accounts.length > 0
                       ? gameStore.accounts[gameStore.curAccountId].name
-                      : '不作修改'
+                      : ''
                   }}
                 </span>
               </MyDropdown>
