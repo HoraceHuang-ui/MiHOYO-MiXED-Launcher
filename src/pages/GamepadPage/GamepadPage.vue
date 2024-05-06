@@ -580,8 +580,11 @@ const gameLoop = () => {
     }
   }
 
-  // [ACCOUNTS] B: Back to Main
-  if (mode.value === 'accounts' && gp.buttons[1].pressed) {
+  // [ACCOUNTS] Y / B: Back to Main
+  if (
+    mode.value === 'accounts' &&
+    (gp.buttons[1].pressed || gp.buttons[3].pressed)
+  ) {
     if (!inThrottle) {
       mode.value = 'main'
       showAccountsDropdown.value = false
@@ -592,7 +595,7 @@ const gameLoop = () => {
     }
   }
 
-  // [ACCOUNTS] LS_v/DIR_v: Select Account
+  // [ACCOUNTS] LS_v / DIR_v: Select Account
   if (
     mode.value === 'accounts' &&
     (gp.axes[1] < -0.9 || gp.buttons[12].pressed)

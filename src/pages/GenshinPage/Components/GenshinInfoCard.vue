@@ -195,7 +195,6 @@ const gameLoop = () => {
   ) {
     if (!inThrottle) {
       inThrottle = true
-      console.log(artifactIdx.value)
       if (artifactIdx.value == 0) {
         artifactIdx.value =
           playerInfo.value.characters[showcaseIdx.value].artifacts.length - 1

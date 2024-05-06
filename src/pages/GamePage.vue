@@ -513,6 +513,7 @@ const refresh = () => {
                 :style="`padding: calc(4px * min(${hScale}, ${vScale})) calc(9px * min(${hScale}, ${vScale})) calc(1px * min(${hScale}, ${vScale})) calc(9px * min(${hScale}, ${vScale}))`"
                 middle
                 placement="top"
+                :selected="gameStore.curAccountId + 1"
                 @command="switchAccount"
               >
                 <i
