@@ -1,5 +1,6 @@
 import { GsRegInfo } from './genshin/gsRegInfo'
 import { SrRegInfo } from './starrail/srRegInfo'
+import { Hi3RegInfo } from './honkai3/hi3RegInfo'
 
 export {}
 
@@ -50,6 +51,8 @@ export interface IReg {
   gsSet: (data: string) => Promise<void>
   srGet: () => Promise<SrRegInfo | undefined>
   srSet: (data: string) => Promise<void>
+  hi3Get: () => Promise<Hi3RegInfo | undefined>
+  hi3Set: (data: string) => Promise<void>
 }
 
 declare global {

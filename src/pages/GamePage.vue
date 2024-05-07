@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { Component, computed, h, inject, onMounted, ref, Ref } from 'vue'
+import {
+  Component,
+  computed,
+  h,
+  inject,
+  onMounted,
+  ref,
+  Ref,
+  toValue,
+} from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { translate } from '../i18n'
 import { LauncherInfo, PostInfo } from '../types/launcher/launcherInfo'
@@ -258,6 +267,10 @@ const launchGame = async () => {
       await window.reg.srSet(
         JSON.stringify(gameStore.value.accounts[gameStore.value.curAccountId]),
       )
+    } else if (gameNo.value == 2) {
+      await window.reg.hi3Set(
+        JSON.stringify(gameStore.value.accounts[gameStore.value.curAccountId]),
+      )
     }
   }
   await window.child.exec(gameStore.value.gamePath!)
@@ -278,34 +291,45 @@ const retrieveAccount = async () => {
 
         if (gameNo.value == 0) {
           const res = await window.reg.gsGet()
-          console.log(res)
           if (res) {
             gameStore.value.accounts.push({
               name: newAccountName.value,
               mihoyoSdk: res.mihoyoSdk,
-              generalData: res.generalData,
+              // generalData: res.generalData,
             })
           } else {
             gameStore.value.accounts.push({
               name: newAccountName.value,
               mihoyoSdk: [],
-              generalData: [],
+              // generalData: [],
             })
           }
         } else if (gameNo.value == 1) {
           const res = await window.reg.srGet()
-          console.log(res)
           if (res) {
             gameStore.value.accounts.push({
               name: newAccountName.value,
               mihoyoSdk: res.mihoyoSdk,
-              lastUserId: res.lastUserId,
+              // lastUserId: res.lastUserId,
             })
           } else {
             gameStore.value.accounts.push({
               name: newAccountName.value,
               mihoyoSdk: [],
-              lastUserId: 0,
+              // lastUserId: 0,
+            })
+          }
+        } else if (gameNo.value == 2) {
+          const res = await window.reg.hi3Get()
+          if (res) {
+            gameStore.value.accounts.push({
+              name: newAccountName.value,
+              mihoyoSdk: res.mihoyoSdk,
+            })
+          } else {
+            gameStore.value.accounts.push({
+              name: newAccountName.value,
+              mihoyoSdk: [],
             })
           }
         }
@@ -345,13 +369,21 @@ const retrieveAccount = async () => {
                 onInput: (e: Event) => {
                   newAccountName.value = (e.target as HTMLInputElement).value
                 },
-                style:
-                  gameNo.value == 1
-                    ? {
+                style: toValue(() => {
+                  switch (gameNo.value) {
+                    case 0:
+                      return undefined
+                    case 1:
+                      return {
                         background: 'white',
                         border: '1px solid gray',
                       }
-                    : undefined,
+                    case 2:
+                      return {
+                        background: '#222',
+                      }
+                  }
+                }),
               }),
             ],
           ),
@@ -521,6 +553,7 @@ const refresh = () => {
                   :style="`font-size: calc(22px * min(${hScale}, ${vScale}))`"
                 />
                 <span
+                  class="font-normal"
                   v-if="gameStore.curAccountId != -1"
                   :style="`margin-left: calc(6px * min(${hScale}, ${vScale}))`"
                 >
@@ -549,6 +582,7 @@ const refresh = () => {
                     ? [
                         $t('general_openOfficialLauncher'),
                         $t('general_clearGamePath'),
+                        $t('general_clearAccounts'),
                       ]
                     : [
                         $t('general_openOfficialLauncher'),

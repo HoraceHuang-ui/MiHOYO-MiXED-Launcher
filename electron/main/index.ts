@@ -18,6 +18,7 @@ import path from 'path'
 import regedit, { promisified as reg } from 'regedit'
 import { SrRegInfo } from '../../src/types/starrail/srRegInfo'
 import { GsRegInfo } from '../../src/types/genshin/gsRegInfo'
+import { Hi3RegInfo } from '../../src/types/honkai3/hi3RegInfo'
 
 regedit.setExternalVBSLocation('resources/regedit/vbs')
 
@@ -321,10 +322,10 @@ async function createWindow() {
 
     reg.putValue({
       'HKCU\\Software\\miHoYo\\原神': {
-        GENERAL_DATA_h2389025596: {
-          value: account.generalData,
-          type: 'REG_BINARY',
-        },
+        // GENERAL_DATA_h2389025596: {
+        //   value: account.generalData,
+        //   type: 'REG_BINARY',
+        // },
         MIHOYOSDK_ADL_PROD_CN_h3123967166: {
           value: account.mihoyoSdk,
           type: 'REG_BINARY',
@@ -344,10 +345,10 @@ async function createWindow() {
           value: account.mihoyoSdk,
           type: 'REG_BINARY',
         },
-        App_LastUserID_h2841727341: {
-          value: account.lastUserId,
-          type: 'REG_DWORD',
-        },
+        // App_LastUserID_h2841727341: {
+        //   value: account.lastUserId,
+        //   type: 'REG_DWORD',
+        // },
       },
     })
   })
@@ -359,7 +360,33 @@ async function createWindow() {
     return result.exists && result.values
       ? {
           name: '',
-          generalData: result.values.GENERAL_DATA_h2389025596.value as number[],
+          // generalData: result.values.GENERAL_DATA_h2389025596.value as number[],
+          mihoyoSdk: result.values.MIHOYOSDK_ADL_PROD_CN_h3123967166
+            .value as number[],
+        }
+      : undefined
+  })
+
+  ipcMain.on('reg:hi3Set', (_event, acc: string) => {
+    const account = JSON.parse(acc)
+
+    reg.putValue({
+      'HKCU\\Software\\miHoYo\\崩坏3': {
+        MIHOYOSDK_ADL_PROD_CN_h3123967166: {
+          value: account.mihoyoSdk,
+          type: 'REG_BINARY',
+        },
+      },
+    })
+  })
+
+  ipcMain.handle('reg:hi3Get', async (): Promise<Hi3RegInfo> => {
+    const result = (await reg.list(['HKCU\\Software\\miHoYo\\崩坏3']))[
+      'HKCU\\Software\\miHoYo\\崩坏3'
+    ]
+    return result.exists && result.values
+      ? {
+          name: '',
           mihoyoSdk: result.values.MIHOYOSDK_ADL_PROD_CN_h3123967166
             .value as number[],
         }
@@ -374,7 +401,7 @@ async function createWindow() {
     return result.exists && result.values
       ? {
           name: '',
-          lastUserId: result.values.App_LastUserID_h2841727341.value as number,
+          // lastUserId: result.values.App_LastUserID_h2841727341.value as number,
           mihoyoSdk: result.values.MIHOYOSDK_ADL_PROD_CN_h3123967166
             .value as number[],
         }

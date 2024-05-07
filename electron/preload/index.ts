@@ -65,11 +65,17 @@ contextBridge.exposeInMainWorld('reg', {
   srGet: async () => {
     return await ipcRenderer.invoke('reg:srGet')
   },
+  hi3Get: async () => {
+    return await ipcRenderer.invoke('reg:hi3Get')
+  },
   gsSet: (account: string) => {
     ipcRenderer.send('reg:gsSet', account)
   },
   srSet: (account: string) => {
     ipcRenderer.send('reg:srSet', account)
+  },
+  hi3Set: (account: string) => {
+    ipcRenderer.send('reg:hi3Set', account)
   },
 })
 

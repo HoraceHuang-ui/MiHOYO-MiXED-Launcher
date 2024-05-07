@@ -662,7 +662,7 @@ watch(selectedGameIndex, () => {
       selectedAccountIndex.value = store.game.sr.curAccountId
       break
     case 'hi3':
-      selectedAccountIndex.value = -1
+      selectedAccountIndex.value = store.game.hi3.curAccountId
       break
   }
 })
@@ -736,12 +736,9 @@ onMounted(async () => {
               <GamepadIcon icon="X" />
               <span>{{ $t('gamepad_officialLauncher') }}</span>
             </div>
-            <div
-              class="bar-item hoverable"
-              @click="launch(importedGames[selectedGameIndex].game, true)"
-            >
+            <div class="bar-item">
               <GamepadIcon icon="Y" />
-              <span>账号</span>
+              <span>{{ $t('general_account') }}</span>
             </div>
             <div class="bar-item hoverable" @click="mode = 'gs-player'">
               <GamepadIcon icon="LS" />
@@ -827,7 +824,7 @@ onMounted(async () => {
             </div>
             <div class="bar-item">
               <GamepadIcon icon="LS_v" />
-              <span>选择账号</span>
+              <span>{{ $t('gamepad_selectAccount') }}</span>
             </div>
             <div
               class="bar-item hoverable"
@@ -902,7 +899,7 @@ onMounted(async () => {
       >
         <MyDropdown
           :items="[
-            '不作修改',
+            $t('general_doNotModify'),
             ...store.game[importedGames[selectedGameIndex].game].accounts.map(
               (acc: GsRegInfo | SrRegInfo) => acc.name,
             ),

@@ -4,6 +4,7 @@ import { Lang } from '../i18n'
 import { FormattedApiInfo } from '../types/starrail/srPlayerInfo'
 import { GsRegInfo } from '../types/genshin/gsRegInfo'
 import { SrRegInfo } from '../types/starrail/srRegInfo'
+import { Hi3RegInfo } from '../types/honkai3/hi3RegInfo'
 
 export const useStore = defineStore('userStore', {
   state: () => ({
@@ -57,6 +58,8 @@ export const useStore = defineStore('userStore', {
         launcherPath: undefined as string | undefined,
         gamePath: undefined as string | undefined,
         upd: false,
+        accounts: [] as Hi3RegInfo[],
+        curAccountId: -1,
       },
     } as Record<string, any>,
   }),
