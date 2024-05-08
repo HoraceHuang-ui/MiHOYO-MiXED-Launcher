@@ -195,7 +195,6 @@ const gameLoop = () => {
   ) {
     if (!inThrottle) {
       inThrottle = true
-      console.log(artifactIdx.value)
       if (artifactIdx.value == 0) {
         artifactIdx.value =
           playerInfo.value.characters[showcaseIdx.value].artifacts.length - 1
@@ -1242,14 +1241,14 @@ const countRolledSubstat = (stats: any[], prop: string) => {
     </div>
     <div
       v-else-if="!playerInfo"
-      class="mt-4 mb-4"
+      class="pt-2 pb-4"
       :style="`font-size: calc(max(14px * min(${hScale}, ${vScale}), 16px))`"
     >
       {{ $t('gs_emptyPlayerTip') }}
     </div>
     <div
       v-else
-      class="mt-4 mb-4"
+      class="pt-2 pb-4"
       :style="`font-size: calc(max(14px * min(${hScale}, ${vScale}), 16px))`"
     >
       {{ $t('gs_showcaseTip') }}

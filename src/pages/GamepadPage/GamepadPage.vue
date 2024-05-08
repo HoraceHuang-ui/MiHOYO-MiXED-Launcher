@@ -10,6 +10,9 @@ import StarRailInfoCard from '../StarRailPage/Components/StarRailInfoCard.vue'
 import MyTextSwitch from '../../components/MyTextSwitch.vue'
 import { useStore } from '../../store'
 import LoadingIcon from '../../components/LoadingIcon.vue'
+import { GsRegInfo } from '../../types/genshin/gsRegInfo'
+import { SrRegInfo } from '../../types/starrail/srRegInfo'
+import MyDropdown from '../../components/MyDropdown.vue'
 
 type Mode =
   | 'main'
@@ -18,6 +21,7 @@ type Mode =
   | 'gs-player'
   | 'sr-player'
   | 'dialog'
+  | 'accounts'
   | 'out'
 type GamePath = {
   game: string
@@ -51,6 +55,8 @@ let gp: Gamepad | null = null
 const selectedGameIndex = ref(0)
 const selectedSettingsCardIndex = ref(0)
 const selectedSettingsItemIndex = ref(0)
+const selectedAccountIndex = ref(-1)
+const showAccountsDropdown = ref(false)
 const launchingGame = ref(-1)
 
 const hScale = inject<Ref<number>>('hScale')
@@ -141,9 +147,35 @@ const leaveGamepadClick = () => {
   leaveGamepad!()
 }
 
-const launch = async (path: string) => {
+const launch = async (game: string, launcher: boolean) => {
   launchingGame.value = selectedGameIndex.value
-  await window.child.exec(path)
+  if (launcher) {
+    await window.child.exec(
+      importedGames.value[selectedGameIndex.value].launcherPath,
+    )
+    return
+  }
+
+  let gameStore: any
+  if (game === 'gs') {
+    gameStore = store.game.gs
+    if (gameStore.curAccountId != -1) {
+      await window.reg.gsSet(
+        JSON.stringify(gameStore.accounts[gameStore.curAccountId]),
+      )
+    }
+  } else if (game === 'sr') {
+    gameStore = store.game.sr
+    if (gameStore.curAccountId != -1) {
+      await window.reg.srSet(
+        JSON.stringify(gameStore.accounts[gameStore.curAccountId]),
+      )
+    }
+  } else {
+    gameStore = store.game.hi3
+  }
+
+  await window.child.exec(gameStore.gamePath)
 }
 
 const winClose = async () => {
@@ -304,7 +336,7 @@ const gameLoop = () => {
   // [MAIN] A: Launch Game
   if (mode.value === 'main' && gp.buttons[0].pressed) {
     if (!inThrottle) {
-      launch(importedGames.value[selectedGameIndex.value].path)
+      launch(importedGames.value[selectedGameIndex.value].game, false)
       inThrottle = true
       setTimeout(() => {
         inThrottle = false
@@ -315,7 +347,21 @@ const gameLoop = () => {
   // [MAIN] X: Official Launcher
   if (mode.value === 'main' && gp.buttons[2].pressed) {
     if (!inThrottle) {
-      launch(importedGames.value[selectedGameIndex.value].launcherPath)
+      launch(importedGames.value[selectedGameIndex.value].game, true)
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 300)
+    }
+  }
+
+  // [MAIN] Y: Select Accounts
+  if (mode.value === 'main' && gp.buttons[3].pressed) {
+    if (!inThrottle) {
+      if (importedGames.value[selectedGameIndex.value].game !== 'hi3') {
+        showAccountsDropdown.value = true
+        mode.value = 'accounts'
+      }
       inThrottle = true
       setTimeout(() => {
         inThrottle = false
@@ -396,8 +442,8 @@ const gameLoop = () => {
 
   // [SETTINGS] LS / DIR_v: Select Settings Item
   if (
-    (mode.value === 'settings' && gp.axes[1] < -0.9) ||
-    gp.buttons[12].pressed
+    mode.value === 'settings' &&
+    (gp.axes[1] < -0.9 || gp.buttons[12].pressed)
   ) {
     if (!inThrottle) {
       if (selectedSettingsItemIndex.value === 0) {
@@ -418,8 +464,8 @@ const gameLoop = () => {
     }
   }
   if (
-    (mode.value === 'settings' && gp.axes[1] > 0.9) ||
-    gp.buttons[13].pressed
+    mode.value === 'settings' &&
+    (gp.axes[1] > 0.9 || gp.buttons[13].pressed)
   ) {
     if (!inThrottle) {
       if (
@@ -534,8 +580,92 @@ const gameLoop = () => {
     }
   }
 
+  // [ACCOUNTS] Y / B: Back to Main
+  if (
+    mode.value === 'accounts' &&
+    (gp.buttons[1].pressed || gp.buttons[3].pressed)
+  ) {
+    if (!inThrottle) {
+      mode.value = 'main'
+      showAccountsDropdown.value = false
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 300)
+    }
+  }
+
+  // [ACCOUNTS] LS_v / DIR_v: Select Account
+  if (
+    mode.value === 'accounts' &&
+    (gp.axes[1] < -0.9 || gp.buttons[12].pressed)
+  ) {
+    if (!inThrottle) {
+      selectedAccountIndex.value =
+        selectedAccountIndex.value === -1
+          ? store.game[importedGames.value[selectedGameIndex.value].game]
+              .accounts.length - 1
+          : selectedAccountIndex.value - 1
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 150)
+    }
+  }
+  if (
+    mode.value === 'accounts' &&
+    (gp.axes[1] > 0.9 || gp.buttons[13].pressed)
+  ) {
+    if (!inThrottle) {
+      selectedAccountIndex.value =
+        selectedAccountIndex.value ===
+        store.game[importedGames.value[selectedGameIndex.value].game].accounts
+          .length -
+          1
+          ? -1
+          : selectedAccountIndex.value + 1
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 150)
+    }
+  }
+
+  // [ACCOUNTS] A: Confirm Select Account
+  if (mode.value === 'accounts' && gp.buttons[0].pressed) {
+    if (!inThrottle) {
+      switchAccount(selectedAccountIndex.value + 1)
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 300)
+    }
+  }
+
   rAF(gameLoop)
 }
+
+const switchAccount = (idx: number) => {
+  store.game[importedGames.value[selectedGameIndex.value].game].curAccountId =
+    idx - 1
+  selectedAccountIndex.value = idx - 1
+  showAccountsDropdown.value = false
+  mode.value = 'main'
+}
+
+watch(selectedGameIndex, () => {
+  switch (importedGames.value[selectedGameIndex.value].game) {
+    case 'gs':
+      selectedAccountIndex.value = store.game.gs.curAccountId
+      break
+    case 'sr':
+      selectedAccountIndex.value = store.game.sr.curAccountId
+      break
+    case 'hi3':
+      selectedAccountIndex.value = store.game.hi3.curAccountId
+      break
+  }
+})
 
 onMounted(async () => {
   for (const game of games) {
@@ -549,6 +679,8 @@ onMounted(async () => {
       })
     }
   }
+
+  selectedAccountIndex.value = store.game.gs.curAccountId
 
   rAF(gameLoop)
 
@@ -599,10 +731,14 @@ onMounted(async () => {
             </div>
             <div
               class="bar-item hoverable"
-              @click="launch(importedGames[selectedGameIndex].launcherPath)"
+              @click="launch(importedGames[selectedGameIndex].game, true)"
             >
               <GamepadIcon icon="X" />
               <span>{{ $t('gamepad_officialLauncher') }}</span>
+            </div>
+            <div class="bar-item">
+              <GamepadIcon icon="Y" />
+              <span>{{ $t('general_account') }}</span>
             </div>
             <div class="bar-item hoverable" @click="mode = 'gs-player'">
               <GamepadIcon icon="LS" />
@@ -670,6 +806,34 @@ onMounted(async () => {
               }}</span>
             </div>
           </div>
+          <div
+            class="absolute left-0 left no-drag"
+            v-else-if="mode === 'accounts'"
+          >
+            <div
+              class="bar-item hoverable"
+              @click="
+                () => {
+                  mode = 'main'
+                  showAccountsDropdown = false
+                }
+              "
+            >
+              <GamepadIcon icon="B" />
+              <span>{{ $t('general_cancel') }}</span>
+            </div>
+            <div class="bar-item">
+              <GamepadIcon icon="LS_v" />
+              <span>{{ $t('gamepad_selectAccount') }}</span>
+            </div>
+            <div
+              class="bar-item hoverable"
+              @click="switchAccount(selectedAccountIndex)"
+            >
+              <GamepadIcon icon="A" />
+              <span>{{ $t('general_confirm') }}</span>
+            </div>
+          </div>
         </Transition>
         <Transition name="swipe-bottom">
           <div
@@ -723,6 +887,52 @@ onMounted(async () => {
       </div>
     </Transition>
 
+    <Transition name="fade">
+      <div
+        class="account-wrapper"
+        :class="{ toolbar: store.settings.gamepad.showToolbar }"
+        v-if="
+          importedGames.length > 0 &&
+          'curAccountId' in store.game[importedGames[selectedGameIndex].game] &&
+          store.game[importedGames[selectedGameIndex].game].accounts.length > 0
+        "
+      >
+        <MyDropdown
+          :items="[
+            $t('general_doNotModify'),
+            ...store.game[importedGames[selectedGameIndex].game].accounts.map(
+              (acc: GsRegInfo | SrRegInfo) => acc.name,
+            ),
+          ]"
+          class="account-info"
+          item-class="text-gray-800 px-2 dark:text-gray-200"
+          middle
+          placement="bottom"
+          @command="switchAccount"
+          :selected="selectedAccountIndex + 1"
+          v-model="showAccountsDropdown"
+        >
+          <i class="bi bi-person-circle" />
+          <span
+            v-if="
+              store.game[importedGames[selectedGameIndex].game].curAccountId !=
+              -1
+            "
+          >
+            {{
+              store.game[importedGames[selectedGameIndex].game].accounts
+                .length > 0
+                ? store.game[importedGames[selectedGameIndex].game].accounts[
+                    store.game[importedGames[selectedGameIndex].game]
+                      .curAccountId
+                  ].name
+                : ''
+            }}
+          </span>
+        </MyDropdown>
+      </div>
+    </Transition>
+
     <div
       class="launch-area-wrapper"
       :class="{ toolbar: store.settings.gamepad.showToolbar }"
@@ -732,10 +942,11 @@ onMounted(async () => {
       </h1>
       <button
         v-for="(game, idx) in importedGames"
-        @click="launch(game.path)"
+        @click="launch(game.game, false)"
         class="game-button"
         :class="{ focus: selectedGameIndex == idx }"
         :key="idx"
+        @mouseenter="selectedGameIndex = idx"
       >
         <div class="flex flex-row transition-all">
           <GamepadIcon
@@ -970,6 +1181,26 @@ onMounted(async () => {
     margin-left: 0;
     width: 98vw;
     height: calc(100vh - 1vw - 64px);
+  }
+}
+
+.account-wrapper {
+  @apply absolute top-[0.7vw] left-1/2 -translate-x-1/2;
+  @apply flex flex-row justify-end text-white;
+  font-size: 22px;
+
+  &.toolbar {
+    @apply top-[1.5vw];
+  }
+}
+
+.account-info {
+  @apply rounded-full bg-black bg-opacity-50;
+  @apply mx-2 h-min cursor-pointer px-[6px] backdrop-blur-md;
+  @apply transition-all hover:bg-gray-600 hover:bg-opacity-50;
+
+  & span {
+    @apply ml-2 mr-1 font-sans;
   }
 }
 

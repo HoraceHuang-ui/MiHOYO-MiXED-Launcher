@@ -94,8 +94,27 @@ onMounted(async () => {
   }, 50)
 })
 
-const launch = async (path: string) => {
-  await window.child.exec(path)
+const launch = async (game: 'gs' | 'sr' | 'hi3') => {
+  let gameStore: any
+  if (game === 'gs') {
+    gameStore = store.game.gs
+    if (gameStore.curAccountId != -1) {
+      await window.reg.gsSet(
+        JSON.stringify(gameStore.accounts[gameStore.curAccountId]),
+      )
+    }
+  } else if (game === 'sr') {
+    gameStore = store.game.sr
+    if (gameStore.curAccountId != -1) {
+      await window.reg.srSet(
+        JSON.stringify(gameStore.accounts[gameStore.curAccountId]),
+      )
+    }
+  } else {
+    gameStore = store.game.hi3
+  }
+
+  await window.child.exec(gameStore.gamePath)
   if (store.settings.general.trayOnLaunch) {
     await window.win.tray()
   }
@@ -149,21 +168,21 @@ const resetPic = () => {
       </h1>
       <button
         v-if="store.game.gs.gamePath"
-        @click="launch(store.game.gs.gamePath)"
+        @click="launch('gs')"
         class="game-button"
       >
         {{ translate('mainpage_buttonText', { game: $t('general_gsShort') }) }}
       </button>
       <button
         v-if="store.game.sr.gamePath"
-        @click="launch(store.game.sr.gamePath)"
+        @click="launch('sr')"
         class="game-button"
       >
         {{ translate('mainpage_buttonText', { game: $t('general_srShort') }) }}
       </button>
       <button
         v-if="store.game.hi3.gamePath"
-        @click="launch(store.game.hi3.gamePath)"
+        @click="launch('hi3')"
         class="game-button"
       >
         {{ translate('mainpage_buttonText', { game: $t('general_hi3Short') }) }}

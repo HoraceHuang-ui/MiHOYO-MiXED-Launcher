@@ -251,10 +251,6 @@ div {
   @apply bg-white;
   border-radius: 5px 20px 0 0;
   transform: translate(5px, -5px);
-
-  .dark & {
-    @apply bg-gray-100;
-  }
 }
 
 .title-wrapper {

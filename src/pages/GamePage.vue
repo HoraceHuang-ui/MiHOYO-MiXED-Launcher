@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { Component, computed, inject, onMounted, Ref, ref } from 'vue'
+import {
+  Component,
+  computed,
+  h,
+  inject,
+  onMounted,
+  ref,
+  Ref,
+  toValue,
+} from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { translate } from '../i18n'
 import { LauncherInfo, PostInfo } from '../types/launcher/launcherInfo'
@@ -15,6 +24,8 @@ import SRImportDialog from './StarRailPage/Components/SRImportDialog.vue'
 import HI3ImportDialog from './Honkai3Page/Components/HI3ImportDialog.vue'
 import StarRailInfoCard from './StarRailPage/Components/StarRailInfoCard.vue'
 import { useStore } from '../store'
+import { SrRegInfo } from '../types/starrail/srRegInfo'
+import { GsRegInfo } from '../types/genshin/gsRegInfo'
 
 const store = useStore()
 
@@ -91,6 +102,7 @@ const hideElements = ref(false)
 const scrollBarRef = ref()
 
 const postTypeMap = new Map<string, PostInfo[]>()
+const newAccountName = ref('')
 
 onMounted(async () => {
   switch (game) {
@@ -150,6 +162,8 @@ onMounted(async () => {
           }),
           msgCenter: false,
           showCancel: true,
+          hScale: hScale,
+          vScale: vScale,
         },
       )
     } else if (timeDelta.value > 0 && timeDelta.value < 3) {
@@ -173,6 +187,8 @@ onMounted(async () => {
           }),
           msgCenter: false,
           showCancel: true,
+          hScale: hScale,
+          vScale: vScale,
         },
       )
     } else if (timeDelta.value == 0) {
@@ -195,6 +211,8 @@ onMounted(async () => {
           }),
           msgCenter: false,
           showCancel: true,
+          hScale: hScale,
+          vScale: vScale,
         },
       )
     }
@@ -240,14 +258,147 @@ const importButtonClick = () => {
 }
 
 const launchGame = async () => {
+  if (gameStore.value.curAccountId != -1) {
+    if (gameNo.value == 0) {
+      await window.reg.gsSet(
+        JSON.stringify(gameStore.value.accounts[gameStore.value.curAccountId]),
+      )
+    } else if (gameNo.value == 1) {
+      await window.reg.srSet(
+        JSON.stringify(gameStore.value.accounts[gameStore.value.curAccountId]),
+      )
+    } else if (gameNo.value == 2) {
+      await window.reg.hi3Set(
+        JSON.stringify(gameStore.value.accounts[gameStore.value.curAccountId]),
+      )
+    }
+  }
   await window.child.exec(gameStore.value.gamePath!)
   if (store.settings.general.trayOnLaunch) {
     window.win.tray()
   }
 }
 
+const retrieveAccount = async () => {
+  newAccountName.value = ''
+  useDialog(
+    dialogComponent,
+    {
+      async onOk(dispose: () => void) {
+        if (newAccountName.value === '') {
+          return
+        }
+
+        if (gameNo.value == 0) {
+          const res = await window.reg.gsGet()
+          if (res) {
+            gameStore.value.accounts.push({
+              name: newAccountName.value,
+              mihoyoSdk: res.mihoyoSdk,
+              // generalData: res.generalData,
+            })
+          } else {
+            gameStore.value.accounts.push({
+              name: newAccountName.value,
+              mihoyoSdk: [],
+              // generalData: [],
+            })
+          }
+        } else if (gameNo.value == 1) {
+          const res = await window.reg.srGet()
+          if (res) {
+            gameStore.value.accounts.push({
+              name: newAccountName.value,
+              mihoyoSdk: res.mihoyoSdk,
+              // lastUserId: res.lastUserId,
+            })
+          } else {
+            gameStore.value.accounts.push({
+              name: newAccountName.value,
+              mihoyoSdk: [],
+              // lastUserId: 0,
+            })
+          }
+        } else if (gameNo.value == 2) {
+          const res = await window.reg.hi3Get()
+          if (res) {
+            gameStore.value.accounts.push({
+              name: newAccountName.value,
+              mihoyoSdk: res.mihoyoSdk,
+            })
+          } else {
+            gameStore.value.accounts.push({
+              name: newAccountName.value,
+              mihoyoSdk: [],
+            })
+          }
+        }
+        dispose()
+      },
+    },
+    {
+      title: translate('general_addAccountTitle'),
+      msg: translate('general_addAccountMsg'),
+      showCancel: true,
+      closeOnOk: false,
+      hScale: hScale,
+      vScale: vScale,
+      vnode: () =>
+        h('div', [
+          h(
+            'div',
+            {
+              class: 'w-full text-center mt-3 ' + prefFont.value,
+              style: {
+                fontSize: 'larger',
+              },
+            },
+            translate('general_addAccountWarning'),
+          ),
+          h(
+            'div',
+            {
+              class: 'flex flex-row justify-center w-full mt-1',
+            },
+            [
+              h('input', {
+                type: 'text',
+                class: 'rounded-full w-[80%] px-2 py-1 text-center',
+                value: newAccountName.value,
+                placeholder: translate('general_addAccountPlaceholder'),
+                onInput: (e: Event) => {
+                  newAccountName.value = (e.target as HTMLInputElement).value
+                },
+                style: toValue(() => {
+                  switch (gameNo.value) {
+                    case 0:
+                      return undefined
+                    case 1:
+                      return {
+                        background: 'white',
+                        border: '1px solid gray',
+                      }
+                    case 2:
+                      return {
+                        background: '#222',
+                      }
+                  }
+                }),
+              }),
+            ],
+          ),
+        ]),
+    },
+  )
+}
+
 const handleCommand = (idx: number) => {
-  const commands = ['openLauncher', 'clearPath', 'clearPlayerinfo']
+  const commands = [
+    'openLauncher',
+    'clearPath',
+    'clearPlayerinfo',
+    'clearAccounts',
+  ]
 
   switch (commands[idx]) {
     case 'openLauncher':
@@ -261,7 +412,15 @@ const handleCommand = (idx: number) => {
       gameStore.value.playerInfo = undefined
       refresh()
       break
+    case 'clearAccounts':
+      gameStore.value.accounts = []
+      gameStore.value.curAccountId = -1
+      break
   }
+}
+
+const switchAccount = (idx: number) => {
+  gameStore.value.curAccountId = idx - 1
 }
 
 const handleScroll = ({ top }: Record<string, number>) => {
@@ -354,35 +513,94 @@ const refresh = () => {
         <div class="launch-area-wrapper">
           <div class="h-[9vh] my-[2vh]" />
           <div
+            class="right"
             v-if="gameStore.gamePath"
-            class="launch-button-wrapper"
-            :class="[{ scrolled: hideElements }, prefFont]"
+            :class="{ scrolled: hideElements }"
           >
-            <button
-              @click="launchGame"
-              class="launch-button"
-              :style="`font-size: calc(min(60px, 25px * min(${hScale}, ${vScale})))`"
+            <div
+              class="account-wrapper"
+              v-if="
+                !hideElements && 'accounts' in gameStore && gameStore.gamePath
+              "
+              :style="`font-size: calc(20px * min(${hScale}, ${vScale}));
+                margin-top: calc(10vh - 28px * min(${hScale}, ${vScale}))`"
             >
-              {{ $t('general_launchGame') }}
-            </button>
-            <MyDropdown
-              class="launch-dropdown"
-              @command="handleCommand"
-              placement="top"
-              :items="[
-                $t('general_openOfficialLauncher'),
-                $t('general_clearGamePath'),
-                $t('general_clearProfileInfo'),
-              ]"
-              middle
-            >
-              <button
-                class="font-gs dropdown-trigger"
-                :style="`font-size: calc(min(60px, 25px * min(${hScale}, ${vScale})));`"
+              <div
+                class="retrieve-account"
+                :style="`padding: calc(4px * min(${hScale}, ${vScale})) calc(8px * min(${hScale}, ${vScale}))`"
+                @click="retrieveAccount"
               >
-                …
+                <i class="bi bi-plus-lg" />
+              </div>
+              <MyDropdown
+                :items="[
+                  $t('general_doNotModify'),
+                  ...gameStore.accounts.map(
+                    (acc: GsRegInfo | SrRegInfo) => acc.name,
+                  ),
+                ]"
+                class="account-info"
+                :class="prefFont"
+                item-class="text-gray-800 px-2 dark:text-gray-200"
+                :style="`padding: calc(4px * min(${hScale}, ${vScale})) calc(9px * min(${hScale}, ${vScale})) calc(1px * min(${hScale}, ${vScale})) calc(9px * min(${hScale}, ${vScale}))`"
+                middle
+                placement="top"
+                :selected="gameStore.curAccountId + 1"
+                @command="switchAccount"
+              >
+                <i
+                  class="bi bi-person-circle"
+                  :style="`font-size: calc(22px * min(${hScale}, ${vScale}))`"
+                />
+                <span
+                  class="font-normal"
+                  v-if="gameStore.curAccountId != -1"
+                  :style="`margin-left: calc(6px * min(${hScale}, ${vScale}))`"
+                >
+                  {{
+                    gameStore.accounts.length > 0
+                      ? gameStore.accounts[gameStore.curAccountId].name
+                      : ''
+                  }}
+                </span>
+              </MyDropdown>
+            </div>
+            <div class="launch-button-wrapper" :class="prefFont">
+              <button
+                @click="launchGame"
+                class="launch-button"
+                :style="`font-size: calc(min(60px, 25px * min(${hScale}, ${vScale})))`"
+              >
+                {{ $t('general_launchGame') }}
               </button>
-            </MyDropdown>
+              <MyDropdown
+                class="launch-dropdown"
+                @command="handleCommand"
+                placement="top"
+                :items="
+                  gameNo == 2
+                    ? [
+                        $t('general_openOfficialLauncher'),
+                        $t('general_clearGamePath'),
+                        $t('general_clearAccounts'),
+                      ]
+                    : [
+                        $t('general_openOfficialLauncher'),
+                        $t('general_clearGamePath'),
+                        $t('general_clearProfileInfo'),
+                        $t('general_clearAccounts'),
+                      ]
+                "
+                middle
+              >
+                <button
+                  class="font-gs dropdown-trigger"
+                  :style="`font-size: calc(min(60px, 25px * min(${hScale}, ${vScale})));`"
+                >
+                  …
+                </button>
+              </MyDropdown>
+            </div>
           </div>
           <button
             v-else
@@ -488,19 +706,43 @@ const refresh = () => {
 
 .launch-area-wrapper {
   @apply w-full flex flex-row relative;
+
+  & .right {
+    @apply absolute right-0 transition-all;
+    @apply flex flex-row;
+    transition-duration: 500ms;
+
+    &.scrolled {
+      @apply right-1/2 translate-x-1/2;
+    }
+  }
+}
+
+.account-wrapper {
+  @apply flex flex-row justify-end text-white;
+}
+
+.retrieve-account {
+  @apply rounded-full bg-black bg-opacity-30;
+  @apply h-min cursor-pointer;
+  @apply transition-all hover:bg-gray-600 hover:bg-opacity-30;
+}
+
+.account-info {
+  @apply rounded-full bg-black bg-opacity-30;
+  @apply mx-2 h-min cursor-pointer;
+  @apply transition-all hover:bg-gray-600 hover:bg-opacity-30;
+
+  & span {
+    @apply ml-2 mr-1 font-sans;
+  }
 }
 
 .launch-button-wrapper {
-  @apply absolute right-0 transition-all;
   @apply flex flex-row mx-[0.67vw] mt-[2vh] rounded-full bg-yellow-400;
-  transition-duration: 500ms;
 
   .dark & {
     @apply bg-yellow-700;
-  }
-
-  &.scrolled {
-    @apply right-1/2 translate-x-1/2;
   }
 }
 

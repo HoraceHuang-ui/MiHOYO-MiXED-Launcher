@@ -2,7 +2,7 @@
 import { marked } from 'marked'
 import { translate } from '../i18n'
 import MyCheckbox from './MyCheckbox.vue'
-import { computed, PropType, ref } from 'vue'
+import { computed, PropType } from 'vue'
 import ScrollWrapper from './ScrollWrapper.vue'
 
 const props = defineProps({
@@ -14,22 +14,17 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  showSkipCurrent: {
-    type: Boolean,
-    default: true,
-  },
-  skipCurrent: {
-    type: Boolean,
-    default: false,
-  },
   gameStyle: {
     type: String as PropType<'gs' | 'sr' | 'hi3'>,
     default: 'gs',
   },
+  skipCurrent: {
+    type: Boolean,
+    required: true,
+  },
 })
-defineEmits(['update:skipCurrent'])
 
-const skip = ref(props.skipCurrent)
+defineEmits(['update:skipCurrent'])
 
 const updDialogContent = marked(props.updInfo.body)
 
@@ -83,8 +78,8 @@ const colorClass = computed(() => {
       {{ translate('updDialog_footerText') }}
     </div>
     <MyCheckbox
-      v-if="showSkipCurrent"
-      v-model="skip"
+      :model-value="skipCurrent"
+      @update:model-value="(nv: boolean) => $emit('update:skipCurrent', nv)"
       :text="translate('updDialog_skipCurrent')"
       :on-color="onColor"
       :off-color="offColor"

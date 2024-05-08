@@ -15,14 +15,13 @@ import { DynamicTextAssets, EnkaClient, TextAssets } from 'enka-network-api'
 import { promises as fs } from 'fs'
 import { Octokit } from '@octokit/core'
 import path from 'path'
-import { useStore } from '../../src/store'
-import { createPinia } from 'pinia'
-import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import regedit, { promisified as reg } from 'regedit'
+import { SrRegInfo } from '../../src/types/starrail/srRegInfo'
+import { GsRegInfo } from '../../src/types/genshin/gsRegInfo'
+import { Hi3RegInfo } from '../../src/types/honkai3/hi3RegInfo'
 
-const pinia = createPinia()
-pinia.use(piniaPluginPersistedstate)
+regedit.setExternalVBSLocation('resources/regedit/vbs')
 
-const store = useStore(pinia)
 const enka = new EnkaClient({
   requestTimeout: 10000,
 })
@@ -314,6 +313,99 @@ async function createWindow() {
       },
     )
     return result
+  })
+
+  ipcMain.on('reg:gsSet', (_event, acc: string) => {
+    // await reg.deleteKey(['HKCU\\Software\\miHoYo\\原神'])
+    // await reg.createKey(['HKCU\\Software\\miHoYo\\原神'])
+    const account = JSON.parse(acc)
+
+    reg.putValue({
+      'HKCU\\Software\\miHoYo\\原神': {
+        // GENERAL_DATA_h2389025596: {
+        //   value: account.generalData,
+        //   type: 'REG_BINARY',
+        // },
+        MIHOYOSDK_ADL_PROD_CN_h3123967166: {
+          value: account.mihoyoSdk,
+          type: 'REG_BINARY',
+        },
+      },
+    })
+  })
+
+  ipcMain.on('reg:srSet', (_event, acc: string) => {
+    // await reg.deleteKey(['HKCU\\Software\\miHoYo\\崩坏：星穹铁道'])
+    // await reg.createKey(['HKCU\\Software\\miHoYo\\崩坏：星穹铁道'])
+    const account = JSON.parse(acc)
+
+    reg.putValue({
+      'HKCU\\Software\\miHoYo\\崩坏：星穹铁道': {
+        MIHOYOSDK_ADL_PROD_CN_h3123967166: {
+          value: account.mihoyoSdk,
+          type: 'REG_BINARY',
+        },
+        // App_LastUserID_h2841727341: {
+        //   value: account.lastUserId,
+        //   type: 'REG_DWORD',
+        // },
+      },
+    })
+  })
+
+  ipcMain.handle('reg:gsGet', async (): Promise<GsRegInfo> => {
+    const result = (await reg.list(['HKCU\\Software\\miHoYo\\原神']))[
+      'HKCU\\Software\\miHoYo\\原神'
+    ]
+    return result.exists && result.values
+      ? {
+          name: '',
+          // generalData: result.values.GENERAL_DATA_h2389025596.value as number[],
+          mihoyoSdk: result.values.MIHOYOSDK_ADL_PROD_CN_h3123967166
+            .value as number[],
+        }
+      : undefined
+  })
+
+  ipcMain.on('reg:hi3Set', (_event, acc: string) => {
+    const account = JSON.parse(acc)
+
+    reg.putValue({
+      'HKCU\\Software\\miHoYo\\崩坏3': {
+        MIHOYOSDK_ADL_PROD_CN_h3123967166: {
+          value: account.mihoyoSdk,
+          type: 'REG_BINARY',
+        },
+      },
+    })
+  })
+
+  ipcMain.handle('reg:hi3Get', async (): Promise<Hi3RegInfo> => {
+    const result = (await reg.list(['HKCU\\Software\\miHoYo\\崩坏3']))[
+      'HKCU\\Software\\miHoYo\\崩坏3'
+    ]
+    return result.exists && result.values
+      ? {
+          name: '',
+          mihoyoSdk: result.values.MIHOYOSDK_ADL_PROD_CN_h3123967166
+            .value as number[],
+        }
+      : undefined
+  })
+
+  ipcMain.handle('reg:srGet', async (): Promise<SrRegInfo> => {
+    const result = (await reg.list(['HKCU\\Software\\miHoYo\\崩坏：星穹铁道']))[
+      'HKCU\\Software\\miHoYo\\崩坏：星穹铁道'
+    ]
+    console.log(result)
+    return result.exists && result.values
+      ? {
+          name: '',
+          // lastUserId: result.values.App_LastUserID_h2841727341.value as number,
+          mihoyoSdk: result.values.MIHOYOSDK_ADL_PROD_CN_h3123967166
+            .value as number[],
+        }
+      : undefined
   })
 
   // --------- Window configs ------------
