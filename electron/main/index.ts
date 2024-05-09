@@ -354,17 +354,18 @@ async function createWindow() {
   })
 
   ipcMain.handle('reg:gsGet', async (): Promise<GsRegInfo> => {
-    const result = (await reg.list(['HKCU\\Software\\miHoYo\\原神']))[
-      'HKCU\\Software\\miHoYo\\原神'
-    ]
-    return result.exists && result.values
-      ? {
-          name: '',
-          // generalData: result.values.GENERAL_DATA_h2389025596.value as number[],
-          mihoyoSdk: result.values.MIHOYOSDK_ADL_PROD_CN_h3123967166
-            .value as number[],
+    return new Promise(resolve => {
+      regedit.list(['HKCU\\Software\\miHoYo\\原神']).on('data', entry => {
+        if (entry.data.exists && entry.data.values) {
+          resolve({
+            name: '',
+            // generalData: result.values.GENERAL_DATA_h2389025596.value as number[],
+            mihoyoSdk: entry.data.values.MIHOYOSDK_ADL_PROD_CN_h3123967166
+              .value as number[],
+          })
         }
-      : undefined
+      })
+    })
   })
 
   ipcMain.on('reg:hi3Set', (_event, acc: string) => {
@@ -381,31 +382,35 @@ async function createWindow() {
   })
 
   ipcMain.handle('reg:hi3Get', async (): Promise<Hi3RegInfo> => {
-    const result = (await reg.list(['HKCU\\Software\\miHoYo\\崩坏3']))[
-      'HKCU\\Software\\miHoYo\\崩坏3'
-    ]
-    return result.exists && result.values
-      ? {
-          name: '',
-          mihoyoSdk: result.values.MIHOYOSDK_ADL_PROD_CN_h3123967166
-            .value as number[],
+    return new Promise(resolve => {
+      regedit.list(['HKCU\\Software\\miHoYo\\崩坏3']).on('data', entry => {
+        if (entry.data.exists && entry.data.values) {
+          resolve({
+            name: '',
+            // generalData: result.values.GENERAL_DATA_h2389025596.value as number[],
+            mihoyoSdk: entry.data.values.MIHOYOSDK_ADL_PROD_CN_h3123967166
+              .value as number[],
+          })
         }
-      : undefined
+      })
+    })
   })
 
   ipcMain.handle('reg:srGet', async (): Promise<SrRegInfo> => {
-    const result = (await reg.list(['HKCU\\Software\\miHoYo\\崩坏：星穹铁道']))[
-      'HKCU\\Software\\miHoYo\\崩坏：星穹铁道'
-    ]
-    console.log(result)
-    return result.exists && result.values
-      ? {
-          name: '',
-          // lastUserId: result.values.App_LastUserID_h2841727341.value as number,
-          mihoyoSdk: result.values.MIHOYOSDK_ADL_PROD_CN_h3123967166
-            .value as number[],
-        }
-      : undefined
+    return new Promise(resolve => {
+      regedit
+        .list(['HKCU\\Software\\miHoYo\\崩坏：星穹铁道'])
+        .on('data', entry => {
+          if (entry.data.exists && entry.data.values) {
+            resolve({
+              name: '',
+              // generalData: result.values.GENERAL_DATA_h2389025596.value as number[],
+              mihoyoSdk: entry.data.values.MIHOYOSDK_ADL_PROD_CN_h3123967166
+                .value as number[],
+            })
+          }
+        })
+    })
   })
 
   // --------- Window configs ------------
