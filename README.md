@@ -23,6 +23,7 @@ the following slow updates!
 - [x] Keeps all UI elements of official launchers.
 - [x] Automatically calculate and notify about major game updates.
 - [x] Gamepad support, with a standalone UI optimized for gamepad operations.
+- [x] Supports reading and writing the registry to switch accounts without re-entering account information in game.
 - [x] System or manual dark theme support.
 
 # Screenshots
