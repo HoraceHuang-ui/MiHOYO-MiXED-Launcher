@@ -36,6 +36,7 @@ const selectedDialogStyleIdx = ref(0)
 const transitionShow = ref(false)
 const appVer = ref('')
 const latest = ref(false)
+const skipCurrent = ref(false)
 const updInfo = ref<UpdInfo>({
   assets: [],
   assets_url: '',
@@ -96,9 +97,15 @@ const checkUpdates = () => {
           dialogComponent(store.settings.appearance.dialogStyle),
           {
             onCancel(dispose: () => void) {
+              if (skipCurrent.value) {
+                store.general.targetVersion = updInfo.value.tag_name
+              }
               dispose()
             },
             onOk(dispose: () => void) {
+              if (skipCurrent.value) {
+                return
+              }
               window.electron.openExtLink(
                 updInfo.value.assets[0].browser_download_url,
               )
@@ -110,12 +117,16 @@ const checkUpdates = () => {
             title: translate('updDialog_title'),
             showCancel: true,
             vnode: () =>
-              h('UpdateDialogContent', {
+              h(UpdateDialogContent, {
                 appVer: appVer.value,
                 updInfo: updInfo.value,
                 gameStyle: store.settings.appearance.dialogStyle,
                 style: {
-                  height: `calc(50vh / min(${hScale?.value}, ${vScale?.value}))`,
+                  height: `calc(52vh / min(${hScale?.value}, ${vScale?.value}))`,
+                },
+                skipCurrent: skipCurrent.value,
+                'onUpdate:skipCurrent': (value: boolean) => {
+                  skipCurrent.value = value
                 },
               }),
             hScale: hScale,

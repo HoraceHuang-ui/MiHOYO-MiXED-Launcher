@@ -161,6 +161,9 @@ onMounted(async () => {
                 dispose()
               },
               onOk(dispose: () => void) {
+                if (skipCurrent.value) {
+                  return
+                }
                 window.electron.openExtLink(
                   updInfo.value.assets[0].browser_download_url,
                 )
@@ -178,6 +181,9 @@ onMounted(async () => {
                   skipCurrent: skipCurrent.value,
                   'onUpdate:skipCurrent': (value: boolean) => {
                     skipCurrent.value = value
+                  },
+                  style: {
+                    height: `calc(52vh / min(${hScale?.value}, ${vScale?.value}))`,
                   },
                   gameStyle: store.settings.appearance.dialogStyle,
                 }),
