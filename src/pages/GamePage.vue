@@ -533,7 +533,7 @@ const refresh = () => {
         "
         :postTypeMap="postTypeMap"
         class="launcher-posts"
-        :class="{ prefFont, 'extra-sink': gameNo == 2 || gameNo == 3 }"
+        :class="[prefFont, { 'extra-sink': gameNo == 2 || gameNo == 3 }]"
       />
     </Transition>
     <ScrollWrapper
@@ -640,7 +640,7 @@ const refresh = () => {
             </div>
           </div>
           <button
-            v-else
+            v-else-if="game !== 'zzz'"
             @click="importButtonClick"
             class="import-button"
             :class="[{ scrolled: hideElements }, prefFont]"

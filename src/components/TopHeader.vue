@@ -12,6 +12,7 @@ const pageNames = [
   translate('general_gs'),
   translate('general_sr'),
   translate('general_hi3'),
+  translate('general_zzz'),
   translate('general_settings'),
 ]
 const selection = ref(0)

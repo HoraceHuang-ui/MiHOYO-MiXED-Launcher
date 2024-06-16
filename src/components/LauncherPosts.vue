@@ -22,12 +22,7 @@ const openLink = (url: string) => {
 </script>
 
 <template>
-  <MyTabs
-    v-model="tabsModel"
-    :tabs="tabs"
-    class="text-sm"
-    style="padding-top: 2rem"
-  >
+  <MyTabs v-model="tabsModel" :tabs="tabs" class="wrapper" :class="prefFont">
     <div v-for="key in keys" :key="key" class="tab-wrapper">
       <ScrollWrapper height="calc(16vh - 48px)">
         <div class="scroll-content-wrapper">
@@ -51,6 +46,11 @@ const openLink = (url: string) => {
 </template>
 
 <style lang="scss" scoped>
+.wrapper {
+  @apply text-sm;
+  padding-top: 2rem;
+}
+
 .tab-wrapper {
   @apply w-full;
 }
