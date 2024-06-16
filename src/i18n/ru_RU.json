@@ -57,7 +57,7 @@
   "mainpage_title": "Запуск miHoYo miXeD",
   "mainpage_buttonText": "Запустить {game}",
   "gs_artifact": "Артефакты",
-  "gs_launcherContentsUrl": "https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=false&key=gcStgarh&language=ru-ru&launcher_id=10",
+  "gs_launcherContentsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getGameContent?launcher_id=VYTpXlbWo8&game_id=gopR6Cufr3&language=ru-ru",
   "gs_enkaLangCode": "ru",
   "gs_emptyPlayerTip": "Здесь будут отображаться данные игрока",
   "gs_showcaseTip": "Информация о игроке недоступна. Включите 'Отображение деталей персонажей' в игре и попробуйте снова.",
@@ -74,7 +74,7 @@
   "gs_charDetails": "Подробности",
   "gs_refinement": "Улучшение",
   "sr_relic": "Реликвии",
-  "sr_launcherContentsUrl": "https://hkrpg-launcher-static.hoyoverse.com/hkrpg_global/mdk/launcher/api/content?filter_adv=false&key=vplOVX8Vn7cwG8yb&language=ru-ru&launcher_id=35",
+  "sr_launcherContentsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getGameContent?launcher_id=VYTpXlbWo8&game_id=4ziysqXOQ8&language=ru-ru",
   "sr_playerInfoUrl": "https://api.mihomo.me/sr_info_parsed/{uid}?lang=ru",
   "sr_charRanksJsonUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/index_new/ru/character_ranks.json",
   "sr_displayCompactFont": "true",
@@ -92,7 +92,7 @@
   "sr_noLightcone": "Световой конус не экипирован",
   "sr_noSubstats": "Нет подстатистики",
   "sr_noRelics": "Нет реликвий",
-  "hi3_launcherContentsUrl": "https://sdk-os-static.mihoyo.com/bh3_global/mdk/launcher/api/content?filter_adv=false&key=dpz65xJ3&language=ru-ru&launcher_id=10",
+  "hi3_launcherContentsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getGameContent?launcher_id=VYTpXlbWo8&game_id=5TIVvvcwtM&language=ru-ru",
   "settings_general": "Общее",
   "settings_selectLang": "Язык",
   "settings_langChangeText": "Вы собираетесь переключиться на «Русский (ru_RU)», приложение будет перезапущено и ВСЕ сохранённые игровые данные профиля будут удалены. Продолжить?",
@@ -131,5 +131,6 @@
   "gamepad_defaultType": "Тип дескриптора по умолчанию",
   "gamepad_defaultTypeTip": "Этот параметр не действует при использовании контроллера Xbox/PS.",
   "gamepad_showToolbar": "Показать панель инструментов",
-  "gamepad_windowActions": "Удерживайте для действий окна"
+  "gamepad_windowActions": "Удерживайте для действий окна",
+  "zzz_launcherContentsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getGameContent?launcher_id=VYTpXlbWo8&game_id=U5hbdsT9W7&language=ru-ru"
 }
