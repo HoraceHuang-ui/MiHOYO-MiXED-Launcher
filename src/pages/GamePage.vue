@@ -67,6 +67,8 @@ const gameNo = computed(() => {
       return 1
     case 'hi3':
       return 2
+    case 'zzz':
+      return 3
   }
   return -1
 })
@@ -79,6 +81,8 @@ const defaultBG = computed(() => {
       return '../../src/assets/srbanner.jpg'
     case 'hi3':
       return '../../src/assets/hi3banner.webp'
+    case 'zzz':
+      return '../../src/assets/zzzbanner.webp'
   }
   return '../../src/assets/gsbanner.png'
 })
@@ -113,7 +117,7 @@ const scrollBarRef = ref()
 const postTypeMap = new Map<string, PostInfo[]>()
 const newAccountName = ref('')
 
-onMounted(async () => {
+const defDialogComponent = (game: string) => {
   switch (game) {
     case 'gs':
       dialogComponent = GenshinDialog
@@ -124,9 +128,14 @@ onMounted(async () => {
     case 'hi3':
       dialogComponent = Honkai3Dialog
       break
+    default:
+      defDialogComponent(store.settings.appearance.dialogStyle)
+      break
   }
+}
 
-  // 获取原神启动器信息
+onMounted(async () => {
+  defDialogComponent(game ? game.toString() : '')
   window.axios
     .get(translate(`${game}_launcherContentsUrl`))
     .then(value => {
@@ -491,7 +500,7 @@ const refresh = () => {
   <div class="content-wrapper" :class="{ from: !launcherInfoReady }">
     <div
       class="bg-pic-wrapper"
-      :class="{ scrolled: hideElements, mask: gameNo != 2 }"
+      :class="{ scrolled: hideElements, mask: gameNo != 2 && gameNo != 3 }"
     >
       <img
         class="bg-pic"
@@ -510,6 +519,7 @@ const refresh = () => {
           !hideElements
         "
         class="launcher-banner"
+        :class="{ 'extra-sink': gameNo == 2 || gameNo == 3 }"
         :banners="launcherInfo.banners"
       />
     </Transition>
@@ -523,7 +533,7 @@ const refresh = () => {
         "
         :postTypeMap="postTypeMap"
         class="launcher-posts"
-        :class="prefFont"
+        :class="{ prefFont, 'extra-sink': gameNo == 2 || gameNo == 3 }"
       />
     </Transition>
     <ScrollWrapper
@@ -534,7 +544,10 @@ const refresh = () => {
       show-bar="never"
     >
       <div class="items-scroll">
-        <div class="launch-area-wrapper">
+        <div
+          class="launch-area-wrapper"
+          :class="{ 'extra-sink': gameNo == 2 || gameNo == 3 }"
+        >
           <div class="h-[9vh] my-[2vh]" />
           <div
             class="right"
@@ -702,6 +715,10 @@ const refresh = () => {
   }
 }
 
+.extra-sink {
+  transform: translateY(6vh);
+}
+
 .launcher-banner {
   @apply absolute left-[8vw] top-[38vh] z-50 rounded-xl;
   height: 26vh;
@@ -799,7 +816,7 @@ const refresh = () => {
 
 .import-button {
   @apply cursor-default;
-  @apply absolute right-0 px-[1.3vw] py-[2vh] rounded-full;
+  @apply h-[9vh] mt-[2vh] absolute right-0 px-[1.3vw] py-[2vh] rounded-full;
   @apply bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-800 active:scale-90 transition-all;
   min-width: 160px;
   transition-duration: 500ms;

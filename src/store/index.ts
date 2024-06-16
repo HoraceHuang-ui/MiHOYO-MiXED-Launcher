@@ -61,6 +61,12 @@ export const useStore = defineStore('userStore', {
         accounts: [] as Hi3RegInfo[],
         curAccountId: -1,
       },
+      zzz: {
+        // zzz
+        launcherPath: undefined,
+        gamePath: undefined,
+        upd: false,
+      },
     } as Record<string, any>,
   }),
   actions: {
