@@ -12,6 +12,7 @@ const pageNames = [
   translate('general_gs'),
   translate('general_sr'),
   translate('general_hi3'),
+  translate('general_zzz'),
   translate('general_settings'),
 ]
 const selection = ref(0)
@@ -50,8 +51,17 @@ const honkai3 = () => {
     },
   })
 }
-const settings = () => {
+const zenless = () => {
   selection.value = 4
+  router.push({
+    name: 'tempPage',
+    query: {
+      from: 'zzz',
+    },
+  })
+}
+const settings = () => {
+  selection.value = 5
   router.push('/settingspage')
 }
 
@@ -98,7 +108,13 @@ const winMax = () => {
         class="header-icon"
         :class="{ selected: selection == 3 }"
       />
-      <div class="header-icon" :class="{ selected: selection == 4 }">
+      <img
+        src="../assets/zzzicon.png"
+        @click="zenless"
+        class="header-icon"
+        :class="{ selected: selection == 4 }"
+      />
+      <div class="header-icon" :class="{ selected: selection == 5 }">
         <img
           src="../assets/settingsIcon.png"
           @click="settings"

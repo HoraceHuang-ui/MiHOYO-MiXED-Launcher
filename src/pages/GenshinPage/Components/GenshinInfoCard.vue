@@ -1184,8 +1184,7 @@ const countRolledSubstat = (stats: any[], prop: string) => {
                                 substat.fightProp,
                               )"
                               :key="i"
-                              class="ml-1 text-center text-sm"
-                              style="margin-top: 1px"
+                              class="ml-1 mt-[1px] text-center text-sm"
                             >
                               <img
                                 src="../../../assets/statIcons/statEnhance.png"

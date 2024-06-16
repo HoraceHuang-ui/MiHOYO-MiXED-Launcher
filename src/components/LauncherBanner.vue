@@ -23,9 +23,9 @@ const openLink = (url: string) => {
   >
     <img
       v-for="banner in banners"
-      @click="openLink(banner.url)"
-      :src="banner.img"
-      :key="banner.banner_id"
+      @click="openLink(banner.image.link)"
+      :src="banner.image.url"
+      :key="banner.id"
       height="100%"
       width="100%"
     />
