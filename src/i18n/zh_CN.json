@@ -57,7 +57,7 @@
   "mainpage_title": "米哈游聚合启动器",
   "mainpage_buttonText": "{game}启动",
   "gs_artifact": "圣遗物",
-  "gs_launcherContentsUrl": "https://sdk-static.mihoyo.com/hk4e_cn/mdk/launcher/api/content?filter_adv=false&key=eYd89JmJ&language=zh-cn&launcher_id=18",
+  "gs_launcherContentsUrl": "https://hyp-api.mihoyo.com/hyp/hyp-connect/api/getGameContent?launcher_id=jGHBHlcOq1&game_id=1Z8W5NHUQb&language=zh-cn",
   "gs_enkaLangCode": "chs",
   "gs_emptyPlayerTip": "此处将显示角色的详细信息",
   "gs_showcaseTip": "当前暂无详细信息，请在游戏内打开“显示角色详情”后再试。",
@@ -74,7 +74,7 @@
   "gs_charDetails": "角色详情",
   "gs_refinement": "精炼",
   "sr_relic": "遗器",
-  "sr_launcherContentsUrl": "https://api-launcher-static.mihoyo.com/hkrpg_cn/mdk/launcher/api/content?filter_adv=false&key=6KcVuOkbcqjJomjZ&language=zh-cn&launcher_id=33",
+  "sr_launcherContentsUrl": "https://hyp-api.mihoyo.com/hyp/hyp-connect/api/getGameContent?launcher_id=jGHBHlcOq1&game_id=64kMb5iAWu&language=zh-cn",
   "sr_playerInfoUrl": "https://api.mihomo.me/sr_info_parsed/{uid}?lang=cn",
   "sr_charRanksJsonUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/index_new/cn/character_ranks.json",
   "sr_displayCompactFont": "false",
@@ -92,7 +92,7 @@
   "sr_noLightcone": "暂未装配光锥",
   "sr_noSubstats": "暂无副词条",
   "sr_noRelics": "暂未装配遗器",
-  "hi3_launcherContentsUrl": "https://bh3-launcher-static.mihoyo.com/bh3_cn/mdk/launcher/api/content?key=SyvuPnqL&filter_adv=false&language=zh-cn&launcher_id=4",
+  "hi3_launcherContentsUrl": "https://hyp-api.mihoyo.com/hyp/hyp-connect/api/getGameContent?launcher_id=jGHBHlcOq1&game_id=osvnlOc0S8&language=zh-cn",
   "settings_general": "通用",
   "settings_selectLang": "语言",
   "settings_langChangeText": "您即将切换到简体中文（zh_CN），确定后程序将重载并清除已储存的游戏账号信息。确定继续吗？",
@@ -131,5 +131,7 @@
   "gamepad_defaultType": "默认键位",
   "gamepad_defaultTypeTip": "当使用 Xbox / PS 手柄时，此设置不生效。",
   "gamepad_showToolbar": "显示底栏",
-  "gamepad_windowActions": "按住以选择窗口操作"
+  "gamepad_windowActions": "按住以选择窗口操作",
+  "zzz_launcherContentsUrl": "https://hyp-api.mihoyo.com/hyp/hyp-connect/api/getGameContent?launcher_id=jGHBHlcOq1&game_id=x6znKlJ0xK&language=zh-cn",
+  "general_gameBackgroundsUrl": "https://hyp-api.mihoyo.com/hyp/hyp-connect/api/getAllGameBasicInfo?launcher_id=jGHBHlcOq1&language=zh-cn"
 }

@@ -57,7 +57,7 @@
   "mainpage_title": "米哈游聚合啓動器",
   "mainpage_buttonText": "{game}啓動",
   "gs_artifact": "聖遺物",
-  "gs_launcherContentsUrl": "https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=false&key=gcStgarh&language=zh-tw&launcher_id=10",
+  "gs_launcherContentsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getGameContent?launcher_id=VYTpXlbWo8&game_id=gopR6Cufr3&language=zh-tw",
   "gs_enkaLangCode": "cht",
   "gs_emptyPlayerTip": "此處將顯示角色的詳細信息",
   "gs_showcaseTip": "當前暫無詳細信息，請在游戲内打開”顯示角色詳情“后再試。",
@@ -74,7 +74,7 @@
   "gs_charDetails": "角色詳情",
   "gs_refinement": "精煉",
   "sr_relic": "遺器",
-  "sr_launcherContentsUrl": "https://hkrpg-launcher-static.hoyoverse.com/hkrpg_global/mdk/launcher/api/content?filter_adv=false&key=vplOVX8Vn7cwG8yb&language=zh-tw&launcher_id=35",
+  "sr_launcherContentsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getGameContent?launcher_id=VYTpXlbWo8&game_id=4ziysqXOQ8&language=zh-tw",
   "sr_playerInfoUrl": "https://api.mihomo.me/sr_info_parsed/{uid}?lang=cht",
   "sr_charRanksJsonUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/index_new/cht/character_ranks.json",
   "sr_displayCompactFont": "false",
@@ -92,7 +92,7 @@
   "sr_noLightcone": "暫未裝配光錐",
   "sr_noSubstats": "暫無副詞條",
   "sr_noRelics": "暫未裝配遺器",
-  "hi3_launcherContentsUrl": "https://sdk-os-static.mihoyo.com/bh3_global/mdk/launcher/api/content?filter_adv=false&key=demhUTcW&language=zh-tw&launcher_id=8",
+  "hi3_launcherContentsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getGameContent?launcher_id=VYTpXlbWo8&game_id=5TIVvvcwtM&language=zh-tw",
   "settings_general": "通用",
   "settings_selectLang": "語言",
   "settings_langChangeText": "您即將切換到繁體中文（zh_TW），確定後程式將重載並清除已儲存的游戲賬戶信息。確定繼續嗎？",
@@ -131,5 +131,7 @@
   "gamepad_defaultType": "默認鍵位",
   "gamepad_defaultTypeTip": "使用 Xbox / PS 手柄時，此設置不生效。",
   "gamepad_showToolbar": "顯示底欄",
-  "gamepad_windowActions": "按住以選擇窗口操作"
+  "gamepad_windowActions": "按住以選擇窗口操作",
+  "zzz_launcherContentsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getGameContent?launcher_id=VYTpXlbWo8&game_id=U5hbdsT9W7&language=zh-tw",
+  "general_gameBackgroundsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getAllGameBasicInfo?launcher_id=VYTpXlbWo8&language=zh-tw"
 }
