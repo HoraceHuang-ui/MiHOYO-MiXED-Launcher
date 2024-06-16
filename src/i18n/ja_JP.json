@@ -57,7 +57,7 @@
   "mainpage_title": "miHoYo miXeD ランチャー",
   "mainpage_buttonText": "{game}を起動！",
   "gs_artifact": "聖遺物",
-  "gs_launcherContentsUrl": "https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=false&key=gcStgarh&language=ja-jp&launcher_id=10",
+  "gs_launcherContentsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getGameContent?launcher_id=VYTpXlbWo8&game_id=gopR6Cufr3&language=ja-jp",
   "gs_enkaLangCode": "ja",
   "gs_emptyPlayerTip": "キャラの詳細がここに表示されます",
   "gs_showcaseTip": "キャラの詳細情報が利用できません。ゲーム内で「キャラクターの詳細を表示」を有効にして、もう一度お試しください。",
@@ -74,7 +74,7 @@
   "gs_charDetails": "ステータス",
   "gs_refinement": "精煉",
   "sr_relic": "遺物",
-  "sr_launcherContentsUrl": "https://hkrpg-launcher-static.hoyoverse.com/hkrpg_global/mdk/launcher/api/content?filter_adv=false&key=vplOVX8Vn7cwG8yb&language=ja-jp&launcher_id=35",
+  "sr_launcherContentsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getGameContent?launcher_id=VYTpXlbWo8&game_id=4ziysqXOQ8&language=ja-jp",
   "sr_playerInfoUrl": "https://api.mihomo.me/sr_info_parsed/{uid}?lang=jp",
   "sr_charRanksJsonUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/index_new/jp/character_ranks.json",
   "sr_displayCompactFont": "false",
@@ -92,7 +92,7 @@
   "sr_noLightcone": "光円錐が装備されていません",
   "sr_noSubstats": "サブスタットなし",
   "sr_noRelics": "遺物なし",
-  "hi3_launcherContentsUrl": "https://sdk-os-static.mihoyo.com/bh3_global/mdk/launcher/api/content?filter_adv=false&key=ojevZ0EyIyZNCy4n&language=ja-jp&launcher_id=19",
+  "hi3_launcherContentsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getGameContent?launcher_id=VYTpXlbWo8&game_id=5TIVvvcwtM&language=ja-jp",
   "settings_general": "一般設定",
   "settings_selectLang": "言語設定",
   "settings_langChangeText": "日本語（ja_JP）に切り替えようとしています。アプリが再読み込みされ、保存されたすべてのローカルゲームプロフィール情報が消去されます。続行しますか？",
@@ -131,5 +131,6 @@
   "gamepad_defaultType": "デフォルトのハンドルタイプ",
   "gamepad_defaultTypeTip": "Xbox/PS コントローラーを使用する場合、この設定は有効になりません。",
   "gamepad_showToolbar": "ツールバーを表示",
-  "gamepad_windowActions": "ウインドウアクションを長押しする"
+  "gamepad_windowActions": "ウインドウアクションを長押しする",
+  "zzz_launcherContentsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getGameContent?launcher_id=VYTpXlbWo8&game_id=U5hbdsT9W7&language=ja-jp"
 }
