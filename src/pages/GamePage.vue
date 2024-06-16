@@ -26,11 +26,19 @@ import StarRailInfoCard from './StarRailPage/Components/StarRailInfoCard.vue'
 import { useStore } from '../store'
 import { SrRegInfo } from '../types/starrail/srRegInfo'
 import { GsRegInfo } from '../types/genshin/gsRegInfo'
+import { BgImageInfo } from '../types/launcher/bgImageInfo'
 
 const store = useStore()
 
+const gameBizMap: Record<string, string> = {
+  gs: 'hk4e',
+  sr: 'hkrpg',
+  hi3: 'bh3',
+  zzz: 'nap',
+}
 const game = useRoute().query.game
 const gameName = translate(`general_${game}`)
+const gameBiz = gameBizMap[game as string]
 
 const hScale = inject<Ref<number>>('hScale')
 const vScale = inject<Ref<number>>('vScale')
@@ -87,16 +95,17 @@ const prefFont = computed(() => {
 })
 let dialogComponent: Component = GenshinDialog
 const launcherInfo = ref<LauncherInfo>({
-  adv: undefined,
-  banner: [],
-  icon: [],
-  links: undefined,
-  more: undefined,
-  post: [],
-  qq: [],
+  banners: [],
+  game: undefined,
+  language: '',
+  posts: [],
+  social_media_list: [],
 })
+const bgImagesInfo = ref<BgImageInfo[]>()
 const launcherInfoReady = ref(false)
 const launcherInfoFailed = ref(false)
+const bgImagesReady = ref(false)
+const bgImagesFailed = ref(false)
 const errMsg = ref('')
 const hideElements = ref(false)
 const scrollBarRef = ref()
@@ -119,10 +128,10 @@ onMounted(async () => {
 
   // 获取原神启动器信息
   window.axios
-    .post(translate(`${game}_launcherContentsUrl`))
+    .get(translate(`${game}_launcherContentsUrl`))
     .then(value => {
-      launcherInfo.value = value.data
-      launcherInfo.value.post.forEach(post => {
+      launcherInfo.value = value.data.content
+      launcherInfo.value.posts.forEach(post => {
         let tmp = postTypeMap.get(post.type)
         if (tmp) {
           tmp.push(post)
@@ -136,6 +145,15 @@ onMounted(async () => {
     .catch(err => {
       launcherInfoFailed.value = true
       errMsg.value = err.toString()
+    })
+  window.axios
+    .get(translate(`general_gameBackgroundsUrl`))
+    .then(value => {
+      bgImagesInfo.value = value.data.game_info_list
+      bgImagesReady.value = true
+    })
+    .catch(() => {
+      bgImagesFailed.value = true
     })
 
   if (gameStore.value.launcherPath && !gameStore.value.upd) {
@@ -224,6 +242,16 @@ onMounted(async () => {
     gameStore.value.upd = true
   }
 })
+
+const findBgImage = () => {
+  if (bgImagesInfo.value) {
+    const res = bgImagesInfo.value.find(a => a.game.biz.startsWith(gameBiz))
+    return res && res.backgrounds && res.backgrounds.length != 0
+      ? res.backgrounds[0].background.url
+      : undefined
+  }
+  return undefined
+}
 
 const importButtonClick = () => {
   let importDialogComponent: Component = GSImportDialog
@@ -468,11 +496,7 @@ const refresh = () => {
       <img
         class="bg-pic"
         :class="{ scrolled: hideElements }"
-        :src="
-          launcherInfoReady && launcherInfo.adv
-            ? launcherInfo.adv.background
-            : defaultBG
-        "
+        :src="bgImagesReady && findBgImage() ? findBgImage() : defaultBG"
         @touchmove.prevent
         @mousewheel.prevent
       />
@@ -481,20 +505,20 @@ const refresh = () => {
       <LauncherBanner
         v-if="
           launcherInfoReady &&
-          'banner' in launcherInfo &&
-          launcherInfo.banner.length > 0 &&
+          'banners' in launcherInfo &&
+          launcherInfo.banners.length > 0 &&
           !hideElements
         "
         class="launcher-banner"
-        :banners="launcherInfo.banner"
+        :banners="launcherInfo.banners"
       />
     </Transition>
     <Transition name="posts">
       <LauncherPosts
         v-if="
           launcherInfoReady &&
-          'post' in launcherInfo &&
-          launcherInfo.post.length > 0 &&
+          'posts' in launcherInfo &&
+          launcherInfo.posts.length > 0 &&
           !hideElements
         "
         :postTypeMap="postTypeMap"
@@ -649,6 +673,7 @@ const refresh = () => {
   width: 98vw;
   height: calc(100vh - 56px + 1.5rem);
   transition-duration: 500ms;
+  -webkit-mask: linear-gradient(white, white);
 
   &.scrolled {
     @apply scale-x-95 translate-y-3;
@@ -663,6 +688,7 @@ const refresh = () => {
   @apply top-0 rounded-3xl w-full h-full;
   @apply transition-all object-cover;
   transition-duration: 500ms;
+  transform: scale(1.03);
 
   .dark & {
     @apply brightness-[85%];
@@ -677,15 +703,16 @@ const refresh = () => {
 }
 
 .launcher-banner {
-  @apply absolute left-[5.3vw] top-[27.4vh] z-50 rounded-xl;
+  @apply absolute left-[8vw] top-[38vh] z-50 rounded-xl;
   height: 26vh;
   width: 56.5vh;
 }
 
 .launcher-posts {
-  @apply absolute left-[5.3vw] top-[54.8vh] z-50 rounded-xl pl-3 pr-1;
+  @apply absolute left-[8vw] z-[49] rounded-xl pl-3 pr-1;
   @apply backdrop-blur-md bg-white bg-opacity-70;
-  height: 16vh;
+  top: calc(64vh - 1.5rem);
+  height: calc(16vh + 1.5rem);
   width: 56.5vh;
 
   .dark & {

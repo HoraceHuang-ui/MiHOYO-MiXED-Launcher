@@ -22,21 +22,26 @@ const openLink = (url: string) => {
 </script>
 
 <template>
-  <MyTabs v-model="tabsModel" :tabs="tabs" class="text-sm">
+  <MyTabs
+    v-model="tabsModel"
+    :tabs="tabs"
+    class="text-sm"
+    style="padding-top: 2rem"
+  >
     <div v-for="key in keys" :key="key" class="tab-wrapper">
       <ScrollWrapper height="calc(16vh - 48px)">
         <div class="scroll-content-wrapper">
           <div
             v-for="post in postTypeMap.get(key)"
             class="link-item"
-            @click="openLink(post.url)"
-            :key="post.post_id"
+            @click="openLink(post.link)"
+            :key="post.id"
           >
             <div class="left">
-              {{ post['tittle'] }}
+              {{ post.title }}
             </div>
             <div class="right">
-              {{ post['show_time'] }}
+              {{ post.date }}
             </div>
           </div>
         </div>
