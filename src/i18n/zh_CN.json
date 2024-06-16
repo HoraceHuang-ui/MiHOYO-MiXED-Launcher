@@ -132,5 +132,6 @@
   "gamepad_defaultTypeTip": "当使用 Xbox / PS 手柄时，此设置不生效。",
   "gamepad_showToolbar": "显示底栏",
   "gamepad_windowActions": "按住以选择窗口操作",
-  "zzz_launcherContentsUrl": "https://hyp-api.mihoyo.com/hyp/hyp-connect/api/getGameContent?launcher_id=jGHBHlcOq1&game_id=x6znKlJ0xK&language=zh-cn"
+  "zzz_launcherContentsUrl": "https://hyp-api.mihoyo.com/hyp/hyp-connect/api/getGameContent?launcher_id=jGHBHlcOq1&game_id=x6znKlJ0xK&language=zh-cn",
+  "general_gameBackgroundsUrl": "https://hyp-api.mihoyo.com/hyp/hyp-connect/api/getAllGameBasicInfo?launcher_id=jGHBHlcOq1&language=zh-cn"
 }
