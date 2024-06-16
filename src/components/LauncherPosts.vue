@@ -22,7 +22,7 @@ const openLink = (url: string) => {
 </script>
 
 <template>
-  <MyTabs v-model="tabsModel" :tabs="tabs" class="wrapper" :class="prefFont">
+  <MyTabs v-model="tabsModel" :tabs="tabs" class="wrapper">
     <div v-for="key in keys" :key="key" class="tab-wrapper">
       <ScrollWrapper height="calc(16vh - 48px)">
         <div class="scroll-content-wrapper">
