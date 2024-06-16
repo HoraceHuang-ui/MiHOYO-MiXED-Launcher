@@ -57,7 +57,7 @@
   "mainpage_title": "miHoYo miXeD Launcher",
   "mainpage_buttonText": "Lancer {game}",
   "gs_artifact": "Artefact",
-  "gs_launcherContentsUrl": "https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=false&key=gcStgarh&language=fr-fr&launcher_id=10",
+  "gs_launcherContentsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getGameContent?launcher_id=VYTpXlbWo8&game_id=gopR6Cufr3&language=fr-fr",
   "gs_enkaLangCode": "fr",
   "gs_emptyPlayerTip": "Les détails du joueur s'afficheront ici",
   "gs_showcaseTip": "Les détails du joueur ne sont pas disponibles, veuillez activer 'Afficher les détails du personnage' dans le jeu et réessayez.",
@@ -74,7 +74,7 @@
   "gs_charDetails": "Détails",
   "gs_refinement": "Raffinement",
   "sr_relic": "Relique",
-  "sr_launcherContentsUrl": "https://hkrpg-launcher-static.hoyoverse.com/hkrpg_global/mdk/launcher/api/content?filter_adv=false&key=vplOVX8Vn7cwG8yb&language=fr-fr&launcher_id=35",
+  "sr_launcherContentsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getGameContent?launcher_id=VYTpXlbWo8&game_id=4ziysqXOQ8&language=fr-fr",
   "sr_playerInfoUrl": "https://api.mihomo.me/sr_info_parsed/{uid}?lang=fr",
   "sr_charRanksJsonUrl": "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/index_new/fr/character_ranks.json",
   "sr_displayCompactFont": "true",
@@ -92,7 +92,7 @@
   "sr_noLightcone": "Aucun Lightcone équipé",
   "sr_noSubstats": "Aucune Substats",
   "sr_noRelics": "Aucune relique",
-  "hi3_launcherContentsUrl": "https://sdk-os-static.mihoyo.com/bh3_global/mdk/launcher/api/content?filter_adv=false&key=dpz65xJ3&language=fr-fr&launcher_id=10",
+  "hi3_launcherContentsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getGameContent?launcher_id=VYTpXlbWo8&game_id=5TIVvvcwtM&language=fr-fr",
   "settings_general": "Général",
   "settings_selectLang": "Langue",
   "settings_langChangeText": "Vous êtes sur le point de passer à Français (fr_FR), l'application se rechargera et TOUTES les informations de profil de jeu local seront effacées. Continuer?",
@@ -131,5 +131,6 @@
   "gamepad_defaultType": "Type de handle par défaut",
   "gamepad_defaultTypeTip": "Ce paramètre ne prend pas effet lors de la connexion à une manette Xbox/PS.",
   "gamepad_showToolbar": "Voir la barre d'outils",
-  "gamepad_windowActions": "Maintenir pour les actions de fenêtre"
+  "gamepad_windowActions": "Maintenir pour les actions de fenêtre",
+  "zzz_launcherContentsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getGameContent?launcher_id=VYTpXlbWo8&game_id=U5hbdsT9W7&language=fr-fr"
 }
