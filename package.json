@@ -54,7 +54,7 @@
     "axios": "^1.6.8",
     "bootstrap-icons": "^1.11.3",
     "enka-network-api": "^4.3.0",
-    "marked": "^12.0.2",
+    "marked": "^13.0.1",
     "path": "^0.12.7",
     "regedit": "^5.1.3",
     "sass": "^1.77.1",
