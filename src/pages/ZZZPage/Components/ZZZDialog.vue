@@ -13,6 +13,10 @@ const props = defineProps({
       return 'Template GS Dialog'
     },
   },
+  styleType: {
+    type: String as PropType<'full-width' | 'normal'>,
+    default: 'full-width',
+  },
   gamepadMode: {
     type: Boolean,
     default: false,
@@ -106,29 +110,49 @@ defineExpose({
       >
         <div
           class="w-full dialog-bg"
-          :style="`
-            transform: scaleY(min(${hScale.value}, ${vScale.value}));
-            border-width: calc(4px * min(${hScale.value}, ${vScale.value})) 0;
-          `"
+          :class="styleType === 'full-width' ? 'left-0 w-full' : 'left-1/2'"
+          :style="
+            styleType === 'full-width'
+              ? `
+              transform: scaleY(min(${hScale.value}, ${vScale.value}));
+              border-width: calc(4px * min(${hScale.value}, ${vScale.value})) 0;
+          `
+              : `
+            width: ${width};
+            transform: scale(min(${hScale.value}, ${vScale.value})) translateX(-50%);
+            transform-origin: center left;
+            border-width: 4px;
+            border-radius: calc(20px * min(${hScale.value}, ${vScale.value})) 0 calc(20px * min(${hScale.value}, ${vScale.value})) calc(20px * min(${hScale.value}, ${vScale.value}));
+          `
+          "
         />
-        <div
-          class="close-area-wrapper"
-          v-if="!showCancel && !showOk"
-          :style="`transform: scale(min(${hScale.value}, ${vScale.value}))`"
-        >
-          <div class="close-button" @click="cancelClick">
-            <img
-              class="my-0.5 h-[20px] object-contain"
-              src="../../../assets/srCloseButton.png"
-            />
-          </div>
-        </div>
         <div
           class="dialog-content-wrapper"
           :style="`width: ${width};
             transform: scale(min(${hScale.value}, ${vScale.value})) translate(-50%)`"
         >
-          <div class="title-wrapper">
+          <div
+            class="close-area-wrapper"
+            v-if="styleType === 'normal' || (!showCancel && !showOk)"
+            :style="`transform: scale(min(${hScale.value}, ${vScale.value}))`"
+          >
+            <div class="close-button" @click="cancelClick">
+              <img
+                class="my-0.5 h-[28px] object-contain"
+                src="../../../assets/zzzDialog/zzzDialogClose.png"
+              />
+            </div>
+          </div>
+          <div
+            class="title-wrapper"
+            :class="styleType === 'full-width' ? 'pt-5' : 'pt-3 pb-2'"
+            :style="
+              styleType === 'full-width'
+                ? ''
+                : `border-radius: calc(20px * min(${hScale.value}, ${vScale.value}) - 8px) 0 0 0;
+                   background: linear-gradient(#2b2d2d, #000);`
+            "
+          >
             <div class="text">
               {{ typeof title === 'string' ? title : title() }}
             </div>
@@ -185,13 +209,13 @@ defineExpose({
 }
 
 .dialog-bg {
-  @apply absolute left-0 w-full h-full;
+  @apply absolute h-full;
   @apply bg-black text-white;
   border-color: #2b2d2d;
 }
 
 .close-area-wrapper {
-  @apply absolute w-12 h-6 right-4 top-3;
+  @apply absolute w-12 h-8 right-5 top-2;
   @apply flex flex-row justify-end;
   z-index: 2001;
 }
@@ -202,8 +226,8 @@ defineExpose({
 }
 
 .close-button {
-  @apply rounded-full transition-all cursor-pointer;
-  @apply hover:opacity-70 hover:scale-125 active:opacity-50 active:scale-90;
+  @apply transition-all cursor-pointer w-full h-full;
+  @apply hover:brightness-200 hover:scale-125 active:scale-90;
 }
 
 .dialog-content-wrapper {
@@ -212,7 +236,7 @@ defineExpose({
 }
 
 .title-wrapper {
-  @apply pt-5 mx-6;
+  @apply px-6 mx-[8px] mt-[8px];
 
   & > .text {
     @apply text-center w-full font-bold;
@@ -221,7 +245,7 @@ defineExpose({
 }
 
 .contents-wrapper {
-  @apply pt-6 pb-4;
+  @apply px-6 pt-6 pb-4;
 }
 
 .buttons-wrapper {

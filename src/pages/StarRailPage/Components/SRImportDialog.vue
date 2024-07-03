@@ -67,7 +67,8 @@ const srGameImport = async () => {
 
 const confirmPaths = () => {
   if (combinePaths.value) {
-    gamePath.value = launcherPath.value + '\\Game\\StarRail.exe'
+    gamePath.value =
+      launcherPath.value + '\\games\\Star Rail Game\\StarRail.exe'
   }
   launcherPath.value += '\\launcher.exe'
 
@@ -119,7 +120,7 @@ const onDialogOk = () => {
           launcherPath === ''
             ? gamePath
             : combinePaths
-              ? launcherPath + '\\Game\\StarRail.exe'
+              ? launcherPath + '\\games\\Star Rail Game\\StarRail.exe'
               : gamePath
         }}
       </div>
@@ -133,7 +134,7 @@ const onDialogOk = () => {
           placement="right"
           max-width="400px"
           middle
-          :content="`<${translate('general_launcherDirectory')}>\\Game\\StarRail.exe`"
+          :content="`<${translate('general_launcherDirectory')}>\\games\\Star Rail Game\\StarRail.exe`"
         >
           <div class="confirm-paths-help">?</div>
         </MyTooltip>

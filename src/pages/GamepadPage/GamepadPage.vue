@@ -46,7 +46,7 @@ const contentReady = ref(false)
 const playerCardCarousel = ref()
 
 const mode = ref<Mode>('main')
-const games = ['gs', 'sr', 'hi3']
+const games = ['gs', 'sr', 'hi3', 'zzz']
 const importedGames = ref<GamePath[]>([])
 const showTooltip = ref(false)
 const gpType = inject<Ref<string>>('gpType')
@@ -171,8 +171,15 @@ const launch = async (game: string, launcher: boolean) => {
         JSON.stringify(gameStore.accounts[gameStore.curAccountId]),
       )
     }
-  } else {
+  } else if (game === 'hi3') {
     gameStore = store.game.hi3
+    if (gameStore.curAccountId != -1) {
+      await window.reg.hi3Set(
+        JSON.stringify(gameStore.accounts[gameStore.curAccountId]),
+      )
+    }
+  } else {
+    gameStore = store.game.zzz
   }
 
   await window.child.exec(gameStore.gamePath)
@@ -358,7 +365,7 @@ const gameLoop = () => {
   // [MAIN] Y: Select Accounts
   if (mode.value === 'main' && gp.buttons[3].pressed) {
     if (!inThrottle) {
-      if (importedGames.value[selectedGameIndex.value].game !== 'hi3') {
+      if (importedGames.value[selectedGameIndex.value].game !== 'zzz') {
         showAccountsDropdown.value = true
         mode.value = 'accounts'
       }

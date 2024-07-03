@@ -27,6 +27,7 @@ import { useStore } from '../store'
 import { SrRegInfo } from '../types/starrail/srRegInfo'
 import { GsRegInfo } from '../types/genshin/gsRegInfo'
 import { BgImageInfo } from '../types/launcher/bgImageInfo'
+import ZZZImportDialog from './ZZZPage/Components/ZZZImportDialog.vue'
 
 const store = useStore()
 
@@ -55,6 +56,9 @@ const timeDelta = computed(() => {
       break
     case 'hi3':
       timeUpd = Date.parse('2023/07/06 12:00:00 UTC+8')
+      break
+    case 'zzz':
+      timeUpd = Date.parse('2023/07/04 12:00:00 UTC+8')
       break
   }
   return Math.ceil((timeNow - timeUpd) / 1000 / 3600 / 24 - 0.5) % 42
@@ -94,6 +98,8 @@ const prefFont = computed(() => {
       return 'font-sr-sans'
     case 'hi3':
       return 'font-bold'
+    case 'zzz':
+      return 'font-bold'
   }
   return 'font-normal'
 })
@@ -127,6 +133,9 @@ const defDialogComponent = (game: string) => {
       break
     case 'hi3':
       dialogComponent = Honkai3Dialog
+      break
+    case 'zzz':
+      dialogComponent = ZZZImportDialog
       break
     default:
       defDialogComponent(store.settings.appearance.dialogStyle)
@@ -273,6 +282,9 @@ const importButtonClick = () => {
       break
     case 'hi3':
       importDialogComponent = HI3ImportDialog
+      break
+    case 'zzz':
+      importDialogComponent = ZZZImportDialog
       break
   }
 
@@ -615,7 +627,7 @@ const refresh = () => {
                 @command="handleCommand"
                 placement="top"
                 :items="
-                  gameNo == 2
+                  gameNo == 2 || gameNo == 3
                     ? [
                         $t('general_openOfficialLauncher'),
                         $t('general_clearGamePath'),
@@ -640,7 +652,7 @@ const refresh = () => {
             </div>
           </div>
           <button
-            v-else-if="game !== 'zzz'"
+            v-else
             @click="importButtonClick"
             class="import-button"
             :class="[{ scrolled: hideElements }, prefFont]"

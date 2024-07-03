@@ -94,7 +94,7 @@ onMounted(async () => {
   }, 50)
 })
 
-const launch = async (game: 'gs' | 'sr' | 'hi3') => {
+const launch = async (game: 'gs' | 'sr' | 'hi3' | 'zzz') => {
   let gameStore: any
   if (game === 'gs') {
     gameStore = store.game.gs
@@ -110,8 +110,15 @@ const launch = async (game: 'gs' | 'sr' | 'hi3') => {
         JSON.stringify(gameStore.accounts[gameStore.curAccountId]),
       )
     }
-  } else {
+  } else if (game === 'hi3') {
     gameStore = store.game.hi3
+    if (gameStore.curAccountId != -1) {
+      await window.reg.hi3Set(
+        JSON.stringify(gameStore.accounts[gameStore.curAccountId]),
+      )
+    }
+  } else {
+    gameStore = store.game.zzz
   }
 
   await window.child.exec(gameStore.gamePath)
@@ -186,6 +193,13 @@ const resetPic = () => {
         class="game-button"
       >
         {{ translate('mainpage_buttonText', { game: $t('general_hi3Short') }) }}
+      </button>
+      <button
+        v-if="store.game.zzz.gamePath"
+        @click="launch('zzz')"
+        class="game-button"
+      >
+        {{ translate('mainpage_buttonText', { game: $t('general_zzzShort') }) }}
       </button>
     </div>
     <div class="icon-button pt-2 left-8" @click="setPic">
