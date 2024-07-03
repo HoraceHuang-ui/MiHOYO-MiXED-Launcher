@@ -133,7 +133,7 @@ const onDialogOk = () => {
         <MyCheckbox
           v-model="combinePaths"
           :text="translate('general_defaultStructure')"
-          on-color="#93BC00"
+          on-color="#93bc00"
           off-color="#dddddd"
         />
         <MyTooltip

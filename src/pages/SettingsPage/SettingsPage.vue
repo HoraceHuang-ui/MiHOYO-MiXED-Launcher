@@ -116,6 +116,7 @@ const checkUpdates = () => {
           {
             title: translate('updDialog_title'),
             showCancel: true,
+            styleType: 'normal',
             vnode: () =>
               h(UpdateDialogContent, {
                 appVer: appVer.value,
