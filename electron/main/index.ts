@@ -38,8 +38,8 @@ const enka = new EnkaClient({
 //
 process.env.DIST_ELECTRON = path.join(__dirname, '..')
 process.env.DIST = path.join(process.env.DIST_ELECTRON, '../dist')
-process.env.PUBLIC = process.env.VITE_DEV_SERVER_URL
-  ? path.join(process.env.DIST_ELECTRON, '../public')
+process.env.BUILD = process.env.VITE_DEV_SERVER_URL
+  ? path.join(process.env.DIST_ELECTRON, '../build')
   : process.env.DIST
 
 // Disable GPU Acceleration for Windows 7
@@ -64,13 +64,12 @@ const preload = path.join(__dirname, '../preload/index.js')
 const url = process.env.VITE_DEV_SERVER_URL
 const indexHtml = path.join(process.env.DIST, 'index.html')
 let tray = null
-const imageFolder = path.join(app.getPath('userData'), 'images')
 
 // if (!fs.existsSync(imageFolder)) {
 //   fs.mkdir(imageFolder);
 // }
 
-const iconPath = path.join(process.env.PUBLIC, 'favicon.ico')
+const iconPath = path.join(process.env.BUILD, 'icon.png')
 const assetsPath = process.env.VITE_DEV_SERVER_URL
   ? '../../src/assets'
   : path.join(__dirname, '../../../src/assets')
@@ -434,7 +433,7 @@ async function createWindow() {
       },
     },
   ])
-  tray = new Tray(path.join(process.env.PUBLIC, 'favicon.ico'))
+  tray = new Tray(iconPath)
   tray.setToolTip('miXeD')
   tray.setContextMenu(contextMenu)
   tray.on('click', () => {
