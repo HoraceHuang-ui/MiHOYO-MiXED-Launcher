@@ -19,6 +19,7 @@ import regedit, { promisified as reg } from 'regedit'
 import { SrRegInfo } from '../../src/types/starrail/srRegInfo'
 import { GsRegInfo } from '../../src/types/genshin/gsRegInfo'
 import { Hi3RegInfo } from '../../src/types/honkai3/hi3RegInfo'
+import { ZZZRegInfo } from '../../src/types/zenless/zzzRegInfo'
 
 regedit.setExternalVBSLocation('resources/regedit/vbs')
 
@@ -38,8 +39,8 @@ const enka = new EnkaClient({
 //
 process.env.DIST_ELECTRON = path.join(__dirname, '..')
 process.env.DIST = path.join(process.env.DIST_ELECTRON, '../dist')
-process.env.BUILD = process.env.VITE_DEV_SERVER_URL
-  ? path.join(process.env.DIST_ELECTRON, '../build')
+process.env.PUBLIC = process.env.VITE_DEV_SERVER_URL
+  ? path.join(process.env.DIST_ELECTRON, '../public')
   : process.env.DIST
 
 // Disable GPU Acceleration for Windows 7
@@ -69,7 +70,7 @@ let tray = null
 //   fs.mkdir(imageFolder);
 // }
 
-const iconPath = path.join(process.env.BUILD, 'icon.png')
+const iconPath = path.join(process.env.PUBLIC, 'favicon.ico')
 const assetsPath = process.env.VITE_DEV_SERVER_URL
   ? '../../src/assets'
   : path.join(__dirname, '../../../src/assets')
@@ -383,6 +384,37 @@ async function createWindow() {
   ipcMain.handle('reg:hi3Get', async (): Promise<Hi3RegInfo> => {
     return new Promise(resolve => {
       regedit.list(['HKCU\\Software\\miHoYo\\崩坏3']).on('data', entry => {
+        if (entry.data.exists && entry.data.values) {
+          resolve({
+            name: '',
+            // generalData: result.values.GENERAL_DATA_h2389025596.value as number[],
+            mihoyoSdk: entry.data.values.MIHOYOSDK_ADL_PROD_CN_h3123967166
+              .value as number[],
+          })
+        }
+      })
+    })
+  })
+
+  ipcMain.on('reg:zzzSet', (_event, acc: string) => {
+    const account = JSON.parse(acc)
+
+    reg.putValue({
+      'HKCU\\Software\\miHoYo\\绝区零': {
+        MIHOYOSDK_ADL_PROD_CN_h3123967166: {
+          value: account.mihoyoSdk,
+          type: 'REG_BINARY',
+        },
+      },
+    })
+  })
+
+  ipcMain.handle('reg:zzzGet', async (): Promise<ZZZRegInfo> => {
+    console.log('get111')
+    return new Promise(resolve => {
+      console.log('get222')
+      regedit.list(['HKCU\\Software\\miHoYo\\绝区零']).on('data', entry => {
+        console.log('get333')
         if (entry.data.exists && entry.data.values) {
           resolve({
             name: '',

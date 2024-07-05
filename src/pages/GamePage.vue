@@ -28,6 +28,7 @@ import { SrRegInfo } from '../types/starrail/srRegInfo'
 import { GsRegInfo } from '../types/genshin/gsRegInfo'
 import { BgImageInfo } from '../types/launcher/bgImageInfo'
 import ZZZImportDialog from './ZZZPage/Components/ZZZImportDialog.vue'
+import ZZZDialog from './ZZZPage/Components/ZZZDialog.vue'
 
 const store = useStore()
 
@@ -135,7 +136,7 @@ const defDialogComponent = (game: string) => {
       dialogComponent = Honkai3Dialog
       break
     case 'zzz':
-      dialogComponent = ZZZImportDialog
+      dialogComponent = ZZZDialog
       break
     default:
       defDialogComponent(store.settings.appearance.dialogStyle)
@@ -320,7 +321,11 @@ const launchGame = async () => {
       await window.reg.hi3Set(
         JSON.stringify(gameStore.value.accounts[gameStore.value.curAccountId]),
       )
-    }
+    } /* else if (gameNo.value == 3) {
+      await window.reg.zzzSet(
+        JSON.stringify(gameStore.value.accounts[gameStore.value.curAccountId]),
+      )
+    } */
   }
   await window.child.exec(gameStore.value.gamePath!)
   if (store.settings.general.trayOnLaunch) {
@@ -381,13 +386,27 @@ const retrieveAccount = async () => {
               mihoyoSdk: [],
             })
           }
-        }
+        } /* else if (gameNo.value == 3) {
+          const res = await window.reg.zzzGet()
+          if (res) {
+            gameStore.value.accounts.push({
+              name: newAccountName.value,
+              mihoyoSdk: res.mihoyoSdk,
+            })
+          } else {
+            gameStore.value.accounts.push({
+              name: newAccountName.value,
+              mihoyoSdk: [],
+            })
+          }
+        } */
         dispose()
       },
     },
     {
       title: translate('general_addAccountTitle'),
       msg: translate('general_addAccountMsg'),
+      styleType: 'normal',
       showCancel: true,
       closeOnOk: false,
       hScale: hScale,

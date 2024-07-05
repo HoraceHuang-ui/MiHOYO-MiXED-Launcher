@@ -239,13 +239,13 @@ defineExpose({
   @apply px-6 mx-[8px] mt-[8px];
 
   & > .text {
-    @apply text-center w-full font-bold;
+    @apply text-center w-full font-bold text-white;
     font-size: larger;
   }
 }
 
 .contents-wrapper {
-  @apply px-6 pt-6 pb-4;
+  @apply px-6 pt-6 pb-4 text-white;
 }
 
 .buttons-wrapper {

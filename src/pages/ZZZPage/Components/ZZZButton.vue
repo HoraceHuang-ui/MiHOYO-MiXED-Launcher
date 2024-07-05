@@ -44,8 +44,8 @@ const backgroundColor: Record<number, string> = {
           class="w-full h-full"
           :src="
             state == 0
-              ? '../../../src/assets/zzzDialog/zzzDialogCancel.png'
-              : '../../../src/assets/zzzDialog/zzzDialogCancelActive.png'
+              ? '../../src/assets/zzzDialog/zzzDialogCancel.png'
+              : '../../src/assets/zzzDialog/zzzDialogCancelActive.png'
           "
         />
       </div>
@@ -63,8 +63,8 @@ const backgroundColor: Record<number, string> = {
           class="w-full h-full"
           :src="
             state == 0
-              ? '../../../src/assets/zzzDialog/zzzDialogOk.png'
-              : '../../../src/assets/zzzDialog/zzzDialogOkActive.png'
+              ? '../../src/assets/zzzDialog/zzzDialogOk.png'
+              : '../../src/assets/zzzDialog/zzzDialogOkActive.png'
           "
         />
       </div>

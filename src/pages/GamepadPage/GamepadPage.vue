@@ -180,6 +180,11 @@ const launch = async (game: string, launcher: boolean) => {
     }
   } else {
     gameStore = store.game.zzz
+    // if (gameStore.curAccountId != -1) {
+    //   await window.reg.zzzSet(
+    //     JSON.stringify(gameStore.accounts[gameStore.curAccountId]),
+    //   )
+    // }
   }
 
   await window.child.exec(gameStore.gamePath)

@@ -66,6 +66,8 @@ export const useStore = defineStore('userStore', {
         launcherPath: undefined,
         gamePath: undefined,
         upd: false,
+        // accounts: [] as ZZZRegInfo[],
+        // curAccountId: -1,
       },
     } as Record<string, any>,
   }),

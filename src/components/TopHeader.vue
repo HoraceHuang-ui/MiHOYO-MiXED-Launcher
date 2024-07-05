@@ -83,7 +83,7 @@ const winMax = () => {
 <template>
   <div class="drag main-wrapper">
     <div class="title-wrapper">
-      <img src="../../build/icon.png" />
+      <img src="../../build/icon.ico" />
       <div class="title">miXeD · {{ pageNames[selection] }}</div>
     </div>
     <div class="no-drag icons-wrapper">

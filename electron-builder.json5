@@ -20,6 +20,7 @@
   },
   win: {
     requestedExecutionLevel: "requireAdministrator",
+    icon: "build/icon.ico",
     target: [
       {
         target: "nsis",
@@ -41,6 +42,7 @@
     "src/assets/elementIcons/*",
     "src/assets/kleeLoading.gif",
     "src/assets/failedEmojis/*",
+    "src/assets/zzzDialog/*",
     "src/assets/gsbanner.png",
     "src/assets/srbanner.jpg",
     "src/assets/hi3banner.webp",
