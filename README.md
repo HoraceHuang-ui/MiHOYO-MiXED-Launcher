@@ -15,8 +15,7 @@ the following slow updates!
 
 # Features
 
-- [x] Launch `Genshin Impact`, `Honkai: Star Rail` and `Honkai Impact 3rd` in one place.
-- [ ] `Zenless Zone Zero` to be supported.
+- [x] Launch `Genshin Impact`, `Honkai: Star Rail`, `Honkai Impact 3rd` and `Zenless Zone Zero` in one place.
 - [x] Manually import customized game directories.
 - [x] Multi-language support.
 - [x] Analyze detailed player info for `Genshin Impact` and `Honkai: Star Rail` in a special card layout.
