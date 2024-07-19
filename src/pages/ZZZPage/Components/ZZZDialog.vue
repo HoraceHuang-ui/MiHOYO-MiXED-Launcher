@@ -144,7 +144,7 @@ defineExpose({
             </div>
           </div>
           <div
-            class="title-wrapper"
+            class="title-wrapper font-zzz-bold"
             :class="styleType === 'full-width' ? 'pt-5' : 'pt-3 pb-2'"
             :style="
               styleType === 'full-width'
@@ -158,7 +158,10 @@ defineExpose({
             </div>
           </div>
           <div class="contents-wrapper">
-            <div class="px-5" :class="msgCenter ? 'text-center' : 'text-left'">
+            <div
+              class="px-5 font-bold"
+              :class="msgCenter ? 'text-center' : 'text-left'"
+            >
               {{ typeof msg === 'string' ? msg : msg() }}
             </div>
             <component :is="vnode" />
@@ -180,6 +183,10 @@ defineExpose({
 </template>
 
 <style lang="scss" scoped>
+.font-zzz-bold {
+  font-family: zzz-font, sans-serif;
+}
+
 .modal {
   @apply absolute top-0 bottom-0 left-0 right-0;
   background: linear-gradient(
@@ -240,7 +247,7 @@ defineExpose({
 
   & > .text {
     @apply text-center w-full font-bold text-white;
-    font-size: larger;
+    font-size: x-large;
   }
 }
 

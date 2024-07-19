@@ -100,7 +100,7 @@ const prefFont = computed(() => {
     case 'hi3':
       return 'font-bold'
     case 'zzz':
-      return 'font-bold'
+      return 'font-zzz-bold'
   }
   return 'font-normal'
 })

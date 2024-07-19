@@ -28,7 +28,7 @@ const backgroundColor: Record<number, string> = {
 
 <template>
   <div
-    class="button-wrapper"
+    class="button-wrapper font-zzz-bold"
     @mouseenter="state = 1"
     @mouseleave="state = 0"
     @mousedown="state = 2"
@@ -80,6 +80,10 @@ const backgroundColor: Record<number, string> = {
 </template>
 
 <style lang="scss" scoped>
+.font-zzz-bold {
+  font-family: zzz-font, sans-serif;
+}
+
 .button-wrapper {
   @apply mx-3 h-10 rounded-full cursor-default shadow-lg;
   border: 4px solid;

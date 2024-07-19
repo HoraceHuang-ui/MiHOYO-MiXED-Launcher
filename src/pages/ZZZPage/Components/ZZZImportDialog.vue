@@ -111,13 +111,13 @@ const onDialogOk = () => {
         {{ translate('general_importGame') }}
       </button>
       <div class="path-wrapper">
-        <span class="theme-color font-bold mr-2">{{
+        <span class="theme-color font-zzz-bold mr-2">{{
           translate('general_launcher')
         }}</span>
         {{ launcherPath === '' ? '' : launcherPath + '\\launcher.exe' }}
       </div>
       <div class="path-wrapper">
-        <span class="theme-color font-bold mr-2">{{
+        <span class="theme-color font-zzz-bold mr-2">{{
           translate('general_game')
         }}</span>
         {{
@@ -150,6 +150,10 @@ const onDialogOk = () => {
 </template>
 
 <style lang="scss" scoped>
+.font-zzz-bold {
+  font-family: zzz-font, sans-serif;
+}
+
 .import-buttons-wrapper {
   @apply px-1 grid grid-cols-2 gap-4;
 }
