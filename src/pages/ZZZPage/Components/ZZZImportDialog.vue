@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { translate } from '../../../i18n'
 import { PropType, Ref, ref } from 'vue'
-import Honkai3Dialog from './Honkai3Dialog.vue'
 import MyCheckbox from '../../../components/MyCheckbox.vue'
 import MyTooltip from '../../../components/MyTooltip.vue'
 import { useStore } from '../../../store'
+import ZZZDialog from './ZZZDialog.vue'
 
 const props = defineProps({
   onOk: {
@@ -29,11 +29,11 @@ const launcherPath = ref('')
 const gamePath = ref('')
 const store = useStore()
 
-const hiLauncherImport = async () => {
+const zzzLauncherImport = async () => {
   window.dialog
     .show({
       title: translate('general_launcherImportTitle', {
-        game: translate('general_hi3'),
+        game: translate('general_zzz'),
       }),
       properties: ['openDirectory'],
     })
@@ -46,11 +46,11 @@ const hiLauncherImport = async () => {
       console.error('Error in showing dialog:', error)
     })
 }
-const hiGameImport = async () => {
+const zzzGameImport = async () => {
   window.dialog
     .show({
       title: translate('general_gameImportTitle', {
-        game: translate('general_hi3'),
+        game: translate('general_zzz'),
       }),
       properties: ['openFile'],
       filters: [{ name: 'EXE', extensions: ['exe'] }],
@@ -68,11 +68,11 @@ const hiGameImport = async () => {
 const confirmPaths = async () => {
   if (combinePaths.value) {
     gamePath.value =
-      launcherPath.value + '\\games\\Honkai Impact 3rd Game\\BH3.exe'
+      launcherPath.value + '\\games\\ZenlessZoneZero Game\\ZenlessZoneZero.exe'
   }
   launcherPath.value += '\\launcher.exe'
-  store.game.hi3.launcherPath = launcherPath.value
-  store.game.hi3.gamePath = gamePath.value
+  store.game.zzz.launcherPath = launcherPath.value
+  store.game.zzz.gamePath = gamePath.value
 }
 
 const onDialogOk = () => {
@@ -87,10 +87,11 @@ const onDialogOk = () => {
 </script>
 
 <template>
-  <Honkai3Dialog
-    :title="`${translate('general_hi3')} ${translate('general_import')}`"
+  <ZZZDialog
+    :title="`${translate('general_zzz')} ${translate('general_import')}`"
     :on-ok="onDialogOk"
     :on-cancel="onCancel"
+    style-type="normal"
     show-ok
     show-cancel
     :close-on-ok="false"
@@ -99,31 +100,32 @@ const onDialogOk = () => {
     :v-scale="vScale"
   >
     <div class="import-buttons-wrapper">
-      <button @click="hiLauncherImport" class="import-button enabled">
+      <button @click="zzzLauncherImport" class="import-button enabled">
         {{ translate('general_importLauncher') }}
       </button>
       <button
-        @click="hiGameImport"
+        @click="zzzGameImport"
         class="import-button"
         :class="combinePaths ? 'disabled' : 'enabled'"
       >
         {{ translate('general_importGame') }}
       </button>
       <div class="path-wrapper">
-        <span class="theme-color font-bold mr-2">{{
+        <span class="theme-color font-zzz-bold mr-2">{{
           translate('general_launcher')
         }}</span>
         {{ launcherPath === '' ? '' : launcherPath + '\\launcher.exe' }}
       </div>
       <div class="path-wrapper">
-        <span class="theme-color font-bold mr-2">{{
+        <span class="theme-color font-zzz-bold mr-2">{{
           translate('general_game')
         }}</span>
         {{
           launcherPath === ''
             ? gamePath
             : combinePaths
-              ? launcherPath + '\\games\\Honkai Impact 3rd Game\\BH3.exe'
+              ? launcherPath +
+                '\\games\\ZenlessZoneZero Game\\ZenlessZoneZero.exe'
               : gamePath
         }}
       </div>
@@ -131,23 +133,27 @@ const onDialogOk = () => {
         <MyCheckbox
           v-model="combinePaths"
           :text="translate('general_defaultStructure')"
-          on-color="#4CC5FE"
+          on-color="#93bc00"
           off-color="#dddddd"
         />
         <MyTooltip
           placement="right"
           max-width="400px"
           middle
-          :content="`<${translate('general_launcherDirectory')}>\\games\\Honkai Impact 3rd Game\\BH3.exe`"
+          :content="`<${translate('general_launcherDirectory')}>\\games\\ZenlessZoneZero Game\\ZenlessZoneZero.exe`"
         >
           <div class="combine-paths-help">?</div>
         </MyTooltip>
       </div>
     </div>
-  </Honkai3Dialog>
+  </ZZZDialog>
 </template>
 
 <style lang="scss" scoped>
+.font-zzz-bold {
+  font-family: zzz-font, sans-serif;
+}
+
 .import-buttons-wrapper {
   @apply px-1 grid grid-cols-2 gap-4;
 }
@@ -157,16 +163,15 @@ const onDialogOk = () => {
 
   &.enabled {
     border-width: 1px;
-    border-color: rgb(72, 107, 161);
-    background: rgb(72, 107, 161, 0.5);
-    color: #51c3f9;
+    border-color: #fbdc00;
+    background: #fbdc0033;
+    color: #fbdc00;
 
     &:hover {
-      @apply border-blue-400;
-      background: rgb(72, 107, 161, 0.8);
+      background: #fbdc0055;
     }
     &:active {
-      background: rgb(130, 167, 229);
+      background: #fbdc00;
     }
   }
   &.disabled {
@@ -188,7 +193,7 @@ const onDialogOk = () => {
 }
 
 .theme-color {
-  color: #51c3f9;
+  color: #93bc00;
 }
 
 .combine-paths-wrapper {
@@ -196,8 +201,8 @@ const onDialogOk = () => {
 }
 
 .combine-paths-help {
-  @apply ml-2 mt-[5px] w-5 h-5 rounded-full;
+  @apply ml-2 mt-[3px] w-5 h-5 rounded-full;
   @apply text-center font-bold text-sm;
-  @apply bg-gray-400 text-white cursor-help;
+  @apply bg-gray-600 text-white cursor-help;
 }
 </style>

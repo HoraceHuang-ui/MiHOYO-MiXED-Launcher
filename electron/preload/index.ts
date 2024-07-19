@@ -68,6 +68,9 @@ contextBridge.exposeInMainWorld('reg', {
   hi3Get: async () => {
     return await ipcRenderer.invoke('reg:hi3Get')
   },
+  zzzGet: async () => {
+    return await ipcRenderer.invoke('reg:zzzGet')
+  },
   gsSet: (account: string) => {
     ipcRenderer.send('reg:gsSet', account)
   },
@@ -76,6 +79,9 @@ contextBridge.exposeInMainWorld('reg', {
   },
   hi3Set: (account: string) => {
     ipcRenderer.send('reg:hi3Set', account)
+  },
+  zzzSet: (account: string) => {
+    ipcRenderer.send('reg:zzzSet', account)
   },
 })
 

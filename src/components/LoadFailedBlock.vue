@@ -14,8 +14,9 @@ const imgs = [
   '../../src/assets/failedEmojis/kleeFailed.png',
   '../../src/assets/failedEmojis/wuwuboFailed.png',
   '../../src/assets/failedEmojis/hi3Failed.png',
+  '../../src/assets/failedEmojis/zzzFailed.png',
 ]
-const sources = ['gs', 'sr', 'hi3']
+const sources = ['gs', 'sr', 'hi3', 'zzz']
 
 const router = useRouter()
 const refresh = () => {
@@ -36,7 +37,7 @@ const refresh = () => {
       :class="{
         'font-gs': gameNo == 0,
         'font-sr': gameNo == 1,
-        'font-semibold': gameNo == 2,
+        'font-semibold': gameNo == 2 || gameNo == 3,
       }"
     >
       {{ $t('general_loadingFailed') }}

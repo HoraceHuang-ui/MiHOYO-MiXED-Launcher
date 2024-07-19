@@ -66,6 +66,10 @@ code {
     font-family: sr-sans-font, sans-serif;
 }
 
+.font-zzz-bold {
+    font-family: zzz-font, sans-serif;
+}
+
 #app {
     text-align: center;
     padding: 0 1vw;

@@ -15,7 +15,7 @@ const props = defineProps({
     required: true,
   },
   gameStyle: {
-    type: String as PropType<'gs' | 'sr' | 'hi3'>,
+    type: String as PropType<'gs' | 'sr' | 'hi3' | 'zzz'>,
     default: 'gs',
   },
   skipCurrent: {
@@ -36,6 +36,8 @@ const onColor = computed(() => {
       return '#CEA652'
     case 'hi3':
       return '#4CC5FE'
+    case 'zzz':
+      return '#93bc00'
   }
 })
 const offColor = computed(() => {
@@ -46,6 +48,8 @@ const offColor = computed(() => {
       return '#606266'
     case 'hi3':
       return '#dddddd'
+    case 'zzz':
+      return '#dddddd'
   }
 })
 
@@ -54,6 +58,8 @@ const colorClass = computed(() => {
     case 'sr':
       return 'text-color-sr'
     case 'hi3':
+      return 'text-color-hi3'
+    case 'zzz':
       return 'text-color-hi3'
     default:
       return 'text-color-normal'
@@ -89,7 +95,7 @@ const colorClass = computed(() => {
 
 <style lang="scss" scoped>
 .main-wrapper {
-  @apply px-[20px];
+  @apply px-[20px] pb-4;
 }
 
 .text-color-normal {

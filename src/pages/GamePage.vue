@@ -27,6 +27,8 @@ import { useStore } from '../store'
 import { SrRegInfo } from '../types/starrail/srRegInfo'
 import { GsRegInfo } from '../types/genshin/gsRegInfo'
 import { BgImageInfo } from '../types/launcher/bgImageInfo'
+import ZZZImportDialog from './ZZZPage/Components/ZZZImportDialog.vue'
+import ZZZDialog from './ZZZPage/Components/ZZZDialog.vue'
 
 const store = useStore()
 
@@ -55,6 +57,9 @@ const timeDelta = computed(() => {
       break
     case 'hi3':
       timeUpd = Date.parse('2023/07/06 12:00:00 UTC+8')
+      break
+    case 'zzz':
+      timeUpd = Date.parse('2023/07/04 12:00:00 UTC+8')
       break
   }
   return Math.ceil((timeNow - timeUpd) / 1000 / 3600 / 24 - 0.5) % 42
@@ -94,6 +99,8 @@ const prefFont = computed(() => {
       return 'font-sr-sans'
     case 'hi3':
       return 'font-bold'
+    case 'zzz':
+      return 'font-zzz-bold'
   }
   return 'font-normal'
 })
@@ -127,6 +134,9 @@ const defDialogComponent = (game: string) => {
       break
     case 'hi3':
       dialogComponent = Honkai3Dialog
+      break
+    case 'zzz':
+      dialogComponent = ZZZDialog
       break
     default:
       defDialogComponent(store.settings.appearance.dialogStyle)
@@ -274,6 +284,9 @@ const importButtonClick = () => {
     case 'hi3':
       importDialogComponent = HI3ImportDialog
       break
+    case 'zzz':
+      importDialogComponent = ZZZImportDialog
+      break
   }
 
   useDialog(
@@ -308,7 +321,11 @@ const launchGame = async () => {
       await window.reg.hi3Set(
         JSON.stringify(gameStore.value.accounts[gameStore.value.curAccountId]),
       )
-    }
+    } /* else if (gameNo.value == 3) {
+      await window.reg.zzzSet(
+        JSON.stringify(gameStore.value.accounts[gameStore.value.curAccountId]),
+      )
+    } */
   }
   await window.child.exec(gameStore.value.gamePath!)
   if (store.settings.general.trayOnLaunch) {
@@ -369,13 +386,27 @@ const retrieveAccount = async () => {
               mihoyoSdk: [],
             })
           }
-        }
+        } /* else if (gameNo.value == 3) {
+          const res = await window.reg.zzzGet()
+          if (res) {
+            gameStore.value.accounts.push({
+              name: newAccountName.value,
+              mihoyoSdk: res.mihoyoSdk,
+            })
+          } else {
+            gameStore.value.accounts.push({
+              name: newAccountName.value,
+              mihoyoSdk: [],
+            })
+          }
+        } */
         dispose()
       },
     },
     {
       title: translate('general_addAccountTitle'),
       msg: translate('general_addAccountMsg'),
+      styleType: 'normal',
       showCancel: true,
       closeOnOk: false,
       hScale: hScale,
@@ -615,7 +646,7 @@ const refresh = () => {
                 @command="handleCommand"
                 placement="top"
                 :items="
-                  gameNo == 2
+                  gameNo == 2 || gameNo == 3
                     ? [
                         $t('general_openOfficialLauncher'),
                         $t('general_clearGamePath'),
@@ -640,7 +671,7 @@ const refresh = () => {
             </div>
           </div>
           <button
-            v-else-if="game !== 'zzz'"
+            v-else
             @click="importButtonClick"
             class="import-button"
             :class="[{ scrolled: hideElements }, prefFont]"

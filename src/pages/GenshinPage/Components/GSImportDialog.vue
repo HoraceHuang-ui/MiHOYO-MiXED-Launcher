@@ -68,7 +68,8 @@ const gsGameImport = async () => {
 
 const confirmPaths = async () => {
   if (combinePaths.value) {
-    gamePath.value = launcherPath.value + '\\Genshin Impact Game\\YuanShen.exe'
+    gamePath.value =
+      launcherPath.value + '\\games\\Genshin Impact Game\\YuanShen.exe'
   }
   launcherPath.value += '\\launcher.exe'
   store.game.gs.launcherPath = launcherPath.value
@@ -121,7 +122,7 @@ const onDialogOk = () => {
           launcherPath === ''
             ? gamePath
             : combinePaths
-              ? launcherPath + '\\Genshin Impact Game\\YuanShen.exe'
+              ? launcherPath + '\\games\\Genshin Impact Game\\YuanShen.exe'
               : gamePath
         }}</span>
       </div>
@@ -135,7 +136,7 @@ const onDialogOk = () => {
           placement="right"
           max-width="400px"
           middle
-          :content="`<${translate('general_launcherDirectory')}>\\Genshin Impact Game\\YuanShen.exe`"
+          :content="`<${translate('general_launcherDirectory')}>\\games\\Genshin Impact Game\\YuanShen.exe`"
         >
           <div class="combine-paths-help">?</div>
         </MyTooltip>
