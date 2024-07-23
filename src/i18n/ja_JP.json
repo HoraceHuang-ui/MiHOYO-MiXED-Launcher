@@ -60,7 +60,7 @@
   "mainpage_buttonText": "{game}を起動！",
   "gs_artifact": "聖遺物",
   "gs_launcherContentsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getGameContent?launcher_id=VYTpXlbWo8&game_id=gopR6Cufr3&language=ja-jp",
-  "gs_enkaLangCode": "ja",
+  "gs_enkaLangCode": "jp",
   "gs_emptyPlayerTip": "キャラの詳細がここに表示されます",
   "gs_showcaseTip": "キャラの詳細情報が利用できません。ゲーム内で「キャラクターの詳細を表示」を有効にして、もう一度お試しください。",
   "gs_loadingPlayerInfo": "キャラ情報を読み込み中...",
