@@ -279,16 +279,16 @@ const requestInfo = () => {
   window.enka
     .getGenshinPlayer(uid, translate('gs_enkaLangCode'))
     .then(resp => {
-      console.log(resp)
-      if (playerInfo.value && playerInfo.value.uid == resp.uid) {
-        mergeToPlayerinfo(resp.characters)
+      const _resp = JSON.parse(resp)
+      if (playerInfo.value && playerInfo.value.uid == _resp.uid) {
+        mergeToPlayerinfo(_resp.characters)
         const temp = playerInfo.value.characters
         playerInfo.value = Object.fromEntries(
-          Object.entries(resp).filter(([key]) => key !== 'characters'),
+          Object.entries(_resp).filter(([key]) => key !== 'characters'),
         )
         playerInfo.value.characters = temp
       } else {
-        playerInfo.value = resp
+        playerInfo.value = _resp
       }
       console.log(playerInfo.value)
       playerInfo.value.characters.sort(function (a: any, b: any) {
@@ -519,6 +519,9 @@ const countRolledSubstat = (stats: any[], prop: string) => {
   }
   return res
 }
+
+const enkaAssetUrl = (obj: any, keyName = 'name') =>
+  `https://enka.network/ui/${obj[keyName]}.png`
 </script>
 
 <template>
@@ -536,7 +539,7 @@ const countRolledSubstat = (stats: any[], prop: string) => {
         v-if="playerInfo && !playerInfoLoading && !playerInfoFailed"
         class="namecard-mask absolute top-0 right-0 bottom-0 z-0 w-1/3 object-cover"
         style="height: 9vh; border-radius: 0 4.5vh 4.5vh 0"
-        :src="playerInfo.profileCard.pictures[1].url"
+        :src="enkaAssetUrl(playerInfo.profileCard.pictures[0])"
       />
       <div
         v-if="playerInfoLoading"
@@ -564,7 +567,7 @@ const countRolledSubstat = (stats: any[], prop: string) => {
         <img
           class="rounded-full bg-slate-200"
           :style="`height: 6vh; margin-left: 1.5vh; border-width: calc(2px * min(${hScale}, ${vScale}))`"
-          :src="playerInfo.profilePicture.icon.url"
+          :src="enkaAssetUrl(playerInfo.profilePicture.icon)"
         />
         <div
           class="font-gs"
@@ -665,12 +668,7 @@ const countRolledSubstat = (stats: any[], prop: string) => {
                 ></div>
                 <img
                   class="absolute bottom-0 char-side-icon rounded-full ml-1 w-12 h-12 hover:transform hover:scale-110 hover:-translate-y-1 active:scale-100 active:translate-y-0 transition-all object-cover"
-                  :src="
-                    character.costume.sideIcon.url.replace(
-                      'api.ambr.top/assets/UI',
-                      'enka.network/ui',
-                    )
-                  "
+                  :src="enkaAssetUrl(character.costume.sideIcon)"
                 />
               </div>
             </div>
@@ -733,10 +731,11 @@ const countRolledSubstat = (stats: any[], prop: string) => {
                 <img
                   class="inline-block object-cover bottom-0 left-0 absolute z-10 h-full pointer-events-none"
                   :src="
-                    (store.settings.appearance.gsCostume
-                      ? character.costume.splashImage.url
-                      : character.characterData.splashImage.url
-                    ).replace('api.ambr.top/assets/UI', 'enka.network/ui')
+                    enkaAssetUrl(
+                      store.settings.appearance.gsCostume
+                        ? character.costume.splashImage
+                        : character.characterData.splashImage,
+                    )
                   "
                 />
               </div>
@@ -777,12 +776,7 @@ const countRolledSubstat = (stats: any[], prop: string) => {
                       >
                         <img
                           class="h-8 rounded-full"
-                          :src="
-                            skill.skill.icon.url.replace(
-                              'api.ambr.top/assets/UI',
-                              'enka.network/ui',
-                            )
-                          "
+                          :src="enkaAssetUrl(skill.skill.icon)"
                         />
                         <div
                           class="text-center w-full mr-1 h-full align-middle text-base font-gs"
@@ -832,11 +826,8 @@ const countRolledSubstat = (stats: any[], prop: string) => {
                         <img
                           class="relative h-8 rounded-full ml-2 z-30"
                           :src="
-                            character.unlockedConstellations[
-                              idx - 1
-                            ].icon.url.replace(
-                              'api.ambr.top/assets/UI',
-                              'enka.network/ui',
+                            enkaAssetUrl(
+                              character.unlockedConstellations[idx - 1].icon,
                             )
                           "
                         />
@@ -1040,12 +1031,7 @@ const countRolledSubstat = (stats: any[], prop: string) => {
                 >
                   <img
                     class="h-full"
-                    :src="
-                      character.weapon.weaponData.awakenIcon.url.replace(
-                        'api.ambr.top/assets/UI',
-                        'enka.network/ui',
-                      )
-                    "
+                    :src="enkaAssetUrl(character.weapon.weaponData.awakenIcon)"
                   />
                   <div class="w-full h-full relative">
                     <div class="flex flex-row justify-between ml-2 mt-4">
@@ -1135,12 +1121,7 @@ const countRolledSubstat = (stats: any[], prop: string) => {
                         margin-top: -45px;
                       "
                       class="artifact-mask w-28 object-cover"
-                      :src="
-                        artifact.artifactData.icon.url.replace(
-                          'api.ambr.top/assets/UI',
-                          'enka.network/ui',
-                        )
-                      "
+                      :src="enkaAssetUrl(artifact.artifactData.icon)"
                     />
                     <div class="w-full h-full relative">
                       <div
