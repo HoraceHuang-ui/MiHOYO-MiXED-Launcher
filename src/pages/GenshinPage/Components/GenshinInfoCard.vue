@@ -665,7 +665,12 @@ const countRolledSubstat = (stats: any[], prop: string) => {
                 ></div>
                 <img
                   class="absolute bottom-0 char-side-icon rounded-full ml-1 w-12 h-12 hover:transform hover:scale-110 hover:-translate-y-1 active:scale-100 active:translate-y-0 transition-all object-cover"
-                  :src="character.costume.sideIcon.url"
+                  :src="
+                    character.costume.sideIcon.url.replace(
+                      'api.ambr.top/assets/UI',
+                      'enka.network/ui',
+                    )
+                  "
                 />
               </div>
             </div>
@@ -728,9 +733,10 @@ const countRolledSubstat = (stats: any[], prop: string) => {
                 <img
                   class="inline-block object-cover bottom-0 left-0 absolute z-10 h-full pointer-events-none"
                   :src="
-                    store.settings.appearance.gsCostume
+                    (store.settings.appearance.gsCostume
                       ? character.costume.splashImage.url
                       : character.characterData.splashImage.url
+                    ).replace('api.ambr.top/assets/UI', 'enka.network/ui')
                   "
                 />
               </div>
@@ -771,7 +777,12 @@ const countRolledSubstat = (stats: any[], prop: string) => {
                       >
                         <img
                           class="h-8 rounded-full"
-                          :src="skill.skill.icon.url"
+                          :src="
+                            skill.skill.icon.url.replace(
+                              'api.ambr.top/assets/UI',
+                              'enka.network/ui',
+                            )
+                          "
                         />
                         <div
                           class="text-center w-full mr-1 h-full align-middle text-base font-gs"
@@ -821,7 +832,12 @@ const countRolledSubstat = (stats: any[], prop: string) => {
                         <img
                           class="relative h-8 rounded-full ml-2 z-30"
                           :src="
-                            character.unlockedConstellations[idx - 1].icon.url
+                            character.unlockedConstellations[
+                              idx - 1
+                            ].icon.url.replace(
+                              'api.ambr.top/assets/UI',
+                              'enka.network/ui',
+                            )
                           "
                         />
                       </div>
@@ -1024,7 +1040,12 @@ const countRolledSubstat = (stats: any[], prop: string) => {
                 >
                   <img
                     class="h-full"
-                    :src="character.weapon.weaponData.awakenIcon.url"
+                    :src="
+                      character.weapon.weaponData.awakenIcon.url.replace(
+                        'api.ambr.top/assets/UI',
+                        'enka.network/ui',
+                      )
+                    "
                   />
                   <div class="w-full h-full relative">
                     <div class="flex flex-row justify-between ml-2 mt-4">
@@ -1114,7 +1135,12 @@ const countRolledSubstat = (stats: any[], prop: string) => {
                         margin-top: -45px;
                       "
                       class="artifact-mask w-28 object-cover"
-                      :src="artifact.artifactData.icon.url"
+                      :src="
+                        artifact.artifactData.icon.url.replace(
+                          'api.ambr.top/assets/UI',
+                          'enka.network/ui',
+                        )
+                      "
                     />
                     <div class="w-full h-full relative">
                       <div
