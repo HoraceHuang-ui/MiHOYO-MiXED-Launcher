@@ -274,9 +274,9 @@ async function createWindow() {
     enka.options.defaultLanguage = lang
 
     try {
-      return convertObjectToJson(await enka.fetchUser(uid, false))
+      return JSON.stringify(convertObjectToJson(await enka.fetchUser(uid)))
     } catch {
-      return convertObjectToJson(await enka.fetchUser(uid, true))
+      return convertObjectToJson(await enka.fetchCollapsedUser(uid))
     }
   })
 
