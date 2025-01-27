@@ -539,7 +539,7 @@ const enkaAssetUrl = (obj: any, keyName = 'name') =>
         v-if="playerInfo && !playerInfoLoading && !playerInfoFailed"
         class="namecard-mask absolute top-0 right-0 bottom-0 z-0 w-1/3 object-cover"
         style="height: 9vh; border-radius: 0 4.5vh 4.5vh 0"
-        :src="enkaAssetUrl(playerInfo.profileCard.pictures[0])"
+        :src="enkaAssetUrl(playerInfo.profileCard.pictures[1])"
       />
       <div
         v-if="playerInfoLoading"
