@@ -562,7 +562,7 @@ const showCharDetails = (index: number) => {
             <div class="flex flex-row flex-nowrap w-max">
               <div
                 v-for="(character, index) in playerInfo.characters"
-                :key="index"
+                :key="character.id"
                 class="relative w-12 h-12 z-50"
                 @click="setShowcase(index)"
               >
@@ -583,7 +583,7 @@ const showCharDetails = (index: number) => {
           </ScrollWrapper>
           <div class="relative z-50" style="width: 15%">
             <div
-              class="absolute left-2 top-3 rounded-full w-9 h-9 pt-1 bg-white hover:bg-gray-200 active:translate-x-1 transition-all bg-opacity-80"
+              class="absolute left-2 top-3 rounded-full w-9 h-9 pt-1 bg-white hover:bg-gray-200 active:translate-x-1 transition-all bg-opacity-80 dark:bg-black dark:hover:bg-gray-700 dark:bg-opacity-80"
               @click="charsPageNext"
               :class="charsPage == pages ? 'disabled' : ''"
             >
@@ -609,7 +609,7 @@ const showCharDetails = (index: number) => {
       >
         <div
           v-for="(character, index) in playerInfo.characters"
-          :key="index"
+          :key="character.id"
           class="z-0 relative w-full mt-12"
         >
           <div
