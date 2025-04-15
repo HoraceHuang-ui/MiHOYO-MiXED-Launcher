@@ -1021,10 +1021,10 @@ const showCharDetails = (index: number) => {
                   </div>
                   <Transition name="fade">
                     <div
-                      class="absolute right-2 top-1 text-sm"
+                      class="absolute right-2 top-1 text-sm transition-all"
                       v-if="memosprite && character.skills.MemospriteSkill"
                     >
-                      {{ '忆灵' }}
+                      {{ $t('sr_memosprite') }}
                     </div>
                   </Transition>
 
@@ -1076,8 +1076,8 @@ const showCharDetails = (index: number) => {
                       </MyTooltip>
                       <div
                         v-if="
-                          character.skill_trees[idx - 1].level >=
-                          character.skill_trees[idx - 1].max_level
+                          character.skill_trees[idx - 1].level ===
+                          (idx == 1 ? 6 : 10)
                         "
                         class="ml-2 mt-2 text-orange-300 text-xl align-middle h-full font-sr-sans"
                       >
@@ -1164,10 +1164,7 @@ const showCharDetails = (index: number) => {
                         </div>
                       </MyTooltip>
                       <div
-                        v-if="
-                          character.skill_trees[idx - 1].level >=
-                          character.skill_trees[idx - 1].max_level
-                        "
+                        v-if="character.skill_trees[idx + 17].level === 6"
                         class="ml-2 mt-2 text-orange-300 text-xl align-middle h-full font-sr-sans"
                       >
                         MAX
@@ -1178,26 +1175,20 @@ const showCharDetails = (index: number) => {
                       >
                         <div
                           class="text-gray-200"
-                          v-if="
-                            character.skill_trees[idx - 1].max_level <=
-                            (idx == 1 ? 6 : 10)
-                          "
+                          v-if="character.skill_trees[idx + 17].max_level <= 6"
                         >
-                          {{ character.skill_trees[idx - 1].level }}
+                          {{ character.skill_trees[idx + 17].level }}
                           <span class="text-gray-400"
                             >/{{
-                              character.skill_trees[idx - 1].max_level
+                              character.skill_trees[idx + 17].max_level
                             }}</span
                           >
                         </div>
                         <div v-else class="text-cyan-400">
-                          {{
-                            character.skill_trees[idx - 1].level +
-                            (idx == 1 ? 1 : 2)
-                          }}
+                          {{ character.skill_trees[idx + 17].level + 1 }}
                           <span class="text-gray-400"
                             >/{{
-                              character.skill_trees[idx - 1].max_level
+                              character.skill_trees[idx + 17].max_level
                             }}</span
                           >
                         </div>
@@ -1435,13 +1426,18 @@ const showCharDetails = (index: number) => {
   @apply inline-block max-w-full overflow-ellipsis whitespace-nowrap overflow-hidden;
 }
 
-.fade-enter-from,
+.fade-enter-from {
+  opacity: 0;
+  transform: translateY(6px);
+}
 .fade-leave-to {
   opacity: 0;
 }
 
-.fade-enter-active,
+.fade-enter-active {
+  transition: all 0.3s;
+}
 .fade-leave-active {
-  transition: opacity 0.3s;
+  transition: opacity 0.2s;
 }
 </style>
