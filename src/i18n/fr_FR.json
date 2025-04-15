@@ -135,5 +135,6 @@
   "gamepad_showToolbar": "Voir la barre d'outils",
   "gamepad_windowActions": "Maintenir pour les actions de fenêtre",
   "zzz_launcherContentsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getGameContent?launcher_id=VYTpXlbWo8&game_id=U5hbdsT9W7&language=fr-fr",
-  "general_gameBackgroundsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getAllGameBasicInfo?launcher_id=VYTpXlbWo8&language=fr-fr"
+  "general_gameBackgroundsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getAllGameBasicInfo?launcher_id=VYTpXlbWo8&language=fr-fr",
+  "sr_memosprite": "Mnémesprit"
 }
