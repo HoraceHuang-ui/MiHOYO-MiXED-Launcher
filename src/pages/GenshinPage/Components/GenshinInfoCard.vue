@@ -539,7 +539,7 @@ const enkaAssetUrl = (obj: any, keyName = 'name') =>
         v-if="playerInfo && !playerInfoLoading && !playerInfoFailed"
         class="namecard-mask absolute top-0 right-0 bottom-0 z-0 w-1/3 object-cover"
         style="height: 9vh; border-radius: 0 4.5vh 4.5vh 0"
-        :src="enkaAssetUrl(playerInfo.profileCard.pictures[0])"
+        :src="enkaAssetUrl(playerInfo.profileCard.pictures[1])"
       />
       <div
         v-if="playerInfoLoading"
@@ -654,7 +654,7 @@ const enkaAssetUrl = (obj: any, keyName = 'name') =>
             <div class="flex flex-row flex-nowrap w-max">
               <div
                 v-for="(character, index) in playerInfo.characters"
-                :key="index"
+                :key="character.characterData.id"
                 class="relative w-12 h-12 z-50"
                 @click="setShowcase(index)"
               >
@@ -701,7 +701,7 @@ const enkaAssetUrl = (obj: any, keyName = 'name') =>
       >
         <div
           v-for="(character, index) in playerInfo.characters"
-          :key="index"
+          :key="character.characterData.id"
           class="z-0 relative w-full h-full mt-12"
         >
           <div
@@ -761,9 +761,9 @@ const enkaAssetUrl = (obj: any, keyName = 'name') =>
                 <div class="flex flex-col">
                   <div class="flex flex-row relative">
                     <MyTooltip
-                      v-for="(skill, id) in character.skillLevels"
+                      v-for="skill in character.skillLevels"
                       placement="top"
-                      :key="id"
+                      :key="skill.skill.id"
                     >
                       <template #content>
                         <span class="font-gs text-base">

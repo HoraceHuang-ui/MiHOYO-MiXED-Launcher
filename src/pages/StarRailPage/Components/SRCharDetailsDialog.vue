@@ -103,6 +103,8 @@ const gameLoop = () => {
   }
 }
 
+const spd = findField(props.character.additions, 'spd')
+
 onMounted(() => {
   if (props.gamepadMode) {
     rAFId = rAF(gameLoop)
@@ -168,9 +170,10 @@ onMounted(() => {
         <div>
           <span>{{ character.attributes[3].display }}</span>
           <span
-            v-if="findField(character.additions, 'spd').display !== ''"
+            v-if="spd.display !== ''"
             class="stat-addition"
-            >+{{ findField(character.additions, 'spd').display }}</span
+            :style="spd.value < 0 && 'color: #f55'"
+            >{{ spd.value > 0 ? `+${spd.display}` : spd.display }}</span
           >
         </div>
       </DialogListItem>

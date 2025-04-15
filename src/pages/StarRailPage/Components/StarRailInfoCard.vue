@@ -62,12 +62,21 @@ const pages = computed(() =>
 const hScale = inject<Ref<number>>('hScale')
 const vScale = inject<Ref<number>>('vScale')
 const gpType = inject<Ref<string>>('gpType')
+const skillTypes = [
+  'Normal',
+  'BPSkill',
+  'Ultra',
+  'Talent',
+  'MemospriteSkill',
+  'MemospriteTalent',
+]
 
 const charsScrollbar = ref()
 const cardsCarouselRef = ref()
 const showcaseIdx = ref(0)
 const relicIdx = ref(0)
 const ascLevelMap = [20, 30, 40, 50, 60, 70, 80]
+const memosprite = ref(0)
 let rankMap: Record<string, RankInfo> = {}
 const ranksReady = ref(false)
 const initReady = ref(false)
@@ -121,7 +130,7 @@ const gameLoop = () => {
   if (
     gamepadMode.value === 'sr-player' &&
     gp.buttons[2].pressed &&
-    playerInfo
+    playerInfo.value
   ) {
     if (!inThrottle) {
       inThrottle = true
@@ -132,8 +141,12 @@ const gameLoop = () => {
     }
   }
 
-  // LS: Select character
-  if (gamepadMode.value === 'sr-player' && gp.axes[0] < -0.9 && playerInfo) {
+  // LS Horizontal: Select character
+  if (
+    gamepadMode.value === 'sr-player' &&
+    gp.axes[0] < -0.9 &&
+    playerInfo.value
+  ) {
     if (!inThrottle) {
       inThrottle = true
       if (showcaseIdx.value > 0) {
@@ -144,7 +157,11 @@ const gameLoop = () => {
       }, 150)
     }
   }
-  if (gamepadMode.value === 'sr-player' && gp.axes[0] > 0.9 && playerInfo) {
+  if (
+    gamepadMode.value === 'sr-player' &&
+    gp.axes[0] > 0.9 &&
+    playerInfo.value
+  ) {
     if (!inThrottle) {
       inThrottle = true
       if (showcaseIdx.value < playerInfo.value.characters.length - 1) {
@@ -156,8 +173,12 @@ const gameLoop = () => {
     }
   }
 
-  // RS: Select Relics
-  if (gamepadMode.value === 'sr-player' && gp.axes[2] < -0.9 && playerInfo) {
+  // RS Horizontal: Select Relics
+  if (
+    gamepadMode.value === 'sr-player' &&
+    gp.axes[2] < -0.9 &&
+    playerInfo.value
+  ) {
     if (!inThrottle) {
       inThrottle = true
       if (relicIdx.value == 0) {
@@ -171,7 +192,11 @@ const gameLoop = () => {
       }, 150)
     }
   }
-  if (gamepadMode.value === 'sr-player' && gp.axes[2] > 0.9 && playerInfo) {
+  if (
+    gamepadMode.value === 'sr-player' &&
+    gp.axes[2] > 0.9 &&
+    playerInfo.value
+  ) {
     if (!inThrottle) {
       inThrottle = true
       if (
@@ -185,6 +210,21 @@ const gameLoop = () => {
       setTimeout(() => {
         inThrottle = false
       }, 150)
+    }
+  }
+
+  // RS: Switch Memosprite
+  if (
+    gamepadMode.value === 'sr-player' &&
+    gp.buttons[11].pressed &&
+    playerInfo.value
+  ) {
+    if (!inThrottle) {
+      inThrottle = true
+      memosprite.value = (memosprite.value + 1) % 2
+      setTimeout(() => {
+        inThrottle = false
+      }, 300)
     }
   }
 
@@ -287,17 +327,26 @@ const requestInfo = () => {
               return -1
             }
           }
-          //     // 双爆分
-          //     const critA = a.stats.critRate.value * 200 + a.stats.critDamage.value * 100
-          //     const critB = b.stats.critRate.value * 200 + b.stats.critDamage.value * 100
-          //     if (critA < critB) {
-          //         return 1
-          //     } else {
-          //         return -1
-          //     }
-          // }
         }
       })
+      for (const character of playerInfo.value.characters) {
+        let skills: Record<string, any[]> = {}
+        let recorded: string[] = []
+        for (const skill of character.skills) {
+          if (
+            !recorded.includes(skill.name) &&
+            skillTypes.includes(skill.type)
+          ) {
+            if (skills[skill.type]) {
+              skills[skill.type].push(skill)
+            } else {
+              skills[skill.type] = [skill]
+            }
+            recorded.push(skill.name)
+          }
+        }
+        character.skills = skills
+      }
 
       store.game.sr.playerInfo = playerInfo.value
       playerInfoLoading.value = false
@@ -562,7 +611,7 @@ const showCharDetails = (index: number) => {
             <div class="flex flex-row flex-nowrap w-max">
               <div
                 v-for="(character, index) in playerInfo.characters"
-                :key="index"
+                :key="character.id"
                 class="relative w-12 h-12 z-50"
                 @click="setShowcase(index)"
               >
@@ -583,7 +632,7 @@ const showCharDetails = (index: number) => {
           </ScrollWrapper>
           <div class="relative z-50" style="width: 15%">
             <div
-              class="absolute left-2 top-3 rounded-full w-9 h-9 pt-1 bg-white hover:bg-gray-200 active:translate-x-1 transition-all bg-opacity-80"
+              class="absolute left-2 top-3 rounded-full w-9 h-9 pt-1 bg-white hover:bg-gray-200 active:translate-x-1 transition-all bg-opacity-80 dark:bg-black dark:hover:bg-gray-700 dark:bg-opacity-80"
               @click="charsPageNext"
               :class="charsPage == pages ? 'disabled' : ''"
             >
@@ -609,7 +658,7 @@ const showCharDetails = (index: number) => {
       >
         <div
           v-for="(character, index) in playerInfo.characters"
-          :key="index"
+          :key="character.id"
           class="z-0 relative w-full mt-12"
         >
           <div
@@ -959,70 +1008,193 @@ const showCharDetails = (index: number) => {
                 </div>
                 <!-- 右侧第三块：行迹 -->
                 <div
-                  class="mt-2 px-2 py-3 w-full rounded-xl bg-black bg-opacity-20 backdrop-blur-md grid grid-cols-4 grid-rows-1 relative z-50"
+                  class="mt-2 px-2 py-3 w-full rounded-xl bg-black bg-opacity-20 backdrop-blur-md relative z-50"
                 >
                   <div
-                    v-for="idx in 4"
-                    :key="idx"
-                    class="h-full flex flex-row cursor-default"
+                    class="absolute right-1 bottom-1 w-6 h-6 rounded-full text-sm text-center hover:bg-white hover:bg-opacity-20 active:scale-95 active:bg-opacity-40 cursor-default transition-all"
+                    @click="memosprite = (memosprite + 1) % 2"
+                    v-if="character.skills.MemospriteSkill"
                   >
-                    <MyTooltip placement="left" max-width="500px" middle>
-                      <template #content>
-                        <div class="max-w-md">
-                          <div class="font-sr text-xl">
-                            {{ character.skills[idx - 1].name }}
-                          </div>
-                          <div class="font-sr-sans text-sm mt-1">
-                            {{
-                              character.skills[idx - 1].simple_desc
-                                ? character.skills[idx - 1].simple_desc
-                                : character.skills[idx - 1].desc
-                            }}
-                          </div>
-                        </div>
-                      </template>
-                      <div
-                        class="h-12 w-12 p-1 rounded-full border-2"
-                        :style="`border-color: ${character.element ? character.element.color : 'white'}`"
-                      >
-                        <img :src="apiUrl + character.skills[idx - 1].icon" />
-                      </div>
-                    </MyTooltip>
-                    <div
-                      v-if="
-                        character.skill_trees[idx - 1].level >=
-                        character.skill_trees[idx - 1].max_level
-                      "
-                      class="ml-2 mt-2 text-orange-300 text-xl align-middle h-full font-sr-sans"
-                    >
-                      MAX
+                    <div class="font-sr-sans flex flex-row justify-center">
+                      <i class="bi bi-arrow-left-right p-1" />
                     </div>
+                  </div>
+                  <Transition name="fade">
                     <div
-                      v-else
-                      class="ml-2 mt-2 text-lg align-middle h-full font-sr-sans"
+                      class="absolute right-2 top-1 text-sm transition-all"
+                      v-if="memosprite && character.skills.MemospriteSkill"
                     >
+                      {{ $t('sr_memosprite') }}
+                    </div>
+                  </Transition>
+
+                  <div
+                    class="grid grid-cols-4 grid-rows-1 w-full"
+                    v-if="!memosprite || !character.skills.MemospriteSkill"
+                  >
+                    <div
+                      v-for="idx in 4"
+                      :key="idx"
+                      class="h-full flex flex-row cursor-default"
+                    >
+                      <MyTooltip placement="left" max-width="500px" middle>
+                        <template #content>
+                          <div
+                            class="max-w-md"
+                            v-for="(skill, id) in character.skills[
+                              skillTypes[idx - 1]
+                            ]"
+                            :key="skill.id"
+                          >
+                            <div
+                              class="font-sr text-xl"
+                              :class="{ 'mt-2': id > 0 }"
+                            >
+                              {{ skill.name }}
+                              <span class="font-sr-sans text-sm text-orange-300"
+                                >[{{ skill.effect_text }}]</span
+                              >
+                            </div>
+                            <div
+                              class="font-sr-sans text-sm mt-1 text-gray-300"
+                            >
+                              {{ skill.simple_desc || skill.desc }}
+                            </div>
+                          </div>
+                        </template>
+                        <div
+                          class="h-12 w-12 p-1 rounded-full border-2"
+                          :style="`border-color: ${character.element ? character.element.color : 'white'}`"
+                        >
+                          <img
+                            :src="
+                              apiUrl +
+                              character.skills[skillTypes[idx - 1]][0].icon
+                            "
+                          />
+                        </div>
+                      </MyTooltip>
                       <div
-                        class="text-gray-200"
                         v-if="
-                          character.skill_trees[idx - 1].max_level <=
+                          character.skill_trees[idx - 1].level ===
                           (idx == 1 ? 6 : 10)
                         "
+                        class="ml-2 mt-2 text-orange-300 text-xl align-middle h-full font-sr-sans"
                       >
-                        {{ character.skill_trees[idx - 1].level }}
-                        <span class="text-gray-400"
-                          >/{{ character.skill_trees[idx - 1].max_level }}</span
-                        >
+                        MAX
                       </div>
-                      <div v-else class="text-cyan-400">
-                        {{
-                          character.skill_trees[idx - 1].level +
-                          (idx == 1 ? 1 : 2)
-                        }}
-                        <span class="text-gray-400"
-                          >/{{ character.skill_trees[idx - 1].max_level }}</span
+                      <div
+                        v-else
+                        class="ml-2 mt-2 text-lg align-middle h-full font-sr-sans"
+                      >
+                        <div
+                          class="text-gray-200"
+                          v-if="
+                            character.skill_trees[idx - 1].max_level <=
+                            (idx == 1 ? 6 : 10)
+                          "
                         >
+                          {{ character.skill_trees[idx - 1].level }}
+                          <span class="text-gray-400"
+                            >/{{
+                              character.skill_trees[idx - 1].max_level
+                            }}</span
+                          >
+                        </div>
+                        <div v-else class="text-cyan-400">
+                          {{
+                            character.skill_trees[idx - 1].level +
+                            (idx == 1 ? 1 : 2)
+                          }}
+                          <span class="text-gray-400"
+                            >/{{
+                              character.skill_trees[idx - 1].max_level
+                            }}</span
+                          >
+                        </div>
                       </div>
                     </div>
+                  </div>
+
+                  <div
+                    class="grid grid-cols-4 grid-rows-1 w-full"
+                    v-if="memosprite && character.skills.MemospriteSkill"
+                  >
+                    <div />
+                    <div
+                      v-for="idx in 2"
+                      :key="idx"
+                      class="h-full flex flex-row cursor-default"
+                    >
+                      <MyTooltip placement="left" max-width="500px" middle>
+                        <template #content>
+                          <div
+                            class="max-w-md"
+                            v-for="(skill, id) in character.skills[
+                              skillTypes[idx + 3]
+                            ]"
+                            :key="skill.id"
+                          >
+                            <div
+                              class="font-sr text-xl"
+                              :class="{ 'mt-2': id > 0 }"
+                            >
+                              {{ skill.name }}
+                              <span class="font-sr-sans text-sm text-orange-300"
+                                >[{{ skill.effect_text }}]</span
+                              >
+                            </div>
+                            <div
+                              class="font-sr-sans text-sm mt-1 text-gray-300"
+                            >
+                              {{ skill.simple_desc || skill.desc }}
+                            </div>
+                          </div>
+                        </template>
+                        <div
+                          class="h-12 w-12 p-1 rounded-full border-2"
+                          :style="`border-color: ${character.element ? character.element.color : 'white'}`"
+                        >
+                          <img
+                            :src="
+                              apiUrl +
+                              character.skills[skillTypes[idx + 3]][0].icon
+                            "
+                          />
+                        </div>
+                      </MyTooltip>
+                      <div
+                        v-if="character.skill_trees[idx + 17].level === 6"
+                        class="ml-2 mt-2 text-orange-300 text-xl align-middle h-full font-sr-sans"
+                      >
+                        MAX
+                      </div>
+                      <div
+                        v-else
+                        class="ml-2 mt-2 text-lg align-middle h-full font-sr-sans"
+                      >
+                        <div
+                          class="text-gray-200"
+                          v-if="character.skill_trees[idx + 17].max_level <= 6"
+                        >
+                          {{ character.skill_trees[idx + 17].level }}
+                          <span class="text-gray-400"
+                            >/{{
+                              character.skill_trees[idx + 17].max_level
+                            }}</span
+                          >
+                        </div>
+                        <div v-else class="text-cyan-400">
+                          {{ character.skill_trees[idx + 17].level + 1 }}
+                          <span class="text-gray-400"
+                            >/{{
+                              character.skill_trees[idx + 17].max_level
+                            }}</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+                    <div />
                   </div>
                 </div>
                 <!-- 右侧第四块：遗器 -->
@@ -1252,5 +1424,20 @@ const showCharDetails = (index: number) => {
 
 .truncated {
   @apply inline-block max-w-full overflow-ellipsis whitespace-nowrap overflow-hidden;
+}
+
+.fade-enter-from {
+  opacity: 0;
+  transform: translateY(6px);
+}
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active {
+  transition: all 0.3s;
+}
+.fade-leave-active {
+  transition: opacity 0.2s;
 }
 </style>
