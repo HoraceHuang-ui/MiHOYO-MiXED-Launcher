@@ -817,6 +817,10 @@ onMounted(async () => {
                 mode === 'gs-player' ? $t('gs_artifact') : $t('sr_relic')
               }}</span>
             </div>
+            <div class="bar-item" v-if="mode === 'sr-player'">
+              <GamepadIcon icon="RS" />
+              <span>{{ $t('sr_memosprite') }}</span>
+            </div>
           </div>
           <div
             class="absolute left-0 left no-drag"
