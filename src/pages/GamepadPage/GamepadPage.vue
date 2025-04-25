@@ -85,6 +85,7 @@ const settingsItems: Ref<SettingsCard[]> = ref([
             style: {
               'padding-left': '20px',
               'list-style-type': 'disc',
+              'list-style-position': 'outside',
             },
           },
           [
