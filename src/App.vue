@@ -130,7 +130,7 @@ onMounted(async () => {
     .then((resp: UpdInfo) => {
       if (needsUpdate(resp.version)) {
         const target = store.general.targetVersion
-        if (!target || target < resp.version) {
+        if (!target || verCompare(resp.version, target) > 0) {
           useDialog(
             dialogComponent(store.settings.appearance.dialogStyle),
             {

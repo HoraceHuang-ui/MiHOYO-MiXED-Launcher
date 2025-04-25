@@ -74,52 +74,49 @@ const checkUpdates = () => {
     )
     .then((resp: UpdInfo) => {
       if (needsUpdate(resp.version)) {
-        const target = store.general.targetVersion
-        if (!target || target < resp.version) {
-          useDialog(
-            dialogComponent(store.settings.appearance.dialogStyle),
-            {
-              onCancel(dispose: () => void) {
-                if (skipCurrent.value) {
-                  store.general.targetVersion = resp.version
-                }
-                dispose()
-              },
-              onOk(dispose: () => void) {
-                if (skipCurrent.value) {
-                  return
-                }
-                window.electron.openExtLink(resp.dlUrl)
-                window.win.close()
-                dispose()
-              },
+        useDialog(
+          dialogComponent(store.settings.appearance.dialogStyle),
+          {
+            onCancel(dispose: () => void) {
+              if (skipCurrent.value) {
+                store.general.targetVersion = resp.version
+              }
+              dispose()
             },
-            {
-              title: translate('updDialog_title'),
-              showCancel: true,
-              styleType: 'normal',
-              vnode: () =>
-                h(UpdateDialogContent, {
-                  appVer: appVer.value,
-                  updInfo: resp,
-                  gameStyle: store.settings.appearance.dialogStyle,
-                  style: {
-                    height: `calc(52vh / min(${hScale?.value}, ${vScale?.value}))`,
-                  },
-                  skipCurrent: skipCurrent.value,
-                  'onUpdate:skipCurrent': (value: boolean) => {
-                    skipCurrent.value = value
-                  },
-                }),
-              hScale: hScale,
-              vScale: vScale,
+            onOk(dispose: () => void) {
+              if (skipCurrent.value) {
+                return
+              }
+              window.electron.openExtLink(resp.dlUrl)
+              window.win.close()
+              dispose()
             },
-          )
-        } else {
-          latest.value = true
-        }
-        updChecking.value = false
+          },
+          {
+            title: translate('updDialog_title'),
+            showCancel: true,
+            styleType: 'normal',
+            vnode: () =>
+              h(UpdateDialogContent, {
+                appVer: appVer.value,
+                updInfo: resp,
+                gameStyle: store.settings.appearance.dialogStyle,
+                style: {
+                  height: `calc(52vh / min(${hScale?.value}, ${vScale?.value}))`,
+                },
+                skipCurrent: skipCurrent.value,
+                'onUpdate:skipCurrent': (value: boolean) => {
+                  skipCurrent.value = value
+                },
+              }),
+            hScale: hScale,
+            vScale: vScale,
+          },
+        )
+      } else {
+        latest.value = true
       }
+      updChecking.value = false
     })
     .catch((err: Error) => {
       checkUpdFailed.value = true
@@ -148,7 +145,7 @@ const verCompare = (a: string, b: string) => {
 
 const needsUpdate = (latestStr: string) => {
   console.log(latestStr)
-  console.log(appVer)
+  console.log(appVer.value)
 
   return verCompare(latestStr, appVer.value) > 0
 }
