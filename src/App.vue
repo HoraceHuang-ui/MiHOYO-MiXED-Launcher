@@ -1,39 +1,18 @@
 <script setup lang="ts">
 import { h, onMounted, onUnmounted, provide, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { UpdInfo } from './types/github/ghUpdInfo'
 import { dialogComponent } from './types/dialog/dialog'
 import { useDialog } from './utils/template-dialog'
 import UpdateDialogContent from './components/UpdateDialogContent.vue'
 import { translate } from './i18n'
 import TopHeader from './components/TopHeader.vue'
 import { useStore } from './store'
+import { UpdInfo } from './types/upd/updates'
 
 const store = useStore()
 
 let appVer = ''
 const updCheck = ref(false)
-const updInfo = ref<UpdInfo>({
-  assets: [],
-  assets_url: '',
-  author: undefined,
-  body: '',
-  created_at: '',
-  discussion_url: '',
-  draft: false,
-  html_url: '',
-  id: 0,
-  name: '',
-  node_id: '',
-  prerelease: false,
-  published_at: '',
-  tag_name: '',
-  tarball_url: '',
-  target_commitish: '',
-  upload_url: '',
-  url: '',
-  zipball_url: '',
-})
 const rAF = window.requestAnimationFrame
 // const rAFStop = window.cancelAnimationFrame
 const gpType = ref('Xbox')
@@ -144,19 +123,20 @@ onMounted(async () => {
     })
   }
 
-  window.github
-    .getLatestRelease()
-    .then((resp: any) => {
-      if (needsUpdate(resp.data.tag_name)) {
+  window.axios
+    .get(
+      'https://gitee.com/HoraceHuang-ui/mixed-info-repo/raw/master/latestUpd.json',
+    )
+    .then((resp: UpdInfo) => {
+      if (needsUpdate(resp.version)) {
         const target = store.general.targetVersion
-        if (!target || target < resp.data.tag_name) {
-          updInfo.value = resp.data
+        if (!target || target < resp.version) {
           useDialog(
             dialogComponent(store.settings.appearance.dialogStyle),
             {
               onCancel(dispose: () => void) {
                 if (skipCurrent.value) {
-                  store.general.targetVersion = updInfo.value.tag_name
+                  store.general.targetVersion = resp.version
                 }
                 dispose()
               },
@@ -164,9 +144,7 @@ onMounted(async () => {
                 if (skipCurrent.value) {
                   return
                 }
-                window.electron.openExtLink(
-                  updInfo.value.assets[0].browser_download_url,
-                )
+                window.electron.openExtLink(resp.dlUrl)
                 window.win.close()
                 dispose()
               },
@@ -178,7 +156,7 @@ onMounted(async () => {
               vnode: () =>
                 h(UpdateDialogContent, {
                   appVer: appVer,
-                  updInfo: updInfo.value,
+                  updInfo: resp,
                   skipCurrent: skipCurrent.value,
                   'onUpdate:skipCurrent': (value: boolean) => {
                     skipCurrent.value = value
@@ -193,9 +171,6 @@ onMounted(async () => {
         }
       }
       updCheck.value = true
-    })
-    .catch((err: Error) => {
-      console.error(err)
     })
 
   const autoEnter = store.settings.gamepad.autoEnter
@@ -269,12 +244,10 @@ const verCompare = (a: string, b: string) => {
 }
 
 const needsUpdate = (latestStr: string) => {
-  const latest = latestStr.substring(1)
-  const curr = appVer
-  console.log(latest)
-  console.log(curr)
+  console.log(latestStr)
+  console.log(appVer)
 
-  return verCompare(latest, curr) > 0
+  return verCompare(latestStr, appVer) > 0
 }
 </script>
 
@@ -289,6 +262,14 @@ const needsUpdate = (latestStr: string) => {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+h2 {
+  @apply text-2xl font-bold;
+}
+
+ul {
+  @apply list-disc list-inside mb-2;
+}
 
 .swipe-top-enter-from,
 .swipe-top-leave-to {

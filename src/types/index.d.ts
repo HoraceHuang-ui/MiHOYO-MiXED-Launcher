@@ -43,10 +43,6 @@ export interface IElectron {
   openExtLink: (url: string) => void
 }
 
-export interface IGithub {
-  getLatestRelease: () => Promise<any>
-}
-
 export interface IReg {
   gsGet: () => Promise<GsRegInfo | undefined>
   gsSet: (data: string) => Promise<void>
