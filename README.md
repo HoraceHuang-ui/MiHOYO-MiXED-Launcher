@@ -5,7 +5,7 @@
 # miHoYo miXED Launcher
 
 By HoraceHyy
-> Launch HoYoVERSE games in one place and analyze in-game player informations.
+> Launch HoYoVERSE games in one place and analyze in-game player information.
 
 # Oops!
 
@@ -62,7 +62,7 @@ the following slow updates!
 
 # Notes
 
-- This app uses GitHub URLs to check its updates and resources for Star Rail player info. If you are from mainland
+- This app uses GitHub URLs to fetch resources for Star Rail player info. If you are from mainland
   China, a proxy is needed.
 
 # Development
@@ -87,17 +87,6 @@ pnpm build
 
 ## Notes
 
-- This app checks for updates via the GitHub API, which will automatically expire once it is uploaded publicly on
-  GitHub. Therefore, during development, please create a token yourself and place it in `Octokit.auth`
-  inside `electron/main/index.ts`.
-
-```ts
-const {Octokit} = require("@octokit/core")
-const octokit = new Octokit({
-    auth: "<YOUR TOKEN HERE>"
-})
-```
-
 - For some reason, relative paths in the `dev` and `build` environments varies for some files. In `onMounted`
   inside `src/pages/SettingsPage.vue`, the path of `package.json` is determined by environment.
 
@@ -113,9 +102,6 @@ fetch('../../app.asar/package.json')
 
 - The current version of `vite-plugin-electron` dependency isn't compatible with `electron@29.0.0` or later. Please
   leave the `electron` dependency version unchanged at `28.2.1`.
-- This project isn't ready to make the change to ES Modules yet. The latest `@octokit/core@6.0.1` has become an ES
-  Module, which is incompatible with this project. Please leave the `@octokit/core` dependency version unchanged at
-  `5.1.0`.
 
 # Credits
 

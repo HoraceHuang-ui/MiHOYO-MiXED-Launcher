@@ -84,17 +84,6 @@ pnpm build
 
 ## 提示
 
-- 本程序检测自身更新目前用的是 GitHub
-  API，但一旦把含 token 的代码同步到这里就会自动销毁，所以构建时请自行申请一个 token，放在 `electron/main/index.ts` 
-  的 `Octokit.auth` 中。
-
-```ts
-const {Octokit} = require("@octokit/core")
-const octokit = new Octokit({
-    auth: "<YOUR TOKEN HERE>"
-})
-```
-
 - 由于一些原因，在开发和生产环境中某些文件的相对路径可能会改变。在 `src/pages/SettingsPage.vue` 中， `package.json` 的相对路径取决于环境。
 
 ```ts
@@ -107,8 +96,6 @@ fetch('../../app.asar/package.json')
     })
 ```
 - 当前最新版本的 `vite-plugin-electron` 依赖与 `electron@29.0.0` 或更高版本不兼容。请将依赖 `electron` 的版本保持在 `28.2.1` 不要变。
-- 本项目尚未准备好向 ES Module 转型。最新的 `@octokit/core@6.0.1` 已经转为 ES Module，与本项目不兼容。请将依赖 `@octokit/core`
-的版本保持在 `5.1.0` 不要变。
 
 # 鸣谢
 
