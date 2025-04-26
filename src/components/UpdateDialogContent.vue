@@ -4,6 +4,7 @@ import { translate } from '../i18n'
 import MyCheckbox from './MyCheckbox.vue'
 import { computed, PropType } from 'vue'
 import ScrollWrapper from './ScrollWrapper.vue'
+import { UpdInfo } from '../types/upd/updates'
 
 const props = defineProps({
   appVer: {
@@ -11,7 +12,7 @@ const props = defineProps({
     required: true,
   },
   updInfo: {
-    type: Object,
+    type: Object as PropType<UpdInfo>,
     required: true,
   },
   gameStyle: {
@@ -26,7 +27,7 @@ const props = defineProps({
 
 defineEmits(['update:skipCurrent'])
 
-const updDialogContent = marked(props.updInfo.body)
+const updDialogContent = marked(props.updInfo.desc)
 
 const onColor = computed(() => {
   switch (props.gameStyle) {
@@ -74,11 +75,11 @@ const colorClass = computed(() => {
     </ScrollWrapper>
     <div :class="colorClass" style="margin-top: 10px">
       {{ translate('updDialog_version') }}v{{ appVer }} 👉
-      {{ updInfo.tag_name }}
+      {{ updInfo.version }}
     </div>
     <div :class="colorClass">
       {{ translate('updDialog_size')
-      }}{{ (updInfo.assets[0].size / 1024 / 1024).toFixed(1) }}MB
+      }}{{ (updInfo.size / 1024 / 1024).toFixed(1) }}MB
     </div>
     <div :class="colorClass">
       {{ translate('updDialog_footerText') }}

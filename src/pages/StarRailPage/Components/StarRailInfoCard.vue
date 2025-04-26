@@ -1011,7 +1011,7 @@ const showCharDetails = (index: number) => {
                   class="mt-2 px-2 py-3 w-full rounded-xl bg-black bg-opacity-20 backdrop-blur-md relative z-50"
                 >
                   <div
-                    class="absolute right-1 bottom-1 w-6 h-6 rounded-full text-sm text-center hover:bg-white hover:bg-opacity-20 active:scale-95 active:bg-opacity-40 cursor-default transition-all"
+                    class="absolute right-1 bottom-1 text-gray-300 w-6 h-6 rounded-full text-sm text-center hover:bg-white hover:bg-opacity-20 active:scale-95 active:bg-opacity-40 cursor-default transition-all"
                     @click="memosprite = (memosprite + 1) % 2"
                     v-if="character.skills.MemospriteSkill"
                   >
@@ -1021,7 +1021,7 @@ const showCharDetails = (index: number) => {
                   </div>
                   <Transition name="fade">
                     <div
-                      class="absolute right-2 top-1 text-sm transition-all"
+                      class="absolute text-gray-300 right-2 top-1 text-sm transition-all"
                       v-if="memosprite && character.skills.MemospriteSkill"
                     >
                       {{ $t('sr_memosprite') }}

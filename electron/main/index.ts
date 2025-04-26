@@ -13,7 +13,6 @@ import { release } from 'node:os'
 import child from 'child_process'
 import { DynamicTextAssets, EnkaClient, TextAssets } from 'enka-network-api'
 import { promises as fs } from 'fs'
-import { Octokit } from '@octokit/core'
 import path from 'path'
 import regedit, { promisified as reg } from 'regedit'
 import { SrRegInfo } from '../../src/types/starrail/srRegInfo'
@@ -299,20 +298,6 @@ async function createWindow() {
 
   ipcMain.on('elec:openExtLink', (_event, url) => {
     shell.openExternal(url)
-  })
-
-  const octokit = new Octokit({
-    auth: '<YOUR TOKEN HERE>',
-  })
-  ipcMain.handle('github:getLatestRelease', async _event => {
-    const result = await octokit.request(
-      'GET /repos/horacehuang-ui/mihoyo-mixed-launcher/releases/latest',
-      {
-        owner: 'HoraceHuang-ui',
-        repo: 'MiHOYO-MiXED-Launcher',
-      },
-    )
-    return result
   })
 
   ipcMain.on('reg:gsSet', (_event, acc: string) => {

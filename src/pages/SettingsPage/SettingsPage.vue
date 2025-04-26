@@ -9,7 +9,6 @@ import {
   translateWithLocale,
 } from '../../i18n'
 import CustomSwitch from '../../components/CustomSwitch.vue'
-import { UpdInfo } from '../../types/github/ghUpdInfo'
 import {
   availableDialogStyleDescs,
   availableDialogStyles,
@@ -27,6 +26,7 @@ import MyGroupButtons from '../../components/MyGroupButtons.vue'
 import GamepadIcon from '../../components/GamepadIcon.vue'
 import MyTooltip from '../../components/MyTooltip.vue'
 import { useStore } from '../../store'
+import { UpdInfo } from '../../types/upd/updates'
 
 const store = useStore()
 const lang = ref<Lang>('en_US')
@@ -37,26 +37,6 @@ const transitionShow = ref(false)
 const appVer = ref('')
 const latest = ref(false)
 const skipCurrent = ref(false)
-const updInfo = ref<UpdInfo>({
-  assets: [],
-  assets_url: '',
-  body: '',
-  created_at: '',
-  discussion_url: '',
-  draft: false,
-  html_url: '',
-  id: 0,
-  name: '',
-  node_id: '',
-  prerelease: false,
-  published_at: '',
-  tag_name: '',
-  tarball_url: '',
-  target_commitish: '',
-  upload_url: '',
-  url: '',
-  zipball_url: '',
-})
 const checkUpdFailed = ref(false)
 const updChecking = ref(false)
 
@@ -88,17 +68,18 @@ const openLink = (url: string) => {
 const checkUpdates = () => {
   updChecking.value = true
   checkUpdFailed.value = false
-  window.github
-    .getLatestRelease()
-    .then(resp => {
-      if (needsUpdate(resp.data.tag_name)) {
-        updInfo.value = resp.data
+  window.axios
+    .get(
+      'https://gitee.com/HoraceHuang-ui/mixed-info-repo/raw/master/latestUpd.json',
+    )
+    .then((resp: UpdInfo) => {
+      if (needsUpdate(resp.version)) {
         useDialog(
           dialogComponent(store.settings.appearance.dialogStyle),
           {
             onCancel(dispose: () => void) {
               if (skipCurrent.value) {
-                store.general.targetVersion = updInfo.value.tag_name
+                store.general.targetVersion = resp.version
               }
               dispose()
             },
@@ -106,9 +87,7 @@ const checkUpdates = () => {
               if (skipCurrent.value) {
                 return
               }
-              window.electron.openExtLink(
-                updInfo.value.assets[0].browser_download_url,
-              )
+              window.electron.openExtLink(resp.dlUrl)
               window.win.close()
               dispose()
             },
@@ -120,7 +99,7 @@ const checkUpdates = () => {
             vnode: () =>
               h(UpdateDialogContent, {
                 appVer: appVer.value,
-                updInfo: updInfo.value,
+                updInfo: resp,
                 gameStyle: store.settings.appearance.dialogStyle,
                 style: {
                   height: `calc(52vh / min(${hScale?.value}, ${vScale?.value}))`,
@@ -165,12 +144,10 @@ const verCompare = (a: string, b: string) => {
 }
 
 const needsUpdate = (latestStr: string) => {
-  const latest = latestStr.substring(1)
-  const curr = appVer.value
-  console.log(latest)
-  console.log(curr)
+  console.log(latestStr)
+  console.log(appVer.value)
 
-  return verCompare(latest, curr) > 0
+  return verCompare(latestStr, appVer.value) > 0
 }
 
 const colorThemeChange = () => {
@@ -382,7 +359,13 @@ const showClearDialog = () => {
             </div>
             <MyTooltip max-width="300px" middle placement="bottom">
               <template #content>
-                <ul style="list-style-type: disc; padding-left: 20px">
+                <ul
+                  style="
+                    list-style-type: disc;
+                    padding-left: 20px;
+                    list-style-position: outside;
+                  "
+                >
                   <li>
                     <span>{{ $t('gamepad_autoEnterTip1_1') }}</span>
                     <GamepadIcon
