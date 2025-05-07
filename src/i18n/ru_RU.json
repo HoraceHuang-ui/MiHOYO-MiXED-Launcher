@@ -137,7 +137,7 @@
   "zzz_launcherContentsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getGameContent?launcher_id=VYTpXlbWo8&game_id=U5hbdsT9W7&language=ru-ru",
   "general_gameBackgroundsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getAllGameBasicInfo?launcher_id=VYTpXlbWo8&language=ru-ru",
   "sr_memosprite": "Духа памяти",
-  "zzz_firstMet": "Первая встреча: ",
+  "zzz_firstMet": "First Met: ",
   "zzz_noRelic": "Драйв-диск еще не установлен",
   "zzz_noWeapon": "Амплификатор еще не установлен",
   "zzz_playerLv": "Интеркнот Ур.",
