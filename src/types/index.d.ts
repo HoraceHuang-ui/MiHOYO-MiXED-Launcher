@@ -35,7 +35,7 @@ export interface IPath {
 }
 
 export interface IAxios {
-  post: (url: string) => Promise<any>
+  post: (url: string, body: any) => Promise<any>
   get: (url: string) => Promise<any>
 }
 

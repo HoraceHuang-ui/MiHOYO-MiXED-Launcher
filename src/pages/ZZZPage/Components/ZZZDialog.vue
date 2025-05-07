@@ -10,7 +10,7 @@ const props = defineProps({
   title: {
     type: Object as PropType<(() => string) | string>,
     default: () => {
-      return 'Template GS Dialog'
+      return 'Template ZZZ Dialog'
     },
   },
   styleType: {
@@ -128,6 +128,7 @@ defineExpose({
         />
         <div
           class="dialog-content-wrapper"
+          :class="{ 'pb-5': props.showCancel || props.showOk }"
           :style="`width: ${width};
             transform: scale(min(${hScale.value}, ${vScale.value})) translate(-50%)`"
         >
@@ -238,7 +239,7 @@ defineExpose({
 }
 
 .dialog-content-wrapper {
-  @apply relative pb-5 left-1/2;
+  @apply relative left-1/2;
   transform-origin: center left;
 }
 

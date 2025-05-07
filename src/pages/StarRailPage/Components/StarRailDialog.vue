@@ -11,7 +11,7 @@ const props = defineProps({
   title: {
     type: Object as PropType<(() => string) | string>,
     default: () => {
-      return 'Template GS Dialog'
+      return 'Template SR Dialog'
     },
   },
   gamepadMode: {

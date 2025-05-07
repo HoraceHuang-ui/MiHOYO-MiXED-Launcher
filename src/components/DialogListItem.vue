@@ -30,8 +30,4 @@ const props = defineProps({
 .icon-wrapper {
   @apply w-4 mr-2 mt-0.5;
 }
-
-.prop-text {
-  @apply font-normal font-sans;
-}
 </style>

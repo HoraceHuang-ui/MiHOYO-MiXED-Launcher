@@ -13,6 +13,7 @@ import LoadingIcon from '../../components/LoadingIcon.vue'
 import { GsRegInfo } from '../../types/genshin/gsRegInfo'
 import { SrRegInfo } from '../../types/starrail/srRegInfo'
 import MyDropdown from '../../components/MyDropdown.vue'
+import ZZZInfoCard from '../ZZZPage/Components/ZZZInfoCard.vue'
 
 type Mode =
   | 'main'
@@ -20,6 +21,7 @@ type Mode =
   | 'window-action'
   | 'gs-player'
   | 'sr-player'
+  | 'zzz-player'
   | 'dialog'
   | 'accounts'
   | 'out'
@@ -555,7 +557,9 @@ const gameLoop = () => {
 
   // [PLAYER] B / LS Press: Back
   if (
-    (mode.value === 'gs-player' || mode.value === 'sr-player') &&
+    (mode.value === 'gs-player' ||
+      mode.value === 'sr-player' ||
+      mode.value === 'zzz-player') &&
     (gp.buttons[10].pressed || gp.buttons[1].pressed)
   ) {
     if (!inThrottle) {
@@ -569,7 +573,9 @@ const gameLoop = () => {
 
   // [PLAYER] DIR_h: Switch Game
   if (
-    (mode.value === 'gs-player' || mode.value === 'sr-player') &&
+    (mode.value === 'gs-player' ||
+      mode.value === 'sr-player' ||
+      'zzz-player') &&
     gp.buttons[14].pressed
   ) {
     if (!inThrottle) {
@@ -581,7 +587,9 @@ const gameLoop = () => {
     }
   }
   if (
-    (mode.value === 'gs-player' || mode.value === 'sr-player') &&
+    (mode.value === 'gs-player' ||
+      mode.value === 'sr-player' ||
+      'zzz-player') &&
     gp.buttons[15].pressed
   ) {
     if (!inThrottle) {
@@ -798,7 +806,9 @@ onMounted(async () => {
           </div>
           <div
             class="absolute left-0 left no-drag"
-            v-else-if="mode === 'gs-player' || mode === 'sr-player'"
+            v-else-if="
+              mode === 'gs-player' || mode === 'sr-player' || 'zzz-player'
+            "
           >
             <div class="bar-item hoverable" @click="mode = 'main'">
               <GamepadIcon icon="B" />
@@ -815,7 +825,15 @@ onMounted(async () => {
             <div class="bar-item">
               <GamepadIcon icon="RS_h" />
               <span>{{
-                mode === 'gs-player' ? $t('gs_artifact') : $t('sr_relic')
+                (function () {
+                  if (mode === 'gs-player') {
+                    return $t('gs_artifact')
+                  } else if (mode === 'sr-player') {
+                    return $t('sr_relic')
+                  } else {
+                    return $t('zzz_driveDisc')
+                  }
+                })()
               }}</span>
             </div>
             <div class="bar-item" v-if="mode === 'sr-player'">
@@ -1086,16 +1104,20 @@ onMounted(async () => {
       v-if="
         mode === 'gs-player' ||
         mode === 'sr-player' ||
+        mode === 'zzz-player' ||
         mode === 'dialog' ||
         (mode === 'settings' &&
           (settingsOldMode === 'gs-player' ||
-            settingsOldMode === 'sr-player')) ||
+            settingsOldMode === 'sr-player' ||
+            settingsOldMode === 'zzz-player')) ||
         (mode === 'window-action' &&
           (windowOldMode === 'gs-player' ||
             windowOldMode === 'sr-player' ||
+            windowOldMode === 'zzz-player' ||
             (windowOldMode === 'settings' &&
               (settingsOldMode === 'gs-player' ||
-                settingsOldMode === 'sr-player'))))
+                settingsOldMode === 'sr-player' ||
+                settingsOldMode === 'zzz-player'))))
       "
       :class="{
         'pointer-events-none': store.settings.gamepad.disableMouse,
@@ -1120,7 +1142,8 @@ onMounted(async () => {
           animation="fade-swipe"
           @update:model-value="
             value => {
-              mode = value == 0 ? 'gs-player' : 'sr-player'
+              let modes: Mode[] = ['gs-player', 'sr-player', 'zzz-player']
+              mode = modes[value]
             }
           "
         >
@@ -1134,6 +1157,14 @@ onMounted(async () => {
 
           <div class="game-info-card-wrapper">
             <StarRailInfoCard
+              class="game-info-card"
+              :style="`width: calc(888px * min(${hScale}, ${vScale}))`"
+              v-model="mode"
+            />
+          </div>
+
+          <div class="game-info-card-wrapper">
+            <ZZZInfoCard
               class="game-info-card"
               :style="`width: calc(888px * min(${hScale}, ${vScale}))`"
               v-model="mode"

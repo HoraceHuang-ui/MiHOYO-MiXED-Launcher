@@ -202,6 +202,7 @@ const showLangDialog = (idx: number) => {
         switchLang(lang.value)
         store.game.gs.playerInfo = undefined
         store.game.sr.playerInfo = undefined
+        store.game.zzz.playerInfo = undefined
         window.win.relaunch()
         dispose()
       },
