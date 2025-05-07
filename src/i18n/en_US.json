@@ -138,10 +138,8 @@
   "general_gameBackgroundsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getAllGameBasicInfo?launcher_id=VYTpXlbWo8&language=en-us",
   "sr_memosprite": "Memosprite",
   "zzz_firstMet": "First Met:",
-  "No Driver Disc Equipped": "zzz_noRelic",
-  "No W-Engine Equipped": "zzz_noWeapon",
-  "Inter-Knot Lv": {
-    "": "zzz_playerLv"
-  },
-  "Driver Disc": "zzz_driverDisc"
+  "zzz_noRelic": "No Drive Disc Equipped",
+  "zzz_noWeapon": "No W-Engine Equipped",
+  "zzz_playerLv": "Inter-Knot Lv.",
+  "zzz_driveDisc": "Drive Disc"
 }
