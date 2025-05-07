@@ -136,5 +136,12 @@
   "gamepad_windowActions": "ウインドウアクションを長押しする",
   "zzz_launcherContentsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getGameContent?launcher_id=VYTpXlbWo8&game_id=U5hbdsT9W7&language=ja-jp",
   "general_gameBackgroundsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getAllGameBasicInfo?launcher_id=VYTpXlbWo8&language=ja-jp",
-  "sr_memosprite": "精霊"
+  "sr_memosprite": "精霊",
+  "zzz_firstMet": "First Met:",
+  "No Driver Disc Equipped": "zzz_noRelic",
+  "No W-Engine Equipped": "zzz_noWeapon",
+  "Inter-Knot Lv": {
+    "": "zzz_playerLv"
+  },
+  "Driver Disc": "zzz_driverDisc"
 }
