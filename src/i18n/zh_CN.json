@@ -141,5 +141,6 @@
   "zzz_noRelic": "暂未装配驱动盘",
   "zzz_noWeapon": "暂未装配音擎",
   "zzz_playerLv": "绳网等级",
-  "zzz_driveDisc": "驱动盘"
+  "zzz_driveDisc": "驱动盘",
+  "zzz_enkaLangCode": "zh-cn"
 }
