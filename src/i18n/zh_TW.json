@@ -137,9 +137,10 @@
   "zzz_launcherContentsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getGameContent?launcher_id=VYTpXlbWo8&game_id=U5hbdsT9W7&language=zh-tw",
   "general_gameBackgroundsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getAllGameBasicInfo?launcher_id=VYTpXlbWo8&language=zh-tw",
   "sr_memosprite": "憶靈",
-  "zzz_firstMet": "首次邂逅：",
+  "zzz_firstMet": "First Met: ",
   "zzz_noRelic": "暫未裝配驅動盤",
   "zzz_noWeapon": "暫未裝配音擎",
   "zzz_playerLv": "繩網等級",
-  "zzz_driveDisc": "驅動盤"
+  "zzz_driveDisc": "驅動盤",
+  "zzz_enkaLangCode": "zh-tw"
 }
