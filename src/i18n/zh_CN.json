@@ -136,5 +136,10 @@
   "gamepad_windowActions": "按住以选择窗口操作",
   "zzz_launcherContentsUrl": "https://hyp-api.mihoyo.com/hyp/hyp-connect/api/getGameContent?launcher_id=jGHBHlcOq1&game_id=x6znKlJ0xK&language=zh-cn",
   "general_gameBackgroundsUrl": "https://hyp-api.mihoyo.com/hyp/hyp-connect/api/getAllGameBasicInfo?launcher_id=jGHBHlcOq1&language=zh-cn",
-  "sr_memosprite": "忆灵"
+  "sr_memosprite": "忆灵",
+  "zzz_firstMet": "首次邂逅：",
+  "zzz_noRelic": "暂未装配驱动盘",
+  "zzz_noWeapon": "暂未装配音擎",
+  "zzz_playerLv": "绳网等级",
+  "zzz_driveDisc": "驱动盘"
 }
