@@ -137,7 +137,7 @@
   "zzz_launcherContentsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getGameContent?launcher_id=VYTpXlbWo8&game_id=U5hbdsT9W7&language=fr-fr",
   "general_gameBackgroundsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getAllGameBasicInfo?launcher_id=VYTpXlbWo8&language=fr-fr",
   "sr_memosprite": "Mnémesprit",
-  "zzz_firstMet": "Première rencontre : ",
+  "zzz_firstMet": "First Met: ",
   "zzz_noRelic": "Aucune disques de poussée",
   "zzz_noWeapon": "Aucune moteur-ampli",
   "zzz_playerLv": "Inter-nœud Niv.",
