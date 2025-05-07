@@ -137,11 +137,9 @@
   "zzz_launcherContentsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getGameContent?launcher_id=VYTpXlbWo8&game_id=U5hbdsT9W7&language=zh-tw",
   "general_gameBackgroundsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getAllGameBasicInfo?launcher_id=VYTpXlbWo8&language=zh-tw",
   "sr_memosprite": "憶靈",
-  "zzz_firstMet": "邂逅：",
-  "No Driver Disc Equipped": "暫未裝配驅動盤",
-  "No W-Engine Equipped": "暫未裝配音擎",
-  "Inter-Knot Lv": {
-    "": "繩網等級"
-  },
-  "Driver Disc": "驅動盤"
+  "zzz_firstMet": "首次邂逅：",
+  "zzz_noRelic": "暫未裝配驅動盤",
+  "zzz_noWeapon": "暫未裝配音擎",
+  "zzz_playerLv": "繩網等級",
+  "zzz_driveDisc": "驅動盤"
 }
