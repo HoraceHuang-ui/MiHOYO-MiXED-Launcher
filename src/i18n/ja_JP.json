@@ -137,7 +137,7 @@
   "zzz_launcherContentsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getGameContent?launcher_id=VYTpXlbWo8&game_id=U5hbdsT9W7&language=ja-jp",
   "general_gameBackgroundsUrl": "https://sg-hyp-api.hoyoverse.com/hyp/hyp-connect/api/getAllGameBasicInfo?launcher_id=VYTpXlbWo8&language=ja-jp",
   "sr_memosprite": "精霊",
-  "zzz_firstMet": "First Met: ",
+  "zzz_firstMet": "First Met:",
   "zzz_noRelic": "ドライバディスクなし",
   "zzz_noWeapon": "音動機なし",
   "zzz_playerLv": "インターノット Lv.",
