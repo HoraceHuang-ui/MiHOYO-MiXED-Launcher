@@ -41,8 +41,8 @@ contextBridge.exposeInMainWorld('path', {
     ipcRenderer.invoke('path:joinDirnameAsset', arg),
 })
 contextBridge.exposeInMainWorld('axios', {
-  post: async (url: string) => {
-    return await ipcRenderer.invoke('axios:post', url)
+  post: async (url: string, body: any) => {
+    return await ipcRenderer.invoke('axios:post', url, body)
   },
   get: async (url: string) => {
     return await ipcRenderer.invoke('axios:get', url)

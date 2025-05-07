@@ -29,6 +29,7 @@ import { GsRegInfo } from '../types/genshin/gsRegInfo'
 import { BgImageInfo } from '../types/launcher/bgImageInfo'
 import ZZZImportDialog from './ZZZPage/Components/ZZZImportDialog.vue'
 import ZZZDialog from './ZZZPage/Components/ZZZDialog.vue'
+import ZZZInfoCard from './ZZZPage/Components/ZZZInfoCard.vue'
 
 const store = useStore()
 
@@ -531,7 +532,7 @@ const refresh = () => {
   <div class="content-wrapper" :class="{ from: !launcherInfoReady }">
     <div
       class="bg-pic-wrapper"
-      :class="{ scrolled: hideElements, mask: gameNo != 2 && gameNo != 3 }"
+      :class="{ scrolled: hideElements, mask: gameNo != 2 }"
     >
       <img
         class="bg-pic"
@@ -550,7 +551,7 @@ const refresh = () => {
           !hideElements
         "
         class="launcher-banner"
-        :class="{ 'extra-sink': gameNo == 2 || gameNo == 3 }"
+        :class="{ 'extra-sink': gameNo == 2 }"
         :banners="launcherInfo.banners"
       />
     </Transition>
@@ -564,7 +565,7 @@ const refresh = () => {
         "
         :postTypeMap="postTypeMap"
         class="launcher-posts"
-        :class="[prefFont, { 'extra-sink': gameNo == 2 || gameNo == 3 }]"
+        :class="[prefFont, { 'extra-sink': gameNo == 2 }]"
       />
     </Transition>
     <ScrollWrapper
@@ -575,10 +576,7 @@ const refresh = () => {
       show-bar="never"
     >
       <div class="items-scroll">
-        <div
-          class="launch-area-wrapper"
-          :class="{ 'extra-sink': gameNo == 2 || gameNo == 3 }"
-        >
+        <div class="launch-area-wrapper" :class="{ 'extra-sink': gameNo == 2 }">
           <div class="h-[9vh] my-[2vh]" />
           <div
             class="right"
@@ -646,7 +644,7 @@ const refresh = () => {
                 @command="handleCommand"
                 placement="top"
                 :items="
-                  gameNo == 2 || gameNo == 3
+                  gameNo === 2
                     ? [
                         $t('general_openOfficialLauncher'),
                         $t('general_clearGamePath'),
@@ -682,6 +680,7 @@ const refresh = () => {
         </div>
         <GenshinInfoCard v-if="game === 'gs'" class="game-info-card" />
         <StarRailInfoCard v-else-if="game === 'sr'" class="game-info-card" />
+        <ZZZInfoCard v-else-if="game === 'zzz'" class="game-info-card" />
       </div>
     </ScrollWrapper>
   </div>

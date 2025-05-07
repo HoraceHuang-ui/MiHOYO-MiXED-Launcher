@@ -34,7 +34,6 @@ defineExpose({
 
 <template>
   <div class="flex flex-row">
-    <GamepadIcon icon="Y" v-if="gamepadMode" class="my-[1vh] mr-2" />
     <div class="wrapper">
       <input
         ref="inputRef"

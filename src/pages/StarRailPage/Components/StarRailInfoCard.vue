@@ -537,6 +537,11 @@ const showCharDetails = (index: number) => {
       </div>
       <div v-else style="width: 35vw" />
       <div class="flex flex-row">
+        <GamepadIcon
+          icon="Y"
+          v-if="gamepadMode"
+          class="mt-[2.5vh] mb-[2vh] mb-[1.5vh] mr-2"
+        />
         <CustomUIDInput
           ref="uidInputDom"
           v-model="uidInput"
@@ -782,8 +787,7 @@ const showCharDetails = (index: number) => {
                       game="sr"
                       stat="hp"
                       fill="#d1d5db"
-                      class="h-5 w-5"
-                      style="margin-top: 3px"
+                      class="h-5 w-5 mt-1"
                     />
                     <span class="text-gray-200 text-right font-sr-sans ml-3">{{
                       Math.floor(character.attributes[0].value) +
@@ -795,8 +799,7 @@ const showCharDetails = (index: number) => {
                       game="sr"
                       stat="atk"
                       fill="#d1d5db"
-                      class="h-5 w-5"
-                      style="margin-top: 3px"
+                      class="h-5 w-5 mt-1"
                     />
                     <span class="text-gray-200 text-right font-sr-sans ml-3">{{
                       Math.floor(character.attributes[1].value) +
@@ -808,8 +811,7 @@ const showCharDetails = (index: number) => {
                       game="sr"
                       stat="def"
                       fill="#d1d5db"
-                      class="h-5 w-5"
-                      style="margin-top: 3px"
+                      class="h-5 w-5 mt-1"
                     />
                     <span class="text-gray-200 text-right font-sr-sans ml-3">{{
                       Math.floor(character.attributes[2].value) +
@@ -821,8 +823,7 @@ const showCharDetails = (index: number) => {
                       game="sr"
                       stat="effect_res"
                       fill="#d1d5db"
-                      class="h-5 w-5"
-                      style="margin-top: 3px"
+                      class="h-5 w-5 mt-1"
                     />
                     <span class="text-gray-200 text-right font-sr-sans ml-3"
                       >{{
@@ -838,8 +839,7 @@ const showCharDetails = (index: number) => {
                       game="sr"
                       stat="spd"
                       fill="#d1d5db"
-                      class="h-5 w-5"
-                      style="margin-top: 3px"
+                      class="h-5 w-5 mt-1"
                     />
                     <span class="text-gray-200 text-right font-sr-sans ml-3">{{
                       (
@@ -853,8 +853,7 @@ const showCharDetails = (index: number) => {
                       game="sr"
                       stat="crit_rate"
                       fill="#d1d5db"
-                      class="h-5 w-5"
-                      style="margin-top: 3px"
+                      class="h-5 w-5 mt-1"
                     />
                     <span class="text-gray-200 text-right font-sr-sans ml-3"
                       >{{
@@ -871,8 +870,7 @@ const showCharDetails = (index: number) => {
                       game="sr"
                       stat="crit_dmg"
                       fill="#d1d5db"
-                      class="h-5 w-5"
-                      style="margin-top: 3px"
+                      class="h-5 w-5 mt-1"
                     />
                     <span class="text-gray-200 text-right font-sr-sans ml-3"
                       >{{
@@ -959,8 +957,7 @@ const showCharDetails = (index: number) => {
                           game="sr"
                           :stat="character.light_cone.attributes[0].field"
                           fill="#d1d5db"
-                          class="h-5 w-5 mr-2"
-                          style="margin-top: 3px"
+                          class="h-5 w-5 mr-2 mt-1"
                         />
                         <span class="text-gray-200 font-sr-sans text-lg">{{
                           character.light_cone
@@ -973,8 +970,7 @@ const showCharDetails = (index: number) => {
                           game="sr"
                           :stat="character.light_cone.attributes[1].field"
                           fill="#d1d5db"
-                          class="h-5 w-5 mr-2"
-                          style="margin-top: 3px"
+                          class="h-5 w-5 mr-2 mt-1"
                         />
                         <span class="text-gray-200 font-sr-sans text-lg">{{
                           character.light_cone
@@ -987,8 +983,7 @@ const showCharDetails = (index: number) => {
                           game="sr"
                           :stat="character.light_cone.attributes[2].field"
                           fill="#d1d5db"
-                          class="h-5 w-5 mr-2"
-                          style="margin-top: 3px"
+                          class="h-5 w-5 mr-2 mt-1"
                         />
                         <span class="text-gray-200 font-sr-sans text-lg">{{
                           character.light_cone
@@ -1245,8 +1240,7 @@ const showCharDetails = (index: number) => {
                             game="sr"
                             :stat="relic.main_affix.field"
                             fill="#d1d5db"
-                            class="h-5 w-5 mr-2"
-                            style="margin-top: 6px"
+                            class="h-5 w-5 mr-2 mt-1.5"
                           />
                           <div
                             class="text-gray-200 text-lg truncated"
@@ -1277,8 +1271,7 @@ const showCharDetails = (index: number) => {
                               game="sr"
                               :stat="substat.field"
                               fill="#ccc"
-                              class="h-5 w-5 mr-2"
-                              style="margin-top: 4px"
+                              class="h-5 w-5 mr-2 mt-1"
                             />
                             <span
                               class="text-gray-200 font-sr-sans text-xl ml-2"

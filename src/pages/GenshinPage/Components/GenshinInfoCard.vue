@@ -28,6 +28,7 @@ const gamepadMode = defineModel({
     | 'window-action'
     | 'gs-player'
     | 'sr-player'
+    | 'zzz-player'
     | 'dialog'
     | 'out'
   >,
@@ -579,6 +580,11 @@ const enkaAssetUrl = (obj: any, keyName = 'name') =>
       </div>
       <div v-else style="width: 35vw" />
       <div class="flex flex-row">
+        <GamepadIcon
+          icon="Y"
+          v-if="gamepadMode"
+          class="mt-[2.5vh] mb-[2vh] mb-[1.5vh] mr-2"
+        />
         <CustomUIDInput
           ref="uidInputDom"
           v-model="uidInput"
@@ -883,8 +889,7 @@ const enkaAssetUrl = (obj: any, keyName = 'name') =>
                       game="gs"
                       stat="FIGHT_PROP_HP"
                       fill="#d1d5db"
-                      class="w-5 h-5"
-                      style="margin-top: 1px"
+                      class="w-5 h-5 mt-[1px]"
                     />
                     <span class="text-gray-200 text-right font-gs ml-3">{{
                       character.stats.maxHealth.value.toFixed(0)
@@ -898,8 +903,7 @@ const enkaAssetUrl = (obj: any, keyName = 'name') =>
                       game="gs"
                       stat="FIGHT_PROP_ATTACK"
                       fill="#d1d5db"
-                      class="w-5 h-5"
-                      style="margin-top: 1px"
+                      class="w-5 h-5 mt-[1px]"
                     />
                     <span class="text-gray-200 text-right font-gs ml-3">{{
                       character.stats.attack.value.toFixed(0)
@@ -913,8 +917,7 @@ const enkaAssetUrl = (obj: any, keyName = 'name') =>
                       game="gs"
                       stat="FIGHT_PROP_DEFENSE"
                       fill="#d1d5db"
-                      class="w-5 h-5"
-                      style="margin-top: 1px"
+                      class="w-5 h-5 mt-[1px]"
                     />
                     <span class="text-gray-200 text-right font-gs ml-3">{{
                       character.stats.defense.value.toFixed(0)
@@ -928,8 +931,7 @@ const enkaAssetUrl = (obj: any, keyName = 'name') =>
                       game="gs"
                       stat="FIGHT_PROP_CHARGE_EFFICIENCY"
                       fill="#d1d5db"
-                      class="w-5 h-5"
-                      style="margin-top: 1px"
+                      class="w-5 h-5 mt-[1px]"
                     />
                     <span class="text-gray-200 text-right font-gs ml-3"
                       >{{
@@ -947,8 +949,7 @@ const enkaAssetUrl = (obj: any, keyName = 'name') =>
                       game="gs"
                       stat="FIGHT_PROP_ELEMENT_MASTERY"
                       fill="#d1d5db"
-                      class="w-5 h-5"
-                      style="margin-top: 1px"
+                      class="w-5 h-5 mt-[1px]"
                     />
                     <span class="text-gray-200 text-right font-gs ml-3">{{
                       character.stats.elementMastery.value.toFixed(0)
@@ -962,8 +963,7 @@ const enkaAssetUrl = (obj: any, keyName = 'name') =>
                       game="gs"
                       stat="CUSTOM_ENERGY_REQUIRED"
                       fill="#d1d5db"
-                      class="w-5 h-5"
-                      style="margin-top: 1px"
+                      class="w-5 h-5 mt-[1px]"
                     />
                     <span class="text-gray-200 text-right font-gs ml-3">{{
                       character.skillLevels[2].skill.costElemVal
@@ -977,8 +977,7 @@ const enkaAssetUrl = (obj: any, keyName = 'name') =>
                       game="gs"
                       stat="FIGHT_PROP_CRITICAL"
                       fill="#d1d5db"
-                      class="w-5 h-5"
-                      style="margin-top: 1px"
+                      class="w-5 h-5 mt-[1px]"
                     />
                     <span class="text-gray-200 text-right font-gs ml-3"
                       >{{
@@ -994,8 +993,7 @@ const enkaAssetUrl = (obj: any, keyName = 'name') =>
                       game="gs"
                       stat="FIGHT_PROP_CRITICAL_HURT"
                       fill="#d1d5db"
-                      class="w-5 h-5"
-                      style="margin-top: 1px"
+                      class="w-5 h-5 mt-[1px]"
                     />
                     <span class="text-gray-200 text-right font-gs ml-3"
                       >{{
@@ -1073,8 +1071,7 @@ const enkaAssetUrl = (obj: any, keyName = 'name') =>
                           game="gs"
                           stat="FIGHT_PROP_ATTACK"
                           fill="#d1d5db"
-                          class="w-5 h-5 mr-2"
-                          style="margin-top: 1px"
+                          class="w-5 h-5 mr-2 mt-[1px]"
                         />
                         <span class="text-gray-200 font-gs text-lg">{{
                           character.weapon.weaponStats[0].value.toFixed(0)
@@ -1090,8 +1087,7 @@ const enkaAssetUrl = (obj: any, keyName = 'name') =>
                           game="gs"
                           :stat="character.weapon.weaponStats[1].fightProp"
                           fill="#d1d5db"
-                          class="w-5 h-5 mr-2"
-                          style="margin-top: 1px"
+                          class="w-5 h-5 mr-2 mt-[1px]"
                         />
                         <span class="text-gray-200 font-gs text-lg">{{
                           displayStat(character.weapon.weaponStats[1])
@@ -1112,6 +1108,7 @@ const enkaAssetUrl = (obj: any, keyName = 'name') =>
                 >
                   <div
                     v-for="artifact in character.artifacts"
+                    :key="artifact.artifactData.id"
                     class="pb-2 pr-2 pl-4 flex flex-row h-40 text-gray-200 w-full"
                   >
                     <img
@@ -1135,8 +1132,7 @@ const enkaAssetUrl = (obj: any, keyName = 'name') =>
                           game="gs"
                           :stat="artifact.mainstat.fightProp"
                           fill="#eee"
-                          class="w-6 h-6 mr-1"
-                          style="margin-top: 3px"
+                          class="w-6 h-6 mr-1 mt-[3px]"
                         />
                         <span class="text-gray-200 text-3xl ml-2 font-gs">
                           {{ displayStat(artifact.mainstat) }}
@@ -1177,8 +1173,7 @@ const enkaAssetUrl = (obj: any, keyName = 'name') =>
                               game="gs"
                               :stat="substat.fightProp"
                               fill="#d1d5db"
-                              class="w-4 h-4 mr-1"
-                              style="margin-top: 2px"
+                              class="w-4 h-4 mr-1 mt-[2px]"
                             />
                             <span class="text-gray-300 font-gs text-lg ml-1">{{
                               displayStat(substat)

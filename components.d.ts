@@ -30,6 +30,7 @@ declare module 'vue' {
     ScrollWrapper: typeof import('./src/components/ScrollWrapper.vue')['default']
     StatIcon: typeof import('./src/components/StatIcon.vue')['default']
     TemplateDialog: typeof import('./src/components/TemplateDialog.vue')['default']
+    TextScroll: typeof import('./src/components/TextScroll.vue')['default']
     TopHeader: typeof import('./src/components/TopHeader.vue')['default']
     UpdateDialogContent: typeof import('./src/components/UpdateDialogContent.vue')['default']
   }

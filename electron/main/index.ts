@@ -287,8 +287,8 @@ async function createWindow() {
     return path.join(assetsPath, arg)
   })
 
-  ipcMain.handle('axios:post', async (_event, url) => {
-    const result = await axios.post(url)
+  ipcMain.handle('axios:post', async (_event, url, body) => {
+    const result = await axios.post(url, body)
     return result.data
   })
   ipcMain.handle('axios:get', async (_event, url) => {
