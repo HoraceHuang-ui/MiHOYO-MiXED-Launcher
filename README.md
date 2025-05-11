@@ -18,7 +18,7 @@ the following slow updates!
 - [x] Launch `Genshin Impact`, `Honkai: Star Rail`, `Honkai Impact 3rd` and `Zenless Zone Zero` in one place.
 - [x] Manually import customized game directories.
 - [x] Multi-language support.
-- [x] Analyze detailed player info for `Genshin Impact` and `Honkai: Star Rail` in a special card layout.
+- [x] Analyze detailed player info for `Genshin Impact`, `Honkai: Star Rail` and `Zenless Zone Zero` in a special card layout.
 - [x] Keeps all UI elements of official launchers.
 - [x] Automatically calculate and notify about major game updates.
 - [x] Gamepad support, with a standalone UI optimized for gamepad operations.
@@ -107,6 +107,7 @@ fetch('../../app.asar/package.json')
 
 - [electron-vite/electron-vite-vue](https://github.com/electron-vite/electron-vite-vue)
 - [enka-network-api](https://github.com/yuko1101/enka-network-api)
+- [Enka.DotNet](https://github.com/aliafuji/EnkaDotnet)
 - [Mar-7th/MiHoMo API](https://march7th.xiaohei.moe/zh/resource/mihomo_api.html) | [Mar-7th/StarRailRes](https://github.com/Mar-7th/StarRailRes)
 
 # Translation

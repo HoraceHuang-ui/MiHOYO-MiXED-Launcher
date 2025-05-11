@@ -16,7 +16,7 @@ By HoraceHyy
 - [x] 聚合启动原神、崩坏：星穹铁道、崩坏3rd、绝区零。
 - [x] 手动导入游戏路径。
 - [x] 多语言支持。
-- [x] 以卡片形式展现原神和崩坏：星穹铁道的游戏内账号信息。
+- [x] 以卡片形式展现原神、崩坏：星穹铁道和绝区零的游戏内账号信息。
 - [x] 保留了官方启动器的所有UI元素。
 - [x] 自动计算游戏大版本更新并提醒。
 - [x] 支持手柄模式，有专门为手柄操作优化的独立 UI 页面。
@@ -101,6 +101,7 @@ fetch('../../app.asar/package.json')
 
 - [electron-vite/electron-vite-vue](https://github.com/electron-vite/electron-vite-vue)
 - [enka-network-api](https://github.com/yuko1101/enka-network-api)
+- [Enka.DotNet](https://github.com/aliafuji/EnkaDotnet)
 - [Mar-7th/MiHoMo API](https://march7th.xiaohei.moe/zh/resource/mihomo_api.html) | [Mar-7th/StarRailRes](https://github.com/Mar-7th/StarRailRes)
 
 # 翻译
