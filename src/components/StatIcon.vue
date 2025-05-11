@@ -327,7 +327,8 @@ const props = defineProps({
     <div v-if="props.game == 'zzz'">
       <zzz_elecIcon
         v-if="
-          props.stat === 'Electric' || props.stat === 'AddedDamageRatio_Elec'
+          props.stat === 'Electric' ||
+          props.stat === 'AddedDamageRatio_Electric'
         "
         :fill="props.fill"
         :class="props.class"
@@ -344,7 +345,8 @@ const props = defineProps({
       />
       <zzz_physIcon
         v-if="
-          props.stat === 'Physical' || props.stat === 'AddedDamageRatio_Physics'
+          props.stat === 'Physical' ||
+          props.stat === 'AddedDamageRatio_Physical'
         "
         :fill="props.fill"
         :class="props.class"
