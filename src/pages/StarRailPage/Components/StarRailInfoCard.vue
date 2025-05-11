@@ -36,7 +36,9 @@ const gamepadMode = defineModel({
     | 'window-action'
     | 'gs-player'
     | 'sr-player'
+    | 'zzz-player'
     | 'dialog'
+    | 'accounts'
     | 'out'
   >,
   required: false,

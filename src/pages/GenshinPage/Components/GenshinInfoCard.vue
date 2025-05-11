@@ -30,6 +30,7 @@ const gamepadMode = defineModel({
     | 'sr-player'
     | 'zzz-player'
     | 'dialog'
+    | 'accounts'
     | 'out'
   >,
   required: false,
