@@ -4,6 +4,7 @@ import StatIcon from '../../../components/StatIcon.vue'
 import DialogListItem from '../../../components/DialogListItem.vue'
 import { onMounted, PropType, Ref, ref } from 'vue'
 import GamepadIcon from '../../../components/GamepadIcon.vue'
+import { translate } from '../../../i18n'
 
 const props = defineProps({
   title: {
