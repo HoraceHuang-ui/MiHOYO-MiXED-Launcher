@@ -816,7 +816,7 @@ const showCharDetails = (index: number) => {
                   />
                   <!--                <div style="font-size: 10px">{{ stat }}</div>-->
                   <div style="font-size: 18px; transform: skewX(14deg)">
-                    {{ character.FinalStats[stat].statValue }}
+                    {{ character.FinalStats[stat].statValue.final }}
                   </div>
                 </div>
                 <div
@@ -1046,17 +1046,15 @@ const showCharDetails = (index: number) => {
                           class="w-5"
                         />
                         <div
-                          v-if="substat.Value[substat.Value.length - 1] !== '1'"
+                          v-if="disc.SubStatsRaw[idx].Level !== 1"
                           class="ml-1 text-center font-zzz-bold text-sm opacity-75"
                           :style="{ color: character.Colors[0].Accent }"
                         >
-                          +{{ substat.Value[substat.Value.length - 1] - 1 }}
+                          +{{ disc.SubStatsRaw[idx].Level - 1 }}
                         </div>
                       </div>
                       <div>
-                        {{
-                          substat.Value.substring(0, substat.Value.length - 3)
-                        }}
+                        {{ substat.Value }}
                       </div>
                     </div>
                   </div>

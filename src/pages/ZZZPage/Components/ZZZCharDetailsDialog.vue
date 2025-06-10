@@ -75,6 +75,17 @@ const gameLoop = () => {
   }
 }
 
+const transElement = (el: string) => {
+  switch (el) {
+    case 'FireFrost':
+      return 'Ice'
+    case 'AuricEther':
+      return 'Ether'
+    default:
+      return el
+  }
+}
+
 const statOrder = [
   'HpMax',
   'Atk',
@@ -87,12 +98,16 @@ const statOrder = [
   'PenRatio',
   'PenDelta',
   'SpRecover',
-  `AddedDamageRatio_${props.character.Element}`,
+  `AddedDamageRatio_${transElement(props.character.Element)}`,
 ]
 
 onMounted(() => {
   if (props.gamepadMode) {
     rAFId = rAF(gameLoop)
+  }
+
+  if (props.character.ProfessionType === 6) {
+    statOrder.push('SkipDefAtk', 'RpRecover')
   }
 })
 </script>
@@ -127,15 +142,12 @@ onMounted(() => {
           <span>{{
             ['HpMax', 'Atk', 'Def'].includes(stat)
               ? character.BaseStats[stat]
-              : character.FinalStats[stat].statValue
+              : character.FinalStats[stat].statValue.final
           }}</span>
           <span
             v-if="['HpMax', 'Atk', 'Def'].includes(stat)"
             class="stat-addition"
-            >+{{
-              parseInt(character.FinalStats[stat].statValue) -
-              character.BaseStats[stat]
-            }}</span
+            >+{{ character.FinalStats[stat].statValue.added }}</span
           >
         </div>
       </DialogListItem>

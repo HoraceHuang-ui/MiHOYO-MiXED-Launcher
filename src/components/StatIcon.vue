@@ -46,6 +46,8 @@ import zzz_fireIcon from '../assets/zzzCard/elementIcons/fireIcon.vue'
 import zzz_iceIcon from '../assets/zzzCard/elementIcons/iceIcon.vue'
 import zzz_physIcon from '../assets/zzzCard/elementIcons/physIcon.vue'
 import zzz_etherIcon from '../assets/zzzCard/elementIcons/etherIcon.vue'
+import zzz_frostIcon from '../assets/zzzCard/elementIcons/frostIcon.vue'
+import zzz_auricIcon from '../assets/zzzCard/elementIcons/auricIcon.vue'
 import zzz_hpIcon from '../assets/statIcons/zzz/hpIcon.vue'
 import zzz_atkIcon from '../assets/statIcons/zzz/atkIcon.vue'
 import zzz_defIcon from '../assets/statIcons/zzz/defIcon.vue'
@@ -57,6 +59,8 @@ import zzz_energyRegenIcon from '../assets/statIcons/zzz/energyRegenIcon.vue'
 import zzz_penRatioIcon from '../assets/statIcons/zzz/penRatioIcon.vue'
 import zzz_penIcon from '../assets/statIcons/zzz/penIcon.vue'
 import zzz_impactIcon from '../assets/statIcons/zzz/impactIcon.vue'
+import zzz_adreAccuIcon from '../assets/statIcons/zzz/adreAccuIcon.vue'
+import zzz_sheerForceIcon from '../assets/statIcons/zzz/sheerForceIcon.vue'
 import zzz_coreAIcon from '../assets/zzzCard/coreSkillIcons/coreAIcon.vue'
 import zzz_coreBIcon from '../assets/zzzCard/coreSkillIcons/coreBIcon.vue'
 import zzz_coreCIcon from '../assets/zzzCard/coreSkillIcons/coreCIcon.vue'
@@ -356,6 +360,22 @@ const props = defineProps({
         :fill="props.fill"
         :class="props.class"
       />
+      <zzz_frostIcon
+        v-if="
+          props.stat === 'FireFrost' ||
+          props.stat === 'AddedDamageRatio_FireFrost'
+        "
+        :fill="props.fill"
+        :class="props.class"
+      />
+      <zzz_auricIcon
+        v-if="
+          props.stat === 'AuricEther' ||
+          props.stat === 'AddedDamageRatio_AuricEther'
+        "
+        :fill="props.fill"
+        :class="props.class"
+      />
       <zzz_hpIcon
         v-if="props.stat === 'HpMax'"
         :fill="props.fill"
@@ -408,6 +428,16 @@ const props = defineProps({
       />
       <zzz_impactIcon
         v-if="props.stat === 'BreakStun'"
+        :fill="props.fill"
+        :class="props.class"
+      />
+      <zzz_sheerForceIcon
+        v-if="props.stat === 'SkipDefAtk'"
+        :fill="props.fill"
+        :class="props.class"
+      />
+      <zzz_adreAccuIcon
+        v-if="props.stat === 'RpRecover'"
         :fill="props.fill"
         :class="props.class"
       />
