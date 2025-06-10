@@ -241,16 +241,6 @@ let inThrottle = false
 let settingsOldMode: Mode = 'out'
 let windowOldMode: Mode = 'out'
 
-const throttle = (callback: () => void, delay: number) => {
-  if (!inThrottle) {
-    callback()
-    inThrottle = true
-    setTimeout(() => {
-      inThrottle = false
-    }, delay)
-  }
-}
-
 const barSettingsClick = () => {
   if (mode.value !== 'settings') {
     settingsOldMode = mode.value
@@ -306,10 +296,14 @@ const gameLoop = () => {
     mode.value !== 'dialog' &&
     gp.buttons[9].pressed
   ) {
-    throttle(() => {
+    if (!inThrottle) {
       settingsOldMode = mode.value
       mode.value = 'settings'
-    }, 300)
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 300)
+    }
   }
 
   // [!WINDOW-ACTION] Map: Quit Gamepad Mode
@@ -318,69 +312,87 @@ const gameLoop = () => {
     mode.value !== 'dialog' &&
     gp.buttons[8].pressed
   ) {
-    throttle(() => {
+    if (!inThrottle) {
       mode.value = 'out'
-      leaveGamepad!()
-    }, 300)
+      inThrottle = true
+      setTimeout(() => {
+        leaveGamepad!()
+        inThrottle = false
+      }, 300)
+    }
   }
 
   // [MAIN] L Axis / ARROW: Select Game
   if (mode.value === 'main' && (gp.axes[0] < -0.9 || gp.buttons[14].pressed)) {
-    throttle(() => {
+    if (!inThrottle) {
       selectedGameIndex.value =
         selectedGameIndex.value === 0
           ? importedGames.value.length - 1
           : selectedGameIndex.value - 1
-    }, 150)
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 150)
+    }
   }
   if (mode.value === 'main' && (gp.axes[0] > 0.9 || gp.buttons[15].pressed)) {
-    throttle(() => {
+    if (!inThrottle) {
       selectedGameIndex.value =
         selectedGameIndex.value === importedGames.value.length - 1
           ? 0
           : selectedGameIndex.value + 1
-    }, 150)
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 150)
+    }
   }
 
   // [MAIN] A: Launch Game
   if (mode.value === 'main' && gp.buttons[0].pressed) {
-    throttle(() => {
+    if (!inThrottle) {
       launch(importedGames.value[selectedGameIndex.value].game, false)
-    }, 300)
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 300)
+    }
   }
 
   // [MAIN] X: Official Launcher
   if (mode.value === 'main' && gp.buttons[2].pressed) {
-    throttle(() => {
+    if (!inThrottle) {
       launch(importedGames.value[selectedGameIndex.value].game, true)
-    }, 300)
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 300)
+    }
   }
 
   // [MAIN] Y: Select Accounts
   if (mode.value === 'main' && gp.buttons[3].pressed) {
-    throttle(() => {
+    if (!inThrottle) {
       if (importedGames.value[selectedGameIndex.value].game !== 'zzz') {
         showAccountsDropdown.value = true
         mode.value = 'accounts'
       }
-    }, 300)
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 300)
+    }
   }
 
   // [MAIN] LS Press: Player Info
   if (mode.value === 'main' && gp.buttons[10].pressed) {
-    throttle(() => {
-      // 根据当前选择的游戏设置对应的player模式
-      const game = importedGames.value[selectedGameIndex.value].game
-      if (game === 'gs') {
-        mode.value = 'gs-player'
-      } else if (game === 'sr') {
-        mode.value = 'sr-player'
-      } else if (game === 'zzz') {
-        mode.value = 'zzz-player'
-      } else {
-        mode.value = 'gs-player' // 默认值
-      }
-    }, 300)
+    if (!inThrottle) {
+      mode.value = 'gs-player'
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 300)
+    }
   }
 
   // [!WINDOW-ACTION] LT: Window Actions
@@ -399,20 +411,32 @@ const gameLoop = () => {
   }
   if (mode.value === 'window-action') {
     if (gp.buttons[2].pressed) {
-      throttle(() => {
+      if (!inThrottle) {
+        inThrottle = true
         winMax()
-        console.log('max')
-      }, 300)
+        setTimeout(() => {
+          console.log('max')
+          inThrottle = false
+        }, 300)
+      }
     }
     if (gp.buttons[3].pressed) {
-      throttle(() => {
+      if (!inThrottle) {
+        inThrottle = true
         winMin()
-      }, 300)
+        setTimeout(() => {
+          inThrottle = false
+        }, 300)
+      }
     }
     if (gp.buttons[1].pressed) {
-      throttle(async () => {
-        await winClose()
-      }, 300)
+      if (!inThrottle) {
+        inThrottle = true
+        setTimeout(async () => {
+          await winClose()
+          inThrottle = false
+        }, 300)
+      }
     }
   }
 
@@ -421,10 +445,14 @@ const gameLoop = () => {
     mode.value === 'settings' &&
     (gp.buttons[1].pressed || gp.buttons[9].pressed)
   ) {
-    throttle(() => {
+    if (!inThrottle) {
       showTooltip.value = false
       mode.value = settingsOldMode
-    }, 300)
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 300)
+    }
   }
 
   // [SETTINGS] LS / DIR_v: Select Settings Item
@@ -432,7 +460,7 @@ const gameLoop = () => {
     mode.value === 'settings' &&
     (gp.axes[1] < -0.9 || gp.buttons[12].pressed)
   ) {
-    throttle(() => {
+    if (!inThrottle) {
       if (selectedSettingsItemIndex.value === 0) {
         const targetCardIdx =
           selectedSettingsCardIndex.value === 0
@@ -444,13 +472,17 @@ const gameLoop = () => {
       } else {
         selectedSettingsItemIndex.value--
       }
-    }, 150)
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 150)
+    }
   }
   if (
     mode.value === 'settings' &&
     (gp.axes[1] > 0.9 || gp.buttons[13].pressed)
   ) {
-    throttle(() => {
+    if (!inThrottle) {
       if (
         selectedSettingsItemIndex.value ===
         settingsItems.value[selectedSettingsCardIndex.value].items.length - 1
@@ -463,44 +495,64 @@ const gameLoop = () => {
       } else {
         selectedSettingsItemIndex.value++
       }
-    }, 150)
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 150)
+    }
   }
 
   // [SETTINGS] RS: Select Settings Card
   if (mode.value === 'settings' && gp.axes[3] < -0.9) {
-    throttle(() => {
+    if (!inThrottle) {
       selectedSettingsItemIndex.value = 0
       selectedSettingsCardIndex.value =
         selectedSettingsCardIndex.value === 0
           ? settingsItems.value.length - 1
           : selectedSettingsCardIndex.value - 1
-    }, 150)
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 150)
+    }
   }
   if (mode.value === 'settings' && gp.axes[3] > 0.9) {
-    throttle(() => {
+    if (!inThrottle) {
       selectedSettingsItemIndex.value = 0
       selectedSettingsCardIndex.value =
         selectedSettingsCardIndex.value === settingsItems.value.length - 1
           ? 0
           : selectedSettingsCardIndex.value + 1
-    }, 150)
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 150)
+    }
   }
 
   // [SETTINGS] A: Select Item
   if (mode.value === 'settings' && gp.buttons[0].pressed) {
-    throttle(() => {
+    if (!inThrottle) {
       onSettingsChange(
         selectedSettingsCardIndex.value,
         selectedSettingsItemIndex.value,
       )
-    }, 300)
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 300)
+    }
   }
 
   // [SETTINGS] LS Press: Show Tooltip
   if (mode.value === 'settings' && gp.buttons[10].pressed) {
-    throttle(() => {
+    if (!inThrottle) {
       showTooltip.value = !showTooltip.value
-    }, 300)
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 300)
+    }
   }
 
   // [PLAYER] B / LS Press: Back
@@ -510,9 +562,13 @@ const gameLoop = () => {
       mode.value === 'zzz-player') &&
     (gp.buttons[10].pressed || gp.buttons[1].pressed)
   ) {
-    throttle(() => {
+    if (!inThrottle) {
       mode.value = 'main'
-    }, 300)
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 300)
+    }
   }
 
   // [PLAYER] DIR_h: Switch Game
@@ -522,9 +578,13 @@ const gameLoop = () => {
       mode.value === 'zzz-player') &&
     gp.buttons[14].pressed
   ) {
-    throttle(() => {
+    if (!inThrottle) {
       playerCardCarousel.value?.prevPane()
-    }, 420)
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 420)
+    }
   }
   if (
     (mode.value === 'gs-player' ||
@@ -532,9 +592,13 @@ const gameLoop = () => {
       mode.value === 'zzz-player') &&
     gp.buttons[15].pressed
   ) {
-    throttle(() => {
+    if (!inThrottle) {
       playerCardCarousel.value?.nextPane()
-    }, 420)
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 420)
+    }
   }
 
   // [ACCOUNTS] Y / B: Back to Main
@@ -542,10 +606,14 @@ const gameLoop = () => {
     mode.value === 'accounts' &&
     (gp.buttons[1].pressed || gp.buttons[3].pressed)
   ) {
-    throttle(() => {
+    if (!inThrottle) {
       mode.value = 'main'
       showAccountsDropdown.value = false
-    }, 300)
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 300)
+    }
   }
 
   // [ACCOUNTS] LS_v / DIR_v: Select Account
@@ -553,19 +621,23 @@ const gameLoop = () => {
     mode.value === 'accounts' &&
     (gp.axes[1] < -0.9 || gp.buttons[12].pressed)
   ) {
-    throttle(() => {
+    if (!inThrottle) {
       selectedAccountIndex.value =
         selectedAccountIndex.value === -1
           ? store.game[importedGames.value[selectedGameIndex.value].game]
               .accounts.length - 1
           : selectedAccountIndex.value - 1
-    }, 150)
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 150)
+    }
   }
   if (
     mode.value === 'accounts' &&
     (gp.axes[1] > 0.9 || gp.buttons[13].pressed)
   ) {
-    throttle(() => {
+    if (!inThrottle) {
       selectedAccountIndex.value =
         selectedAccountIndex.value ===
         store.game[importedGames.value[selectedGameIndex.value].game].accounts
@@ -573,14 +645,22 @@ const gameLoop = () => {
           1
           ? -1
           : selectedAccountIndex.value + 1
-    }, 150)
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 150)
+    }
   }
 
   // [ACCOUNTS] A: Confirm Select Account
   if (mode.value === 'accounts' && gp.buttons[0].pressed) {
-    throttle(() => {
+    if (!inThrottle) {
       switchAccount(selectedAccountIndex.value + 1)
-    }, 300)
+      inThrottle = true
+      setTimeout(() => {
+        inThrottle = false
+      }, 300)
+    }
   }
 
   rAF(gameLoop)
@@ -727,7 +807,9 @@ onMounted(async () => {
           <div
             class="absolute left-0 left no-drag"
             v-else-if="
-              mode === 'gs-player' || mode === 'sr-player' || mode === 'zzz-player'
+              mode === 'gs-player' ||
+              mode === 'sr-player' ||
+              mode === 'zzz-player'
             "
           >
             <div class="bar-item hoverable" @click="mode = 'main'">
