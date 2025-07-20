@@ -609,8 +609,14 @@ const showCharDetails = (index: number) => {
                   style="left: 10px"
                 ></div>
                 <img
+                  v-if="Object.keys(character.Skins).length == 0"
                   class="absolute left-[2px] bottom-[2px] char-side-icon rounded-full ml-[10px] w-8 h-8 hover:transform hover:scale-110 active:scale-100 transition-all object-cover"
                   :src="character.CircleIconUrl"
+                />
+                <img
+                  v-else
+                  class="absolute left-[2px] bottom-[2px] char-side-icon rounded-full ml-[10px] w-8 h-8 hover:transform hover:scale-110 active:scale-100 transition-all object-cover"
+                  :src="Object.values(character.Skins)[0].CircleIcon"
                 />
               </div>
             </div>
@@ -690,10 +696,27 @@ const showCharDetails = (index: number) => {
             />
             <!-- 立绘 -->
             <img
+              v-if="
+                !store.settings.appearance.gsCostume ||
+                !character.Skins ||
+                Object.keys(character.Skins).length == 0
+              "
               class="absolute z-[6] h-full"
               :src="character.ImageUrl"
-              :style="`left: ${character.Transform.Left}px; top: ${character.Transform.Top}px; transform: scale(${character.Transform.Scale})`"
+              :style="`left: ${character.Transform.left}px; top: ${character.Transform.top}px; transform: scale(${character.Transform.scale})`"
             />
+            <img
+              v-else
+              class="absolute z-[6] h-full"
+              :src="Object.values(character.Skins)[0].Image"
+              :style="`left: ${character.Transform.skin.left}px; top: ${character.Transform.skin.top}px; scale: ${character.Transform.skin.scale}`"
+            />
+            <!--            <img-->
+            <!--              v-else-->
+            <!--              class="absolute z-[6] h-full"-->
+            <!--              src="https://enka.network/ui/zzz/IconRole46_01.png"-->
+            <!--              :style="`left: ${-40}px; top: ${280}px; scale: ${1.7}`"-->
+            <!--            />-->
             <!-- 左上人名、属性、命途 -->
             <div
               class="font-zzz-bold absolute left-4 top-5 z-20 text-3xl text-white justify-between flex flex-row"
