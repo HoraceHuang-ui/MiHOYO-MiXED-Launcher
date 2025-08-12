@@ -265,7 +265,7 @@ const requestInfo = () => {
   uid = uidInput.value
   playerInfoFailed.value = false
   window.axios
-    .post('http://1.92.84.11:5004/Enka', {
+    .post('http://120.55.52.240:5004/Enka', {
       // .post('http://0.0.0.0:5004/Enka', {
       game: 2,
       lang: translate('zzz_enkaLangCode'),
