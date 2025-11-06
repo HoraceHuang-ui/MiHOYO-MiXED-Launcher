@@ -69,8 +69,8 @@ const skillTypes = [
   'BPSkill',
   'Ultra',
   'Talent',
-  'MemospriteSkill',
-  'MemospriteTalent',
+  // 'MemospriteSkill',
+  // 'MemospriteTalent',
 ]
 
 const charsScrollbar = ref()
@@ -78,7 +78,7 @@ const cardsCarouselRef = ref()
 const showcaseIdx = ref(0)
 const relicIdx = ref(0)
 const ascLevelMap = [20, 30, 40, 50, 60, 70, 80]
-const memosprite = ref(0)
+// const memosprite = ref(0)
 let rankMap: Record<string, RankInfo> = {}
 const ranksReady = ref(false)
 const initReady = ref(false)
@@ -216,19 +216,19 @@ const gameLoop = () => {
   }
 
   // RS: Switch Memosprite
-  if (
-    gamepadMode.value === 'sr-player' &&
-    gp.buttons[11].pressed &&
-    playerInfo.value
-  ) {
-    if (!inThrottle) {
-      inThrottle = true
-      memosprite.value = (memosprite.value + 1) % 2
-      setTimeout(() => {
-        inThrottle = false
-      }, 300)
-    }
-  }
+  // if (
+  //   gamepadMode.value === 'sr-player' &&
+  //   gp.buttons[11].pressed &&
+  //   playerInfo.value
+  // ) {
+  //   if (!inThrottle) {
+  //     inThrottle = true
+  //     memosprite.value = (memosprite.value + 1) % 2
+  //     setTimeout(() => {
+  //       inThrottle = false
+  //     }, 300)
+  //   }
+  // }
 
   if (rAFId) {
     rAFId = rAF(gameLoop)
@@ -294,6 +294,7 @@ const requestInfo = () => {
       console.log(resp.player.uid)
       if (playerInfo.value && playerInfo.value.player.uid == resp.player.uid) {
         console.log('uid equal')
+        console.log(resp)
         mergeToPlayerinfo(resp.characters)
         playerInfo.value.player = resp.player
       } else {
@@ -334,7 +335,7 @@ const requestInfo = () => {
       for (const character of playerInfo.value.characters) {
         let skills: Record<string, any[]> = {}
         let recorded: string[] = []
-        for (const skill of character.skills) {
+        for (const skill of Object.values(character.skills)) {
           if (
             !recorded.includes(skill.name) &&
             skillTypes.includes(skill.type)
@@ -1007,28 +1008,25 @@ const showCharDetails = (index: number) => {
                 <div
                   class="mt-2 px-2 py-3 w-full rounded-xl bg-black bg-opacity-20 backdrop-blur-md relative z-50"
                 >
-                  <div
-                    class="absolute right-1 bottom-1 text-gray-300 w-6 h-6 rounded-full text-sm text-center hover:bg-white hover:bg-opacity-20 active:scale-95 active:bg-opacity-40 cursor-default transition-all"
-                    @click="memosprite = (memosprite + 1) % 2"
-                    v-if="character.skills.MemospriteSkill"
-                  >
-                    <div class="font-sr-sans flex flex-row justify-center">
-                      <i class="bi bi-arrow-left-right p-1" />
-                    </div>
-                  </div>
-                  <Transition name="fade">
-                    <div
-                      class="absolute text-gray-300 right-2 top-1 text-sm transition-all"
-                      v-if="memosprite && character.skills.MemospriteSkill"
-                    >
-                      {{ $t('sr_memosprite') }}
-                    </div>
-                  </Transition>
+                  <!--                  <div-->
+                  <!--                    class="absolute right-1 bottom-1 text-gray-300 w-6 h-6 rounded-full text-sm text-center hover:bg-white hover:bg-opacity-20 active:scale-95 active:bg-opacity-40 cursor-default transition-all"-->
+                  <!--                    @click="memosprite = (memosprite + 1) % 2"-->
+                  <!--                    v-if="character.skills.MemospriteSkill"-->
+                  <!--                  >-->
+                  <!--                    <div class="font-sr-sans flex flex-row justify-center">-->
+                  <!--                      <i class="bi bi-arrow-left-right p-1" />-->
+                  <!--                    </div>-->
+                  <!--                  </div>-->
+                  <!--                  <Transition name="fade">-->
+                  <!--                    <div-->
+                  <!--                      class="absolute text-gray-300 right-2 top-1 text-sm transition-all"-->
+                  <!--                      v-if="memosprite && character.skills.MemospriteSkill"-->
+                  <!--                    >-->
+                  <!--                      {{ $t('sr_memosprite') }}-->
+                  <!--                    </div>-->
+                  <!--                  </Transition>-->
 
-                  <div
-                    class="grid grid-cols-4 grid-rows-1 w-full"
-                    v-if="!memosprite || !character.skills.MemospriteSkill"
-                  >
+                  <div class="grid grid-cols-4 grid-rows-1 w-full">
                     <div
                       v-for="idx in 4"
                       :key="idx"
@@ -1113,86 +1111,86 @@ const showCharDetails = (index: number) => {
                     </div>
                   </div>
 
-                  <div
-                    class="grid grid-cols-4 grid-rows-1 w-full"
-                    v-if="memosprite && character.skills.MemospriteSkill"
-                  >
-                    <div />
-                    <div
-                      v-for="idx in 2"
-                      :key="idx"
-                      class="h-full flex flex-row cursor-default"
-                    >
-                      <MyTooltip placement="left" max-width="500px" middle>
-                        <template #content>
-                          <div
-                            class="max-w-md"
-                            v-for="(skill, id) in character.skills[
-                              skillTypes[idx + 3]
-                            ]"
-                            :key="skill.id"
-                          >
-                            <div
-                              class="font-sr text-xl"
-                              :class="{ 'mt-2': id > 0 }"
-                            >
-                              {{ skill.name }}
-                              <span class="font-sr-sans text-sm text-orange-300"
-                                >[{{ skill.effect_text }}]</span
-                              >
-                            </div>
-                            <div
-                              class="font-sr-sans text-sm mt-1 text-gray-300"
-                            >
-                              {{ skill.simple_desc || skill.desc }}
-                            </div>
-                          </div>
-                        </template>
-                        <div
-                          class="h-12 w-12 p-1 rounded-full border-2"
-                          :style="`border-color: ${character.element ? character.element.color : 'white'}`"
-                        >
-                          <img
-                            :src="
-                              apiUrl +
-                              character.skills[skillTypes[idx + 3]][0].icon
-                            "
-                          />
-                        </div>
-                      </MyTooltip>
-                      <div
-                        v-if="character.skill_trees[idx + 17].level === 6"
-                        class="ml-2 mt-2 text-orange-300 text-xl align-middle h-full font-sr-sans"
-                      >
-                        MAX
-                      </div>
-                      <div
-                        v-else
-                        class="ml-2 mt-2 text-lg align-middle h-full font-sr-sans"
-                      >
-                        <div
-                          class="text-gray-200"
-                          v-if="character.skill_trees[idx + 17].max_level <= 6"
-                        >
-                          {{ character.skill_trees[idx + 17].level }}
-                          <span class="text-gray-400"
-                            >/{{
-                              character.skill_trees[idx + 17].max_level
-                            }}</span
-                          >
-                        </div>
-                        <div v-else class="text-cyan-400">
-                          {{ character.skill_trees[idx + 17].level + 1 }}
-                          <span class="text-gray-400"
-                            >/{{
-                              character.skill_trees[idx + 17].max_level
-                            }}</span
-                          >
-                        </div>
-                      </div>
-                    </div>
-                    <div />
-                  </div>
+                  <!--                  <div-->
+                  <!--                    class="grid grid-cols-4 grid-rows-1 w-full"-->
+                  <!--                    v-if="memosprite && character.skills.MemospriteSkill"-->
+                  <!--                  >-->
+                  <!--                    <div />-->
+                  <!--                    <div-->
+                  <!--                      v-for="idx in 2"-->
+                  <!--                      :key="idx"-->
+                  <!--                      class="h-full flex flex-row cursor-default"-->
+                  <!--                    >-->
+                  <!--                      <MyTooltip placement="left" max-width="500px" middle>-->
+                  <!--                        <template #content>-->
+                  <!--                          <div-->
+                  <!--                            class="max-w-md"-->
+                  <!--                            v-for="(skill, id) in character.skills[-->
+                  <!--                              skillTypes[idx + 3]-->
+                  <!--                            ]"-->
+                  <!--                            :key="skill.id"-->
+                  <!--                          >-->
+                  <!--                            <div-->
+                  <!--                              class="font-sr text-xl"-->
+                  <!--                              :class="{ 'mt-2': id > 0 }"-->
+                  <!--                            >-->
+                  <!--                              {{ skill.name }}-->
+                  <!--                              <span class="font-sr-sans text-sm text-orange-300"-->
+                  <!--                                >[{{ skill.effect_text }}]</span-->
+                  <!--                              >-->
+                  <!--                            </div>-->
+                  <!--                            <div-->
+                  <!--                              class="font-sr-sans text-sm mt-1 text-gray-300"-->
+                  <!--                            >-->
+                  <!--                              {{ skill.simple_desc || skill.desc }}-->
+                  <!--                            </div>-->
+                  <!--                          </div>-->
+                  <!--                        </template>-->
+                  <!--                        <div-->
+                  <!--                          class="h-12 w-12 p-1 rounded-full border-2"-->
+                  <!--                          :style="`border-color: ${character.element ? character.element.color : 'white'}`"-->
+                  <!--                        >-->
+                  <!--                          <img-->
+                  <!--                            :src="-->
+                  <!--                              apiUrl +-->
+                  <!--                              character.skills[skillTypes[idx + 3]][0].icon-->
+                  <!--                            "-->
+                  <!--                          />-->
+                  <!--                        </div>-->
+                  <!--                      </MyTooltip>-->
+                  <!--                      <div-->
+                  <!--                        v-if="character.skill_trees[idx + 17].level === 6"-->
+                  <!--                        class="ml-2 mt-2 text-orange-300 text-xl align-middle h-full font-sr-sans"-->
+                  <!--                      >-->
+                  <!--                        MAX-->
+                  <!--                      </div>-->
+                  <!--                      <div-->
+                  <!--                        v-else-->
+                  <!--                        class="ml-2 mt-2 text-lg align-middle h-full font-sr-sans"-->
+                  <!--                      >-->
+                  <!--                        <div-->
+                  <!--                          class="text-gray-200"-->
+                  <!--                          v-if="character.skill_trees[idx + 17].max_level <= 6"-->
+                  <!--                        >-->
+                  <!--                          {{ character.skill_trees[idx + 17].level }}-->
+                  <!--                          <span class="text-gray-400"-->
+                  <!--                            >/{{-->
+                  <!--                              character.skill_trees[idx + 17].max_level-->
+                  <!--                            }}</span-->
+                  <!--                          >-->
+                  <!--                        </div>-->
+                  <!--                        <div v-else class="text-cyan-400">-->
+                  <!--                          {{ character.skill_trees[idx + 17].level + 1 }}-->
+                  <!--                          <span class="text-gray-400"-->
+                  <!--                            >/{{-->
+                  <!--                              character.skill_trees[idx + 17].max_level-->
+                  <!--                            }}</span-->
+                  <!--                          >-->
+                  <!--                        </div>-->
+                  <!--                      </div>-->
+                  <!--                    </div>-->
+                  <!--                    <div />-->
+                  <!--                  </div>-->
                 </div>
                 <!-- 右侧第四块：遗器 -->
                 <MyCarousel

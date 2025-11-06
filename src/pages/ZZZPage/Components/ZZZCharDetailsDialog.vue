@@ -126,7 +126,7 @@ onMounted(() => {
   >
     <div class="list-items-wrapper font-zzz-bold">
       <DialogListItem
-        :name="character.FinalStats[stat].statName"
+        :name="character.FinalStats[stat]?.statName"
         v-for="stat in statOrder"
         :key="stat"
       >
@@ -142,12 +142,12 @@ onMounted(() => {
           <span>{{
             ['HpMax', 'Atk', 'Def'].includes(stat)
               ? character.BaseStats[stat]
-              : character.FinalStats[stat].statValue.final
+              : character.FinalStats[stat]?.statValue.final
           }}</span>
           <span
             v-if="['HpMax', 'Atk', 'Def'].includes(stat)"
             class="stat-addition"
-            >+{{ character.FinalStats[stat].statValue.added }}</span
+            >+{{ character.FinalStats[stat]?.statValue.added }}</span
           >
         </div>
       </DialogListItem>

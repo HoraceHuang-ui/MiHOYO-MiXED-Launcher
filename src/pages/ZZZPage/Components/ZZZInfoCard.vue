@@ -265,7 +265,7 @@ const requestInfo = () => {
   uid = uidInput.value
   playerInfoFailed.value = false
   window.axios
-    .post('http://1.92.84.11:5004/Enka', {
+    .post('http://120.55.52.240:5004/Enka', {
       // .post('http://0.0.0.0:5004/Enka', {
       game: 2,
       lang: translate('zzz_enkaLangCode'),
@@ -609,8 +609,16 @@ const showCharDetails = (index: number) => {
                   style="left: 10px"
                 ></div>
                 <img
+                  v-if="Object.keys(character.Skins).length == 0"
                   class="absolute left-[2px] bottom-[2px] char-side-icon rounded-full ml-[10px] w-8 h-8 hover:transform hover:scale-110 active:scale-100 transition-all object-cover"
                   :src="character.CircleIconUrl"
+                />
+                <img
+                  v-else
+                  class="absolute left-[2px] bottom-[2px] char-side-icon rounded-full ml-[10px] w-8 h-8 hover:transform hover:scale-110 active:scale-100 transition-all object-cover"
+                  :src="
+                    (Object.values(character.Skins)?.[0] as any)?.CircleIcon
+                  "
                 />
               </div>
             </div>
@@ -690,10 +698,37 @@ const showCharDetails = (index: number) => {
             />
             <!-- 立绘 -->
             <img
+              v-if="
+                !store.settings.appearance.gsCostume ||
+                !character.Skins ||
+                Object.keys(character.Skins).length == 0
+              "
               class="absolute z-[6] h-full"
               :src="character.ImageUrl"
-              :style="`left: ${character.Transform.Left}px; top: ${character.Transform.Top}px; transform: scale(${character.Transform.Scale})`"
+              :style="`left: ${character.Transform.left ?? 0}px; top: ${character.Transform.top ?? 0}px; transform: scale(${character.Transform.scale ?? 1})`"
             />
+            <!--            <img-->
+            <!--              v-if="-->
+            <!--                !store.settings.appearance.gsCostume ||-->
+            <!--                !character.Skins ||-->
+            <!--                Object.keys(character.Skins).length == 0-->
+            <!--              "-->
+            <!--              class="absolute z-[6] h-full"-->
+            <!--              src="https://enka.network/ui/zzz/IconRole52.png"-->
+            <!--              :style="`left: ${60}px; top: ${300}px; transform: scale(${1.8})`"-->
+            <!--            />-->
+            <img
+              v-else
+              class="absolute z-[6] h-full"
+              :src="(Object.values(character.Skins)?.[0] as any)?.Image"
+              :style="`left: ${character.Transform.skin?.left ?? 0}px; top: ${character.Transform.skin?.top ?? 0}px; scale: ${character.Transform.skin?.scale ?? 1}`"
+            />
+            <!--            <img-->
+            <!--              v-else-->
+            <!--              class="absolute z-[6] h-full"-->
+            <!--              src="https://enka.network/ui/zzz/IconRole51_01.png"-->
+            <!--              :style="`left: ${40}px; top: ${320}px; scale: ${1.9}`"-->
+            <!--            />-->
             <!-- 左上人名、属性、命途 -->
             <div
               class="font-zzz-bold absolute left-4 top-5 z-20 text-3xl text-white justify-between flex flex-row"
