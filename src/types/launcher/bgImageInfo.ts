@@ -9,4 +9,7 @@ export interface BackgroundInfo {
   id: string
   background: ImageInfo
   icon: any
+  theme?: ImageInfo
+  video?: ImageInfo
+  type: string
 }

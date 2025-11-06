@@ -30,6 +30,7 @@ import { BgImageInfo } from '../types/launcher/bgImageInfo'
 import ZZZImportDialog from './ZZZPage/Components/ZZZImportDialog.vue'
 import ZZZDialog from './ZZZPage/Components/ZZZDialog.vue'
 import ZZZInfoCard from './ZZZPage/Components/ZZZInfoCard.vue'
+import MyCarousel from '../components/MyCarousel.vue'
 
 const store = useStore()
 
@@ -169,6 +170,7 @@ onMounted(async () => {
   window.axios
     .get(translate(`general_gameBackgroundsUrl`))
     .then(value => {
+      console.log(value.data)
       bgImagesInfo.value = value.data.game_info_list
       bgImagesReady.value = true
     })
@@ -263,14 +265,10 @@ onMounted(async () => {
   }
 })
 
-const findBgImage = () => {
-  if (bgImagesInfo.value) {
-    const res = bgImagesInfo.value.find(a => a.game.biz.startsWith(gameBiz))
-    return res && res.backgrounds && res.backgrounds.length != 0
-      ? res.backgrounds[0].background.url
-      : undefined
-  }
-  return undefined
+const videoPaused = ref(false)
+const bgIdx = ref(0)
+const findBgsObj = () => {
+  return bgImagesInfo.value?.find?.(a => a.game.biz.startsWith(gameBiz))
 }
 
 const importButtonClick = () => {
@@ -534,14 +532,96 @@ const refresh = () => {
       class="bg-pic-wrapper"
       :class="{ scrolled: hideElements, mask: gameNo != 2 }"
     >
+      <MyCarousel
+        class="bg-pic"
+        :autoplay="false"
+        show-arrow="never"
+        show-indicator="never"
+        animation="fade-swipe"
+        v-if="bgImagesReady"
+        :class="{ scrolled: hideElements }"
+        v-model="bgIdx"
+      >
+        <div
+          v-for="bg in findBgsObj()?.backgrounds ?? []"
+          class="relative size-full"
+          :key="bg.id"
+        >
+          <Transition name="fade">
+            <video
+              v-if="bg.type === 'BACKGROUND_TYPE_VIDEO' && !videoPaused"
+              class="size-full object-cover absolute z-30 left-0 top-0"
+              autoplay
+              muted
+              playsinline
+              loop
+            >
+              <source :src="bg.video?.url ?? ''" type="video/webm" />
+            </video>
+          </Transition>
+          <img
+            class="object-cover absolute left-0 top-0 size-full z-[29]"
+            :src="bg.background.url"
+          />
+          <img
+            v-if="bg.theme?.url"
+            class="object-cover absolute left-0 top-0 size-full z-[31]"
+            :src="bg.theme?.url"
+          />
+        </div>
+      </MyCarousel>
       <img
+        v-else
         class="bg-pic"
         :class="{ scrolled: hideElements }"
-        :src="bgImagesReady && findBgImage() ? findBgImage() : defaultBG"
-        @touchmove.prevent
-        @mousewheel.prevent
+        :src="defaultBG"
       />
     </div>
+    <Transition name="fade-blur">
+      <div
+        v-if="bgImagesReady && !hideElements"
+        class="absolute right-2 top-2 flex flex-row justify-end"
+      >
+        <Transition name="swipe-right">
+          <div
+            v-if="
+              findBgsObj()?.backgrounds?.[bgIdx]?.type ===
+              'BACKGROUND_TYPE_VIDEO'
+            "
+            @click="videoPaused = !videoPaused"
+            class="icon-button mr-1 text-xl"
+          >
+            <div
+              class="size-8 pt-[1px] hover:bg-white dark:hover:bg-black rounded-full transition-all"
+            >
+              <i class="bi" :class="videoPaused ? 'bi-play' : 'bi-pause'" />
+            </div>
+          </div>
+        </Transition>
+        <div
+          class="icon-button flex flex-row"
+          v-if="(findBgsObj()?.backgrounds?.length ?? 0) > 1"
+        >
+          <div
+            class="size-8 pt-[3px] hover:bg-white dark:hover:bg-black rounded-full transition-all"
+            @click="bgIdx--"
+            :class="{ 'opacity-20 pointer-events-none': bgIdx === 0 }"
+          >
+            <i class="bi bi-chevron-left size-full" />
+          </div>
+          <div
+            class="size-8 pt-[3px] hover:bg-white dark:hover:bg-black rounded-full transition-all"
+            @click="bgIdx++"
+            :class="{
+              'opacity-20 pointer-events-none':
+                bgIdx + 1 === findBgsObj()?.backgrounds?.length,
+            }"
+          >
+            <i class="bi bi-chevron-right size-full" />
+          </div>
+        </div>
+      </div>
+    </Transition>
     <Transition name="banner">
       <LauncherBanner
         v-if="
@@ -728,7 +808,7 @@ const refresh = () => {
 }
 
 .bg-pic {
-  @apply top-0 rounded-3xl w-full h-full;
+  @apply top-0 rounded-3xl size-full;
   @apply transition-all object-cover;
   transition-duration: 500ms;
   transform: scale(1.03);
@@ -747,6 +827,16 @@ const refresh = () => {
 
 .extra-sink {
   transform: translateY(6vh);
+}
+
+.icon-button {
+  @apply z-50;
+  @apply rounded-full backdrop-blur-md;
+  background: rgb(255, 255, 255, 0.4);
+
+  .dark & {
+    background: rgb(0, 0, 0, 0.3);
+  }
 }
 
 .launcher-banner {
@@ -864,6 +954,15 @@ const refresh = () => {
   @apply my-2 w-full shadow-md;
 }
 
+.fade-blur-enter-from,
+.fade-blur-leave-to {
+  @apply opacity-0 pointer-events-none blur-md;
+}
+.fade-blur-enter-active,
+.fade-blur-leave-active {
+  transition: all 0.5s ease;
+}
+
 .banner-enter-from,
 .banner-leave-to {
   @apply opacity-0 -translate-y-10 pointer-events-none blur-md -translate-x-14 scale-110;
@@ -879,5 +978,26 @@ const refresh = () => {
 .posts-enter-active,
 .posts-leave-active {
   transition: all 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.swipe-right-enter-from,
+.swipe-right-leave-to {
+  opacity: 0;
+  transform: translateX(60%);
+}
+
+.swipe-right-enter-active,
+.swipe-right-leave-active {
+  transition: all 0.3s;
 }
 </style>
